@@ -111,7 +111,7 @@ enum Naming {
     "default", "defer", "do", "else", "fallthrough", "for", "guard", "if",
     "in", "repeat", "return", "switch", "where", "while", "as", "catch",
     "false", "is", "nil", "rethrows", "super", "self", "throw", "throws",
-    "true", "try", "await", "async", "some", "each", "Type", "Self",
+    "true", "try", "await", "async", "some", "each", "Type", "Self"
   ]
 }
 

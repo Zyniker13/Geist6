@@ -149,8 +149,7 @@ final class TypeEmitter {
       let stringBranch = anyOf.first { isPlainString($0) }
       let refBranch = anyOf.first { $0["$ref"] != nil }
       if stringBranch != nil, let refBranch = refBranch,
-        let ref = refBranch["$ref"] as? String
-      {
+        let ref = refBranch["$ref"] as? String {
         let target = nameForSchemaKey(TypeEmitter.refKey(ref))
         return "Expandable<\(target)>"
       }
@@ -177,8 +176,7 @@ final class TypeEmitter {
     // synthesized Codable recursed until the stack overflowed at decode
     // time. Classify the branch directly instead.
     if let anyOf = (schema["oneOf"] ?? schema["anyOf"]) as? [[String: Any]],
-      anyOf.count == 1, let only = anyOf.first
-    {
+      anyOf.count == 1, let only = anyOf.first {
       return swiftType(for: only, fallbackName: fallbackName, bucket: bucket)
     }
 
@@ -204,8 +202,7 @@ final class TypeEmitter {
     case .freeObject:
       // Metadata-style maps: string values when documented, otherwise raw.
       if case .string = ParsedSchema.classify(
-        schema["additionalProperties"] as? [String: Any] ?? [:])
-      {
+        schema["additionalProperties"] as? [String: Any] ?? [:]) {
         return "[String: String]"
       }
       return "[String: JSONValue]"
@@ -248,8 +245,8 @@ final class TypeEmitter {
           // allOf + $ref inheritance: inline the referenced schema's
           // properties if reachable.
           if let branchProps = self.inlinedProperties[TypeEmitter.refKey(ref)] {
-            for (k, v) in branchProps where properties[k] == nil {
-              properties[k] = v
+            for (key, value) in branchProps where properties[key] == nil {
+              properties[key] = value
             }
             if let req = (self.inlinedSchemas[TypeEmitter.refKey(ref)]?["required"] as? [Any]) {
               required.append(contentsOf: req)
@@ -257,8 +254,8 @@ final class TypeEmitter {
           }
         }
         if let branchProps = branch["properties"] as? [String: Any] {
-          for (k, v) in branchProps where properties[k] == nil {
-            properties[k] = v
+          for (key, value) in branchProps where properties[key] == nil {
+            properties[key] = value
           }
         }
         if let req = branch["required"] as? [Any] {
@@ -428,7 +425,8 @@ final class TypeEmitter {
           // sub-resources). Treat absence the same as explicit null
           // instead of throwing keyNotFound at decode time.
           lines.append(
-            "        self.\(entry.swift) = try container.decodeIfPresent(\(base).self, forKey: .\(entry.swift)) ?? .null"
+            "        self.\(entry.swift) = try container.decodeIfPresent("
+              + "\(base).self, forKey: .\(entry.swift)) ?? .null"
           )
         } else {
           lines.append(
@@ -602,8 +600,7 @@ final class TypeEmitter {
       for candidateTag in ["object", "type"] {
         if let tagSchema = variantProps[candidateTag] as? [String: Any],
           let values = tagSchema["enum"] as? [Any], values.count == 1,
-          let value = values[0] as? String
-        {
+          let value = values[0] as? String {
           tagField = candidateTag
           tagValue = value
           break
@@ -631,14 +628,16 @@ final class TypeEmitter {
       for variant in variants {
         guard let tagValue = variant.tagValue else { continue }
         lines.append(
-          "            if tag == \"\(tagValue)\" { self = .\(variant.swiftCase)(try container.decode(\(variant.typeName).self)); return }"
+          "            if tag == \"\(tagValue)\" { self = .\(variant.swiftCase)(try container.decode("
+            + "\(variant.typeName).self)); return }"
         )
       }
       lines.append("        }")
     }
     for variant in variants {
       lines.append(
-        "        if let value = try? container.decode(\(variant.typeName).self) { self = .\(variant.swiftCase)(value); return }"
+        "        if let value = try? container.decode(\(variant.typeName).self) "
+        + "{ self = .\(variant.swiftCase)(value); return }"
       )
     }
     lines.append("        self = .other(try container.decode(JSONValue.self))")

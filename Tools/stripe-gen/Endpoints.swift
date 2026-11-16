@@ -22,8 +22,7 @@ struct OpRequest {
 enum OpCollector {
 
   static func collect(schemas: [String: [String: Any]], paths: [String: [String: Any]]) throws
-    -> [OpRequest]
-  {
+    -> [OpRequest] {
     var resources: [(key: String, schema: [String: Any])] = []
     for (key, schema) in schemas {
       guard let resource = schema["x-stripeResource"] as? [String: Any],
@@ -65,8 +64,7 @@ enum OpCollector {
         var bodySchema: [String: Any]?
         var bodyContentType: String?
         if let requestBody = op["requestBody"] as? [String: Any],
-          let content = requestBody["content"] as? [String: [String: Any]]
-        {
+          let content = requestBody["content"] as? [String: [String: Any]] {
           for (contentType, media) in content {
             if let schema = media["schema"] as? [String: Any] {
               bodySchema = schema
@@ -90,8 +88,7 @@ enum OpCollector {
           let ok = responses["200"] as? [String: Any],
           let content = ok["content"] as? [String: [String: Any]],
           let media = content["application/json"],
-          let schema = media["schema"] as? [String: Any]
-        {
+          let schema = media["schema"] as? [String: Any] {
           responseSchema = schema
         }
         let operationId = op["operationId"] as? String ?? "\(http) \(path)"
@@ -126,7 +123,7 @@ final class EndpointEmitter {
   /// methodName overrides for awkward generated names.
   private let methodOverrides: [String: String] = [
     "FeeRefund.refund": "refundApplicationFee",
-    "Account.retrieve#self": "retrieveCurrentAccount",
+    "Account.retrieve#self": "retrieveCurrentAccount"
   ]
 
   init(emitter: TypeEmitter) {

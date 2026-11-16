@@ -118,8 +118,7 @@ public protocol LosslessEnum: Sendable, Equatable, Hashable, Codable {
 /// The four-state field shape the pinned spec's nullability rules produce:
 /// absent (nil), present with a value, or explicitly null.
 public indirect enum Nullable<Value: Codable & Sendable & Hashable>: Sendable, Codable, Equatable,
-  Hashable
-{
+  Hashable {
   case value(Value)
   case null
 
@@ -157,8 +156,7 @@ public indirect enum Nullable<Value: Codable & Sendable & Hashable>: Sendable, C
 /// An expandable reference: the API returns either an ID or, when expanded,
 /// the full object.
 public indirect enum Expandable<Value: Codable & Sendable & Hashable>: Sendable, Codable, Equatable,
-  Hashable
-{
+  Hashable {
   case id(String)
   case object(Value)
 

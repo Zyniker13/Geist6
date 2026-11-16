@@ -12,7 +12,7 @@ final class State: @unchecked Sendable {
   // otherwise inherit main-actor isolation, and invoking them from
   // URLSession's URLProtocol queue trips the dispatch main-thread
   // assertion at runtime.
-  private var handler: (@Sendable (URLRequest) -> RecordingResponse)? = nil
+  private var handler: (@Sendable (URLRequest) -> RecordingResponse)?
   private var recordedRequests: [URLRequest] = []
   private var recordedResponses: [URLResponse] = []
   private let queue = DispatchQueue(label: "geist6.RecordingURLProtocol.State")
@@ -100,6 +100,9 @@ final class RecordingURLProtocol: URLProtocol, @unchecked Sendable {
 
   // MARK: - URLProtocol overrides
 
+  // URLProtocol requires class for these overrides; static_over_final_class
+  // doesn't account for that API constraint.
+  // swiftlint:disable:next static_over_final_class
   override class func canInit(with request: URLRequest) -> Bool {
     // Intercept everything aimed at the stub base URL (port 1). The
     // client appends real API paths (/v1/...) to the base URL, so the
@@ -108,12 +111,13 @@ final class RecordingURLProtocol: URLProtocol, @unchecked Sendable {
     return url.host == "127.0.0.1" && url.port == 1 && url.scheme == "http"
   }
 
+  // swiftlint:disable:next static_over_final_class
   override class func canonicalRequest(for request: URLRequest) -> URLRequest {
-    var r = request
-    if r.value(forHTTPHeaderField: "Content-Type") == nil {
-      r.setValue("application/json", forHTTPHeaderField: "Content-Type")
+    var req = request
+    if req.value(forHTTPHeaderField: "Content-Type") == nil {
+      req.setValue("application/json", forHTTPHeaderField: "Content-Type")
     }
-    return r
+    return req
   }
 
   override func startLoading() {
@@ -165,6 +169,20 @@ final class RecordingURLProtocol: URLProtocol, @unchecked Sendable {
   }
 }
 
+// MARK: - TestJSON
+
+/// Serializes a test fixture object without force-trying: a malformed
+/// literal fixture is a test-authoring bug, so it aborts loudly.
+enum TestJSON {
+  static func data(_ object: Any) -> Data {
+    do {
+      return try JSONSerialization.data(withJSONObject: object, options: [])
+    } catch {
+      fatalError("invalid test fixture: \(error)")
+    }
+  }
+}
+
 // MARK: - RecordingResponse
 
 /// Response variants that a URLProtocol handler can produce.
@@ -180,13 +198,13 @@ enum RecordingResponse {
 struct StubBuilder {
   static func install(status: Int, body: Data?, headers: [String: String] = [:]) {
     RecordingURLProtocol.handler = { _ in
-      var h = headers
-      h["Content-Type"] = "application/json"
+      var hdrs = headers
+      hdrs["Content-Type"] = "application/json"
       let hr = HTTPURLResponse(
         url: URL(string: "http://127.0.0.1:1/stub")!,
         statusCode: status,
         httpVersion: nil,
-        headerFields: h
+        headerFields: hdrs
       )!
       RecordingURLProtocol.state.appendResponse(hr)
       return RecordingResponse.httpResponse(hr, body ?? Data())
@@ -194,7 +212,7 @@ struct StubBuilder {
   }
 
   static func install(status: Int, json: [String: Any], headers: [String: String] = [:]) {
-    let body = try! JSONSerialization.data(withJSONObject: json, options: [])
+    let body = TestJSON.data(json)
     install(status: status, body: body, headers: headers)
   }
 }

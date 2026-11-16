@@ -41,7 +41,7 @@ final class PaginationTests: XCTestCase {
       "metadata": [String: String](),
       "paid": true,
       "refunded": false,
-      "status": "succeeded",
+      "status": "succeeded"
     ]
   }
 
@@ -52,14 +52,14 @@ final class PaginationTests: XCTestCase {
     let counter = ThreadSafeCounter()
     RecordingURLProtocol.handler = { _ in
       let page = counter.increment()
-      let charges = (0..<3).map { i in
-        Self.stubCharge(id: "ch_page\(page)_\(i)", amount: 100 * (i + 1))
+      let charges = (0..<3).map { idx in
+        Self.stubCharge(id: "ch_page\(page)_\(idx)", amount: 100 * (idx + 1))
       }
       return RecordingResponse.httpResponse(
         HTTPURLResponse(
           url: URL(string: "http://127.0.0.1:1/stub")!,
           statusCode: 200, httpVersion: nil, headerFields: nil)!,
-        try! JSONSerialization.data(withJSONObject: [
+        TestJSON.data([
           "data": charges, "has_more": page < 2,
           "url": "/v1/charges"
         ]))
@@ -101,7 +101,7 @@ final class PaginationTests: XCTestCase {
         HTTPURLResponse(
           url: URL(string: "http://127.0.0.1:1/stub")!,
           statusCode: 200, httpVersion: nil, headerFields: nil)!,
-        try! JSONSerialization.data(withJSONObject: [
+        TestJSON.data([
           "data": [Self.stubCharge(id: "ch_1", amount: 100)],
           "has_more": false, "url": "/v1/charges"
         ]))
@@ -140,14 +140,14 @@ final class PaginationTests: XCTestCase {
     let counter = ThreadSafeCounter()
     RecordingURLProtocol.handler = { _ in
       let page = counter.increment()
-      let charges = (0..<3).map { i in
-        Self.stubCharge(id: "ch_page\(page)_\(i)", amount: 100 * (i + 1))
+      let charges = (0..<3).map { idx in
+        Self.stubCharge(id: "ch_page\(page)_\(idx)", amount: 100 * (idx + 1))
       }
       return RecordingResponse.httpResponse(
         HTTPURLResponse(
           url: URL(string: "http://127.0.0.1:1/stub")!,
           statusCode: 200, httpVersion: nil, headerFields: nil)!,
-        try! JSONSerialization.data(withJSONObject: [
+        TestJSON.data([
           "data": charges, "has_more": true,
           "url": "/v1/charges"
         ]))

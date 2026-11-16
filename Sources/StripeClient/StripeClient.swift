@@ -67,16 +67,19 @@ public struct StripeAPIError: Swift.Error, Sendable, CustomStringConvertible {
     public var requestId: String?
     public var adviceCode: String?
 
-    enum CodingKeys: String, CodingKey {
-      case type, code, message
-      case docUrl = "doc_url"
-      case param
-      case declineCode = "decline_code"
-      case charge
-      case paymentIntentId = "payment_intent"
-      case paymentMethodType = "payment_method_type"
-      case requestId = "request_id"
-      case adviceCode = "advice_code"
+    public init(from decoder: Decoder) throws {
+      let container = try decoder.container(keyedBy: DetailCodingKeys.self)
+      self.type = try container.decodeIfPresent(String.self, forKey: .type)
+      self.code = try container.decodeIfPresent(String.self, forKey: .code)
+      self.message = try container.decodeIfPresent(String.self, forKey: .message)
+      self.docUrl = try container.decodeIfPresent(String.self, forKey: .docUrl)
+      self.param = try container.decodeIfPresent(String.self, forKey: .param)
+      self.declineCode = try container.decodeIfPresent(String.self, forKey: .declineCode)
+      self.charge = try container.decodeIfPresent(String.self, forKey: .charge)
+      self.paymentIntentId = try container.decodeIfPresent(String.self, forKey: .paymentIntentId)
+      self.paymentMethodType = try container.decodeIfPresent(String.self, forKey: .paymentMethodType)
+      self.requestId = try container.decodeIfPresent(String.self, forKey: .requestId)
+      self.adviceCode = try container.decodeIfPresent(String.self, forKey: .adviceCode)
     }
 
     /// All-unknown detail, used when the body is not a parseable error.
@@ -93,11 +96,40 @@ public struct StripeAPIError: Swift.Error, Sendable, CustomStringConvertible {
       requestId = nil
       adviceCode = nil
     }
+  }
 
-    /// The API's `payment_intent` field may be a full object or an ID
-    /// string; keep the ID when it is one.
+  /// Coding keys for `Detail` — top-level to avoid nesting >1 deep.
+  private enum DetailCodingKeys: String, CodingKey {
+    case type, code, message, docUrl = "doc_url", param, declineCode = "decline_code", charge
+    case paymentIntentId = "payment_intent", paymentMethodType = "payment_method_type"
+    case requestId = "request_id", adviceCode = "advice_code"
+  }
+
+  /// Coding keys for `HTTPError` — top-level to avoid nesting >1 deep.
+  private enum HTTPErrorCodingKeys: String, CodingKey {
+    case type, code, message, docUrl = "doc_url", param, declineCode = "decline_code", charge
+    case paymentMethodType = "payment_method_type"
+    case requestId = "request_id", adviceCode = "advice_code"
+    case paymentIntentId = "payment_intent"
+  }
+
+  /// The API's `payment_intent` field may be a full object or an ID
+  /// string; keep the ID when it is one.
+  public struct HTTPError: Sendable, Decodable {
+    public var type: String?
+    public var code: String?
+    public var message: String?
+    public var docUrl: String?
+    public var param: String?
+    public var declineCode: String?
+    public var charge: String?
+    public var paymentMethodType: String?
+    public var requestId: String?
+    public var adviceCode: String?
+    public var paymentIntentId: String?
+
     public init(from decoder: Decoder) throws {
-      let container = try decoder.container(keyedBy: CodingKeys.self)
+      let container = try decoder.container(keyedBy: HTTPErrorCodingKeys.self)
       type = try container.decodeIfPresent(String.self, forKey: .type)
       code = try container.decodeIfPresent(String.self, forKey: .code)
       message = try container.decodeIfPresent(String.self, forKey: .message)

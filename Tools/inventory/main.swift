@@ -62,7 +62,7 @@ let tier1Screen: [String: String] = [
   "Payout": "Payouts screens (M7)",
   "Dispute": "Disputes screens (M9)",
   "Account": "Account screens (M8); setup and account details (M2)",
-  "Event": "Activity feed (M3; full filters M11)",
+  "Event": "Activity feed (M3; full filters M11)"
 ]
 
 let tier1: Set<String> = Set(tier1Screen.keys)
@@ -149,7 +149,7 @@ let earlyMilestones: [String: String] = [
   "EarlyFraudWarning": "M9",
   "ValueList": "M9",
   "ValueListItem": "M9",
-  "PaymentEvaluation": "M9",
+  "PaymentEvaluation": "M9"
 ]
 
 /// Per-operation milestone overrides, keyed "ClassName.methodName".
@@ -166,7 +166,7 @@ let v2PackageMilestones: [String: String] = [
   "v2.core.vault": "M8",
   "v2.money_management": "M10",
   "v2.billing": "M10",
-  "v2.commerce": "M10",
+  "v2.commerce": "M10"
 ]
 
 /// Tier 3: endpoints too unusual for tier 2; reachable through the API
@@ -183,7 +183,7 @@ let tier3Classes: Set<String> = [
   "PayoutIntent", "PayoutMethod", "PayoutMethodsBankAccountSpec",
   "ReceivedCredit", "RecipientVerification",
   // Legacy or internal.
-  "Source", "Token", "EphemeralKey", "SetupAttempt", "ThreeDSecure",
+  "Source", "Token", "EphemeralKey", "SetupAttempt", "ThreeDSecure"
 ]
 
 // MARK: - Restricted-key permissions (from Stripe's permissions reference)
@@ -246,7 +246,7 @@ let documentedPermissions: [String: (read: String, write: String)] = [
   "Token": ("token_read", "token_write"),
   "Review": ("review_read", "review_write"),
   "ReportRun": ("report_runs_and_report_types_read", "report_runs_and_report_types_read"),
-  "ReportType": ("report_runs_and_report_types_read", "report_runs_and_report_types_read"),
+  "ReportType": ("report_runs_and_report_types_read", "report_runs_and_report_types_read")
 ]
 
 /// Resources with no documented object permission name; a Dashboard restricted
@@ -276,8 +276,7 @@ func coverage(for resource: SpecResource, operation: SpecOperation) -> Coverage 
   let tier: Int
   let screen: String
   if tier1.contains(resource.className), milestone != "M10",
-    !resource.inPackage.hasPrefix("v2.")
-  {
+    !resource.inPackage.hasPrefix("v2.") {
     // v1 core resources get their crafted screens; v2 namespace
     // resources stay generated or Explorer in v1.0.0.
     tier = 1
@@ -336,7 +335,8 @@ func generateInventoryMarkdown(_ inventory: SpecInventory) -> String {
     "Totals: \(resources.count) resources with their own operations, \(ops.count) operations (\(typeSummary))."
   )
   lines.append(
-    "Resources without operations are nested value types inside other resources; they are not a separate part of the API surface."
+    "Resources without operations are nested value types inside other"
+    + " resources; they are not a separate part of the API surface."
   )
   lines.append("")
 
@@ -413,7 +413,7 @@ func generateCoverageMatrixMarkdown(_ inventory: SpecInventory) -> String {
 // MARK: - JSON inventory (machine-readable)
 
 func generateInventoryJSON(_ inventory: SpecInventory) throws -> Data {
-  struct Op: Codable {
+  struct OperationEntry: Codable {
     let name: String
     let type: String
     let http: String
@@ -426,7 +426,7 @@ func generateInventoryJSON(_ inventory: SpecInventory) throws -> Data {
     let object: String
     let package: String
     let polymorphicGroups: [String]
-    let operations: [Op]
+    let operations: [OperationEntry]
   }
   struct Doc: Codable {
     let apiVersion: String
@@ -443,7 +443,7 @@ func generateInventoryJSON(_ inventory: SpecInventory) throws -> Data {
         package: resource.package,
         polymorphicGroups: resource.polymorphicGroups,
         operations: resource.operations.map {
-          Op(
+          OperationEntry(
             name: $0.methodName, type: $0.methodType, http: $0.http, path: $0.path,
             write: $0.isWrite)
         }
@@ -505,18 +505,22 @@ if mode == "check" {
   }
   if problems.isEmpty {
     print(
-      "inventory check: OK (\(inventory.resources.count) resources, \(inventory.operations.count) operations, version \(inventory.apiVersion))"
+      "inventory check: OK (\(inventory.resources.count) resources, "
+      + "\(inventory.operations.count) operations, version \(inventory.apiVersion))"
     )
   } else {
-    for problem in problems { fail("inventory check: \(problem)") }
+    for problem in problems {
+      fail("inventory check: \(problem)")
+    }
   }
 } else {
   try FileManager.default.createDirectory(atPath: outDir, withIntermediateDirectories: true)
   try markdown.write(toFile: outDir + "/api-inventory.md", atomically: true, encoding: .utf8)
   try matrix.write(toFile: outDir + "/coverage-matrix.md", atomically: true, encoding: .utf8)
   try json.write(to: URL(fileURLWithPath: outDir + "/api-inventory.json"))
-  print(
-    "wrote \(outDir)/api-inventory.md, coverage-matrix.md, api-inventory.json",
-    "(\(inventory.resources.count) resources, \(inventory.operations.count) operations, version \(inventory.apiVersion))"
-  )
+  let nResources = inventory.resources.count
+  let nOperations = inventory.operations.count
+  let summary = "\(nResources) resources, \(nOperations) operations, version \(inventory.apiVersion)"
+  let msg = "wrote \(outDir)/api-inventory.md, coverage-matrix.md, api-inventory.json (\(summary))"
+  print(msg)
 }

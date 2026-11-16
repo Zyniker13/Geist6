@@ -17,6 +17,7 @@ final class MockServerTests: XCTestCase {
 
   private static let harness = MockHarness()
 
+  // swiftlint:disable:next static_over_final_class
   override class func tearDown() {
     super.tearDown()
     MockHarness.tearDown()
@@ -114,11 +115,11 @@ private final class MockHarness: @unchecked Sendable {
   static var client: StripeClient {
     semaphore.wait()
     defer { semaphore.signal() }
-    guard let c = _client else {
+    guard let client = _client else {
       boot()
       return _client!
     }
-    return c
+    return client
   }
 
   static func tearDown() {
@@ -135,7 +136,7 @@ private final class MockHarness: @unchecked Sendable {
     let candidates = [
       ProcessInfo.processInfo.environment["STRIPE_MOCK_PATH"],
       "/opt/homebrew/bin/stripe-mock",
-      "/usr/local/bin/stripe-mock",
+      "/usr/local/bin/stripe-mock"
     ]
     let path = candidates
       .compactMap { $0 }
@@ -204,7 +205,7 @@ private final class MockHarness: @unchecked Sendable {
           }
           innerSem.signal()
         }.resume()
-        let _ = innerSem.wait(timeout: .now() + 1.0)
+        _ = innerSem.wait(timeout: .now() + 1.0)
         if !ready { Thread.sleep(forTimeInterval: 0.2) }
       }
       box.value = ready

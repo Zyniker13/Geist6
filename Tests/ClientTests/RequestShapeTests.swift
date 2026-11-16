@@ -28,7 +28,10 @@ final class RequestShapeTests: XCTestCase {
       _ = try await client.perform(
         method: "GET", path: "/v1/charges", params: nil as EmptyParams?)
     } catch { XCTFail("Should not throw") }
-    XCTAssertEqual(RecordingURLProtocol.recordedRequests.first?.value(forHTTPHeaderField: "Authorization"), "Bearer sk_test_fake")
+    XCTAssertEqual(
+      RecordingURLProtocol.recordedRequests.first?.value(forHTTPHeaderField: "Authorization"),
+      "Bearer sk_test_fake"
+    )
   }
 
   func testStripeAccountHeader() async {
@@ -44,7 +47,10 @@ final class RequestShapeTests: XCTestCase {
       _ = try await client.perform(
         method: "GET", path: "/v1/charges", params: nil as EmptyParams?)
     } catch { XCTFail("Should not throw") }
-    XCTAssertEqual(RecordingURLProtocol.recordedRequests.first?.value(forHTTPHeaderField: "Stripe-Account"), "acct_connected1")
+    XCTAssertEqual(
+      RecordingURLProtocol.recordedRequests.first?.value(forHTTPHeaderField: "Stripe-Account"),
+      "acct_connected1"
+    )
   }
 
   // MARK: - Form encoding (POST with params)
@@ -122,7 +128,7 @@ final class RequestShapeTests: XCTestCase {
 
   func testParseInvalidRequestError() async {
     let client = makeClient()
-    let body = try! JSONSerialization.data(withJSONObject: [
+    let body = TestJSON.data([
       "error": ["type": "invalid_request_error", "message": "Missing required param: email"]
     ])
     StubBuilder.install(status: 400, body: body)
@@ -141,7 +147,7 @@ final class RequestShapeTests: XCTestCase {
 
   func testParseCardError() async {
     let client = makeClient()
-    let body = try! JSONSerialization.data(withJSONObject: [
+    let body = TestJSON.data([
       "error": ["type": "card_error", "message": "Your card was declined", "code": "card_declined"]
     ])
     StubBuilder.install(status: 402, body: body)
@@ -160,7 +166,7 @@ final class RequestShapeTests: XCTestCase {
 
   func testParseApiError() async {
     let client = makeClient()
-    let body = try! JSONSerialization.data(withJSONObject: [
+    let body = TestJSON.data([
       "error": ["type": "api_error", "message": "Stripe is down"]
     ])
     StubBuilder.install(status: 500, body: body)
@@ -178,7 +184,7 @@ final class RequestShapeTests: XCTestCase {
 
   func testParseNotFoundError() async {
     let client = makeClient()
-    let body = try! JSONSerialization.data(withJSONObject: [
+    let body = TestJSON.data([
       "error": ["type": "invalid_request_error", "message": "No such charge: ch_missing"]
     ])
     StubBuilder.install(status: 404, body: body)
@@ -217,7 +223,7 @@ final class RequestShapeTests: XCTestCase {
       "metadata": [String: String](),
       "paid": true,
       "refunded": false,
-      "status": "succeeded",
+      "status": "succeeded"
     ]
     StubBuilder.install(
       status: 200,
@@ -250,14 +256,14 @@ final class RequestShapeTests: XCTestCase {
           HTTPURLResponse(
             url: URL(string: "http://127.0.0.1:1/stub")!,
             statusCode: 500, httpVersion: nil, headerFields: nil)!,
-          try! JSONSerialization.data(withJSONObject: [
+          TestJSON.data([
             "error": ["type": "api_error", "message": "Server error"]]))
       }
       return RecordingResponse.httpResponse(
         HTTPURLResponse(
           url: URL(string: "http://127.0.0.1:1/stub")!,
           statusCode: 200, httpVersion: nil, headerFields: nil)!,
-        try! JSONSerialization.data(withJSONObject: ["data": []]))
+        TestJSON.data(["data": []]))
     }
     do {
       let result = try await client.perform(
@@ -271,12 +277,12 @@ final class RequestShapeTests: XCTestCase {
     let client = makeClient()
     let counter = ThreadSafeCounter()
     RecordingURLProtocol.handler = { _ in
-      let _ = counter.increment()
+      _ = counter.increment()
       return RecordingResponse.httpResponse(
         HTTPURLResponse(
           url: URL(string: "http://127.0.0.1:1/stub")!,
           statusCode: 400, httpVersion: nil, headerFields: nil)!,
-        try! JSONSerialization.data(withJSONObject: [
+        TestJSON.data([
           "error": ["type": "invalid_request_error", "message": "Bad"]]))
     }
     do {

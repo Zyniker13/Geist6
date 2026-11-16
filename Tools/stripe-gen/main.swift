@@ -124,7 +124,9 @@ do {
   try stamp.write(toFile: modelsDir + "/generation-stamp.txt", atomically: true, encoding: .utf8)
 
   print(
-    "stripe-gen: \(ops.count) operations, \(emitter.types.count + endpointEmitter.params.count + endpointEmitter.lists.count) types generated"
+    "stripe-gen: \(ops.count) operations, "
+    + "\(emitter.types.count + endpointEmitter.params.count + endpointEmitter.lists.count)"
+    + " types generated"
   )
   if !emitter.unknowns.isEmpty {
     for unknown in emitter.unknowns.sorted().prefix(20) {

@@ -53,10 +53,8 @@ extension StripeClient {
       let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
       let items = components.queryItems
     else { return nil }
-    for item in items {
-      if item.name == "page" {
-        return item.value
-      }
+    for item in items where item.name == "page" {
+      return item.value
     }
     return nil
   }
