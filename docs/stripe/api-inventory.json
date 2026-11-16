@@ -1,0 +1,6655 @@
+{
+  "apiVersion" : "2026-10-28.endive",
+  "packages" : {
+    "Apps" : [
+      {
+        "className" : "Install",
+        "object" : "apps.install",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/apps\/installs",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/apps\/installs\/{id}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/apps\/installs",
+            "type" : "create",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "update",
+            "path" : "\/v1\/apps\/installs\/{id}",
+            "type" : "update",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "uninstall",
+            "path" : "\/v1\/apps\/installs\/{id}\/uninstall",
+            "type" : "custom",
+            "write" : true
+          }
+        ],
+        "package" : "Apps",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "apps.install"
+      },
+      {
+        "className" : "Secret",
+        "object" : "apps.secret",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/apps\/secrets",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "find",
+            "path" : "\/v1\/apps\/secrets\/find",
+            "type" : "custom",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/apps\/secrets",
+            "type" : "create",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "delete_where",
+            "path" : "\/v1\/apps\/secrets\/delete",
+            "type" : "custom",
+            "write" : true
+          }
+        ],
+        "package" : "Apps",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "apps.secret"
+      }
+    ],
+    "Billing" : [
+      {
+        "className" : "Alert",
+        "object" : "billing.alert",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/billing\/alerts",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/billing\/alerts\/{id}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/billing\/alerts",
+            "type" : "create",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "activate",
+            "path" : "\/v1\/billing\/alerts\/{id}\/activate",
+            "type" : "custom",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "archive",
+            "path" : "\/v1\/billing\/alerts\/{id}\/archive",
+            "type" : "custom",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "deactivate",
+            "path" : "\/v1\/billing\/alerts\/{id}\/deactivate",
+            "type" : "custom",
+            "write" : true
+          }
+        ],
+        "package" : "Billing",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "billing.alert"
+      },
+      {
+        "className" : "CreditBalanceSummary",
+        "object" : "billing.credit_balance_summary",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/billing\/credit_balance_summary",
+            "type" : "retrieve",
+            "write" : false
+          }
+        ],
+        "package" : "Billing",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "billing.credit_balance_summary"
+      },
+      {
+        "className" : "CreditBalanceTransaction",
+        "object" : "billing.credit_balance_transaction",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/billing\/credit_balance_transactions",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/billing\/credit_balance_transactions\/{id}",
+            "type" : "retrieve",
+            "write" : false
+          }
+        ],
+        "package" : "Billing",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "billing.credit_balance_transaction"
+      },
+      {
+        "className" : "CreditGrant",
+        "object" : "billing.credit_grant",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/billing\/credit_grants",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/billing\/credit_grants\/{id}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/billing\/credit_grants",
+            "type" : "create",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "update",
+            "path" : "\/v1\/billing\/credit_grants\/{id}",
+            "type" : "update",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "expire",
+            "path" : "\/v1\/billing\/credit_grants\/{id}\/expire",
+            "type" : "custom",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "void_grant",
+            "path" : "\/v1\/billing\/credit_grants\/{id}\/void",
+            "type" : "custom",
+            "write" : true
+          }
+        ],
+        "package" : "Billing",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "billing.credit_grant"
+      },
+      {
+        "className" : "FeedbackOption",
+        "object" : "billing.feedback_option",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/billing\/feedback_options",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/billing\/feedback_options\/{id}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/billing\/feedback_options",
+            "type" : "create",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "update",
+            "path" : "\/v1\/billing\/feedback_options\/{id}",
+            "type" : "update",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "deactivate",
+            "path" : "\/v1\/billing\/feedback_options\/{id}\/deactivate",
+            "type" : "custom",
+            "write" : true
+          }
+        ],
+        "package" : "Billing",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "billing.feedback_option"
+      },
+      {
+        "className" : "Meter",
+        "object" : "billing.meter",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/billing\/meters",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/billing\/meters\/{id}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/billing\/meters",
+            "type" : "create",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "update",
+            "path" : "\/v1\/billing\/meters\/{id}",
+            "type" : "update",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "deactivate",
+            "path" : "\/v1\/billing\/meters\/{id}\/deactivate",
+            "type" : "custom",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "reactivate",
+            "path" : "\/v1\/billing\/meters\/{id}\/reactivate",
+            "type" : "custom",
+            "write" : true
+          }
+        ],
+        "package" : "Billing",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "billing.meter"
+      },
+      {
+        "className" : "MeterEvent",
+        "object" : "billing.meter_event",
+        "operations" : [
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/billing\/meter_events",
+            "type" : "create",
+            "write" : true
+          }
+        ],
+        "package" : "Billing",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "billing.meter_event"
+      },
+      {
+        "className" : "MeterEventAdjustment",
+        "object" : "billing.meter_event_adjustment",
+        "operations" : [
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/billing\/meter_event_adjustments",
+            "type" : "create",
+            "write" : true
+          }
+        ],
+        "package" : "Billing",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "billing.meter_event_adjustment"
+      },
+      {
+        "className" : "MeterEventSummary",
+        "object" : "billing.meter_event_summary",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/billing\/meters\/{id}\/event_summaries",
+            "type" : "list",
+            "write" : false
+          }
+        ],
+        "package" : "Billing",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "billing.meter_event_summary"
+      }
+    ],
+    "BillingPortal" : [
+      {
+        "className" : "Configuration",
+        "object" : "billing_portal.configuration",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/billing_portal\/configurations",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/billing_portal\/configurations\/{configuration}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/billing_portal\/configurations",
+            "type" : "create",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "update",
+            "path" : "\/v1\/billing_portal\/configurations\/{configuration}",
+            "type" : "update",
+            "write" : true
+          }
+        ],
+        "package" : "BillingPortal",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "billing_portal.configuration"
+      },
+      {
+        "className" : "Session",
+        "object" : "billing_portal.session",
+        "operations" : [
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/billing_portal\/sessions",
+            "type" : "create",
+            "write" : true
+          }
+        ],
+        "package" : "BillingPortal",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "billing_portal.session"
+      }
+    ],
+    "Checkout" : [
+      {
+        "className" : "Session",
+        "object" : "checkout.session",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/checkout\/sessions",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/checkout\/sessions\/{session}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "list_line_items",
+            "path" : "\/v1\/checkout\/sessions\/{session}\/line_items",
+            "type" : "custom",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/checkout\/sessions",
+            "type" : "create",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "update",
+            "path" : "\/v1\/checkout\/sessions\/{session}",
+            "type" : "update",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "expire",
+            "path" : "\/v1\/checkout\/sessions\/{session}\/expire",
+            "type" : "custom",
+            "write" : true
+          }
+        ],
+        "package" : "Checkout",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "checkout.session"
+      }
+    ],
+    "Climate" : [
+      {
+        "className" : "Order",
+        "object" : "climate.order",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/climate\/orders",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/climate\/orders\/{order}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/climate\/orders",
+            "type" : "create",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "update",
+            "path" : "\/v1\/climate\/orders\/{order}",
+            "type" : "update",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "cancel",
+            "path" : "\/v1\/climate\/orders\/{order}\/cancel",
+            "type" : "custom",
+            "write" : true
+          }
+        ],
+        "package" : "Climate",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "climate.order"
+      },
+      {
+        "className" : "Product",
+        "object" : "climate.product",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/climate\/products",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/climate\/products\/{product}",
+            "type" : "retrieve",
+            "write" : false
+          }
+        ],
+        "package" : "Climate",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "climate.product"
+      },
+      {
+        "className" : "Supplier",
+        "object" : "climate.supplier",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/climate\/suppliers",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/climate\/suppliers\/{supplier}",
+            "type" : "retrieve",
+            "write" : false
+          }
+        ],
+        "package" : "Climate",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "climate.supplier"
+      }
+    ],
+    "Core" : [
+      {
+        "className" : "Account",
+        "object" : "account",
+        "operations" : [
+          {
+            "http" : "delete",
+            "name" : "delete",
+            "path" : "\/v1\/accounts\/{account}",
+            "type" : "delete",
+            "write" : true
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/account",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/accounts",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/accounts\/{account}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "capabilities",
+            "path" : "\/v1\/accounts\/{account}\/capabilities",
+            "type" : "custom",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "persons",
+            "path" : "\/v1\/accounts\/{account}\/persons",
+            "type" : "custom",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/accounts",
+            "type" : "create",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "update",
+            "path" : "\/v1\/accounts\/{account}",
+            "type" : "update",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "reject",
+            "path" : "\/v1\/accounts\/{account}\/reject",
+            "type" : "custom",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "unreject",
+            "path" : "\/v1\/accounts\/{account}\/unreject",
+            "type" : "custom",
+            "write" : true
+          }
+        ],
+        "package" : "Core",
+        "polymorphicGroups" : [
+          "deleted_payment_source",
+          "payment_source"
+        ],
+        "schema" : "account"
+      },
+      {
+        "className" : "AccountLink",
+        "object" : "account_link",
+        "operations" : [
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/account_links",
+            "type" : "create",
+            "write" : true
+          }
+        ],
+        "package" : "Core",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "account_link"
+      },
+      {
+        "className" : "AccountSession",
+        "object" : "account_session",
+        "operations" : [
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/account_sessions",
+            "type" : "create",
+            "write" : true
+          }
+        ],
+        "package" : "Core",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "account_session"
+      },
+      {
+        "className" : "ApplePayDomain",
+        "object" : "apple_pay_domain",
+        "operations" : [
+          {
+            "http" : "delete",
+            "name" : "delete",
+            "path" : "\/v1\/apple_pay\/domains\/{domain}",
+            "type" : "delete",
+            "write" : true
+          },
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/apple_pay\/domains",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/apple_pay\/domains\/{domain}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/apple_pay\/domains",
+            "type" : "create",
+            "write" : true
+          }
+        ],
+        "package" : "Core",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "apple_pay_domain"
+      },
+      {
+        "className" : "ApplicationFee",
+        "object" : "application_fee",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/application_fees",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/application_fees\/{id}",
+            "type" : "retrieve",
+            "write" : false
+          }
+        ],
+        "package" : "Core",
+        "polymorphicGroups" : [
+          "balance_transaction_source"
+        ],
+        "schema" : "application_fee"
+      },
+      {
+        "className" : "Balance",
+        "object" : "balance",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/balance",
+            "type" : "retrieve",
+            "write" : false
+          }
+        ],
+        "package" : "Core",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "balance"
+      },
+      {
+        "className" : "BalanceSettings",
+        "object" : "balance_settings",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/balance_settings",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "update",
+            "path" : "\/v1\/balance_settings",
+            "type" : "update",
+            "write" : true
+          }
+        ],
+        "package" : "Core",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "balance_settings"
+      },
+      {
+        "className" : "BalanceTransaction",
+        "object" : "balance_transaction",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/balance_transactions",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/balance_transactions\/{id}",
+            "type" : "retrieve",
+            "write" : false
+          }
+        ],
+        "package" : "Core",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "balance_transaction"
+      },
+      {
+        "className" : "BankAccount",
+        "object" : "bank_account",
+        "operations" : [
+          {
+            "http" : "delete",
+            "name" : "delete",
+            "path" : "\/v1\/accounts\/{account}\/external_accounts\/{id}",
+            "type" : "delete",
+            "write" : true
+          },
+          {
+            "http" : "delete",
+            "name" : "delete",
+            "path" : "\/v1\/customers\/{customer}\/sources\/{id}",
+            "type" : "delete",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "update",
+            "path" : "\/v1\/accounts\/{account}\/external_accounts\/{id}",
+            "type" : "update",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "update",
+            "path" : "\/v1\/customers\/{customer}\/sources\/{id}",
+            "type" : "update",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "verify",
+            "path" : "\/v1\/customers\/{customer}\/sources\/{id}\/verify",
+            "type" : "custom",
+            "write" : true
+          }
+        ],
+        "package" : "Core",
+        "polymorphicGroups" : [
+          "deleted_external_account",
+          "deleted_payment_source",
+          "external_account",
+          "payment_source"
+        ],
+        "schema" : "bank_account"
+      },
+      {
+        "className" : "Capability",
+        "object" : "capability",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/accounts\/{account}\/capabilities",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/accounts\/{account}\/capabilities",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/accounts\/{account}\/capabilities\/{capability}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/accounts\/{account}\/capabilities\/{capability}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "update",
+            "path" : "\/v1\/accounts\/{account}\/capabilities\/{capability}",
+            "type" : "update",
+            "write" : true
+          }
+        ],
+        "package" : "Core",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "capability"
+      },
+      {
+        "className" : "Card",
+        "object" : "card",
+        "operations" : [
+          {
+            "http" : "delete",
+            "name" : "delete",
+            "path" : "\/v1\/accounts\/{account}\/external_accounts\/{id}",
+            "type" : "delete",
+            "write" : true
+          },
+          {
+            "http" : "delete",
+            "name" : "delete",
+            "path" : "\/v1\/customers\/{customer}\/sources\/{id}",
+            "type" : "delete",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "update",
+            "path" : "\/v1\/accounts\/{account}\/external_accounts\/{id}",
+            "type" : "update",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "update",
+            "path" : "\/v1\/customers\/{customer}\/sources\/{id}",
+            "type" : "update",
+            "write" : true
+          }
+        ],
+        "package" : "Core",
+        "polymorphicGroups" : [
+          "deleted_external_account",
+          "deleted_payment_source",
+          "external_account",
+          "payment_source"
+        ],
+        "schema" : "card"
+      },
+      {
+        "className" : "CashBalance",
+        "object" : "cash_balance",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/customers\/{customer}\/cash_balance",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "update",
+            "path" : "\/v1\/customers\/{customer}\/cash_balance",
+            "type" : "update",
+            "write" : true
+          }
+        ],
+        "package" : "Core",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "cash_balance"
+      },
+      {
+        "className" : "Charge",
+        "object" : "charge",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/charges",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/charges\/{charge}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "search",
+            "path" : "\/v1\/charges\/search",
+            "type" : "custom",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/charges",
+            "type" : "create",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "update",
+            "path" : "\/v1\/charges\/{charge}",
+            "type" : "update",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "capture",
+            "path" : "\/v1\/charges\/{charge}\/capture",
+            "type" : "custom",
+            "write" : true
+          }
+        ],
+        "package" : "Core",
+        "polymorphicGroups" : [
+          "balance_transaction_source"
+        ],
+        "schema" : "charge"
+      },
+      {
+        "className" : "ConfirmationToken",
+        "object" : "confirmation_token",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/confirmation_tokens\/{confirmation_token}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/test_helpers\/confirmation_tokens",
+            "type" : "create",
+            "write" : true
+          }
+        ],
+        "package" : "Core",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "confirmation_token"
+      },
+      {
+        "className" : "CountrySpec",
+        "object" : "country_spec",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/country_specs",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/country_specs\/{country}",
+            "type" : "retrieve",
+            "write" : false
+          }
+        ],
+        "package" : "Core",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "country_spec"
+      },
+      {
+        "className" : "Coupon",
+        "object" : "coupon",
+        "operations" : [
+          {
+            "http" : "delete",
+            "name" : "delete",
+            "path" : "\/v1\/coupons\/{coupon}",
+            "type" : "delete",
+            "write" : true
+          },
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/coupons",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/coupons\/{coupon}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/coupons",
+            "type" : "create",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "update",
+            "path" : "\/v1\/coupons\/{coupon}",
+            "type" : "update",
+            "write" : true
+          }
+        ],
+        "package" : "Core",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "coupon"
+      },
+      {
+        "className" : "CreditNote",
+        "object" : "credit_note",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/credit_notes",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/credit_notes\/{id}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "preview",
+            "path" : "\/v1\/credit_notes\/preview",
+            "type" : "custom",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "preview_lines",
+            "path" : "\/v1\/credit_notes\/preview\/lines",
+            "type" : "custom",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/credit_notes",
+            "type" : "create",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "update",
+            "path" : "\/v1\/credit_notes\/{id}",
+            "type" : "update",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "void_credit_note",
+            "path" : "\/v1\/credit_notes\/{id}\/void",
+            "type" : "custom",
+            "write" : true
+          }
+        ],
+        "package" : "Core",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "credit_note"
+      },
+      {
+        "className" : "CreditNoteLineItem",
+        "object" : "credit_note_line_item",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/credit_notes\/{credit_note}\/lines",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/credit_notes\/{credit_note}\/lines",
+            "type" : "list",
+            "write" : false
+          }
+        ],
+        "package" : "Core",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "credit_note_line_item"
+      },
+      {
+        "className" : "Customer",
+        "object" : "customer",
+        "operations" : [
+          {
+            "http" : "delete",
+            "name" : "delete",
+            "path" : "\/v1\/customers\/{customer}",
+            "type" : "delete",
+            "write" : true
+          },
+          {
+            "http" : "delete",
+            "name" : "delete_discount",
+            "path" : "\/v1\/customers\/{customer}\/discount",
+            "type" : "custom",
+            "write" : true
+          },
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/customers",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/customers\/{customer}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "balance_transactions",
+            "path" : "\/v1\/customers\/{customer}\/balance_transactions",
+            "type" : "custom",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "list_payment_methods",
+            "path" : "\/v1\/customers\/{customer}\/payment_methods",
+            "type" : "custom",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve_payment_method",
+            "path" : "\/v1\/customers\/{customer}\/payment_methods\/{payment_method}",
+            "type" : "custom",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "search",
+            "path" : "\/v1\/customers\/search",
+            "type" : "custom",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/customers",
+            "type" : "create",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "update",
+            "path" : "\/v1\/customers\/{customer}",
+            "type" : "update",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "create_funding_instructions",
+            "path" : "\/v1\/customers\/{customer}\/funding_instructions",
+            "type" : "custom",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "fund_cash_balance",
+            "path" : "\/v1\/test_helpers\/customers\/{customer}\/fund_cash_balance",
+            "type" : "custom",
+            "write" : true
+          }
+        ],
+        "package" : "Core",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "customer"
+      },
+      {
+        "className" : "CustomerBalanceTransaction",
+        "object" : "customer_balance_transaction",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/customers\/{customer}\/balance_transactions",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/customers\/{customer}\/balance_transactions",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/customers\/{customer}\/balance_transactions\/{transaction}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/customers\/{customer}\/balance_transactions\/{transaction}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/customers\/{customer}\/balance_transactions",
+            "type" : "create",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/customers\/{customer}\/balance_transactions",
+            "type" : "create",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "update",
+            "path" : "\/v1\/customers\/{customer}\/balance_transactions\/{transaction}",
+            "type" : "update",
+            "write" : true
+          }
+        ],
+        "package" : "Core",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "customer_balance_transaction"
+      },
+      {
+        "className" : "CustomerCashBalanceTransaction",
+        "object" : "customer_cash_balance_transaction",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/customers\/{customer}\/cash_balance_transactions",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/customers\/{customer}\/cash_balance_transactions",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/customers\/{customer}\/cash_balance_transactions\/{transaction}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/customers\/{customer}\/cash_balance_transactions\/{transaction}",
+            "type" : "retrieve",
+            "write" : false
+          }
+        ],
+        "package" : "Core",
+        "polymorphicGroups" : [
+          "balance_transaction_source"
+        ],
+        "schema" : "customer_cash_balance_transaction"
+      },
+      {
+        "className" : "CustomerSession",
+        "object" : "customer_session",
+        "operations" : [
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/customer_sessions",
+            "type" : "create",
+            "write" : true
+          }
+        ],
+        "package" : "Core",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "customer_session"
+      },
+      {
+        "className" : "Dispute",
+        "object" : "dispute",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/disputes",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/disputes\/{dispute}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "update",
+            "path" : "\/v1\/disputes\/{dispute}",
+            "type" : "update",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "close",
+            "path" : "\/v1\/disputes\/{dispute}\/close",
+            "type" : "custom",
+            "write" : true
+          }
+        ],
+        "package" : "Core",
+        "polymorphicGroups" : [
+          "balance_transaction_source"
+        ],
+        "schema" : "dispute"
+      },
+      {
+        "className" : "EphemeralKey",
+        "object" : "ephemeral_key",
+        "operations" : [
+          {
+            "http" : "delete",
+            "name" : "delete",
+            "path" : "\/v1\/ephemeral_keys\/{key}",
+            "type" : "delete",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/ephemeral_keys",
+            "type" : "create",
+            "write" : true
+          }
+        ],
+        "package" : "Core",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "ephemeral_key"
+      },
+      {
+        "className" : "Event",
+        "object" : "event",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/events",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/events\/{id}",
+            "type" : "retrieve",
+            "write" : false
+          }
+        ],
+        "package" : "Core",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "event"
+      },
+      {
+        "className" : "ExchangeRate",
+        "object" : "exchange_rate",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/exchange_rates",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/exchange_rates\/{rate_id}",
+            "type" : "retrieve",
+            "write" : false
+          }
+        ],
+        "package" : "Core",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "exchange_rate"
+      },
+      {
+        "className" : "ExternalAccount",
+        "object" : "external_account",
+        "operations" : [
+          {
+            "http" : "delete",
+            "name" : "delete",
+            "path" : "\/v1\/accounts\/{account}\/external_accounts\/{id}",
+            "type" : "delete",
+            "write" : true
+          },
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/accounts\/{account}\/external_accounts",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/accounts\/{account}\/external_accounts",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/accounts\/{account}\/external_accounts\/{id}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/accounts\/{account}\/external_accounts\/{id}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/accounts\/{account}\/external_accounts",
+            "type" : "create",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/accounts\/{account}\/external_accounts",
+            "type" : "create",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "update",
+            "path" : "\/v1\/accounts\/{account}\/external_accounts\/{id}",
+            "type" : "update",
+            "write" : true
+          }
+        ],
+        "package" : "Core",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "external_account"
+      },
+      {
+        "className" : "FeeRefund",
+        "object" : "fee_refund",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/application_fees\/{fee}\/refunds\/{id}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/application_fees\/{fee}\/refunds\/{id}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/application_fees\/{id}\/refunds",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/application_fees\/{id}\/refunds",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "update",
+            "path" : "\/v1\/application_fees\/{fee}\/refunds\/{id}",
+            "type" : "update",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/application_fees\/{id}\/refunds",
+            "type" : "create",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/application_fees\/{id}\/refunds",
+            "type" : "create",
+            "write" : true
+          }
+        ],
+        "package" : "Core",
+        "polymorphicGroups" : [
+          "balance_transaction_source"
+        ],
+        "schema" : "fee_refund"
+      },
+      {
+        "className" : "File",
+        "object" : "file",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/files",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/files\/{file}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/files",
+            "type" : "create",
+            "write" : true
+          }
+        ],
+        "package" : "Core",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "file"
+      },
+      {
+        "className" : "FileLink",
+        "object" : "file_link",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/file_links",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/file_links\/{link}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/file_links",
+            "type" : "create",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "update",
+            "path" : "\/v1\/file_links\/{link}",
+            "type" : "update",
+            "write" : true
+          }
+        ],
+        "package" : "Core",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "file_link"
+      },
+      {
+        "className" : "Invoice",
+        "object" : "invoice",
+        "operations" : [
+          {
+            "http" : "delete",
+            "name" : "delete",
+            "path" : "\/v1\/invoices\/{invoice}",
+            "type" : "delete",
+            "write" : true
+          },
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/invoices",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/invoices\/{invoice}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "search",
+            "path" : "\/v1\/invoices\/search",
+            "type" : "custom",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/invoices",
+            "type" : "create",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "update",
+            "path" : "\/v1\/invoices\/{invoice}",
+            "type" : "update",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "add_lines",
+            "path" : "\/v1\/invoices\/{invoice}\/add_lines",
+            "type" : "custom",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "attach_payment",
+            "path" : "\/v1\/invoices\/{invoice}\/attach_payment",
+            "type" : "custom",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "finalize_invoice",
+            "path" : "\/v1\/invoices\/{invoice}\/finalize",
+            "type" : "custom",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "mark_uncollectible",
+            "path" : "\/v1\/invoices\/{invoice}\/mark_uncollectible",
+            "type" : "custom",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "pay",
+            "path" : "\/v1\/invoices\/{invoice}\/pay",
+            "type" : "custom",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "remove_lines",
+            "path" : "\/v1\/invoices\/{invoice}\/remove_lines",
+            "type" : "custom",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "send_invoice",
+            "path" : "\/v1\/invoices\/{invoice}\/send",
+            "type" : "custom",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "update_lines",
+            "path" : "\/v1\/invoices\/{invoice}\/update_lines",
+            "type" : "custom",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "void_invoice",
+            "path" : "\/v1\/invoices\/{invoice}\/void",
+            "type" : "custom",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "create_preview",
+            "path" : "\/v1\/invoices\/create_preview",
+            "type" : "custom",
+            "write" : true
+          }
+        ],
+        "package" : "Core",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "invoice"
+      },
+      {
+        "className" : "InvoiceItem",
+        "object" : "invoiceitem",
+        "operations" : [
+          {
+            "http" : "delete",
+            "name" : "delete",
+            "path" : "\/v1\/invoiceitems\/{invoiceitem}",
+            "type" : "delete",
+            "write" : true
+          },
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/invoiceitems",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/invoiceitems\/{invoiceitem}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/invoiceitems",
+            "type" : "create",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "update",
+            "path" : "\/v1\/invoiceitems\/{invoiceitem}",
+            "type" : "update",
+            "write" : true
+          }
+        ],
+        "package" : "Core",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "invoiceitem"
+      },
+      {
+        "className" : "InvoiceLineItem",
+        "object" : "line_item",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/invoices\/{invoice}\/lines",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/invoices\/{invoice}\/lines",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "update",
+            "path" : "\/v1\/invoices\/{invoice}\/lines\/{line_item_id}",
+            "type" : "update",
+            "write" : true
+          }
+        ],
+        "package" : "Core",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "line_item"
+      },
+      {
+        "className" : "InvoicePayment",
+        "object" : "invoice_payment",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/invoice_payments",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/invoice_payments\/{invoice_payment}",
+            "type" : "retrieve",
+            "write" : false
+          }
+        ],
+        "package" : "Core",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "invoice_payment"
+      },
+      {
+        "className" : "InvoiceRenderingTemplate",
+        "object" : "invoice_rendering_template",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/invoice_rendering_templates",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/invoice_rendering_templates\/{template}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "archive",
+            "path" : "\/v1\/invoice_rendering_templates\/{template}\/archive",
+            "type" : "custom",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "unarchive",
+            "path" : "\/v1\/invoice_rendering_templates\/{template}\/unarchive",
+            "type" : "custom",
+            "write" : true
+          }
+        ],
+        "package" : "Core",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "invoice_rendering_template"
+      },
+      {
+        "className" : "LoginLink",
+        "object" : "login_link",
+        "operations" : [
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/accounts\/{account}\/login_links",
+            "type" : "custom",
+            "write" : true
+          }
+        ],
+        "package" : "Core",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "login_link"
+      },
+      {
+        "className" : "Mandate",
+        "object" : "mandate",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/mandates\/{mandate}",
+            "type" : "retrieve",
+            "write" : false
+          }
+        ],
+        "package" : "Core",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "mandate"
+      },
+      {
+        "className" : "PaymentAttemptRecord",
+        "object" : "payment_attempt_record",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/payment_attempt_records",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/payment_attempt_records\/{id}",
+            "type" : "retrieve",
+            "write" : false
+          }
+        ],
+        "package" : "Core",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "payment_attempt_record"
+      },
+      {
+        "className" : "PaymentIntent",
+        "object" : "payment_intent",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/payment_intents",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/payment_intents\/{intent}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "search",
+            "path" : "\/v1\/payment_intents\/search",
+            "type" : "custom",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/payment_intents",
+            "type" : "create",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "update",
+            "path" : "\/v1\/payment_intents\/{intent}",
+            "type" : "update",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "apply_customer_balance",
+            "path" : "\/v1\/payment_intents\/{intent}\/apply_customer_balance",
+            "type" : "custom",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "cancel",
+            "path" : "\/v1\/payment_intents\/{intent}\/cancel",
+            "type" : "custom",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "capture",
+            "path" : "\/v1\/payment_intents\/{intent}\/capture",
+            "type" : "custom",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "confirm",
+            "path" : "\/v1\/payment_intents\/{intent}\/confirm",
+            "type" : "custom",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "increment_authorization",
+            "path" : "\/v1\/payment_intents\/{intent}\/increment_authorization",
+            "type" : "custom",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "verify_microdeposits",
+            "path" : "\/v1\/payment_intents\/{intent}\/verify_microdeposits",
+            "type" : "custom",
+            "write" : true
+          }
+        ],
+        "package" : "Core",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "payment_intent"
+      },
+      {
+        "className" : "PaymentIntentAmountDetailsLineItem",
+        "object" : "payment_intent_amount_details_line_item",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/payment_intents\/{intent}\/amount_details_line_items",
+            "type" : "list",
+            "write" : false
+          }
+        ],
+        "package" : "Core",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "payment_intent_amount_details_line_item"
+      },
+      {
+        "className" : "PaymentLink",
+        "object" : "payment_link",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/payment_links",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/payment_links\/{payment_link}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "list_line_items",
+            "path" : "\/v1\/payment_links\/{payment_link}\/line_items",
+            "type" : "custom",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/payment_links",
+            "type" : "create",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "update",
+            "path" : "\/v1\/payment_links\/{payment_link}",
+            "type" : "update",
+            "write" : true
+          }
+        ],
+        "package" : "Core",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "payment_link"
+      },
+      {
+        "className" : "PaymentMethod",
+        "object" : "payment_method",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/payment_methods",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/payment_methods\/{payment_method}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/payment_methods",
+            "type" : "create",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "update",
+            "path" : "\/v1\/payment_methods\/{payment_method}",
+            "type" : "update",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "attach",
+            "path" : "\/v1\/payment_methods\/{payment_method}\/attach",
+            "type" : "custom",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "detach",
+            "path" : "\/v1\/payment_methods\/{payment_method}\/detach",
+            "type" : "custom",
+            "write" : true
+          }
+        ],
+        "package" : "Core",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "payment_method"
+      },
+      {
+        "className" : "PaymentMethodConfiguration",
+        "object" : "payment_method_configuration",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/payment_method_configurations",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/payment_method_configurations\/{configuration}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/payment_method_configurations",
+            "type" : "create",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "update",
+            "path" : "\/v1\/payment_method_configurations\/{configuration}",
+            "type" : "update",
+            "write" : true
+          }
+        ],
+        "package" : "Core",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "payment_method_configuration"
+      },
+      {
+        "className" : "PaymentMethodDomain",
+        "object" : "payment_method_domain",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/payment_method_domains",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/payment_method_domains\/{payment_method_domain}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/payment_method_domains",
+            "type" : "create",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "update",
+            "path" : "\/v1\/payment_method_domains\/{payment_method_domain}",
+            "type" : "update",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "validate",
+            "path" : "\/v1\/payment_method_domains\/{payment_method_domain}\/validate",
+            "type" : "custom",
+            "write" : true
+          }
+        ],
+        "package" : "Core",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "payment_method_domain"
+      },
+      {
+        "className" : "PaymentRecord",
+        "object" : "payment_record",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/payment_records",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/payment_records\/{id}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "report_payment_attempt",
+            "path" : "\/v1\/payment_records\/{id}\/report_payment_attempt",
+            "type" : "custom",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "report_payment_attempt_canceled",
+            "path" : "\/v1\/payment_records\/{id}\/report_payment_attempt_canceled",
+            "type" : "custom",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "report_payment_attempt_failed",
+            "path" : "\/v1\/payment_records\/{id}\/report_payment_attempt_failed",
+            "type" : "custom",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "report_payment_attempt_guaranteed",
+            "path" : "\/v1\/payment_records\/{id}\/report_payment_attempt_guaranteed",
+            "type" : "custom",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "report_payment_attempt_informational",
+            "path" : "\/v1\/payment_records\/{id}\/report_payment_attempt_informational",
+            "type" : "custom",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "report_refund",
+            "path" : "\/v1\/payment_records\/{id}\/report_refund",
+            "type" : "custom",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "report_payment",
+            "path" : "\/v1\/payment_records\/report_payment",
+            "type" : "custom",
+            "write" : true
+          }
+        ],
+        "package" : "Core",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "payment_record"
+      },
+      {
+        "className" : "PaymentSource",
+        "object" : "payment_source",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/customers\/{customer}\/sources",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/customers\/{customer}\/sources",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/customers\/{customer}\/sources\/{id}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/customers\/{customer}\/sources\/{id}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/customers\/{customer}\/sources",
+            "type" : "create",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/customers\/{customer}\/sources",
+            "type" : "create",
+            "write" : true
+          }
+        ],
+        "package" : "Core",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "payment_source"
+      },
+      {
+        "className" : "Payout",
+        "object" : "payout",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/payouts",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/payouts\/{payout}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/payouts",
+            "type" : "create",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "update",
+            "path" : "\/v1\/payouts\/{payout}",
+            "type" : "update",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "cancel",
+            "path" : "\/v1\/payouts\/{payout}\/cancel",
+            "type" : "custom",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "reverse",
+            "path" : "\/v1\/payouts\/{payout}\/reverse",
+            "type" : "custom",
+            "write" : true
+          }
+        ],
+        "package" : "Core",
+        "polymorphicGroups" : [
+          "balance_transaction_source"
+        ],
+        "schema" : "payout"
+      },
+      {
+        "className" : "Person",
+        "object" : "person",
+        "operations" : [
+          {
+            "http" : "delete",
+            "name" : "delete",
+            "path" : "\/v1\/accounts\/{account}\/persons\/{person}",
+            "type" : "delete",
+            "write" : true
+          },
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/accounts\/{account}\/persons",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/accounts\/{account}\/persons",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/accounts\/{account}\/persons\/{person}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/accounts\/{account}\/persons\/{person}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/accounts\/{account}\/persons",
+            "type" : "create",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/accounts\/{account}\/persons",
+            "type" : "create",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "update",
+            "path" : "\/v1\/accounts\/{account}\/persons\/{person}",
+            "type" : "update",
+            "write" : true
+          }
+        ],
+        "package" : "Core",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "person"
+      },
+      {
+        "className" : "Plan",
+        "object" : "plan",
+        "operations" : [
+          {
+            "http" : "delete",
+            "name" : "delete",
+            "path" : "\/v1\/plans\/{plan}",
+            "type" : "delete",
+            "write" : true
+          },
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/plans",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/plans\/{plan}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/plans",
+            "type" : "create",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "update",
+            "path" : "\/v1\/plans\/{plan}",
+            "type" : "update",
+            "write" : true
+          }
+        ],
+        "package" : "Core",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "plan"
+      },
+      {
+        "className" : "Price",
+        "object" : "price",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/prices",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/prices\/{price}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "search",
+            "path" : "\/v1\/prices\/search",
+            "type" : "custom",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/prices",
+            "type" : "create",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "update",
+            "path" : "\/v1\/prices\/{price}",
+            "type" : "update",
+            "write" : true
+          }
+        ],
+        "package" : "Core",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "price"
+      },
+      {
+        "className" : "Product",
+        "object" : "product",
+        "operations" : [
+          {
+            "http" : "delete",
+            "name" : "delete",
+            "path" : "\/v1\/products\/{id}",
+            "type" : "delete",
+            "write" : true
+          },
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/products",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/products\/{id}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "search",
+            "path" : "\/v1\/products\/search",
+            "type" : "custom",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/products",
+            "type" : "create",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "update",
+            "path" : "\/v1\/products\/{id}",
+            "type" : "update",
+            "write" : true
+          }
+        ],
+        "package" : "Core",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "product"
+      },
+      {
+        "className" : "ProductFeature",
+        "object" : "product_feature",
+        "operations" : [
+          {
+            "http" : "delete",
+            "name" : "delete",
+            "path" : "\/v1\/products\/{product}\/features\/{id}",
+            "type" : "delete",
+            "write" : true
+          },
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/products\/{product}\/features",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/products\/{product}\/features\/{id}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/products\/{product}\/features",
+            "type" : "create",
+            "write" : true
+          }
+        ],
+        "package" : "Core",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "product_feature"
+      },
+      {
+        "className" : "PromotionCode",
+        "object" : "promotion_code",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/promotion_codes",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/promotion_codes\/{promotion_code}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/promotion_codes",
+            "type" : "create",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "update",
+            "path" : "\/v1\/promotion_codes\/{promotion_code}",
+            "type" : "update",
+            "write" : true
+          }
+        ],
+        "package" : "Core",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "promotion_code"
+      },
+      {
+        "className" : "Quote",
+        "object" : "quote",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/quotes",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/quotes\/{quote}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "list_computed_upfront_line_items",
+            "path" : "\/v1\/quotes\/{quote}\/computed_upfront_line_items",
+            "type" : "custom",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "list_line_items",
+            "path" : "\/v1\/quotes\/{quote}\/line_items",
+            "type" : "custom",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/quotes",
+            "type" : "create",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "update",
+            "path" : "\/v1\/quotes\/{quote}",
+            "type" : "update",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "accept",
+            "path" : "\/v1\/quotes\/{quote}\/accept",
+            "type" : "custom",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "cancel",
+            "path" : "\/v1\/quotes\/{quote}\/cancel",
+            "type" : "custom",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "finalize_quote",
+            "path" : "\/v1\/quotes\/{quote}\/finalize",
+            "type" : "custom",
+            "write" : true
+          },
+          {
+            "http" : "get",
+            "name" : "pdf",
+            "path" : "\/v1\/quotes\/{quote}\/pdf",
+            "type" : "custom",
+            "write" : false
+          }
+        ],
+        "package" : "Core",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "quote"
+      },
+      {
+        "className" : "Refund",
+        "object" : "refund",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/charges\/{charge}\/refunds",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/charges\/{charge}\/refunds\/{refund}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/refunds",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/refunds\/{refund}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/refunds",
+            "type" : "create",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "update",
+            "path" : "\/v1\/refunds\/{refund}",
+            "type" : "update",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "cancel",
+            "path" : "\/v1\/refunds\/{refund}\/cancel",
+            "type" : "custom",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "expire",
+            "path" : "\/v1\/test_helpers\/refunds\/{refund}\/expire",
+            "type" : "custom",
+            "write" : true
+          }
+        ],
+        "package" : "Core",
+        "polymorphicGroups" : [
+          "balance_transaction_source"
+        ],
+        "schema" : "refund"
+      },
+      {
+        "className" : "Review",
+        "object" : "review",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/reviews",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/reviews\/{review}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "approve",
+            "path" : "\/v1\/reviews\/{review}\/approve",
+            "type" : "custom",
+            "write" : true
+          }
+        ],
+        "package" : "Core",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "review"
+      },
+      {
+        "className" : "SetupAttempt",
+        "object" : "setup_attempt",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/setup_attempts",
+            "type" : "list",
+            "write" : false
+          }
+        ],
+        "package" : "Core",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "setup_attempt"
+      },
+      {
+        "className" : "SetupIntent",
+        "object" : "setup_intent",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/setup_intents",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/setup_intents\/{intent}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/setup_intents",
+            "type" : "create",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "update",
+            "path" : "\/v1\/setup_intents\/{intent}",
+            "type" : "update",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "cancel",
+            "path" : "\/v1\/setup_intents\/{intent}\/cancel",
+            "type" : "custom",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "confirm",
+            "path" : "\/v1\/setup_intents\/{intent}\/confirm",
+            "type" : "custom",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "verify_microdeposits",
+            "path" : "\/v1\/setup_intents\/{intent}\/verify_microdeposits",
+            "type" : "custom",
+            "write" : true
+          }
+        ],
+        "package" : "Core",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "setup_intent"
+      },
+      {
+        "className" : "ShippingRate",
+        "object" : "shipping_rate",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/shipping_rates",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/shipping_rates\/{shipping_rate_token}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/shipping_rates",
+            "type" : "create",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "update",
+            "path" : "\/v1\/shipping_rates\/{shipping_rate_token}",
+            "type" : "update",
+            "write" : true
+          }
+        ],
+        "package" : "Core",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "shipping_rate"
+      },
+      {
+        "className" : "Source",
+        "object" : "source",
+        "operations" : [
+          {
+            "http" : "delete",
+            "name" : "detach",
+            "path" : "\/v1\/customers\/{customer}\/sources\/{id}",
+            "type" : "custom",
+            "write" : true
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/sources\/{source}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "source_transactions",
+            "path" : "\/v1\/sources\/{source}\/source_transactions",
+            "type" : "custom",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/sources",
+            "type" : "create",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "update",
+            "path" : "\/v1\/sources\/{source}",
+            "type" : "update",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "verify",
+            "path" : "\/v1\/sources\/{source}\/verify",
+            "type" : "custom",
+            "write" : true
+          }
+        ],
+        "package" : "Core",
+        "polymorphicGroups" : [
+          "deleted_payment_source",
+          "payment_source"
+        ],
+        "schema" : "source"
+      },
+      {
+        "className" : "Subscription",
+        "object" : "subscription",
+        "operations" : [
+          {
+            "http" : "delete",
+            "name" : "cancel",
+            "path" : "\/v1\/subscriptions\/{subscription_exposed_id}",
+            "type" : "custom",
+            "write" : true
+          },
+          {
+            "http" : "delete",
+            "name" : "delete_discount",
+            "path" : "\/v1\/subscriptions\/{subscription_exposed_id}\/discount",
+            "type" : "custom",
+            "write" : true
+          },
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/subscriptions",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/subscriptions\/{subscription_exposed_id}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "search",
+            "path" : "\/v1\/subscriptions\/search",
+            "type" : "custom",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/subscriptions",
+            "type" : "create",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "migrate",
+            "path" : "\/v1\/subscriptions\/{subscription}\/migrate",
+            "type" : "custom",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "pause",
+            "path" : "\/v1\/subscriptions\/{subscription}\/pause",
+            "type" : "custom",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "resume",
+            "path" : "\/v1\/subscriptions\/{subscription}\/resume",
+            "type" : "custom",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "update",
+            "path" : "\/v1\/subscriptions\/{subscription_exposed_id}",
+            "type" : "update",
+            "write" : true
+          }
+        ],
+        "package" : "Core",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "subscription"
+      },
+      {
+        "className" : "SubscriptionItem",
+        "object" : "subscription_item",
+        "operations" : [
+          {
+            "http" : "delete",
+            "name" : "delete",
+            "path" : "\/v1\/subscription_items\/{item}",
+            "type" : "delete",
+            "write" : true
+          },
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/subscription_items",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/subscription_items\/{item}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/subscription_items",
+            "type" : "create",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "update",
+            "path" : "\/v1\/subscription_items\/{item}",
+            "type" : "update",
+            "write" : true
+          }
+        ],
+        "package" : "Core",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "subscription_item"
+      },
+      {
+        "className" : "SubscriptionSchedule",
+        "object" : "subscription_schedule",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/subscription_schedules",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/subscription_schedules\/{schedule}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/subscription_schedules",
+            "type" : "create",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "update",
+            "path" : "\/v1\/subscription_schedules\/{schedule}",
+            "type" : "update",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "cancel",
+            "path" : "\/v1\/subscription_schedules\/{schedule}\/cancel",
+            "type" : "custom",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "release",
+            "path" : "\/v1\/subscription_schedules\/{schedule}\/release",
+            "type" : "custom",
+            "write" : true
+          }
+        ],
+        "package" : "Core",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "subscription_schedule"
+      },
+      {
+        "className" : "TaxCode",
+        "object" : "tax_code",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/tax_codes",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/tax_codes\/{id}",
+            "type" : "retrieve",
+            "write" : false
+          }
+        ],
+        "package" : "Core",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "tax_code"
+      },
+      {
+        "className" : "TaxId",
+        "object" : "tax_id",
+        "operations" : [
+          {
+            "http" : "delete",
+            "name" : "delete",
+            "path" : "\/v1\/customers\/{customer}\/tax_ids\/{id}",
+            "type" : "delete",
+            "write" : true
+          },
+          {
+            "http" : "delete",
+            "name" : "delete",
+            "path" : "\/v1\/tax_ids\/{id}",
+            "type" : "delete",
+            "write" : true
+          },
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/customers\/{customer}\/tax_ids",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/customers\/{customer}\/tax_ids",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/customers\/{customer}\/tax_ids\/{id}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/customers\/{customer}\/tax_ids\/{id}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/tax_ids",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/tax_ids\/{id}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/customers\/{customer}\/tax_ids",
+            "type" : "create",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/customers\/{customer}\/tax_ids",
+            "type" : "create",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/tax_ids",
+            "type" : "create",
+            "write" : true
+          }
+        ],
+        "package" : "Core",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "tax_id"
+      },
+      {
+        "className" : "TaxRate",
+        "object" : "tax_rate",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/tax_rates",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/tax_rates\/{tax_rate}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/tax_rates",
+            "type" : "create",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "update",
+            "path" : "\/v1\/tax_rates\/{tax_rate}",
+            "type" : "update",
+            "write" : true
+          }
+        ],
+        "package" : "Core",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "tax_rate"
+      },
+      {
+        "className" : "Token",
+        "object" : "token",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/tokens\/{token}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/tokens",
+            "type" : "create",
+            "write" : true
+          }
+        ],
+        "package" : "Core",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "token"
+      },
+      {
+        "className" : "Topup",
+        "object" : "topup",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/topups",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/topups\/{topup}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/topups",
+            "type" : "create",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "update",
+            "path" : "\/v1\/topups\/{topup}",
+            "type" : "update",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "cancel",
+            "path" : "\/v1\/topups\/{topup}\/cancel",
+            "type" : "custom",
+            "write" : true
+          }
+        ],
+        "package" : "Core",
+        "polymorphicGroups" : [
+          "balance_transaction_source"
+        ],
+        "schema" : "topup"
+      },
+      {
+        "className" : "Transfer",
+        "object" : "transfer",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/transfers",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/transfers\/{transfer}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/transfers",
+            "type" : "create",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "update",
+            "path" : "\/v1\/transfers\/{transfer}",
+            "type" : "update",
+            "write" : true
+          }
+        ],
+        "package" : "Core",
+        "polymorphicGroups" : [
+          "balance_transaction_source"
+        ],
+        "schema" : "transfer"
+      },
+      {
+        "className" : "TransferReversal",
+        "object" : "transfer_reversal",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/transfers\/{id}\/reversals",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/transfers\/{id}\/reversals",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/transfers\/{transfer}\/reversals\/{id}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/transfers\/{transfer}\/reversals\/{id}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/transfers\/{id}\/reversals",
+            "type" : "create",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/transfers\/{id}\/reversals",
+            "type" : "create",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "update",
+            "path" : "\/v1\/transfers\/{transfer}\/reversals\/{id}",
+            "type" : "update",
+            "write" : true
+          }
+        ],
+        "package" : "Core",
+        "polymorphicGroups" : [
+          "balance_transaction_source"
+        ],
+        "schema" : "transfer_reversal"
+      },
+      {
+        "className" : "WebhookEndpoint",
+        "object" : "webhook_endpoint",
+        "operations" : [
+          {
+            "http" : "delete",
+            "name" : "delete",
+            "path" : "\/v1\/webhook_endpoints\/{webhook_endpoint}",
+            "type" : "delete",
+            "write" : true
+          },
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/webhook_endpoints",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/webhook_endpoints\/{webhook_endpoint}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/webhook_endpoints",
+            "type" : "create",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "update",
+            "path" : "\/v1\/webhook_endpoints\/{webhook_endpoint}",
+            "type" : "update",
+            "write" : true
+          }
+        ],
+        "package" : "Core",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "webhook_endpoint"
+      }
+    ],
+    "Entitlements" : [
+      {
+        "className" : "ActiveEntitlement",
+        "object" : "entitlements.active_entitlement",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/entitlements\/active_entitlements",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/entitlements\/active_entitlements\/{id}",
+            "type" : "retrieve",
+            "write" : false
+          }
+        ],
+        "package" : "Entitlements",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "entitlements.active_entitlement"
+      },
+      {
+        "className" : "Feature",
+        "object" : "entitlements.feature",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/entitlements\/features",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/entitlements\/features\/{id}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/entitlements\/features",
+            "type" : "create",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "update",
+            "path" : "\/v1\/entitlements\/features\/{id}",
+            "type" : "update",
+            "write" : true
+          }
+        ],
+        "package" : "Entitlements",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "entitlements.feature"
+      }
+    ],
+    "FinancialConnections" : [
+      {
+        "className" : "Account",
+        "object" : "financial_connections.account",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/financial_connections\/accounts",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/financial_connections\/accounts\/{account}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "list_owners",
+            "path" : "\/v1\/financial_connections\/accounts\/{account}\/owners",
+            "type" : "custom",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "disconnect",
+            "path" : "\/v1\/financial_connections\/accounts\/{account}\/disconnect",
+            "type" : "custom",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "refresh",
+            "path" : "\/v1\/financial_connections\/accounts\/{account}\/refresh",
+            "type" : "custom",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "subscribe",
+            "path" : "\/v1\/financial_connections\/accounts\/{account}\/subscribe",
+            "type" : "custom",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "unsubscribe",
+            "path" : "\/v1\/financial_connections\/accounts\/{account}\/unsubscribe",
+            "type" : "custom",
+            "write" : true
+          }
+        ],
+        "package" : "FinancialConnections",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "financial_connections.account"
+      },
+      {
+        "className" : "Session",
+        "object" : "financial_connections.session",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/financial_connections\/sessions\/{session}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/financial_connections\/sessions",
+            "type" : "create",
+            "write" : true
+          }
+        ],
+        "package" : "FinancialConnections",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "financial_connections.session"
+      },
+      {
+        "className" : "Transaction",
+        "object" : "financial_connections.transaction",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/financial_connections\/transactions",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/financial_connections\/transactions\/{transaction}",
+            "type" : "retrieve",
+            "write" : false
+          }
+        ],
+        "package" : "FinancialConnections",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "financial_connections.transaction"
+      }
+    ],
+    "Forwarding" : [
+      {
+        "className" : "Request",
+        "object" : "forwarding.request",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/forwarding\/requests",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/forwarding\/requests\/{id}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/forwarding\/requests",
+            "type" : "create",
+            "write" : true
+          }
+        ],
+        "package" : "Forwarding",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "forwarding.request"
+      }
+    ],
+    "Identity" : [
+      {
+        "className" : "VerificationReport",
+        "object" : "identity.verification_report",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/identity\/verification_reports",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/identity\/verification_reports\/{report}",
+            "type" : "retrieve",
+            "write" : false
+          }
+        ],
+        "package" : "Identity",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "identity.verification_report"
+      },
+      {
+        "className" : "VerificationSession",
+        "object" : "identity.verification_session",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/identity\/verification_sessions",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/identity\/verification_sessions\/{session}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/identity\/verification_sessions",
+            "type" : "create",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "update",
+            "path" : "\/v1\/identity\/verification_sessions\/{session}",
+            "type" : "update",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "cancel",
+            "path" : "\/v1\/identity\/verification_sessions\/{session}\/cancel",
+            "type" : "custom",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "redact",
+            "path" : "\/v1\/identity\/verification_sessions\/{session}\/redact",
+            "type" : "custom",
+            "write" : true
+          }
+        ],
+        "package" : "Identity",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "identity.verification_session"
+      }
+    ],
+    "Issuing" : [
+      {
+        "className" : "Authorization",
+        "object" : "issuing.authorization",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/issuing\/authorizations",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/issuing\/authorizations\/{authorization}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "update",
+            "path" : "\/v1\/issuing\/authorizations\/{authorization}",
+            "type" : "update",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "approve",
+            "path" : "\/v1\/issuing\/authorizations\/{authorization}\/approve",
+            "type" : "custom",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "decline",
+            "path" : "\/v1\/issuing\/authorizations\/{authorization}\/decline",
+            "type" : "custom",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/test_helpers\/issuing\/authorizations",
+            "type" : "create",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "capture",
+            "path" : "\/v1\/test_helpers\/issuing\/authorizations\/{authorization}\/capture",
+            "type" : "custom",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "expire",
+            "path" : "\/v1\/test_helpers\/issuing\/authorizations\/{authorization}\/expire",
+            "type" : "custom",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "finalize_amount",
+            "path" : "\/v1\/test_helpers\/issuing\/authorizations\/{authorization}\/finalize_amount",
+            "type" : "custom",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "respond",
+            "path" : "\/v1\/test_helpers\/issuing\/authorizations\/{authorization}\/fraud_challenges\/respond",
+            "type" : "custom",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "increment",
+            "path" : "\/v1\/test_helpers\/issuing\/authorizations\/{authorization}\/increment",
+            "type" : "custom",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "reverse",
+            "path" : "\/v1\/test_helpers\/issuing\/authorizations\/{authorization}\/reverse",
+            "type" : "custom",
+            "write" : true
+          }
+        ],
+        "package" : "Issuing",
+        "polymorphicGroups" : [
+          "balance_transaction_source"
+        ],
+        "schema" : "issuing.authorization"
+      },
+      {
+        "className" : "Card",
+        "object" : "issuing.card",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/issuing\/cards",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/issuing\/cards\/{card}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/issuing\/cards",
+            "type" : "create",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "update",
+            "path" : "\/v1\/issuing\/cards\/{card}",
+            "type" : "update",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "deliver_card",
+            "path" : "\/v1\/test_helpers\/issuing\/cards\/{card}\/shipping\/deliver",
+            "type" : "custom",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "fail_card",
+            "path" : "\/v1\/test_helpers\/issuing\/cards\/{card}\/shipping\/fail",
+            "type" : "custom",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "return_card",
+            "path" : "\/v1\/test_helpers\/issuing\/cards\/{card}\/shipping\/return",
+            "type" : "custom",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "ship_card",
+            "path" : "\/v1\/test_helpers\/issuing\/cards\/{card}\/shipping\/ship",
+            "type" : "custom",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "submit_card",
+            "path" : "\/v1\/test_helpers\/issuing\/cards\/{card}\/shipping\/submit",
+            "type" : "custom",
+            "write" : true
+          }
+        ],
+        "package" : "Issuing",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "issuing.card"
+      },
+      {
+        "className" : "Cardholder",
+        "object" : "issuing.cardholder",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/issuing\/cardholders",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/issuing\/cardholders\/{cardholder}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/issuing\/cardholders",
+            "type" : "create",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "update",
+            "path" : "\/v1\/issuing\/cardholders\/{cardholder}",
+            "type" : "update",
+            "write" : true
+          }
+        ],
+        "package" : "Issuing",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "issuing.cardholder"
+      },
+      {
+        "className" : "Dispute",
+        "object" : "issuing.dispute",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/issuing\/disputes",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/issuing\/disputes\/{dispute}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/issuing\/disputes",
+            "type" : "create",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "update",
+            "path" : "\/v1\/issuing\/disputes\/{dispute}",
+            "type" : "update",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "submit",
+            "path" : "\/v1\/issuing\/disputes\/{dispute}\/submit",
+            "type" : "custom",
+            "write" : true
+          }
+        ],
+        "package" : "Issuing",
+        "polymorphicGroups" : [
+          "balance_transaction_source"
+        ],
+        "schema" : "issuing.dispute"
+      },
+      {
+        "className" : "PersonalizationDesign",
+        "object" : "issuing.personalization_design",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/issuing\/personalization_designs",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/issuing\/personalization_designs\/{personalization_design}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/issuing\/personalization_designs",
+            "type" : "create",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "update",
+            "path" : "\/v1\/issuing\/personalization_designs\/{personalization_design}",
+            "type" : "update",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "activate",
+            "path" : "\/v1\/test_helpers\/issuing\/personalization_designs\/{personalization_design}\/activate",
+            "type" : "custom",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "deactivate",
+            "path" : "\/v1\/test_helpers\/issuing\/personalization_designs\/{personalization_design}\/deactivate",
+            "type" : "custom",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "reject",
+            "path" : "\/v1\/test_helpers\/issuing\/personalization_designs\/{personalization_design}\/reject",
+            "type" : "custom",
+            "write" : true
+          }
+        ],
+        "package" : "Issuing",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "issuing.personalization_design"
+      },
+      {
+        "className" : "PhysicalBundle",
+        "object" : "issuing.physical_bundle",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/issuing\/physical_bundles",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/issuing\/physical_bundles\/{physical_bundle}",
+            "type" : "retrieve",
+            "write" : false
+          }
+        ],
+        "package" : "Issuing",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "issuing.physical_bundle"
+      },
+      {
+        "className" : "Token",
+        "object" : "issuing.token",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/issuing\/tokens",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/issuing\/tokens\/{token}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "update",
+            "path" : "\/v1\/issuing\/tokens\/{token}",
+            "type" : "update",
+            "write" : true
+          }
+        ],
+        "package" : "Issuing",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "issuing.token"
+      },
+      {
+        "className" : "Transaction",
+        "object" : "issuing.transaction",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/issuing\/transactions",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/issuing\/transactions\/{transaction}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "update",
+            "path" : "\/v1\/issuing\/transactions\/{transaction}",
+            "type" : "update",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "refund",
+            "path" : "\/v1\/test_helpers\/issuing\/transactions\/{transaction}\/refund",
+            "type" : "custom",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "create_force_capture",
+            "path" : "\/v1\/test_helpers\/issuing\/transactions\/create_force_capture",
+            "type" : "custom",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "create_unlinked_refund",
+            "path" : "\/v1\/test_helpers\/issuing\/transactions\/create_unlinked_refund",
+            "type" : "custom",
+            "write" : true
+          }
+        ],
+        "package" : "Issuing",
+        "polymorphicGroups" : [
+          "balance_transaction_source"
+        ],
+        "schema" : "issuing.transaction"
+      }
+    ],
+    "ProductCatalog" : [
+      {
+        "className" : "TrialOffer",
+        "object" : "product_catalog.trial_offer",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/product_catalog\/trial_offers",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/product_catalog\/trial_offers\/{id}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/product_catalog\/trial_offers",
+            "type" : "create",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "update",
+            "path" : "\/v1\/product_catalog\/trial_offers\/{id}",
+            "type" : "update",
+            "write" : true
+          }
+        ],
+        "package" : "ProductCatalog",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "product_catalog.trial_offer"
+      }
+    ],
+    "Radar" : [
+      {
+        "className" : "EarlyFraudWarning",
+        "object" : "radar.early_fraud_warning",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/radar\/early_fraud_warnings",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/radar\/early_fraud_warnings\/{early_fraud_warning}",
+            "type" : "retrieve",
+            "write" : false
+          }
+        ],
+        "package" : "Radar",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "radar.early_fraud_warning"
+      },
+      {
+        "className" : "PaymentEvaluation",
+        "object" : "radar.payment_evaluation",
+        "operations" : [
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/radar\/payment_evaluations",
+            "type" : "create",
+            "write" : true
+          }
+        ],
+        "package" : "Radar",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "radar.payment_evaluation"
+      },
+      {
+        "className" : "ValueList",
+        "object" : "radar.value_list",
+        "operations" : [
+          {
+            "http" : "delete",
+            "name" : "delete",
+            "path" : "\/v1\/radar\/value_lists\/{value_list}",
+            "type" : "delete",
+            "write" : true
+          },
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/radar\/value_lists",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/radar\/value_lists\/{value_list}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/radar\/value_lists",
+            "type" : "create",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "update",
+            "path" : "\/v1\/radar\/value_lists\/{value_list}",
+            "type" : "update",
+            "write" : true
+          }
+        ],
+        "package" : "Radar",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "radar.value_list"
+      },
+      {
+        "className" : "ValueListItem",
+        "object" : "radar.value_list_item",
+        "operations" : [
+          {
+            "http" : "delete",
+            "name" : "delete",
+            "path" : "\/v1\/radar\/value_list_items\/{item}",
+            "type" : "delete",
+            "write" : true
+          },
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/radar\/value_list_items",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/radar\/value_list_items\/{item}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/radar\/value_list_items",
+            "type" : "create",
+            "write" : true
+          }
+        ],
+        "package" : "Radar",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "radar.value_list_item"
+      }
+    ],
+    "Reporting" : [
+      {
+        "className" : "ReportRun",
+        "object" : "reporting.report_run",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/reporting\/report_runs",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/reporting\/report_runs\/{report_run}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/reporting\/report_runs",
+            "type" : "create",
+            "write" : true
+          }
+        ],
+        "package" : "Reporting",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "reporting.report_run"
+      },
+      {
+        "className" : "ReportType",
+        "object" : "reporting.report_type",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/reporting\/report_types",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/reporting\/report_types\/{report_type}",
+            "type" : "retrieve",
+            "write" : false
+          }
+        ],
+        "package" : "Reporting",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "reporting.report_type"
+      }
+    ],
+    "Sigma" : [
+      {
+        "className" : "ScheduledQueryRun",
+        "object" : "scheduled_query_run",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/sigma\/scheduled_query_runs",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/sigma\/scheduled_query_runs\/{scheduled_query_run}",
+            "type" : "retrieve",
+            "write" : false
+          }
+        ],
+        "package" : "Sigma",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "scheduled_query_run"
+      }
+    ],
+    "Tax" : [
+      {
+        "className" : "Association",
+        "object" : "tax.association",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "find",
+            "path" : "\/v1\/tax\/associations\/find",
+            "type" : "custom",
+            "write" : false
+          }
+        ],
+        "package" : "Tax",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "tax.association"
+      },
+      {
+        "className" : "Calculation",
+        "object" : "tax.calculation",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/tax\/calculations\/{calculation}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "list_line_items",
+            "path" : "\/v1\/tax\/calculations\/{calculation}\/line_items",
+            "type" : "custom",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/tax\/calculations",
+            "type" : "create",
+            "write" : true
+          }
+        ],
+        "package" : "Tax",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "tax.calculation"
+      },
+      {
+        "className" : "Location",
+        "object" : "tax.location",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/tax\/locations",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/tax\/locations\/{location}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/tax\/locations",
+            "type" : "create",
+            "write" : true
+          }
+        ],
+        "package" : "Tax",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "tax.location"
+      },
+      {
+        "className" : "Registration",
+        "object" : "tax.registration",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/tax\/registrations",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/tax\/registrations\/{id}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/tax\/registrations",
+            "type" : "create",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "update",
+            "path" : "\/v1\/tax\/registrations\/{id}",
+            "type" : "update",
+            "write" : true
+          }
+        ],
+        "package" : "Tax",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "tax.registration"
+      },
+      {
+        "className" : "Settings",
+        "object" : "tax.settings",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/tax\/settings",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "update",
+            "path" : "\/v1\/tax\/settings",
+            "type" : "update",
+            "write" : true
+          }
+        ],
+        "package" : "Tax",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "tax.settings"
+      },
+      {
+        "className" : "Transaction",
+        "object" : "tax.transaction",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/tax\/transactions\/{transaction}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "list_line_items",
+            "path" : "\/v1\/tax\/transactions\/{transaction}\/line_items",
+            "type" : "custom",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "create_from_calculation",
+            "path" : "\/v1\/tax\/transactions\/create_from_calculation",
+            "type" : "custom",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "create_reversal",
+            "path" : "\/v1\/tax\/transactions\/create_reversal",
+            "type" : "custom",
+            "write" : true
+          }
+        ],
+        "package" : "Tax",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "tax.transaction"
+      }
+    ],
+    "Terminal" : [
+      {
+        "className" : "Configuration",
+        "object" : "terminal.configuration",
+        "operations" : [
+          {
+            "http" : "delete",
+            "name" : "delete",
+            "path" : "\/v1\/terminal\/configurations\/{configuration}",
+            "type" : "delete",
+            "write" : true
+          },
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/terminal\/configurations",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/terminal\/configurations\/{configuration}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/terminal\/configurations",
+            "type" : "create",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "update",
+            "path" : "\/v1\/terminal\/configurations\/{configuration}",
+            "type" : "update",
+            "write" : true
+          }
+        ],
+        "package" : "Terminal",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "terminal.configuration"
+      },
+      {
+        "className" : "ConnectionToken",
+        "object" : "terminal.connection_token",
+        "operations" : [
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/terminal\/connection_tokens",
+            "type" : "create",
+            "write" : true
+          }
+        ],
+        "package" : "Terminal",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "terminal.connection_token"
+      },
+      {
+        "className" : "Location",
+        "object" : "terminal.location",
+        "operations" : [
+          {
+            "http" : "delete",
+            "name" : "delete",
+            "path" : "\/v1\/terminal\/locations\/{location}",
+            "type" : "delete",
+            "write" : true
+          },
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/terminal\/locations",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/terminal\/locations\/{location}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/terminal\/locations",
+            "type" : "create",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "update",
+            "path" : "\/v1\/terminal\/locations\/{location}",
+            "type" : "update",
+            "write" : true
+          }
+        ],
+        "package" : "Terminal",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "terminal.location"
+      },
+      {
+        "className" : "OnboardingLink",
+        "object" : "terminal.onboarding_link",
+        "operations" : [
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/terminal\/onboarding_links",
+            "type" : "create",
+            "write" : true
+          }
+        ],
+        "package" : "Terminal",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "terminal.onboarding_link"
+      },
+      {
+        "className" : "Reader",
+        "object" : "terminal.reader",
+        "operations" : [
+          {
+            "http" : "delete",
+            "name" : "delete",
+            "path" : "\/v1\/terminal\/readers\/{reader}",
+            "type" : "delete",
+            "write" : true
+          },
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/terminal\/readers",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/terminal\/readers\/{reader}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/terminal\/readers",
+            "type" : "create",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "update",
+            "path" : "\/v1\/terminal\/readers\/{reader}",
+            "type" : "update",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "cancel_action",
+            "path" : "\/v1\/terminal\/readers\/{reader}\/cancel_action",
+            "type" : "custom",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "collect_inputs",
+            "path" : "\/v1\/terminal\/readers\/{reader}\/collect_inputs",
+            "type" : "custom",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "collect_payment_method",
+            "path" : "\/v1\/terminal\/readers\/{reader}\/collect_payment_method",
+            "type" : "custom",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "confirm_payment_intent",
+            "path" : "\/v1\/terminal\/readers\/{reader}\/confirm_payment_intent",
+            "type" : "custom",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "process_payment_intent",
+            "path" : "\/v1\/terminal\/readers\/{reader}\/process_payment_intent",
+            "type" : "custom",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "process_setup_intent",
+            "path" : "\/v1\/terminal\/readers\/{reader}\/process_setup_intent",
+            "type" : "custom",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "refund_payment",
+            "path" : "\/v1\/terminal\/readers\/{reader}\/refund_payment",
+            "type" : "custom",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "set_reader_display",
+            "path" : "\/v1\/terminal\/readers\/{reader}\/set_reader_display",
+            "type" : "custom",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "present_payment_method",
+            "path" : "\/v1\/test_helpers\/terminal\/readers\/{reader}\/present_payment_method",
+            "type" : "custom",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "succeed_input_collection",
+            "path" : "\/v1\/test_helpers\/terminal\/readers\/{reader}\/succeed_input_collection",
+            "type" : "custom",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "timeout_input_collection",
+            "path" : "\/v1\/test_helpers\/terminal\/readers\/{reader}\/timeout_input_collection",
+            "type" : "custom",
+            "write" : true
+          }
+        ],
+        "package" : "Terminal",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "terminal.reader"
+      }
+    ],
+    "TestHelpers" : [
+      {
+        "className" : "TestClock",
+        "object" : "test_helpers.test_clock",
+        "operations" : [
+          {
+            "http" : "delete",
+            "name" : "delete",
+            "path" : "\/v1\/test_helpers\/test_clocks\/{test_clock}",
+            "type" : "delete",
+            "write" : true
+          },
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/test_helpers\/test_clocks",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/test_helpers\/test_clocks\/{test_clock}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/test_helpers\/test_clocks",
+            "type" : "create",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "advance",
+            "path" : "\/v1\/test_helpers\/test_clocks\/{test_clock}\/advance",
+            "type" : "custom",
+            "write" : true
+          }
+        ],
+        "package" : "TestHelpers",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "test_helpers.test_clock"
+      }
+    ],
+    "ThreeDSecure" : [
+      {
+        "className" : "Authentication",
+        "object" : "three_d_secure.authentication",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/three_d_secure\/authentications",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/three_d_secure\/authentications\/{authentication}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/three_d_secure\/authentications",
+            "type" : "create",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "cancel",
+            "path" : "\/v1\/three_d_secure\/authentications\/{authentication}\/cancel",
+            "type" : "custom",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "submit",
+            "path" : "\/v1\/three_d_secure\/authentications\/{authentication}\/submit",
+            "type" : "custom",
+            "write" : true
+          }
+        ],
+        "package" : "ThreeDSecure",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "three_d_secure.authentication"
+      }
+    ],
+    "Treasury" : [
+      {
+        "className" : "CreditReversal",
+        "object" : "treasury.credit_reversal",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/treasury\/credit_reversals",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/treasury\/credit_reversals\/{credit_reversal}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/treasury\/credit_reversals",
+            "type" : "create",
+            "write" : true
+          }
+        ],
+        "package" : "Treasury",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "treasury.credit_reversal"
+      },
+      {
+        "className" : "DebitReversal",
+        "object" : "treasury.debit_reversal",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/treasury\/debit_reversals",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/treasury\/debit_reversals\/{debit_reversal}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/treasury\/debit_reversals",
+            "type" : "create",
+            "write" : true
+          }
+        ],
+        "package" : "Treasury",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "treasury.debit_reversal"
+      },
+      {
+        "className" : "FinancialAccount",
+        "object" : "treasury.financial_account",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/treasury\/financial_accounts",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/treasury\/financial_accounts\/{financial_account}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve_features",
+            "path" : "\/v1\/treasury\/financial_accounts\/{financial_account}\/features",
+            "type" : "custom",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/treasury\/financial_accounts",
+            "type" : "create",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "update",
+            "path" : "\/v1\/treasury\/financial_accounts\/{financial_account}",
+            "type" : "update",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "close",
+            "path" : "\/v1\/treasury\/financial_accounts\/{financial_account}\/close",
+            "type" : "custom",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "update_features",
+            "path" : "\/v1\/treasury\/financial_accounts\/{financial_account}\/features",
+            "type" : "custom",
+            "write" : true
+          }
+        ],
+        "package" : "Treasury",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "treasury.financial_account"
+      },
+      {
+        "className" : "InboundTransfer",
+        "object" : "treasury.inbound_transfer",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/treasury\/inbound_transfers",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/treasury\/inbound_transfers\/{id}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "fail",
+            "path" : "\/v1\/test_helpers\/treasury\/inbound_transfers\/{id}\/fail",
+            "type" : "custom",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "return_inbound_transfer",
+            "path" : "\/v1\/test_helpers\/treasury\/inbound_transfers\/{id}\/return",
+            "type" : "custom",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "succeed",
+            "path" : "\/v1\/test_helpers\/treasury\/inbound_transfers\/{id}\/succeed",
+            "type" : "custom",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/treasury\/inbound_transfers",
+            "type" : "create",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "cancel",
+            "path" : "\/v1\/treasury\/inbound_transfers\/{inbound_transfer}\/cancel",
+            "type" : "custom",
+            "write" : true
+          }
+        ],
+        "package" : "Treasury",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "treasury.inbound_transfer"
+      },
+      {
+        "className" : "OutboundPayment",
+        "object" : "treasury.outbound_payment",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/treasury\/outbound_payments",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/treasury\/outbound_payments\/{id}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "update",
+            "path" : "\/v1\/test_helpers\/treasury\/outbound_payments\/{id}",
+            "type" : "update",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "fail",
+            "path" : "\/v1\/test_helpers\/treasury\/outbound_payments\/{id}\/fail",
+            "type" : "custom",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "post",
+            "path" : "\/v1\/test_helpers\/treasury\/outbound_payments\/{id}\/post",
+            "type" : "custom",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "return_outbound_payment",
+            "path" : "\/v1\/test_helpers\/treasury\/outbound_payments\/{id}\/return",
+            "type" : "custom",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/treasury\/outbound_payments",
+            "type" : "create",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "cancel",
+            "path" : "\/v1\/treasury\/outbound_payments\/{id}\/cancel",
+            "type" : "custom",
+            "write" : true
+          }
+        ],
+        "package" : "Treasury",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "treasury.outbound_payment"
+      },
+      {
+        "className" : "OutboundTransfer",
+        "object" : "treasury.outbound_transfer",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/treasury\/outbound_transfers",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/treasury\/outbound_transfers\/{outbound_transfer}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "update",
+            "path" : "\/v1\/test_helpers\/treasury\/outbound_transfers\/{outbound_transfer}",
+            "type" : "update",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "fail",
+            "path" : "\/v1\/test_helpers\/treasury\/outbound_transfers\/{outbound_transfer}\/fail",
+            "type" : "custom",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "post",
+            "path" : "\/v1\/test_helpers\/treasury\/outbound_transfers\/{outbound_transfer}\/post",
+            "type" : "custom",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "return_outbound_transfer",
+            "path" : "\/v1\/test_helpers\/treasury\/outbound_transfers\/{outbound_transfer}\/return",
+            "type" : "custom",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/treasury\/outbound_transfers",
+            "type" : "create",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "cancel",
+            "path" : "\/v1\/treasury\/outbound_transfers\/{outbound_transfer}\/cancel",
+            "type" : "custom",
+            "write" : true
+          }
+        ],
+        "package" : "Treasury",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "treasury.outbound_transfer"
+      },
+      {
+        "className" : "ReceivedCredit",
+        "object" : "treasury.received_credit",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/treasury\/received_credits",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/treasury\/received_credits\/{id}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/test_helpers\/treasury\/received_credits",
+            "type" : "create",
+            "write" : true
+          }
+        ],
+        "package" : "Treasury",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "treasury.received_credit"
+      },
+      {
+        "className" : "ReceivedDebit",
+        "object" : "treasury.received_debit",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/treasury\/received_debits",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/treasury\/received_debits\/{id}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v1\/test_helpers\/treasury\/received_debits",
+            "type" : "create",
+            "write" : true
+          }
+        ],
+        "package" : "Treasury",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "treasury.received_debit"
+      },
+      {
+        "className" : "Transaction",
+        "object" : "treasury.transaction",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/treasury\/transactions",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/treasury\/transactions\/{id}",
+            "type" : "retrieve",
+            "write" : false
+          }
+        ],
+        "package" : "Treasury",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "treasury.transaction"
+      },
+      {
+        "className" : "TransactionEntry",
+        "object" : "treasury.transaction_entry",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v1\/treasury\/transaction_entries",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v1\/treasury\/transaction_entries\/{id}",
+            "type" : "retrieve",
+            "write" : false
+          }
+        ],
+        "package" : "Treasury",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "treasury.transaction_entry"
+      }
+    ],
+    "v2.billing" : [
+      {
+        "className" : "MeterEvent",
+        "object" : "v2.billing.meter_event",
+        "operations" : [
+          {
+            "http" : "post",
+            "name" : "create_stream",
+            "path" : "\/v2\/billing\/meter_event_stream",
+            "type" : "custom",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v2\/billing\/meter_events",
+            "type" : "create",
+            "write" : true
+          }
+        ],
+        "package" : "v2.billing",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "v2.billing.meter_event"
+      },
+      {
+        "className" : "MeterEventAdjustment",
+        "object" : "v2.billing.meter_event_adjustment",
+        "operations" : [
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v2\/billing\/meter_event_adjustments",
+            "type" : "create",
+            "write" : true
+          }
+        ],
+        "package" : "v2.billing",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "v2.billing.meter_event_adjustment"
+      },
+      {
+        "className" : "MeterEventSession",
+        "object" : "v2.billing.meter_event_session",
+        "operations" : [
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v2\/billing\/meter_event_session",
+            "type" : "create",
+            "write" : true
+          }
+        ],
+        "package" : "v2.billing",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "v2.billing.meter_event_session"
+      }
+    ],
+    "v2.commerce" : [
+      {
+        "className" : "ProductCatalogImport",
+        "object" : "v2.commerce.product_catalog_import",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v2\/commerce\/product_catalog\/imports",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v2\/commerce\/product_catalog\/imports",
+            "type" : "create",
+            "write" : true
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v2\/commerce\/product_catalog\/imports\/{id}",
+            "type" : "retrieve",
+            "write" : false
+          }
+        ],
+        "package" : "v2.commerce",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "v2.commerce.product_catalog_import"
+      }
+    ],
+    "v2.core" : [
+      {
+        "className" : "Account",
+        "object" : "v2.core.account",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v2\/core\/accounts",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v2\/core\/accounts",
+            "type" : "create",
+            "write" : true
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v2\/core\/accounts\/{id}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "update",
+            "path" : "\/v2\/core\/accounts\/{id}",
+            "type" : "update",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "close",
+            "path" : "\/v2\/core\/accounts\/{id}\/close",
+            "type" : "custom",
+            "write" : true
+          }
+        ],
+        "package" : "v2.core",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "v2.core.account"
+      },
+      {
+        "className" : "AccountLink",
+        "object" : "v2.core.account_link",
+        "operations" : [
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v2\/core\/account_links",
+            "type" : "create",
+            "write" : true
+          }
+        ],
+        "package" : "v2.core",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "v2.core.account_link"
+      },
+      {
+        "className" : "AccountPerson",
+        "object" : "v2.core.account_person",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v2\/core\/accounts\/{account_id}\/persons",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v2\/core\/accounts\/{account_id}\/persons",
+            "type" : "create",
+            "write" : true
+          },
+          {
+            "http" : "delete",
+            "name" : "delete",
+            "path" : "\/v2\/core\/accounts\/{account_id}\/persons\/{id}",
+            "type" : "delete",
+            "write" : true
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v2\/core\/accounts\/{account_id}\/persons\/{id}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "update",
+            "path" : "\/v2\/core\/accounts\/{account_id}\/persons\/{id}",
+            "type" : "update",
+            "write" : true
+          }
+        ],
+        "package" : "v2.core",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "v2.core.account_person"
+      },
+      {
+        "className" : "AccountPersonToken",
+        "object" : "v2.core.account_person_token",
+        "operations" : [
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v2\/core\/accounts\/{account_id}\/person_tokens",
+            "type" : "create",
+            "write" : true
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v2\/core\/accounts\/{account_id}\/person_tokens\/{id}",
+            "type" : "retrieve",
+            "write" : false
+          }
+        ],
+        "package" : "v2.core",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "v2.core.account_person_token"
+      },
+      {
+        "className" : "AccountToken",
+        "object" : "v2.core.account_token",
+        "operations" : [
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v2\/core\/account_tokens",
+            "type" : "create",
+            "write" : true
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v2\/core\/account_tokens\/{id}",
+            "type" : "retrieve",
+            "write" : false
+          }
+        ],
+        "package" : "v2.core",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "v2.core.account_token"
+      },
+      {
+        "className" : "Event",
+        "object" : "v2.core.event",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v2\/core\/events",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v2\/core\/events\/{id}",
+            "type" : "retrieve",
+            "write" : false
+          }
+        ],
+        "package" : "v2.core",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "v2.core.event"
+      },
+      {
+        "className" : "EventDestination",
+        "object" : "v2.core.event_destination",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v2\/core\/event_destinations",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v2\/core\/event_destinations",
+            "type" : "create",
+            "write" : true
+          },
+          {
+            "http" : "delete",
+            "name" : "delete",
+            "path" : "\/v2\/core\/event_destinations\/{id}",
+            "type" : "delete",
+            "write" : true
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v2\/core\/event_destinations\/{id}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "update",
+            "path" : "\/v2\/core\/event_destinations\/{id}",
+            "type" : "update",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "disable",
+            "path" : "\/v2\/core\/event_destinations\/{id}\/disable",
+            "type" : "custom",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "enable",
+            "path" : "\/v2\/core\/event_destinations\/{id}\/enable",
+            "type" : "custom",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "ping",
+            "path" : "\/v2\/core\/event_destinations\/{id}\/ping",
+            "type" : "custom",
+            "write" : true
+          }
+        ],
+        "package" : "v2.core",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "v2.core.event_destination"
+      }
+    ],
+    "v2.core.vault" : [
+      {
+        "className" : "GbBankAccount",
+        "object" : "v2.core.vault.gb_bank_account",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v2\/core\/vault\/gb_bank_accounts",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v2\/core\/vault\/gb_bank_accounts",
+            "type" : "create",
+            "write" : true
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v2\/core\/vault\/gb_bank_accounts\/{id}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "archive",
+            "path" : "\/v2\/core\/vault\/gb_bank_accounts\/{id}\/archive",
+            "type" : "custom",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "unarchive",
+            "path" : "\/v2\/core\/vault\/gb_bank_accounts\/{id}\/unarchive",
+            "type" : "custom",
+            "write" : true
+          }
+        ],
+        "package" : "v2.core.vault",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "v2.core.vault.gb_bank_account"
+      },
+      {
+        "className" : "UsBankAccount",
+        "object" : "v2.core.vault.us_bank_account",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v2\/core\/vault\/us_bank_accounts",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v2\/core\/vault\/us_bank_accounts",
+            "type" : "create",
+            "write" : true
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v2\/core\/vault\/us_bank_accounts\/{id}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "update",
+            "path" : "\/v2\/core\/vault\/us_bank_accounts\/{id}",
+            "type" : "update",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "archive",
+            "path" : "\/v2\/core\/vault\/us_bank_accounts\/{id}\/archive",
+            "type" : "custom",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "confirm_microdeposits",
+            "path" : "\/v2\/core\/vault\/us_bank_accounts\/{id}\/confirm_microdeposits",
+            "type" : "custom",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "send_microdeposits",
+            "path" : "\/v2\/core\/vault\/us_bank_accounts\/{id}\/send_microdeposits",
+            "type" : "custom",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "unarchive",
+            "path" : "\/v2\/core\/vault\/us_bank_accounts\/{id}\/unarchive",
+            "type" : "custom",
+            "write" : true
+          }
+        ],
+        "package" : "v2.core.vault",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "v2.core.vault.us_bank_account"
+      }
+    ],
+    "v2.money_management" : [
+      {
+        "className" : "Adjustment",
+        "object" : "v2.money_management.adjustment",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v2\/money_management\/adjustments",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v2\/money_management\/adjustments\/{id}",
+            "type" : "retrieve",
+            "write" : false
+          }
+        ],
+        "package" : "v2.money_management",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "v2.money_management.adjustment"
+      },
+      {
+        "className" : "FinancialAccount",
+        "object" : "v2.money_management.financial_account",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v2\/money_management\/financial_accounts",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v2\/money_management\/financial_accounts\/{id}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "update",
+            "path" : "\/v2\/money_management\/financial_accounts\/{id}",
+            "type" : "update",
+            "write" : true
+          }
+        ],
+        "package" : "v2.money_management",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "v2.money_management.financial_account"
+      },
+      {
+        "className" : "FinancialAddress",
+        "object" : "v2.money_management.financial_address",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v2\/money_management\/financial_addresses",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v2\/money_management\/financial_addresses",
+            "type" : "create",
+            "write" : true
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v2\/money_management\/financial_addresses\/{id}",
+            "type" : "retrieve",
+            "write" : false
+          }
+        ],
+        "package" : "v2.money_management",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "v2.money_management.financial_address"
+      },
+      {
+        "className" : "FinancialAddressCreditSimulation",
+        "object" : "v2.money_management.financial_address_credit_simulation",
+        "operations" : [
+          {
+            "http" : "post",
+            "name" : "credit",
+            "path" : "\/v2\/money_management\/test_helpers\/financial_addresses\/{id}\/credit",
+            "type" : "custom",
+            "write" : true
+          }
+        ],
+        "package" : "v2.money_management",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "v2.money_management.financial_address_credit_simulation"
+      },
+      {
+        "className" : "InboundTransfer",
+        "object" : "v2.money_management.inbound_transfer",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v2\/money_management\/inbound_transfers",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v2\/money_management\/inbound_transfers",
+            "type" : "create",
+            "write" : true
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v2\/money_management\/inbound_transfers\/{id}",
+            "type" : "retrieve",
+            "write" : false
+          }
+        ],
+        "package" : "v2.money_management",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "v2.money_management.inbound_transfer"
+      },
+      {
+        "className" : "OutboundPayment",
+        "object" : "v2.money_management.outbound_payment",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v2\/money_management\/outbound_payments",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v2\/money_management\/outbound_payments",
+            "type" : "create",
+            "write" : true
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v2\/money_management\/outbound_payments\/{id}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "cancel",
+            "path" : "\/v2\/money_management\/outbound_payments\/{id}\/cancel",
+            "type" : "custom",
+            "write" : true
+          }
+        ],
+        "package" : "v2.money_management",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "v2.money_management.outbound_payment"
+      },
+      {
+        "className" : "OutboundSetupIntent",
+        "object" : "v2.money_management.outbound_setup_intent",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v2\/money_management\/outbound_setup_intents",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v2\/money_management\/outbound_setup_intents",
+            "type" : "create",
+            "write" : true
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v2\/money_management\/outbound_setup_intents\/{id}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "update",
+            "path" : "\/v2\/money_management\/outbound_setup_intents\/{id}",
+            "type" : "update",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "cancel",
+            "path" : "\/v2\/money_management\/outbound_setup_intents\/{id}\/cancel",
+            "type" : "custom",
+            "write" : true
+          }
+        ],
+        "package" : "v2.money_management",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "v2.money_management.outbound_setup_intent"
+      },
+      {
+        "className" : "PayoutIntent",
+        "object" : "v2.money_management.payout_intent",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v2\/money_management\/payout_intents",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v2\/money_management\/payout_intents",
+            "type" : "create",
+            "write" : true
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v2\/money_management\/payout_intents\/{id}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "update",
+            "path" : "\/v2\/money_management\/payout_intents\/{id}",
+            "type" : "update",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "cancel",
+            "path" : "\/v2\/money_management\/payout_intents\/{id}\/cancel",
+            "type" : "custom",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "confirm",
+            "path" : "\/v2\/money_management\/payout_intents\/{id}\/confirm",
+            "type" : "custom",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "refresh_fx_quote",
+            "path" : "\/v2\/money_management\/payout_intents\/{id}\/refresh_fx_quote",
+            "type" : "custom",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "refresh_recipient_verification",
+            "path" : "\/v2\/money_management\/payout_intents\/{id}\/refresh_recipient_verification",
+            "type" : "custom",
+            "write" : true
+          }
+        ],
+        "package" : "v2.money_management",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "v2.money_management.payout_intent"
+      },
+      {
+        "className" : "PayoutMethod",
+        "object" : "v2.money_management.payout_method",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v2\/money_management\/payout_methods",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v2\/money_management\/payout_methods\/{id}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "archive",
+            "path" : "\/v2\/money_management\/payout_methods\/{id}\/archive",
+            "type" : "custom",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "unarchive",
+            "path" : "\/v2\/money_management\/payout_methods\/{id}\/unarchive",
+            "type" : "custom",
+            "write" : true
+          }
+        ],
+        "package" : "v2.money_management",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "v2.money_management.payout_method"
+      },
+      {
+        "className" : "PayoutMethodsBankAccountSpec",
+        "object" : "v2.money_management.payout_methods_bank_account_spec",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v2\/money_management\/payout_methods_bank_account_spec",
+            "type" : "retrieve",
+            "write" : false
+          }
+        ],
+        "package" : "v2.money_management",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "v2.money_management.payout_methods_bank_account_spec"
+      },
+      {
+        "className" : "ReceivedCredit",
+        "object" : "v2.money_management.received_credit",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v2\/money_management\/received_credits",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v2\/money_management\/received_credits\/{id}",
+            "type" : "retrieve",
+            "write" : false
+          }
+        ],
+        "package" : "v2.money_management",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "v2.money_management.received_credit"
+      },
+      {
+        "className" : "RecipientVerification",
+        "object" : "v2.money_management.recipient_verification",
+        "operations" : [
+          {
+            "http" : "post",
+            "name" : "create",
+            "path" : "\/v2\/money_management\/recipient_verifications",
+            "type" : "create",
+            "write" : true
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v2\/money_management\/recipient_verifications\/{id}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "acknowledge",
+            "path" : "\/v2\/money_management\/recipient_verifications\/{id}\/acknowledge",
+            "type" : "custom",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "recipient_verifications",
+            "path" : "\/v2\/test_helpers\/money_management\/recipient_verifications",
+            "type" : "custom",
+            "write" : true
+          }
+        ],
+        "package" : "v2.money_management",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "v2.money_management.recipient_verification"
+      },
+      {
+        "className" : "Transaction",
+        "object" : "v2.money_management.transaction",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v2\/money_management\/transactions",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v2\/money_management\/transactions\/{id}",
+            "type" : "retrieve",
+            "write" : false
+          },
+          {
+            "http" : "post",
+            "name" : "update",
+            "path" : "\/v2\/money_management\/transactions\/{id}",
+            "type" : "update",
+            "write" : true
+          },
+          {
+            "http" : "post",
+            "name" : "refresh_regulatory_receipt",
+            "path" : "\/v2\/money_management\/transactions\/{id}\/refresh_regulatory_receipt",
+            "type" : "custom",
+            "write" : true
+          }
+        ],
+        "package" : "v2.money_management",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "v2.money_management.transaction"
+      },
+      {
+        "className" : "TransactionEntry",
+        "object" : "v2.money_management.transaction_entry",
+        "operations" : [
+          {
+            "http" : "get",
+            "name" : "list",
+            "path" : "\/v2\/money_management\/transaction_entries",
+            "type" : "list",
+            "write" : false
+          },
+          {
+            "http" : "get",
+            "name" : "retrieve",
+            "path" : "\/v2\/money_management\/transaction_entries\/{id}",
+            "type" : "retrieve",
+            "write" : false
+          }
+        ],
+        "package" : "v2.money_management",
+        "polymorphicGroups" : [
+
+        ],
+        "schema" : "v2.money_management.transaction_entry"
+      }
+    ]
+  },
+  "sourceRelease" : "v2600"
+}
