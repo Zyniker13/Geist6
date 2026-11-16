@@ -1,6 +1,6 @@
 # Coverage matrix
 
-One row for every operation on every resource in [`api-inventory.md`](api-inventory.md) (built from the same pinned spec, API version 2026-10-28.endive). Tiers of support are defined in [ROADMAP.md](../../ROADMAP.md#tiers-of-support): tier 1 crafted screens, tier 2 generated structured views, tier 3 the API Explorer. The restricted-key permission column uses the names documented in Stripe's permissions reference; "unlisted" resources are granted through the Dashboard key picker, and the app probes access before showing a feature. Regenerate with `swift run inventory gen`.
+One row for every operation on every resource in [`api-inventory.md`](api-inventory.md) (built from the same pinned spec, API version 2026-10-28.endive). Tiers of support are defined in [ROADMAP.md](../../ROADMAP.md#tiers-of-support): tier 1 crafted screens, tier 2 generated structured views, tier 3 the API Explorer. The restricted-key permission column uses the names documented in Stripe's permissions reference; "unlisted" resources are granted through the Dashboard key picker, and the app probes access before showing a feature. Every write row is subject to the roadmap's Keys and Safety rules: an idempotency key, a confirmation that restates amount, currency, account, and mode for money-moving or irreversible actions, a visible live-mode marker, and an audit-log entry — and no write of any kind is sendable in Dashboard mode, which the client enforces. Regenerate with `swift run inventory gen`.
 
 | Resource | Operation | HTTP | Path | Tier | Milestone | Screen or flow | Restricted-key permission |
 | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -49,8 +49,8 @@ One row for every operation on every resource in [`api-inventory.md`](api-invent
 |  | create | POST | /v1/charges | 1 | M4 | Payments screens (M4) | charge_write |
 |  | update | POST | /v1/charges/{charge} | 1 | M4 | Payments screens (M4) | charge_write |
 |  | capture | POST | /v1/charges/{charge}/capture | 1 | M4 | Payments screens (M4) | charge_write |
-| ConfirmationToken | retrieve | GET | /v1/confirmation_tokens/{confirmation_token} | 2 | M10 | Generated list, detail, and edit views | confirmation_token_read |
-|  | create | POST | /v1/test_helpers/confirmation_tokens | 2 | M10 | Generated list, detail, and edit views | confirmation_token_read |
+| ConfirmationToken | retrieve | GET | /v1/confirmation_tokens/{confirmation_token} | 2 | M4 | Generated list, detail, and edit views | confirmation_token_read |
+|  | create | POST | /v1/test_helpers/confirmation_tokens | 2 | M4 | Generated list, detail, and edit views | confirmation_token_read |
 | CountrySpec | list | GET | /v1/country_specs | 2 | M7 | Generated list, detail, and edit views | unlisted (Dashboard key picker) |
 |  | retrieve | GET | /v1/country_specs/{country} | 2 | M7 | Generated list, detail, and edit views | unlisted (Dashboard key picker) |
 | Coupon | delete | DELETE | /v1/coupons/{coupon} | 2 | M6 | Generated list, detail, and edit views | coupon_write |
@@ -90,7 +90,7 @@ One row for every operation on every resource in [`api-inventory.md`](api-invent
 |  | list | GET | /v1/customers/{customer}/cash_balance_transactions | 2 | M5 | Generated list, detail, and edit views | unlisted (Dashboard key picker) |
 |  | retrieve | GET | /v1/customers/{customer}/cash_balance_transactions/{transaction} | 2 | M5 | Generated list, detail, and edit views | unlisted (Dashboard key picker) |
 |  | retrieve | GET | /v1/customers/{customer}/cash_balance_transactions/{transaction} | 2 | M5 | Generated list, detail, and edit views | unlisted (Dashboard key picker) |
-| CustomerSession | create | POST | /v1/customer_sessions | 2 | M10 | Generated list, detail, and edit views | customer_session_write |
+| CustomerSession | create | POST | /v1/customer_sessions | 2 | M6 | Generated list, detail, and edit views | customer_session_write |
 | Dispute | list | GET | /v1/disputes | 2 | M10 | Generated list, detail, and edit views | dispute_read |
 |  | retrieve | GET | /v1/disputes/{dispute} | 2 | M10 | Generated list, detail, and edit views | dispute_read |
 |  | update | POST | /v1/disputes/{dispute} | 2 | M10 | Generated list, detail, and edit views | dispute_write |
@@ -101,14 +101,14 @@ One row for every operation on every resource in [`api-inventory.md`](api-invent
 |  | retrieve | GET | /v1/events/{id} | 1 | M3 | Activity feed (M3; full filters M11) | event_read |
 | ExchangeRate | list | GET | /v1/exchange_rates | 2 | M7 | Generated list, detail, and edit views | unlisted (Dashboard key picker) |
 |  | retrieve | GET | /v1/exchange_rates/{rate_id} | 2 | M7 | Generated list, detail, and edit views | unlisted (Dashboard key picker) |
-| ExternalAccount | delete | DELETE | /v1/accounts/{account}/external_accounts/{id} | 2 | M10 | Generated list, detail, and edit views | unlisted (Dashboard key picker) |
-|  | list | GET | /v1/accounts/{account}/external_accounts | 2 | M10 | Generated list, detail, and edit views | unlisted (Dashboard key picker) |
-|  | list | GET | /v1/accounts/{account}/external_accounts | 2 | M10 | Generated list, detail, and edit views | unlisted (Dashboard key picker) |
-|  | retrieve | GET | /v1/accounts/{account}/external_accounts/{id} | 2 | M10 | Generated list, detail, and edit views | unlisted (Dashboard key picker) |
-|  | retrieve | GET | /v1/accounts/{account}/external_accounts/{id} | 2 | M10 | Generated list, detail, and edit views | unlisted (Dashboard key picker) |
-|  | create | POST | /v1/accounts/{account}/external_accounts | 2 | M10 | Generated list, detail, and edit views | unlisted (Dashboard key picker) |
-|  | create | POST | /v1/accounts/{account}/external_accounts | 2 | M10 | Generated list, detail, and edit views | unlisted (Dashboard key picker) |
-|  | update | POST | /v1/accounts/{account}/external_accounts/{id} | 2 | M10 | Generated list, detail, and edit views | unlisted (Dashboard key picker) |
+| ExternalAccount | delete | DELETE | /v1/accounts/{account}/external_accounts/{id} | 2 | M8 | Generated list, detail, and edit views | unlisted (Dashboard key picker) |
+|  | list | GET | /v1/accounts/{account}/external_accounts | 2 | M8 | Generated list, detail, and edit views | unlisted (Dashboard key picker) |
+|  | list | GET | /v1/accounts/{account}/external_accounts | 2 | M8 | Generated list, detail, and edit views | unlisted (Dashboard key picker) |
+|  | retrieve | GET | /v1/accounts/{account}/external_accounts/{id} | 2 | M8 | Generated list, detail, and edit views | unlisted (Dashboard key picker) |
+|  | retrieve | GET | /v1/accounts/{account}/external_accounts/{id} | 2 | M8 | Generated list, detail, and edit views | unlisted (Dashboard key picker) |
+|  | create | POST | /v1/accounts/{account}/external_accounts | 2 | M8 | Generated list, detail, and edit views | unlisted (Dashboard key picker) |
+|  | create | POST | /v1/accounts/{account}/external_accounts | 2 | M8 | Generated list, detail, and edit views | unlisted (Dashboard key picker) |
+|  | update | POST | /v1/accounts/{account}/external_accounts/{id} | 2 | M8 | Generated list, detail, and edit views | unlisted (Dashboard key picker) |
 | FeeRefund | retrieve | GET | /v1/application_fees/{fee}/refunds/{id} | 2 | M8 | Generated list, detail, and edit views | unlisted (Dashboard key picker) |
 |  | retrieve | GET | /v1/application_fees/{fee}/refunds/{id} | 2 | M8 | Generated list, detail, and edit views | unlisted (Dashboard key picker) |
 |  | list | GET | /v1/application_fees/{id}/refunds | 2 | M8 | Generated list, detail, and edit views | unlisted (Dashboard key picker) |
@@ -154,7 +154,7 @@ One row for every operation on every resource in [`api-inventory.md`](api-invent
 |  | archive | POST | /v1/invoice_rendering_templates/{template}/archive | 2 | M6 | Generated list, detail, and edit views | unlisted (Dashboard key picker) |
 |  | unarchive | POST | /v1/invoice_rendering_templates/{template}/unarchive | 2 | M6 | Generated list, detail, and edit views | unlisted (Dashboard key picker) |
 | LoginLink | create | POST | /v1/accounts/{account}/login_links | 2 | M8 | Generated list, detail, and edit views | edit_link_write |
-| Mandate | retrieve | GET | /v1/mandates/{mandate} | 2 | M10 | Generated list, detail, and edit views | mandate_read |
+| Mandate | retrieve | GET | /v1/mandates/{mandate} | 2 | M4 | Generated list, detail, and edit views | mandate_read |
 | PaymentAttemptRecord | list | GET | /v1/payment_attempt_records | 2 | M10 | Generated list, detail, and edit views | payment_records_read |
 |  | retrieve | GET | /v1/payment_attempt_records/{id} | 2 | M10 | Generated list, detail, and edit views | payment_records_read |
 | PaymentIntent | list | GET | /v1/payment_intents | 1 | M4 | Payments screens (M4) | payment_intent_read |
@@ -168,7 +168,7 @@ One row for every operation on every resource in [`api-inventory.md`](api-invent
 |  | confirm | POST | /v1/payment_intents/{intent}/confirm | 1 | M4 | Payments screens (M4) | payment_intent_write |
 |  | increment_authorization | POST | /v1/payment_intents/{intent}/increment_authorization | 1 | M4 | Payments screens (M4) | payment_intent_write |
 |  | verify_microdeposits | POST | /v1/payment_intents/{intent}/verify_microdeposits | 1 | M4 | Payments screens (M4) | payment_intent_write |
-| PaymentIntentAmountDetailsLineItem | list | GET | /v1/payment_intents/{intent}/amount_details_line_items | 2 | M10 | Generated list, detail, and edit views | unlisted (Dashboard key picker) |
+| PaymentIntentAmountDetailsLineItem | list | GET | /v1/payment_intents/{intent}/amount_details_line_items | 2 | M4 | Generated list, detail, and edit views | unlisted (Dashboard key picker) |
 | PaymentLink | list | GET | /v1/payment_links | 1 | M4 | Payments screens (M4) | payment_links_read |
 |  | retrieve | GET | /v1/payment_links/{payment_link} | 1 | M4 | Payments screens (M4) | payment_links_read |
 |  | list_line_items | GET | /v1/payment_links/{payment_link}/line_items | 1 | M4 | Payments screens (M4) | payment_links_read |
@@ -198,12 +198,12 @@ One row for every operation on every resource in [`api-inventory.md`](api-invent
 |  | report_payment_attempt_informational | POST | /v1/payment_records/{id}/report_payment_attempt_informational | 2 | M10 | Generated list, detail, and edit views | payment_records_write |
 |  | report_refund | POST | /v1/payment_records/{id}/report_refund | 2 | M10 | Generated list, detail, and edit views | payment_records_write |
 |  | report_payment | POST | /v1/payment_records/report_payment | 2 | M10 | Generated list, detail, and edit views | payment_records_write |
-| PaymentSource | list | GET | /v1/customers/{customer}/sources | 2 | M10 | Generated list, detail, and edit views | unlisted (Dashboard key picker) |
-|  | list | GET | /v1/customers/{customer}/sources | 2 | M10 | Generated list, detail, and edit views | unlisted (Dashboard key picker) |
-|  | retrieve | GET | /v1/customers/{customer}/sources/{id} | 2 | M10 | Generated list, detail, and edit views | unlisted (Dashboard key picker) |
-|  | retrieve | GET | /v1/customers/{customer}/sources/{id} | 2 | M10 | Generated list, detail, and edit views | unlisted (Dashboard key picker) |
-|  | create | POST | /v1/customers/{customer}/sources | 2 | M10 | Generated list, detail, and edit views | unlisted (Dashboard key picker) |
-|  | create | POST | /v1/customers/{customer}/sources | 2 | M10 | Generated list, detail, and edit views | unlisted (Dashboard key picker) |
+| PaymentSource | list | GET | /v1/customers/{customer}/sources | 2 | M5 | Generated list, detail, and edit views | unlisted (Dashboard key picker) |
+|  | list | GET | /v1/customers/{customer}/sources | 2 | M5 | Generated list, detail, and edit views | unlisted (Dashboard key picker) |
+|  | retrieve | GET | /v1/customers/{customer}/sources/{id} | 2 | M5 | Generated list, detail, and edit views | unlisted (Dashboard key picker) |
+|  | retrieve | GET | /v1/customers/{customer}/sources/{id} | 2 | M5 | Generated list, detail, and edit views | unlisted (Dashboard key picker) |
+|  | create | POST | /v1/customers/{customer}/sources | 2 | M5 | Generated list, detail, and edit views | unlisted (Dashboard key picker) |
+|  | create | POST | /v1/customers/{customer}/sources | 2 | M5 | Generated list, detail, and edit views | unlisted (Dashboard key picker) |
 | Payout | list | GET | /v1/payouts | 1 | M7 | Payouts screens (M7) | payout_read |
 |  | retrieve | GET | /v1/payouts/{payout} | 1 | M7 | Payouts screens (M7) | payout_read |
 |  | create | POST | /v1/payouts | 1 | M7 | Payouts screens (M7) | payout_write |
@@ -600,51 +600,51 @@ One row for every operation on every resource in [`api-inventory.md`](api-invent
 |  | retrieve | GET | /v1/treasury/transactions/{id} | 2 | M10 | Generated list, detail, and edit views | unlisted (Dashboard key picker) |
 | TransactionEntry | list | GET | /v1/treasury/transaction_entries | 2 | M10 | Generated list, detail, and edit views | unlisted (Dashboard key picker) |
 |  | retrieve | GET | /v1/treasury/transaction_entries/{id} | 2 | M10 | Generated list, detail, and edit views | unlisted (Dashboard key picker) |
-| MeterEvent | create_stream | POST | /v2/billing/meter_event_stream | 2 | M6 | Generated list, detail, and edit views v2 namespace: JSON bodies, page tokens, thin events | billing_meter_event_write |
-|  | create | POST | /v2/billing/meter_events | 2 | M6 | Generated list, detail, and edit views v2 namespace: JSON bodies, page tokens, thin events | billing_meter_event_write |
-| MeterEventAdjustment | create | POST | /v2/billing/meter_event_adjustments | 2 | M6 | Generated list, detail, and edit views v2 namespace: JSON bodies, page tokens, thin events | unlisted (Dashboard key picker) |
+| MeterEvent | create_stream | POST | /v2/billing/meter_event_stream | 2 | M10 | Generated list, detail, and edit views v2 namespace: JSON bodies, page tokens, thin events | billing_meter_event_write |
+|  | create | POST | /v2/billing/meter_events | 2 | M10 | Generated list, detail, and edit views v2 namespace: JSON bodies, page tokens, thin events | billing_meter_event_write |
+| MeterEventAdjustment | create | POST | /v2/billing/meter_event_adjustments | 2 | M10 | Generated list, detail, and edit views v2 namespace: JSON bodies, page tokens, thin events | unlisted (Dashboard key picker) |
 | MeterEventSession | create | POST | /v2/billing/meter_event_session | 3 | M10 | API Explorer v2 namespace: JSON bodies, page tokens, thin events | unlisted (Dashboard key picker) |
 | ProductCatalogImport | list | GET | /v2/commerce/product_catalog/imports | 3 | M10 | API Explorer v2 namespace: JSON bodies, page tokens, thin events | product_catalog_import_read |
 |  | create | POST | /v2/commerce/product_catalog/imports | 3 | M10 | API Explorer v2 namespace: JSON bodies, page tokens, thin events | product_catalog_import_write |
 |  | retrieve | GET | /v2/commerce/product_catalog/imports/{id} | 3 | M10 | API Explorer v2 namespace: JSON bodies, page tokens, thin events | product_catalog_import_read |
-| Account | list | GET | /v2/core/accounts | 1 | M2 | Account screens (M8); setup and account details (M2) v2 namespace: JSON bodies, page tokens, thin events | connected_account_read |
-|  | create | POST | /v2/core/accounts | 1 | M2 | Account screens (M8); setup and account details (M2) v2 namespace: JSON bodies, page tokens, thin events | connected_account_read |
-|  | retrieve | GET | /v2/core/accounts/{id} | 1 | M2 | Account screens (M8); setup and account details (M2) v2 namespace: JSON bodies, page tokens, thin events | connected_account_read |
-|  | update | POST | /v2/core/accounts/{id} | 1 | M2 | Account screens (M8); setup and account details (M2) v2 namespace: JSON bodies, page tokens, thin events | connected_account_read |
-|  | close | POST | /v2/core/accounts/{id}/close | 1 | M2 | Account screens (M8); setup and account details (M2) v2 namespace: JSON bodies, page tokens, thin events | connected_account_read |
-| AccountLink | create | POST | /v2/core/account_links | 2 | M8 | Generated list, detail, and edit views v2 namespace: JSON bodies, page tokens, thin events | account_link_write |
-| AccountPerson | list | GET | /v2/core/accounts/{account_id}/persons | 2 | M10 | Generated list, detail, and edit views v2 namespace: JSON bodies, page tokens, thin events | unlisted (Dashboard key picker) |
-|  | create | POST | /v2/core/accounts/{account_id}/persons | 2 | M10 | Generated list, detail, and edit views v2 namespace: JSON bodies, page tokens, thin events | unlisted (Dashboard key picker) |
-|  | delete | DELETE | /v2/core/accounts/{account_id}/persons/{id} | 2 | M10 | Generated list, detail, and edit views v2 namespace: JSON bodies, page tokens, thin events | unlisted (Dashboard key picker) |
-|  | retrieve | GET | /v2/core/accounts/{account_id}/persons/{id} | 2 | M10 | Generated list, detail, and edit views v2 namespace: JSON bodies, page tokens, thin events | unlisted (Dashboard key picker) |
-|  | update | POST | /v2/core/accounts/{account_id}/persons/{id} | 2 | M10 | Generated list, detail, and edit views v2 namespace: JSON bodies, page tokens, thin events | unlisted (Dashboard key picker) |
-| AccountPersonToken | create | POST | /v2/core/accounts/{account_id}/person_tokens | 2 | M10 | Generated list, detail, and edit views v2 namespace: JSON bodies, page tokens, thin events | unlisted (Dashboard key picker) |
-|  | retrieve | GET | /v2/core/accounts/{account_id}/person_tokens/{id} | 2 | M10 | Generated list, detail, and edit views v2 namespace: JSON bodies, page tokens, thin events | unlisted (Dashboard key picker) |
-| AccountToken | create | POST | /v2/core/account_tokens | 2 | M10 | Generated list, detail, and edit views v2 namespace: JSON bodies, page tokens, thin events | unlisted (Dashboard key picker) |
-|  | retrieve | GET | /v2/core/account_tokens/{id} | 2 | M10 | Generated list, detail, and edit views v2 namespace: JSON bodies, page tokens, thin events | unlisted (Dashboard key picker) |
-| Event | list | GET | /v2/core/events | 1 | M3 | Activity feed (M3; full filters M11) v2 namespace: JSON bodies, page tokens, thin events | event_read |
-|  | retrieve | GET | /v2/core/events/{id} | 1 | M3 | Activity feed (M3; full filters M11) v2 namespace: JSON bodies, page tokens, thin events | event_read |
-| EventDestination | list | GET | /v2/core/event_destinations | 2 | M10 | Generated list, detail, and edit views v2 namespace: JSON bodies, page tokens, thin events | unlisted (Dashboard key picker) |
-|  | create | POST | /v2/core/event_destinations | 2 | M10 | Generated list, detail, and edit views v2 namespace: JSON bodies, page tokens, thin events | unlisted (Dashboard key picker) |
-|  | delete | DELETE | /v2/core/event_destinations/{id} | 2 | M10 | Generated list, detail, and edit views v2 namespace: JSON bodies, page tokens, thin events | unlisted (Dashboard key picker) |
-|  | retrieve | GET | /v2/core/event_destinations/{id} | 2 | M10 | Generated list, detail, and edit views v2 namespace: JSON bodies, page tokens, thin events | unlisted (Dashboard key picker) |
-|  | update | POST | /v2/core/event_destinations/{id} | 2 | M10 | Generated list, detail, and edit views v2 namespace: JSON bodies, page tokens, thin events | unlisted (Dashboard key picker) |
-|  | disable | POST | /v2/core/event_destinations/{id}/disable | 2 | M10 | Generated list, detail, and edit views v2 namespace: JSON bodies, page tokens, thin events | unlisted (Dashboard key picker) |
-|  | enable | POST | /v2/core/event_destinations/{id}/enable | 2 | M10 | Generated list, detail, and edit views v2 namespace: JSON bodies, page tokens, thin events | unlisted (Dashboard key picker) |
-|  | ping | POST | /v2/core/event_destinations/{id}/ping | 2 | M10 | Generated list, detail, and edit views v2 namespace: JSON bodies, page tokens, thin events | unlisted (Dashboard key picker) |
-| GbBankAccount | list | GET | /v2/core/vault/gb_bank_accounts | 3 | M10 | API Explorer v2 namespace: JSON bodies, page tokens, thin events | unlisted (Dashboard key picker) |
-|  | create | POST | /v2/core/vault/gb_bank_accounts | 3 | M10 | API Explorer v2 namespace: JSON bodies, page tokens, thin events | unlisted (Dashboard key picker) |
-|  | retrieve | GET | /v2/core/vault/gb_bank_accounts/{id} | 3 | M10 | API Explorer v2 namespace: JSON bodies, page tokens, thin events | unlisted (Dashboard key picker) |
-|  | archive | POST | /v2/core/vault/gb_bank_accounts/{id}/archive | 3 | M10 | API Explorer v2 namespace: JSON bodies, page tokens, thin events | unlisted (Dashboard key picker) |
-|  | unarchive | POST | /v2/core/vault/gb_bank_accounts/{id}/unarchive | 3 | M10 | API Explorer v2 namespace: JSON bodies, page tokens, thin events | unlisted (Dashboard key picker) |
-| UsBankAccount | list | GET | /v2/core/vault/us_bank_accounts | 3 | M10 | API Explorer v2 namespace: JSON bodies, page tokens, thin events | unlisted (Dashboard key picker) |
-|  | create | POST | /v2/core/vault/us_bank_accounts | 3 | M10 | API Explorer v2 namespace: JSON bodies, page tokens, thin events | unlisted (Dashboard key picker) |
-|  | retrieve | GET | /v2/core/vault/us_bank_accounts/{id} | 3 | M10 | API Explorer v2 namespace: JSON bodies, page tokens, thin events | unlisted (Dashboard key picker) |
-|  | update | POST | /v2/core/vault/us_bank_accounts/{id} | 3 | M10 | API Explorer v2 namespace: JSON bodies, page tokens, thin events | unlisted (Dashboard key picker) |
-|  | archive | POST | /v2/core/vault/us_bank_accounts/{id}/archive | 3 | M10 | API Explorer v2 namespace: JSON bodies, page tokens, thin events | unlisted (Dashboard key picker) |
-|  | confirm_microdeposits | POST | /v2/core/vault/us_bank_accounts/{id}/confirm_microdeposits | 3 | M10 | API Explorer v2 namespace: JSON bodies, page tokens, thin events | unlisted (Dashboard key picker) |
-|  | send_microdeposits | POST | /v2/core/vault/us_bank_accounts/{id}/send_microdeposits | 3 | M10 | API Explorer v2 namespace: JSON bodies, page tokens, thin events | unlisted (Dashboard key picker) |
-|  | unarchive | POST | /v2/core/vault/us_bank_accounts/{id}/unarchive | 3 | M10 | API Explorer v2 namespace: JSON bodies, page tokens, thin events | unlisted (Dashboard key picker) |
+| Account | list | GET | /v2/core/accounts | 2 | M8 | Generated list, detail, and edit views v2 namespace: JSON bodies, page tokens, thin events; accounts v2 is GA for Connect platforms and preview otherwise | connected_account_read |
+|  | create | POST | /v2/core/accounts | 2 | M8 | Generated list, detail, and edit views v2 namespace: JSON bodies, page tokens, thin events; accounts v2 is GA for Connect platforms and preview otherwise | connected_account_read |
+|  | retrieve | GET | /v2/core/accounts/{id} | 2 | M8 | Generated list, detail, and edit views v2 namespace: JSON bodies, page tokens, thin events; accounts v2 is GA for Connect platforms and preview otherwise | connected_account_read |
+|  | update | POST | /v2/core/accounts/{id} | 2 | M8 | Generated list, detail, and edit views v2 namespace: JSON bodies, page tokens, thin events; accounts v2 is GA for Connect platforms and preview otherwise | connected_account_read |
+|  | close | POST | /v2/core/accounts/{id}/close | 2 | M8 | Generated list, detail, and edit views v2 namespace: JSON bodies, page tokens, thin events; accounts v2 is GA for Connect platforms and preview otherwise | connected_account_read |
+| AccountLink | create | POST | /v2/core/account_links | 2 | M8 | Generated list, detail, and edit views v2 namespace: JSON bodies, page tokens, thin events; accounts v2 is GA for Connect platforms and preview otherwise | account_link_write |
+| AccountPerson | list | GET | /v2/core/accounts/{account_id}/persons | 2 | M8 | Generated list, detail, and edit views v2 namespace: JSON bodies, page tokens, thin events; accounts v2 is GA for Connect platforms and preview otherwise | unlisted (Dashboard key picker) |
+|  | create | POST | /v2/core/accounts/{account_id}/persons | 2 | M8 | Generated list, detail, and edit views v2 namespace: JSON bodies, page tokens, thin events; accounts v2 is GA for Connect platforms and preview otherwise | unlisted (Dashboard key picker) |
+|  | delete | DELETE | /v2/core/accounts/{account_id}/persons/{id} | 2 | M8 | Generated list, detail, and edit views v2 namespace: JSON bodies, page tokens, thin events; accounts v2 is GA for Connect platforms and preview otherwise | unlisted (Dashboard key picker) |
+|  | retrieve | GET | /v2/core/accounts/{account_id}/persons/{id} | 2 | M8 | Generated list, detail, and edit views v2 namespace: JSON bodies, page tokens, thin events; accounts v2 is GA for Connect platforms and preview otherwise | unlisted (Dashboard key picker) |
+|  | update | POST | /v2/core/accounts/{account_id}/persons/{id} | 2 | M8 | Generated list, detail, and edit views v2 namespace: JSON bodies, page tokens, thin events; accounts v2 is GA for Connect platforms and preview otherwise | unlisted (Dashboard key picker) |
+| AccountPersonToken | create | POST | /v2/core/accounts/{account_id}/person_tokens | 2 | M8 | Generated list, detail, and edit views v2 namespace: JSON bodies, page tokens, thin events; accounts v2 is GA for Connect platforms and preview otherwise | unlisted (Dashboard key picker) |
+|  | retrieve | GET | /v2/core/accounts/{account_id}/person_tokens/{id} | 2 | M8 | Generated list, detail, and edit views v2 namespace: JSON bodies, page tokens, thin events; accounts v2 is GA for Connect platforms and preview otherwise | unlisted (Dashboard key picker) |
+| AccountToken | create | POST | /v2/core/account_tokens | 2 | M8 | Generated list, detail, and edit views v2 namespace: JSON bodies, page tokens, thin events; accounts v2 is GA for Connect platforms and preview otherwise | unlisted (Dashboard key picker) |
+|  | retrieve | GET | /v2/core/account_tokens/{id} | 2 | M8 | Generated list, detail, and edit views v2 namespace: JSON bodies, page tokens, thin events; accounts v2 is GA for Connect platforms and preview otherwise | unlisted (Dashboard key picker) |
+| Event | list | GET | /v2/core/events | 2 | M11 | Generated list, detail, and edit views v2 namespace: JSON bodies, page tokens, thin events; accounts v2 is GA for Connect platforms and preview otherwise | event_read |
+|  | retrieve | GET | /v2/core/events/{id} | 2 | M11 | Generated list, detail, and edit views v2 namespace: JSON bodies, page tokens, thin events; accounts v2 is GA for Connect platforms and preview otherwise | event_read |
+| EventDestination | list | GET | /v2/core/event_destinations | 2 | M11 | Generated list, detail, and edit views v2 namespace: JSON bodies, page tokens, thin events; accounts v2 is GA for Connect platforms and preview otherwise | unlisted (Dashboard key picker) |
+|  | create | POST | /v2/core/event_destinations | 2 | M11 | Generated list, detail, and edit views v2 namespace: JSON bodies, page tokens, thin events; accounts v2 is GA for Connect platforms and preview otherwise | unlisted (Dashboard key picker) |
+|  | delete | DELETE | /v2/core/event_destinations/{id} | 2 | M11 | Generated list, detail, and edit views v2 namespace: JSON bodies, page tokens, thin events; accounts v2 is GA for Connect platforms and preview otherwise | unlisted (Dashboard key picker) |
+|  | retrieve | GET | /v2/core/event_destinations/{id} | 2 | M11 | Generated list, detail, and edit views v2 namespace: JSON bodies, page tokens, thin events; accounts v2 is GA for Connect platforms and preview otherwise | unlisted (Dashboard key picker) |
+|  | update | POST | /v2/core/event_destinations/{id} | 2 | M11 | Generated list, detail, and edit views v2 namespace: JSON bodies, page tokens, thin events; accounts v2 is GA for Connect platforms and preview otherwise | unlisted (Dashboard key picker) |
+|  | disable | POST | /v2/core/event_destinations/{id}/disable | 2 | M11 | Generated list, detail, and edit views v2 namespace: JSON bodies, page tokens, thin events; accounts v2 is GA for Connect platforms and preview otherwise | unlisted (Dashboard key picker) |
+|  | enable | POST | /v2/core/event_destinations/{id}/enable | 2 | M11 | Generated list, detail, and edit views v2 namespace: JSON bodies, page tokens, thin events; accounts v2 is GA for Connect platforms and preview otherwise | unlisted (Dashboard key picker) |
+|  | ping | POST | /v2/core/event_destinations/{id}/ping | 2 | M11 | Generated list, detail, and edit views v2 namespace: JSON bodies, page tokens, thin events; accounts v2 is GA for Connect platforms and preview otherwise | unlisted (Dashboard key picker) |
+| GbBankAccount | list | GET | /v2/core/vault/gb_bank_accounts | 3 | M8 | API Explorer v2 namespace: JSON bodies, page tokens, thin events | unlisted (Dashboard key picker) |
+|  | create | POST | /v2/core/vault/gb_bank_accounts | 3 | M8 | API Explorer v2 namespace: JSON bodies, page tokens, thin events | unlisted (Dashboard key picker) |
+|  | retrieve | GET | /v2/core/vault/gb_bank_accounts/{id} | 3 | M8 | API Explorer v2 namespace: JSON bodies, page tokens, thin events | unlisted (Dashboard key picker) |
+|  | archive | POST | /v2/core/vault/gb_bank_accounts/{id}/archive | 3 | M8 | API Explorer v2 namespace: JSON bodies, page tokens, thin events | unlisted (Dashboard key picker) |
+|  | unarchive | POST | /v2/core/vault/gb_bank_accounts/{id}/unarchive | 3 | M8 | API Explorer v2 namespace: JSON bodies, page tokens, thin events | unlisted (Dashboard key picker) |
+| UsBankAccount | list | GET | /v2/core/vault/us_bank_accounts | 3 | M8 | API Explorer v2 namespace: JSON bodies, page tokens, thin events | unlisted (Dashboard key picker) |
+|  | create | POST | /v2/core/vault/us_bank_accounts | 3 | M8 | API Explorer v2 namespace: JSON bodies, page tokens, thin events | unlisted (Dashboard key picker) |
+|  | retrieve | GET | /v2/core/vault/us_bank_accounts/{id} | 3 | M8 | API Explorer v2 namespace: JSON bodies, page tokens, thin events | unlisted (Dashboard key picker) |
+|  | update | POST | /v2/core/vault/us_bank_accounts/{id} | 3 | M8 | API Explorer v2 namespace: JSON bodies, page tokens, thin events | unlisted (Dashboard key picker) |
+|  | archive | POST | /v2/core/vault/us_bank_accounts/{id}/archive | 3 | M8 | API Explorer v2 namespace: JSON bodies, page tokens, thin events | unlisted (Dashboard key picker) |
+|  | confirm_microdeposits | POST | /v2/core/vault/us_bank_accounts/{id}/confirm_microdeposits | 3 | M8 | API Explorer v2 namespace: JSON bodies, page tokens, thin events | unlisted (Dashboard key picker) |
+|  | send_microdeposits | POST | /v2/core/vault/us_bank_accounts/{id}/send_microdeposits | 3 | M8 | API Explorer v2 namespace: JSON bodies, page tokens, thin events | unlisted (Dashboard key picker) |
+|  | unarchive | POST | /v2/core/vault/us_bank_accounts/{id}/unarchive | 3 | M8 | API Explorer v2 namespace: JSON bodies, page tokens, thin events | unlisted (Dashboard key picker) |
 | Adjustment | list | GET | /v2/money_management/adjustments | 3 | M10 | API Explorer v2 namespace: JSON bodies, page tokens, thin events | unlisted (Dashboard key picker) |
 |  | retrieve | GET | /v2/money_management/adjustments/{id} | 3 | M10 | API Explorer v2 namespace: JSON bodies, page tokens, thin events | unlisted (Dashboard key picker) |
 | FinancialAccount | list | GET | /v2/money_management/financial_accounts | 2 | M10 | Generated list, detail, and edit views v2 namespace: JSON bodies, page tokens, thin events | unlisted (Dashboard key picker) |

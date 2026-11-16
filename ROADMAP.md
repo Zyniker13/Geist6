@@ -100,7 +100,7 @@ Improve this where the work shows a better way, and record the change.
 - **Restricted keys first.** Setup recommends a restricted key with the Dashboard or Management permission set from `docs/stripe/permissions.md`. A secret key (`sk_`) is accepted only after a clear warning and is always shown with a badge. A publishable key (`pk_`) is rejected with an explanation.
 - **Two modes per account.** *Dashboard* mode never sends a write request, enforced in `StripeClient` (not only in the UI), and tested. *Management* mode allows writes the key permits. The user can lock any account to Dashboard mode even if its key allows more.
 - **The permission map.** On setup and on a schedule, the app learns what the key may do (from Stripe where it says so, and otherwise by cheap read-only probes such as `limit=1` list calls), and hides or disables what the key cannot do, with a message that says which permission to add. It never probes with a write.
-- **Every write is deliberate.** Every request that changes anything carries an idempotency key; money-moving or irreversible actions (refunds, payouts, transfers, cancellations, voids, closing a dispute, deleting) need a confirmation that restates the amount, currency, account, and mode, and optionally Face ID or the passcode. Live mode is always visibly marked. Every write is recorded in a local audit log (what, when, which account, the request ID) that the user can view and export.
+- **Every write is deliberate.** Every request that changes anything carries an idempotency key where Stripe accepts one: all `/v1` POST requests, and `/v2` POST and DELETE requests (Stripe documents idempotency keys as effective on those verbs only; `/v1` DELETE is idempotent by definition). Money-moving or irreversible actions (refunds, payouts, transfers, cancellations, voids, closing a dispute, deleting) need a confirmation that restates the amount, currency, account, and mode, and optionally Face ID or the passcode. Live mode is always visibly marked. Every write is recorded in a local audit log (what, when, which account, the request ID) that the user can view and export.
 - **Test data first.** Every write flow is built and tested against `stripe-mock` and, where the maintainer provides one, a Stripe sandbox, before it is enabled for live mode.
 
 ### Setup: the Shortest Path
@@ -145,7 +145,7 @@ Each milestone builds on the ones before it. Feature milestones (M4 to M11) each
 
 ### M4: Payments
 
-PaymentIntents, Charges, payment methods and their types, Refunds (full, partial, and with reason), Checkout Sessions, Payment Links, SetupIntents, captures and cancellations, the payment timeline (from the PaymentIntent, its charges, refunds, disputes, and balance transactions), receipts, and filters by status, amount, date, customer, and method.
+PaymentIntents, Charges, payment methods and their types, Refunds (full, partial, and with reason), Checkout Sessions, Payment Links, SetupIntents, captures and cancellations, the payment timeline (from the PaymentIntent, its charges, refunds, disputes, and balance transactions), receipts, filters by status, amount, date, customer, and method, plus the tier-2 rows that ride along with payments: Mandates, Confirmation Tokens, and the PaymentIntent amount-details line items.
 
 **Done when:** every payments row in the coverage matrix is built at its tier; refund and capture flows pass UI tests against `stripe-mock` with confirmation and idempotency checked; and no write control appears in Dashboard mode (UI test).
 
@@ -169,7 +169,7 @@ Balance and balance transactions with fees, Payouts (list, detail with the trans
 
 ### M8: Connect
 
-Connected accounts (list, detail, capabilities, requirements, and verification status), account links and login links for Express accounts, transfers and application fees and their refunds, payouts on connected accounts, and the v2 accounts API where M0 found it applies.
+Connected accounts (list, detail, capabilities, requirements, and verification status), account links and login links for Express accounts, transfers and application fees and their refunds, payouts on connected accounts, the v2 accounts API (GA for Connect platforms and in preview otherwise: the app covers its rows at tier 2 when a platform key uses it), connected-account persons, external accounts, and account sessions.
 
 **Done when:** every Connect row is built at its tier; a platform test shows every screen working on a connected account through `Stripe-Account`; and the active connected account is always visible (UI test).
 
@@ -185,7 +185,7 @@ Disputes with deadlines, evidence editing (text and file uploads), submission, a
 - The tier-3 API Explorer: every endpoint in the spec, a form for its parameters, the raw response, copy-as-curl with the key redacted, and history; Dashboard mode limits it to GET.
 - Bring every remaining matrix row to its tier: Terminal (readers, locations, configurations), Issuing (cardholders, cards, authorizations with approve and decline, transactions, disputes), Treasury (financial accounts, flows), Tax (settings, registrations, calculations, transactions), Identity (verification sessions and reports), Climate, Financial Connections, Entitlements, Forwarding, Files and file links, webhook endpoint management, Apple Pay domains, shipping rates, and anything else in the inventory.
 
-**Done when:** `Tools/inventory` reports that every in-scope resource and action in the pinned spec is reachable in the app at its tier or higher (a CI check, not a manual count), and the explorer passes contract tests for every endpoint against `stripe-mock`.
+**Done when:** `Tools/inventory` reports that every in-scope resource and action in the pinned spec is reachable in the app at its tier or higher (a CI check, not a manual count), and the explorer passes contract tests for every endpoint that `stripe-mock` serves (all of `/v1`) against `stripe-mock`, with `/v2` endpoints covered by recorded response fixtures written by hand with obviously fake values, because `stripe-mock` implements only the `/v1` namespace.
 
 ### M11: Events, Alerts, and System Integration
 

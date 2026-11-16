@@ -84,11 +84,15 @@ let earlyMilestones: [String: String] = [
     "CheckoutSession": "M4",
     "PaymentLink": "M4",
     "SetupIntent": "M4",
+    "ConfirmationToken": "M4",
+    "Mandate": "M4",
+    "PaymentIntentAmountDetailsLineItem": "M4",
     // M5 customers.
     "Customer": "M5",
     "TaxId": "M5",
     "CustomerBalanceTransaction": "M5",
     "CustomerCashBalanceTransaction": "M5",
+    "PaymentSource": "M5",
     // M6 billing.
     "Product": "M6",
     "Price": "M6",
@@ -119,6 +123,7 @@ let earlyMilestones: [String: String] = [
     "CreditBalanceTransaction": "M6",
     "FeedbackOption": "M6",
     "TestClock": "M6",
+    "CustomerSession": "M6",
     // M7 balances, payouts, reporting.
     "Payout": "M7",
     "Transfer": "M7",
@@ -137,6 +142,7 @@ let earlyMilestones: [String: String] = [
     "FeeRefund": "M8",
     "Capability": "M8",
     "Person": "M8",
+    "ExternalAccount": "M8",
     // M9 disputes and fraud.
     "Review": "M9",
     "EarlyFraudWarning": "M9",
@@ -150,6 +156,16 @@ let opMilestoneOverrides: [String: String] = [
     // Setup calls GET /v1/account in M2; the other Account screens come with
     // Connect in M8.
     "Account.retrieve": "M2",
+]
+
+/// v2 resources carry notes about their namespace behavior wherever they are
+/// covered; Connect's v2 accounts API ships with M8's screens.
+let v2PackageMilestones: [String: String] = [
+    "v2.core": "M8",
+    "v2.core.vault": "M8",
+    "v2.money_management": "M10",
+    "v2.billing": "M10",
+    "v2.commerce": "M10",
 ]
 
 /// Tier 3: endpoints too unusual for tier 2; reachable through the API
@@ -244,10 +260,22 @@ func permissionLabel(for className: String, isWrite: Bool) -> String {
 
 func coverage(for resource: SpecResource, operation: SpecOperation) -> Coverage {
     let key = "\(resource.className).\(operation.methodName)"
-    let milestone = opMilestoneOverrides[key] ?? earlyMilestones[resource.className] ?? "M10"
+    var milestone = opMilestoneOverrides[key] ?? earlyMilestones[resource.className] ?? "M10"
+    if let packageMilestone = v2PackageMilestones[resource.inPackage] {
+        // v2 core events and event destinations belong with the activity and
+        // alert work (M11); the rest of v2.core ships with Connect in M8.
+        if resource.className == "Event" || resource.className == "EventDestination" {
+            milestone = "M11"
+        } else {
+            milestone = packageMilestone
+        }
+    }
     let tier: Int
     let screen: String
-    if tier1.contains(resource.className), milestone != "M10" {
+    if tier1.contains(resource.className), milestone != "M10",
+       !resource.inPackage.hasPrefix("v2.") {
+        // v1 core resources get their crafted screens; v2 namespace
+        // resources stay generated or Explorer in v1.0.0.
         tier = 1
         screen = tier1Screen[resource.className] ?? "Hand-built screens"
     } else if tier3Classes.contains(resource.className) {
@@ -260,6 +288,9 @@ func coverage(for resource: SpecResource, operation: SpecOperation) -> Coverage 
     var note = ""
     if resource.schema.hasPrefix("v2.") || resource.inPackage.hasPrefix("v2.") {
         note = "v2 namespace: JSON bodies, page tokens, thin events"
+        if resource.inPackage == "v2.core" {
+            note += "; accounts v2 is GA for Connect platforms and preview otherwise"
+        }
     }
     if resource.inPackage == "TestHelpers" {
         note = "test mode only"
@@ -332,7 +363,12 @@ func generateCoverageMatrixMarkdown(_ inventory: SpecInventory) -> String {
         restricted-key permission column uses the names documented in Stripe's \
         permissions reference; "unlisted" resources are granted through the \
         Dashboard key picker, and the app probes access before showing a \
-        feature. Regenerate with `swift run inventory gen`.
+        feature. Every write row is subject to the roadmap's Keys and Safety \
+        rules: an idempotency key, a confirmation that restates amount, \
+        currency, account, and mode for money-moving or irreversible actions, \
+        a visible live-mode marker, and an audit-log entry — and no write of \
+        any kind is sendable in Dashboard mode, which the client enforces. \
+        Regenerate with `swift run inventory gen`.
         """)
     lines.append("")
     lines.append("| Resource | Operation | HTTP | Path | Tier | Milestone | Screen or flow | Restricted-key permission |")

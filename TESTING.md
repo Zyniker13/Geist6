@@ -21,7 +21,7 @@ Paths and commands are the plan; fill in the real ones as each suite is built.
 | Generator | The generated models match the pinned spec; regeneration produces no diff | `Tests/GeneratorTests/`, CI regeneration check | every CI run |
 | Inventory and coverage | Every resource and action in the pinned spec has a coverage-matrix row, and every in-scope row is reachable at its tier | `Tools/inventory --check` | every CI run |
 | Decoding | Every fixture object decodes losslessly, including unknown fields and enum values, nulls, and expanded and unexpanded fields | `Tests/ModelsTests/` | every CI run |
-| Client contract | Every endpoint works against `stripe-mock`: encoding, pagination, search, expansion, files, idempotency, retries, and every error type | `Tests/ClientTests/` | every CI run, macOS and Linux |
+| Client contract | Every endpoint works against `stripe-mock`: encoding, pagination, search, expansion, files, idempotency, retries, and every error type (`/v1`; `stripe-mock` serves only `/v1`, so `/v2` endpoints get the same coverage against hand-written response fixtures with obviously fake values) | `Tests/ClientTests/` | every CI run, macOS and Linux |
 | Dashboard mode | No write request can be sent in Dashboard mode | `Tests/ClientTests/ReadOnlyTests` | every CI run |
 | Money and metrics | Formatting in every currency, and dashboard and billing metrics against hand-checked fixtures | `Tests/ConsoleTests/` | every CI run |
 | Key safety | Keys never reach the cache, logs, exports, or copy-as-curl | `Tests/ConsoleTests/KeySafetyTests` | every CI run |
