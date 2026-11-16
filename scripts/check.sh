@@ -23,9 +23,7 @@ fi
 
 if command -v swift-format >/dev/null 2>&1; then
     echo "== swift-format =="
-    swift-format lint --recursive --parallel Sources Tools Tests \
-        --exclude Sources/StripeModels/Generated --exclude Sources/StripeClient/Generated \
-        >/dev/null
+    swift-format lint --recursive --parallel Sources Tools Tests >/dev/null
 else
     echo "swift-format not installed; skipping (brew install swift-format)"
 fi
