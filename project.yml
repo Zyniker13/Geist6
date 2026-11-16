@@ -1,0 +1,60 @@
+name: Geist6
+options:
+  bundleIdPrefix: app.geist6
+  createIntermediateGroups: true
+  deploymentTarget:
+    iOS: "26.0"
+settings:
+  base:
+    SWIFT_VERSION: "6.2"
+    IPHONEOS_DEPLOYMENT_TARGET: "26.0"
+    TARGETED_DEVICE_FAMILY: "2"
+    GENERATE_INFOPLIST_FILE: true
+packages:
+  Geist6:
+    path: .
+targets:
+  Geist6:
+    type: application
+    platform: iOS
+    sources:
+      - Sources/App
+    dependencies:
+      - package: Geist6
+        products:
+          - StripeClient
+          - StripeModels
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: app.geist6.app
+        INFOPLIST_KEY_UILaunchScreen_Generation: true
+        INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad: "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight"
+        CODE_SIGNING_ALLOWED: NO
+  Geist6Tests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - TestsApp
+    dependencies:
+      - target: Geist6
+  Geist6UITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources:
+      - TestsAppUI
+    dependencies:
+      - target: Geist6
+schemes:
+  Geist6:
+    build:
+      targets:
+        Geist6: all
+        Geist6Tests: [test]
+        Geist6UITests: [test]
+    run:
+      config: Debug
+    test:
+      config: Debug
+      targets:
+        - Geist6Tests
+        - Geist6UITests

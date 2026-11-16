@@ -1,0 +1,46 @@
+# SwiftLint configuration. Generated code is governed by the regeneration
+# check (stripe-gen + CI diff), so it is excluded here.
+included:
+  - Sources
+  - Tests
+  - Tools
+  - TestsApp
+  - TestsAppUI
+excluded:
+  - Sources/StripeModels/Generated
+  - Sources/StripeClient/Generated
+  - .build
+
+line_length:
+  warning: 120
+  error: 160
+  ignores_comments: true
+
+identifier_name:
+  min_length: 2
+  excluded:
+    - id
+    - a
+    - b
+    - p
+    - q
+
+type_body_length:
+  warning: 600
+  error: 1200
+
+file_length:
+  warning: 1200
+  error: 2400
+  ignore_comment_only_lines: true
+
+function_body_length:
+  warning: 120
+  error: 300
+
+cyclomatic_complexity:
+  warning: 20
+  error: 40
+
+large_tuple:
+  warning: 4

@@ -1,0 +1,6 @@
+apiVersion: 2026-10-28.endive
+sourceRelease: v2600
+schemas: 2544
+operations: 660
+generatedTypes: 11078
+unknownSchemaShapes: 0
