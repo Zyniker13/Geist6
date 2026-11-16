@@ -126,9 +126,10 @@ public struct StripeAPIError: Swift.Error, Sendable, CustomStringConvertible {
   public var rawBody: Data?
   public var requestId: String?
   /// True for `429` rate limits and lock timeouts, which Stripe documents
-  /// as safe to retry.
+  /// as safe to retry, and for `5xx` server failures: every write carries
+  /// an idempotency key, so replaying a failed request cannot double-charge.
   public var isRetryable: Bool {
-    status == 429
+    status == 429 || (500...599).contains(status)
   }
 
   public var description: String {
@@ -531,14 +532,10 @@ public struct StripeClient: Sendable {
   }
 
   static func requestId(from response: HTTPURLResponse) -> String? {
-    let headers = response.allHeaderFields
-    for (key, value) in headers {
-      let keyStr = key as? String ?? String(describing: key)
-      if keyStr.caseInsensitiveCompare("Request-Id") == .orderedSame {
-        return value as? String
-      }
-    }
-    return nil
+    // value(forHTTPHeaderField:) is case-insensitive and avoids bridging
+    // allHeaderFields ([AnyHashable: Any]) into Swift collections, which
+    // crashed under concurrency in early M1 testing.
+    return response.value(forHTTPHeaderField: "Request-Id")
   }
 
   static func parseError(status: Int, body: Data, requestId: String?) -> StripeAPIError {
@@ -562,6 +559,12 @@ public struct ListResponse<T: Decodable & Sendable>: Decodable, Sendable {
   public var data: [T]
   public var hasMore: Bool
   public var url: String
+
+  private enum CodingKeys: String, CodingKey {
+    case data
+    case hasMore = "has_more"
+    case url
+  }
 }
 
 extension ListResponse: StripeList where T: StripeIdentified {}
@@ -571,6 +574,12 @@ public struct SearchResponse<T: Decodable & Sendable>: Decodable, Sendable {
   public var data: [T]
   public var hasMore: Bool
   public var url: String
+
+  private enum CodingKeys: String, CodingKey {
+    case data
+    case hasMore = "has_more"
+    case url
+  }
 }
 
 /// A response from a Stripe delete endpoint.
