@@ -3,9 +3,9 @@
 Keep every field current after every meaningful step. This file and `ROADMAP.md` are the truth when work resumes.
 
 - **Current milestone:** M1 (Foundation) — full test suite green, check.sh verification running
-- **Last done:** All lint violations resolved (nesting, line_length, static_over_final_class, identifier_name, force_try, opening_brace, trailing_comma, redundant_discardable_let, for_where, type_name). Fixed `stripe-gen` self-recursive union crash (single-branch anyOf → branch type, 11,078→10,762 types). Fixed test harness (URLProtocol interception, body-stream draining, @Sendable closures, thread-safe counters). Fixed Swift 6.2 tools-version mismatch in CI. Fixed check.sh swift-format --exclude flag (unsupported in v604.0.0). `check.sh` runs green end-to-end. CI run 43909241426: macOS job fixed with Xcode 26 selection; Linux job transient failure.
-- **Next step:** Push, verify CI green, close M1 per ROADMAP.md done-when, move to M2
-- **Blocked on:** nothing
+- **Last done:** All lint violations resolved (nesting, line_length, static_over_final_class, identifier_name, force_try, opening_brace, trailing_comma, redundant_discardable_let, for_where, type_name). Fixed `stripe-gen` self-recursive union crash (single-branch anyOf → branch type, 11,078→10,762 types). Fixed test harness (URLProtocol interception, body-stream draining, @Sendable closures, thread-safe counters). Fixed Swift 6.2 tools-version mismatch in CI. Fixed check.sh swift-format --exclude flag (unsupported in v604.0.0). Fixed CI Xcode selection (match Xcode_2*.app or fall back to Xcode.app). `check.sh` runs green end-to-end. MockServerTests: 6/6 pass, EXIT=0 (earlier SIGSEGV was from stale build). CI runs 43938869854 and 43940339693 failed — likely same Xcode selection issue; pushed fix in 74dc9b0.
+- **Next step:** Wait for CI run 43940339693 (should have been re-triggered by the ci.yml fix); verify green; close M1 per ROADMAP.md done-when and move to M2
+- **Blocked on:** CI — waiting for new run after Xcode selection fix (commit 74dc9b0)
 
 ## Environment Check
 
