@@ -13,7 +13,8 @@ public enum QuoteApplication: Sendable, Codable, Equatable, Hashable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let raw = try? container.decode([String: JSONValue].self), let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
+        if let raw = try? container.decode([String: JSONValue].self),
+           let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
             if tag == "application" { self = .application(try container.decode(Application.self)); return }
             if tag == "application" { self = .deletedApplication(try container.decode(DeletedApplication.self)); return }
         }
@@ -43,7 +44,8 @@ public enum QuoteCustomer: Sendable, Codable, Equatable, Hashable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let raw = try? container.decode([String: JSONValue].self), let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
+        if let raw = try? container.decode([String: JSONValue].self),
+           let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
             if tag == "customer" { self = .customer(try container.decode(Customer.self)); return }
             if tag == "customer" { self = .deletedCustomer(try container.decode(DeletedCustomer.self)); return }
         }
@@ -93,7 +95,8 @@ public enum QuoteInvoice: Sendable, Codable, Equatable, Hashable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let raw = try? container.decode([String: JSONValue].self), let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
+        if let raw = try? container.decode([String: JSONValue].self),
+           let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
             if tag == "invoice" { self = .invoice(try container.decode(Invoice.self)); return }
             if tag == "invoice" { self = .deletedInvoice(try container.decode(DeletedInvoice.self)); return }
         }

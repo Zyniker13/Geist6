@@ -42,7 +42,8 @@ public enum ReportingReportRunResult: Sendable, Codable, Equatable, Hashable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let raw = try? container.decode([String: JSONValue].self), let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
+        if let raw = try? container.decode([String: JSONValue].self),
+           let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
             if tag == "file" { self = .file(try container.decode(File.self)); return }
         }
         if let value = try? container.decode(File.self) { self = .file(value); return }

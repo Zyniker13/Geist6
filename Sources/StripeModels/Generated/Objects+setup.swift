@@ -13,7 +13,8 @@ public enum SetupAttemptCustomer: Sendable, Codable, Equatable, Hashable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let raw = try? container.decode([String: JSONValue].self), let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
+        if let raw = try? container.decode([String: JSONValue].self),
+           let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
             if tag == "customer" { self = .customer(try container.decode(Customer.self)); return }
             if tag == "customer" { self = .deletedCustomer(try container.decode(DeletedCustomer.self)); return }
         }
@@ -891,7 +892,8 @@ public enum SetupAttemptPaymentMethodDetailsCardPresentOffline: Sendable, Codabl
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let raw = try? container.decode([String: JSONValue].self), let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
+        if let raw = try? container.decode([String: JSONValue].self),
+           let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
             if tag == "deferred" { self = .paymentMethodDetailsCardPresentOffline(try container.decode(PaymentMethodDetailsCardPresentOffline.self)); return }
         }
         if let value = try? container.decode(PaymentMethodDetailsCardPresentOffline.self) { self = .paymentMethodDetailsCardPresentOffline(value); return }
@@ -1716,7 +1718,8 @@ public enum SetupIntentCustomer: Sendable, Codable, Equatable, Hashable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let raw = try? container.decode([String: JSONValue].self), let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
+        if let raw = try? container.decode([String: JSONValue].self),
+           let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
             if tag == "customer" { self = .customer(try container.decode(Customer.self)); return }
             if tag == "customer" { self = .deletedCustomer(try container.decode(DeletedCustomer.self)); return }
         }

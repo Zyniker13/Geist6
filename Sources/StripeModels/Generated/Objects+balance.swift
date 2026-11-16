@@ -1503,7 +1503,8 @@ public enum BalanceTransactionSource: Sendable, Codable, Equatable, Hashable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let raw = try? container.decode([String: JSONValue].self), let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
+        if let raw = try? container.decode([String: JSONValue].self),
+           let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
             if tag == "application_fee" { self = .applicationFee(try container.decode(ApplicationFee.self)); return }
             if tag == "charge" { self = .charge(try container.decode(Charge.self)); return }
             if tag == "connect_collection_transfer" { self = .connectCollectionTransfer(try container.decode(ConnectCollectionTransfer.self)); return }

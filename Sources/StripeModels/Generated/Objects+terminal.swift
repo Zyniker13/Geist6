@@ -3298,7 +3298,8 @@ public enum ConfigurationResponse: Sendable, Codable, Equatable, Hashable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let raw = try? container.decode([String: JSONValue].self), let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
+        if let raw = try? container.decode([String: JSONValue].self),
+           let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
             if tag == "terminal.configuration" { self = .terminalConfiguration(try container.decode(TerminalConfiguration.self)); return }
             if tag == "terminal.configuration" { self = .deletedTerminalConfiguration(try container.decode(DeletedTerminalConfiguration.self)); return }
         }
@@ -3325,7 +3326,8 @@ public enum LocationResponse: Sendable, Codable, Equatable, Hashable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let raw = try? container.decode([String: JSONValue].self), let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
+        if let raw = try? container.decode([String: JSONValue].self),
+           let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
             if tag == "terminal.location" { self = .terminalLocation(try container.decode(TerminalLocation.self)); return }
             if tag == "terminal.location" { self = .deletedTerminalLocation(try container.decode(DeletedTerminalLocation.self)); return }
         }
@@ -3652,7 +3654,8 @@ public enum ReaderResponse: Sendable, Codable, Equatable, Hashable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let raw = try? container.decode([String: JSONValue].self), let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
+        if let raw = try? container.decode([String: JSONValue].self),
+           let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
             if tag == "terminal.reader" { self = .terminalReader(try container.decode(TerminalReader.self)); return }
             if tag == "terminal.reader" { self = .deletedTerminalReader(try container.decode(DeletedTerminalReader.self)); return }
         }

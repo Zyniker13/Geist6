@@ -392,7 +392,8 @@ public enum DeletedDiscountCustomer: Sendable, Codable, Equatable, Hashable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let raw = try? container.decode([String: JSONValue].self), let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
+        if let raw = try? container.decode([String: JSONValue].self),
+           let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
             if tag == "customer" { self = .customer(try container.decode(Customer.self)); return }
             if tag == "customer" { self = .deletedCustomer(try container.decode(DeletedCustomer.self)); return }
         }
@@ -554,7 +555,8 @@ public enum DeletedExternalAccount: Sendable, Codable, Equatable, Hashable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let raw = try? container.decode([String: JSONValue].self), let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
+        if let raw = try? container.decode([String: JSONValue].self),
+           let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
             if tag == "bank_account" { self = .deletedBankAccount(try container.decode(DeletedBankAccount.self)); return }
             if tag == "card" { self = .deletedCard(try container.decode(DeletedCard.self)); return }
         }
@@ -747,7 +749,8 @@ public enum DeletedPaymentSource: Sendable, Codable, Equatable, Hashable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let raw = try? container.decode([String: JSONValue].self), let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
+        if let raw = try? container.decode([String: JSONValue].self),
+           let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
             if tag == "bank_account" { self = .deletedBankAccount(try container.decode(DeletedBankAccount.self)); return }
             if tag == "card" { self = .deletedCard(try container.decode(DeletedCard.self)); return }
         }

@@ -13,7 +13,8 @@ public enum InvoiceitemCustomer: Sendable, Codable, Equatable, Hashable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let raw = try? container.decode([String: JSONValue].self), let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
+        if let raw = try? container.decode([String: JSONValue].self),
+           let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
             if tag == "customer" { self = .customer(try container.decode(Customer.self)); return }
             if tag == "customer" { self = .deletedCustomer(try container.decode(DeletedCustomer.self)); return }
         }
@@ -78,7 +79,8 @@ public enum InvoiceitemParent: Sendable, Codable, Equatable, Hashable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let raw = try? container.decode([String: JSONValue].self), let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
+        if let raw = try? container.decode([String: JSONValue].self),
+           let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
             if tag == "subscription_details" { self = .billingBillResourceInvoiceItemParentsInvoiceItemParent(try container.decode(BillingBillResourceInvoiceItemParentsInvoiceItemParent.self)); return }
         }
         if let value = try? container.decode(BillingBillResourceInvoiceItemParentsInvoiceItemParent.self) { self = .billingBillResourceInvoiceItemParentsInvoiceItemParent(value); return }
@@ -101,7 +103,8 @@ public enum InvoiceitemPricing: Sendable, Codable, Equatable, Hashable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let raw = try? container.decode([String: JSONValue].self), let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
+        if let raw = try? container.decode([String: JSONValue].self),
+           let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
             if tag == "price_details" { self = .billingBillResourceInvoicingPricingPricing(try container.decode(BillingBillResourceInvoicingPricingPricing.self)); return }
         }
         if let value = try? container.decode(BillingBillResourceInvoicingPricingPricing.self) { self = .billingBillResourceInvoicingPricingPricing(value); return }

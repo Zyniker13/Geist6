@@ -508,7 +508,8 @@ public enum AccountExternalAccountCreatedEventObject: Sendable, Codable, Equatab
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let raw = try? container.decode([String: JSONValue].self), let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
+        if let raw = try? container.decode([String: JSONValue].self),
+           let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
             if tag == "bank_account" { self = .bankAccount(try container.decode(BankAccount.self)); return }
             if tag == "card" { self = .card(try container.decode(Card.self)); return }
             if tag == "source" { self = .source(try container.decode(Source.self)); return }
@@ -581,7 +582,8 @@ public enum AccountExternalAccountDeletedEventObject: Sendable, Codable, Equatab
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let raw = try? container.decode([String: JSONValue].self), let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
+        if let raw = try? container.decode([String: JSONValue].self),
+           let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
             if tag == "bank_account" { self = .bankAccount(try container.decode(BankAccount.self)); return }
             if tag == "card" { self = .card(try container.decode(Card.self)); return }
             if tag == "source" { self = .source(try container.decode(Source.self)); return }
@@ -654,7 +656,8 @@ public enum AccountExternalAccountUpdatedEventObject: Sendable, Codable, Equatab
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let raw = try? container.decode([String: JSONValue].self), let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
+        if let raw = try? container.decode([String: JSONValue].self),
+           let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
             if tag == "bank_account" { self = .bankAccount(try container.decode(BankAccount.self)); return }
             if tag == "card" { self = .card(try container.decode(Card.self)); return }
             if tag == "source" { self = .source(try container.decode(Source.self)); return }

@@ -2,9 +2,9 @@
 
 Keep every field current after every meaningful step. This file and `ROADMAP.md` are the truth when work resumes.
 
-- **Current milestone:** M1 (Foundation), core complete — app build verifying
-- **Last done:** `stripe-gen` emits the full surface (660 operations, 11,078 types) and the whole package compiles; `swift test` green (inventory checks); committed generator fixes, CI workflow, check.sh, XcodeGen project, and the app skeleton
-- **Next step:** verify the iPad app build (running), run lint gates, push, confirm CI green; then finish M1 (StripeClient against stripe-mock tests) and close M1
+- **Current milestone:** M1 (Foundation), core complete — StripeClient mock tests in progress
+- **Last done:** Fixed SIGSEGV crash in `StripeClient.requestId(from:)` (GET requests) by hoisting `allHeaderFields` to a local variable and using safer key cast; all 20 MockServerTests pass when decoded individually (except `testRetrieveCharge` which crashes during `Charge.self` decode — a separate issue in the auto-generated `Charge` model's `Codable` implementation). Minimal tests (`testListCharges`, `testRetrieveCharge`) fail due to port 0 (need `boot()` call). Full suite `swift test` still unreliable (runner hangs/zombies).
+- **Next step:** Fix `Charge` decode crash (likely a bug in the auto-generated `Charge` model's `Codable`), fix minimal tests to use `MockHarness.client`, run full MockServerTests suite, then run `swift test` and fix any remaining issues
 - **Blocked on:** nothing
 
 ## Environment Check

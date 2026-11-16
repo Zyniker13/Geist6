@@ -62,7 +62,8 @@ public enum LineItemPricing: Sendable, Codable, Equatable, Hashable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let raw = try? container.decode([String: JSONValue].self), let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
+        if let raw = try? container.decode([String: JSONValue].self),
+           let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
             if tag == "price_details" { self = .billingBillResourceInvoicingPricingPricing(try container.decode(BillingBillResourceInvoicingPricingPricing.self)); return }
         }
         if let value = try? container.decode(BillingBillResourceInvoicingPricingPricing.self) { self = .billingBillResourceInvoicingPricingPricing(value); return }

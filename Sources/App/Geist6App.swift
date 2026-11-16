@@ -5,9 +5,9 @@ import SwiftUI
 /// portable package carries the logic.
 @main
 struct Geist6App: App {
-    var body: some Scene {
-        WindowGroup {
-            ContentView()
-        }
+  var body: some Scene {
+    WindowGroup {
+      ContentView()
     }
+  }
 }

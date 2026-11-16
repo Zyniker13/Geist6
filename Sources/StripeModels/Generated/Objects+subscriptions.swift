@@ -1019,7 +1019,8 @@ public enum SubscriptionsResourcePendingUpdateDiscount: Sendable, Codable, Equat
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let raw = try? container.decode([String: JSONValue].self), let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
+        if let raw = try? container.decode([String: JSONValue].self),
+           let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
             if tag == "discount" { self = .discount(try container.decode(Discount.self)); return }
         }
         if let value = try? container.decode(Discount.self) { self = .discount(value); return }
@@ -1168,7 +1169,8 @@ public enum SubscriptionsResourceSubscriptionInvoiceSettingsAccountTaxIdsItem: S
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let raw = try? container.decode([String: JSONValue].self), let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
+        if let raw = try? container.decode([String: JSONValue].self),
+           let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
             if tag == "tax_id" { self = .taxId(try container.decode(TaxId.self)); return }
             if tag == "tax_id" { self = .deletedTaxId(try container.decode(DeletedTaxId.self)); return }
         }

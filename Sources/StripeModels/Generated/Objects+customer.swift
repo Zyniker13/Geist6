@@ -31,7 +31,8 @@ public enum CustomerCashBalance: Sendable, Codable, Equatable, Hashable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let raw = try? container.decode([String: JSONValue].self), let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
+        if let raw = try? container.decode([String: JSONValue].self),
+           let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
             if tag == "cash_balance" { self = .cashBalance(try container.decode(CashBalance.self)); return }
         }
         if let value = try? container.decode(CashBalance.self) { self = .cashBalance(value); return }
@@ -54,7 +55,8 @@ public enum CustomerDiscount: Sendable, Codable, Equatable, Hashable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let raw = try? container.decode([String: JSONValue].self), let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
+        if let raw = try? container.decode([String: JSONValue].self),
+           let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
             if tag == "discount" { self = .discount(try container.decode(Discount.self)); return }
         }
         if let value = try? container.decode(Discount.self) { self = .discount(value); return }
@@ -740,7 +742,8 @@ public enum CustomerSourceCreatedEventObject: Sendable, Codable, Equatable, Hash
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let raw = try? container.decode([String: JSONValue].self), let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
+        if let raw = try? container.decode([String: JSONValue].self),
+           let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
             if tag == "bank_account" { self = .bankAccount(try container.decode(BankAccount.self)); return }
             if tag == "card" { self = .card(try container.decode(Card.self)); return }
             if tag == "source" { self = .source(try container.decode(Source.self)); return }
@@ -813,7 +816,8 @@ public enum CustomerSourceDeletedEventObject: Sendable, Codable, Equatable, Hash
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let raw = try? container.decode([String: JSONValue].self), let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
+        if let raw = try? container.decode([String: JSONValue].self),
+           let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
             if tag == "bank_account" { self = .bankAccount(try container.decode(BankAccount.self)); return }
             if tag == "card" { self = .card(try container.decode(Card.self)); return }
             if tag == "source" { self = .source(try container.decode(Source.self)); return }
@@ -885,7 +889,8 @@ public enum CustomerSourceExpiringEventObject: Sendable, Codable, Equatable, Has
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let raw = try? container.decode([String: JSONValue].self), let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
+        if let raw = try? container.decode([String: JSONValue].self),
+           let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
             if tag == "card" { self = .card(try container.decode(Card.self)); return }
             if tag == "source" { self = .source(try container.decode(Source.self)); return }
         }
@@ -955,7 +960,8 @@ public enum CustomerSourceUpdatedEventObject: Sendable, Codable, Equatable, Hash
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let raw = try? container.decode([String: JSONValue].self), let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
+        if let raw = try? container.decode([String: JSONValue].self),
+           let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
             if tag == "bank_account" { self = .bankAccount(try container.decode(BankAccount.self)); return }
             if tag == "card" { self = .card(try container.decode(Card.self)); return }
             if tag == "source" { self = .source(try container.decode(Source.self)); return }
@@ -5159,7 +5165,8 @@ public enum CustomerResponse: Sendable, Codable, Equatable, Hashable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let raw = try? container.decode([String: JSONValue].self), let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
+        if let raw = try? container.decode([String: JSONValue].self),
+           let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
             if tag == "customer" { self = .customer(try container.decode(Customer.self)); return }
             if tag == "customer" { self = .deletedCustomer(try container.decode(DeletedCustomer.self)); return }
         }

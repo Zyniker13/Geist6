@@ -1222,7 +1222,8 @@ public enum TreasuryInboundTransferOriginPaymentMethodDetails: Sendable, Codable
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let raw = try? container.decode([String: JSONValue].self), let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
+        if let raw = try? container.decode([String: JSONValue].self),
+           let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
             if tag == "us_bank_account" { self = .inboundTransfers(try container.decode(InboundTransfers.self)); return }
         }
         if let value = try? container.decode(InboundTransfers.self) { self = .inboundTransfers(value); return }
