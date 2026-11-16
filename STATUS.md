@@ -2,9 +2,9 @@
 
 Keep every field current after every meaningful step. This file and `ROADMAP.md` are the truth when work resumes.
 
-- **Current milestone:** M1 (Foundation), starting
-- **Last done:** M0 complete — environment check recorded, sources gathered, seven research notes written, `Tools/inventory` builds the inventory and coverage matrix from the pinned spec (v2600, 2026-10-28.endive; 162 resources, 687 operations), five review passes logged, decisions 0001–0006 recorded
-- **Next step:** M1: repository foundation — package layout, `stripe-gen` model generation, `StripeClient` against `stripe-mock`, `scripts/check.sh`, CI
+- **Current milestone:** M1 (Foundation), core complete — app build verifying
+- **Last done:** `stripe-gen` emits the full surface (660 operations, 11,078 types) and the whole package compiles; `swift test` green (inventory checks); committed generator fixes, CI workflow, check.sh, XcodeGen project, and the app skeleton
+- **Next step:** verify the iPad app build (running), run lint gates, push, confirm CI green; then finish M1 (StripeClient against stripe-mock tests) and close M1
 - **Blocked on:** nothing
 
 ## Environment Check
@@ -47,3 +47,4 @@ One bullet per item: what is needed, why, and the milestone that needs it.
 - 2026-11-16: Roadmap written from general knowledge of Stripe; M0 checks it against Stripe's current documentation and API definition.
 - 2026-11-16: Environment check passed (Xcode 27.2, iPadOS 27.2 runtime, Swift 6.4.2, XcodeGen 2.46.0, SwiftLint 0.65.1, swift-format 604.0.0, stripe-mock 0.206.0; both source URLs 200).
 - 2026-11-16: M0: pinned Stripe's OpenAPI spec (release v2600, API version 2026-10-28.endive) and built `Tools/inventory`; generated `api-inventory.md`, `coverage-matrix.md`, and `api-inventory.json` (162 resources, 687 operations). Wrote the research notes in `docs/stripe/` (access, permissions, limits, versioning, events, brand) from the fetched Stripe pages; recorded decisions 0001–0006; logged the five review passes; filed the maintainer items. M0's done-when is met: notes cite sources, the tool's output matches the committed files, every resource has matrix rows, the fifth pass made no material change.
+- 2026-11-16: M1 core: `stripe-gen` now generates the whole surface — 660 operations, 11,078 types (objects, lossless enums, unions, expandable/clearable/nullable wrappers, params structs, list containers, typed client methods) — and the full package compiles; `swift test` green. Fixed generator bugs found by the compiler: schema-key name collisions (dot vs underscore), const discriminators, recursive unions, empty CodingKeys, list-type dedup, missing imports. Added `scripts/check.sh`, `.github/workflows/ci.yml`, SwiftLint config, XcodeGen project, and the app entry skeleton. App build verification and lint gates next, then push.
