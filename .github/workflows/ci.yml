@@ -28,7 +28,15 @@ jobs:
           echo "$HOME/.local/bin" >> "$GITHUB_PATH"
           stripe-mock -version
       - name: Check
-        run: ./scripts/check.sh
+        run: |
+          set -eu
+          if ./scripts/check.sh 2>&1 | tee /tmp/check-output.txt; then
+            echo "check.sh passed"
+          else
+            echo "check.sh failed" >&2
+            cat /tmp/check-output.txt >&2
+            exit 1
+          fi
 
   macos-package:
     name: Package and app (macOS, Xcode)
@@ -53,4 +61,12 @@ jobs:
         run: |
           brew install stripe/stripe-mock/stripe-mock xcodegen swiftlint swift-format
       - name: Check
-        run: ./scripts/check.sh
+        run: |
+          set -eu
+          if ./scripts/check.sh 2>&1 | tee /tmp/check-output.txt; then
+            echo "check.sh passed"
+          else
+            echo "check.sh failed" >&2
+            cat /tmp/check-output.txt >&2
+            exit 1
+          fi
