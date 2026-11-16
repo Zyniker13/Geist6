@@ -8,12 +8,16 @@ import XCTest
 /// Swift 6 requires all mutable global state to be wrapped in a
 /// Sendable type.
 final class State: @unchecked Sendable {
-  private var handler: ((URLRequest) -> RecordingResponse)? = nil
+  // Handlers must be @Sendable: closures formed in @MainActor test code
+  // otherwise inherit main-actor isolation, and invoking them from
+  // URLSession's URLProtocol queue trips the dispatch main-thread
+  // assertion at runtime.
+  private var handler: (@Sendable (URLRequest) -> RecordingResponse)? = nil
   private var recordedRequests: [URLRequest] = []
   private var recordedResponses: [URLResponse] = []
   private let queue = DispatchQueue(label: "geist6.RecordingURLProtocol.State")
 
-  var handlerValue: ((URLRequest) -> RecordingResponse)? {
+  var handlerValue: (@Sendable (URLRequest) -> RecordingResponse)? {
     get { queue.sync { handler } }
     set { queue.sync { handler = newValue } }
   }
@@ -45,6 +49,28 @@ final class State: @unchecked Sendable {
   }
 }
 
+// MARK: - ThreadSafeCounter
+
+/// Counter that can be incremented from any queue. URLSession's
+/// URLProtocol callbacks run off the main actor, so test handlers must
+/// not mutate captured locals there (Swift 6 dynamic isolation
+/// enforcement traps on the cross-actor access).
+final class ThreadSafeCounter: @unchecked Sendable {
+  private let lock = NSLock()
+  private var value = 0
+  func increment() -> Int {
+    lock.lock()
+    defer { lock.unlock() }
+    value += 1
+    return value
+  }
+  var current: Int {
+    lock.lock()
+    defer { lock.unlock() }
+    return value
+  }
+}
+
 // MARK: - RecordingURLProtocol
 
 /// A URLProtocol that records requests/responses and delegates to a
@@ -55,7 +81,7 @@ final class RecordingURLProtocol: URLProtocol, @unchecked Sendable {
 
   // MARK: - Public accessors
 
-  static var handler: ((URLRequest) -> RecordingResponse)? {
+  static var handler: (@Sendable (URLRequest) -> RecordingResponse)? {
     get { state.handlerValue }
     set { state.handlerValue = newValue }
   }
@@ -75,7 +101,11 @@ final class RecordingURLProtocol: URLProtocol, @unchecked Sendable {
   // MARK: - URLProtocol overrides
 
   override class func canInit(with request: URLRequest) -> Bool {
-    request.url?.absoluteString.hasPrefix("http://127.0.0.1:1/stub") ?? false
+    // Intercept everything aimed at the stub base URL (port 1). The
+    // client appends real API paths (/v1/...) to the base URL, so the
+    // match cannot be path-based.
+    guard let url = request.url else { return false }
+    return url.host == "127.0.0.1" && url.port == 1 && url.scheme == "http"
   }
 
   override class func canonicalRequest(for request: URLRequest) -> URLRequest {
@@ -87,7 +117,14 @@ final class RecordingURLProtocol: URLProtocol, @unchecked Sendable {
   }
 
   override func startLoading() {
-    RecordingURLProtocol.state.appendRequest(request)
+    // URLSession converts httpBody into a stream before the request
+    // reaches a URLProtocol; drain the stream so recorded requests
+    // expose their body via httpBody for assertions.
+    var recorded = request
+    if recorded.httpBody == nil, let stream = recorded.httpBodyStream {
+      recorded.httpBody = Self.drain(stream)
+    }
+    RecordingURLProtocol.state.appendRequest(recorded)
 
     guard let handler = RecordingURLProtocol.handler else {
       client?.urlProtocol(self, didFailWithError: URLError(.badServerResponse))
@@ -109,6 +146,23 @@ final class RecordingURLProtocol: URLProtocol, @unchecked Sendable {
   }
 
   override func stopLoading() {}
+
+  /// Reads an InputStream to the end. The stream is already positioned at
+  /// the start when handed over by URLSession.
+  private static func drain(_ stream: InputStream) -> Data? {
+    stream.open()
+    defer { stream.close() }
+    var data = Data()
+    let bufferSize = 16_384
+    let buffer = UnsafeMutablePointer<UInt8>.allocate(capacity: bufferSize)
+    defer { buffer.deallocate() }
+    while stream.hasBytesAvailable {
+      let read = stream.read(buffer, maxLength: bufferSize)
+      if read <= 0 { break }
+      data.append(buffer, count: read)
+    }
+    return data
+  }
 }
 
 // MARK: - RecordingResponse

@@ -104,17 +104,18 @@ final class RequestShapeTests: XCTestCase {
     XCTAssertNil(key)
   }
 
-  // MARK: - No idempotency key on DELETE
+  // MARK: - Idempotency key on DELETE
 
-  func testNoIdempotencyKeyOnDelete() async {
+  func testIdempotencyKeyOnDelete() async {
     let client = makeClient()
     StubBuilder.install(status: 200, json: ["id": "cus_1", "deleted": true])
     do {
       _ = try await client.perform(
         method: "DELETE", path: "/v1/customers/cus_1", params: nil as EmptyParams?)
     } catch { XCTFail("Should not throw") }
+    // DELETE is a write, so it must carry an idempotency key like POST.
     let key = RecordingURLProtocol.recordedRequests.first?.value(forHTTPHeaderField: "Idempotency-Key")
-    XCTAssertNil(key)
+    XCTAssertNotNil(key, "DELETE is a write and must carry an idempotency key")
   }
 
   // MARK: - Error parsing
@@ -175,13 +176,75 @@ final class RequestShapeTests: XCTestCase {
     }
   }
 
+  func testParseNotFoundError() async {
+    let client = makeClient()
+    let body = try! JSONSerialization.data(withJSONObject: [
+      "error": ["type": "invalid_request_error", "message": "No such charge: ch_missing"]
+    ])
+    StubBuilder.install(status: 404, body: body)
+    do {
+      _ = try await client.perform(
+        method: "GET", path: "/v1/charges/ch_missing", params: nil as EmptyParams?)
+      XCTFail("Should throw")
+    } catch let error as StripeAPIError {
+      XCTAssertEqual(error.httpStatus, 404)
+      XCTAssertEqual(error.type, .invalidRequestError)
+      XCTAssertEqual(error.message, "No such charge: ch_missing")
+    } catch {
+      XCTFail("Expected StripeAPIError, got \(error)")
+    }
+  }
+
+  // MARK: - Search request shape and response decoding
+
+  func testSearchRequestShapeAndDecode() async {
+    let client = makeClient()
+    // Minimal Charge fixture covering every key the generated decoder
+    // requires; stripe-mock's fixture body would work, but the stub keeps
+    // this test independent of the mock server.
+    let charge: [String: Any] = [
+      "id": "ch_search_fixture",
+      "object": "charge",
+      "amount": 1_000,
+      "amount_captured": 1_000,
+      "amount_refunded": 0,
+      "billing_details": [String: Any](),
+      "captured": true,
+      "created": 1_700_000_000,
+      "currency": "usd",
+      "disputed": false,
+      "livemode": false,
+      "metadata": [String: String](),
+      "paid": true,
+      "refunded": false,
+      "status": "succeeded",
+    ]
+    StubBuilder.install(
+      status: 200,
+      json: ["data": [charge], "has_more": false, "url": "/v1/charges/search"])
+    do {
+      let result = try await client.perform(
+        method: "GET", path: "/v1/charges/search", params: ["query": "paid"])
+      let search = try StripeClient.decoder.decode(
+        SearchResponse<Charge>.self, from: result.body)
+      XCTAssertEqual(search.data.count, 1)
+      XCTAssertEqual(search.data.first?.id, "ch_search_fixture")
+      XCTAssertFalse(search.hasMore)
+      let url = RecordingURLProtocol.recordedRequests.first?.url?.absoluteString
+      XCTAssertTrue(url!.contains("/v1/charges/search"), "search path should reach the wire")
+      XCTAssertTrue(url!.contains("query=paid"), "search query param should be sent")
+    } catch {
+      XCTFail("Should not throw: \(error)")
+    }
+  }
+
   // MARK: - Retry on 500
 
   func testRetryOn500() async {
     let client = makeClient()
-    var count = 0
+    let counter = ThreadSafeCounter()
     RecordingURLProtocol.handler = { _ in
-      count += 1
+      let count = counter.increment()
       if count <= 2 {
         return RecordingResponse.httpResponse(
           HTTPURLResponse(
@@ -201,14 +264,14 @@ final class RequestShapeTests: XCTestCase {
         method: "GET", path: "/v1/charges", params: nil as EmptyParams?)
       XCTAssertNotNil(result.body)
     } catch { XCTFail("Should not throw after retries") }
-    XCTAssertEqual(count, 3, "Should retry twice then succeed")
+    XCTAssertEqual(counter.current, 3, "Should retry twice then succeed")
   }
 
   func testNoRetryOn400() async {
     let client = makeClient()
-    var count = 0
+    let counter = ThreadSafeCounter()
     RecordingURLProtocol.handler = { _ in
-      count += 1
+      let _ = counter.increment()
       return RecordingResponse.httpResponse(
         HTTPURLResponse(
           url: URL(string: "http://127.0.0.1:1/stub")!,
@@ -221,7 +284,7 @@ final class RequestShapeTests: XCTestCase {
         method: "POST", path: "/v1/customers", params: nil as EmptyParams?)
       XCTFail("Should throw")
     } catch {
-      XCTAssertEqual(count, 1, "Should not retry on 400")
+      XCTAssertEqual(counter.current, 1, "Should not retry on 400")
     }
   }
 

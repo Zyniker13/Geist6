@@ -24,21 +24,6 @@ final class MockServerTests: XCTestCase {
 
   // MARK: - List
 
-  func testListCharges() async throws {
-    // Minimal test: use URLSession directly to isolate the crash
-    let url = URL(string: "http://127.0.0.1:\(MockHarness.mockPort)/v1/charges?limit=2")!
-    var req = URLRequest(url: url)
-    req.httpMethod = "GET"
-    req.setValue("Bearer sk_test_fake", forHTTPHeaderField: "Authorization")
-    let (data, response) = try await URLSession.shared.data(for: req)
-    let http = response as! HTTPURLResponse
-    XCTAssertEqual(http.statusCode, 200)
-    XCTAssertTrue(data.count > 0)
-    let json = String(data: data, encoding: .utf8)!
-    XCTAssertTrue(json.contains("\"data\""))
-    XCTAssertTrue(json.contains("\"id\""))
-  }
-
   func testListChargesFull() async throws {
     let client = MockHarness.client
     // Test with params to reproduce the crash
@@ -50,32 +35,12 @@ final class MockServerTests: XCTestCase {
 
   // MARK: - Retrieve
 
-  func testRetrieveCharge() async throws {
-    // Minimal test: use URLSession directly
-    let url = URL(string: "http://127.0.0.1:\(MockHarness.mockPort)/v1/charges/ch_1234567890")!
-    var req = URLRequest(url: url)
-    req.httpMethod = "GET"
-    req.setValue("Bearer sk_test_fake", forHTTPHeaderField: "Authorization")
-    let (data, response) = try await URLSession.shared.data(for: req)
-    let http = response as! HTTPURLResponse
-    XCTAssertEqual(http.statusCode, 200)
-    XCTAssertTrue(data.count > 0)
-    let json = String(data: data, encoding: .utf8)!
-    XCTAssertTrue(json.contains("\"id\""))
-    XCTAssertTrue(json.contains("\"ch_1234567890\""))
-  }
-
   func testRetrieveChargeFull() async throws {
     let client = MockHarness.client
     let result = try await client.perform(
       method: "GET", path: "/v1/charges/ch_1234567890", params: nil as EmptyParams?, namespace: .v1)
     XCTAssertEqual(result.status, 200)
     XCTAssertTrue(result.body.count > 0)
-    // Try JSONSerialization first to verify body is valid JSON
-    if let json = try? JSONSerialization.jsonObject(with: result.body) {
-      print("DEBUG: valid JSON: \(json)")
-    }
-    // Then try Charge decode
     let charge = try StripeClient.decoder.decode(
       Charge.self, from: result.body)
     XCTAssertEqual(charge.id, "ch_1234567890")
@@ -128,29 +93,10 @@ final class MockServerTests: XCTestCase {
     XCTAssertTrue(deleted.deleted)
   }
 
-  // MARK: - Search
-
-  func testSearchCharges() async throws {
-    let client = MockHarness.client
-    let result = try await client.perform(
-      method: "GET", path: "/v1/charges/search?query=paid", params: nil as EmptyParams?, namespace: .v1)
-    let search = try StripeClient.decoder.decode(
-      SearchResponse<Charge>.self, from: result.body)
-    XCTAssertFalse(search.data.isEmpty)
-  }
-
-  // MARK: - Error handling
-
-  func testRetrieveUnknownCharge() async throws {
-    let client = MockHarness.client
-    do {
-      _ = try await client.perform(
-        method: "GET", path: "/v1/charges/ch_nonexistent", params: nil as EmptyParams?, namespace: .v1)
-      XCTFail("Should throw for unknown charge")
-    } catch let error as StripeAPIError {
-      XCTAssertEqual(error.status, 404)
-    }
-  }
+  // Search and 404-error handling are covered in RequestShapeTests via
+  // URLProtocol stubs: stripe-mock serves fixture objects for any
+  // resource id (so an unknown id does not 404) and does not implement
+  // the /v1 search endpoints.
 }
 
 // MARK: - MockHarness
@@ -164,8 +110,6 @@ private final class MockHarness: @unchecked Sendable {
   @MainActor private static var process: Process?
   @MainActor private static var port: Int = 0
   @MainActor private static var _client: StripeClient!
-
-  static var mockPort: Int { port }
 
   static var client: StripeClient {
     semaphore.wait()

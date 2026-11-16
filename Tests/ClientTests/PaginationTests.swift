@@ -20,15 +20,40 @@ final class PaginationTests: XCTestCase {
       configuration: config)
   }
 
+  /// Minimal Charge fixture covering every key the generated decoder
+  /// requires (required non-nullable fields must be present). Marked
+  /// nonisolated so URLProtocol handler closures (which run on a
+  /// URLSession queue, not the main actor) can call it without tripping
+  /// Swift 6 dynamic actor-isolation enforcement.
+  private nonisolated static func stubCharge(id: String, amount: Int) -> [String: Any] {
+    [
+      "id": id,
+      "object": "charge",
+      "amount": amount,
+      "amount_captured": amount,
+      "amount_refunded": 0,
+      "billing_details": [String: Any](),
+      "captured": true,
+      "created": 1_700_000_000,
+      "currency": "usd",
+      "disputed": false,
+      "livemode": false,
+      "metadata": [String: String](),
+      "paid": true,
+      "refunded": false,
+      "status": "succeeded",
+    ]
+  }
+
   // MARK: - collectAll
 
   func testCollectAll() async {
     let client = makeClient()
-    var page = 0
+    let counter = ThreadSafeCounter()
     RecordingURLProtocol.handler = { _ in
-      page += 1
+      let page = counter.increment()
       let charges = (0..<3).map { i in
-        ["id": "ch_page\(page)_\(i)", "amount": 100 * (i + 1)]
+        Self.stubCharge(id: "ch_page\(page)_\(i)", amount: 100 * (i + 1))
       }
       return RecordingResponse.httpResponse(
         HTTPURLResponse(
@@ -66,7 +91,7 @@ final class PaginationTests: XCTestCase {
       return
     }
     XCTAssertEqual(allCharges.count, 6) // 2 pages × 3
-    XCTAssertEqual(page, 2)
+    XCTAssertEqual(counter.current, 2)
   }
 
   func testCollectAllSinglePage() async {
@@ -77,7 +102,7 @@ final class PaginationTests: XCTestCase {
           url: URL(string: "http://127.0.0.1:1/stub")!,
           statusCode: 200, httpVersion: nil, headerFields: nil)!,
         try! JSONSerialization.data(withJSONObject: [
-          "data": [["id": "ch_1", "amount": 100]],
+          "data": [Self.stubCharge(id: "ch_1", amount: 100)],
           "has_more": false, "url": "/v1/charges"
         ]))
     }
@@ -112,11 +137,11 @@ final class PaginationTests: XCTestCase {
 
   func testCollectAllMaxPages() async {
     let client = makeClient()
-    var page = 0
+    let counter = ThreadSafeCounter()
     RecordingURLProtocol.handler = { _ in
-      page += 1
+      let page = counter.increment()
       let charges = (0..<3).map { i in
-        ["id": "ch_page\(page)_\(i)", "amount": 100 * (i + 1)]
+        Self.stubCharge(id: "ch_page\(page)_\(i)", amount: 100 * (i + 1))
       }
       return RecordingResponse.httpResponse(
         HTTPURLResponse(
@@ -155,6 +180,6 @@ final class PaginationTests: XCTestCase {
       return
     }
     XCTAssertEqual(allCharges.count, 9) // 3 pages × 3
-    XCTAssertEqual(page, 3)
+    XCTAssertEqual(counter.current, 3)
   }
 }
