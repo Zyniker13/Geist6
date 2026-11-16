@@ -36,13 +36,16 @@ jobs:
     timeout-minutes: 180
     steps:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
-      - name: Select Xcode 26
-        # The package manifest needs the Swift 6.2 toolchain
-        # (swift-tools-version:6.2, .iOS(.v26) platform case); the default
-        # Xcode on macos-latest images may be older.
+      - name: Select latest Xcode
+        # The package manifest needs Swift 6.2+ toolchain; use whatever
+        # Xcode version the runner ships (macos-latest defaults to latest).
         run: |
           set -eu
-          XCODE_PATH="$(ls -d /Applications/Xcode_26*.app | sort -V | tail -1)"
+          # Prefer Xcode_2*.app naming; fall back to Xcode.app
+          XCODE_PATH=$(ls -d /Applications/Xcode_2*.app 2>/dev/null | sort -V | tail -1 || true)
+          if [ -z "$XCODE_PATH" ]; then
+            XCODE_PATH="/Applications/Xcode.app"
+          fi
           echo "Selecting $XCODE_PATH"
           sudo xcode-select -s "$XCODE_PATH"
           swift --version
