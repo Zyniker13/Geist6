@@ -36,6 +36,16 @@ jobs:
     timeout-minutes: 180
     steps:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - name: Select Xcode 26
+        # The package manifest needs the Swift 6.2 toolchain
+        # (swift-tools-version:6.2, .iOS(.v26) platform case); the default
+        # Xcode on macos-latest images may be older.
+        run: |
+          set -eu
+          XCODE_PATH="$(ls -d /Applications/Xcode_26*.app | sort -V | tail -1)"
+          echo "Selecting $XCODE_PATH"
+          sudo xcode-select -s "$XCODE_PATH"
+          swift --version
       - name: Install tools
         run: |
           brew install stripe/stripe-mock/stripe-mock xcodegen swiftlint swift-format
