@@ -1,0 +1,19 @@
+# Build artifacts
+.build/
+DerivedData/
+dist/
+
+# Generated Xcode project (source of truth: project.yml + `xcodegen generate`)
+*.xcodeproj/
+
+# Xcode user state
+xcuserdata/
+*.xcuserdatad/
+.DS_Store
+
+# SwiftPM
+.swiftpm/
+
+# Local secrets (never commit)
+.env
+*.env
