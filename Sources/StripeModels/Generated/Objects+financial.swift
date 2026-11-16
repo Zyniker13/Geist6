@@ -4,66 +4,6 @@
 //  Do not edit by hand: rerun `swift run stripe-gen`.
 //
 import Foundation
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum FinancialConnectionsAccountAccountHolder: Sendable, Codable, Equatable, Hashable {
-    case bankConnectionsResourceAccountholder(BankConnectionsResourceAccountholder)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(BankConnectionsResourceAccountholder.self) { self = .bankConnectionsResourceAccountholder(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .bankConnectionsResourceAccountholder(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum FinancialConnectionsAccountBalance: Sendable, Codable, Equatable, Hashable {
-    case bankConnectionsResourceBalance(BankConnectionsResourceBalance)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(BankConnectionsResourceBalance.self) { self = .bankConnectionsResourceBalance(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .bankConnectionsResourceBalance(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum FinancialConnectionsAccountBalanceRefresh: Sendable, Codable, Equatable, Hashable {
-    case bankConnectionsResourceBalanceRefresh(BankConnectionsResourceBalanceRefresh)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(BankConnectionsResourceBalanceRefresh.self) { self = .bankConnectionsResourceBalanceRefresh(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .bankConnectionsResourceBalanceRefresh(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
 /// Lossless enum: values Stripe documents plus any value the API
 /// adds later, kept in `undocumented` instead of dropped.
 public enum FinancialConnectionsAccountCategory: Sendable, Equatable, Hashable, LosslessEnum {
@@ -132,26 +72,6 @@ public enum FinancialConnectionsAccountObject: Sendable, Equatable, Hashable, Lo
     public func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
         try container.encode(rawValue)
-    }
-}
-
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum FinancialConnectionsAccountOwnershipRefresh: Sendable, Codable, Equatable, Hashable {
-    case bankConnectionsResourceOwnershipRefresh(BankConnectionsResourceOwnershipRefresh)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(BankConnectionsResourceOwnershipRefresh.self) { self = .bankConnectionsResourceOwnershipRefresh(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .bankConnectionsResourceOwnershipRefresh(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
     }
 }
 
@@ -303,31 +223,11 @@ public enum FinancialConnectionsAccountSupportedPaymentMethodTypesItem: Sendable
     }
 }
 
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum FinancialConnectionsAccountTransactionRefresh: Sendable, Codable, Equatable, Hashable {
-    case bankConnectionsResourceTransactionRefresh(BankConnectionsResourceTransactionRefresh)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(BankConnectionsResourceTransactionRefresh.self) { self = .bankConnectionsResourceTransactionRefresh(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .bankConnectionsResourceTransactionRefresh(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
 public struct FinancialConnectionsAccount: Sendable, Codable, Equatable, Hashable, StripeIdentified {
-    public var accountHolder: Nullable<FinancialConnectionsAccountAccountHolder>
+    public var accountHolder: Nullable<BankConnectionsResourceAccountholder>
     public var accountNumbers: Nullable<[BankConnectionsResourceAccountNumberDetails]>
-    public var balance: Nullable<FinancialConnectionsAccountBalance>
-    public var balanceRefresh: Nullable<FinancialConnectionsAccountBalanceRefresh>
+    public var balance: Nullable<BankConnectionsResourceBalance>
+    public var balanceRefresh: Nullable<BankConnectionsResourceBalanceRefresh>
     public var category: FinancialConnectionsAccountCategory
     public var created: StripeTimestamp
     public var displayName: Nullable<String>
@@ -337,19 +237,19 @@ public struct FinancialConnectionsAccount: Sendable, Codable, Equatable, Hashabl
     public var livemode: Bool
     public var object: FinancialConnectionsAccountObject
     public var ownership: Nullable<Expandable<FinancialConnectionsAccountOwnership>>
-    public var ownershipRefresh: Nullable<FinancialConnectionsAccountOwnershipRefresh>
+    public var ownershipRefresh: Nullable<BankConnectionsResourceOwnershipRefresh>
     public var permissions: Nullable<[CheckoutFinancialConnectionsPaymentMethodOptionsPermissionsItem]>
     public var status: FinancialConnectionsAccountStatus
     public var statusDetails: BankConnectionsResourceAccountStatusDetails?
     public var subcategory: FinancialConnectionsAccountSubcategory
     public var subscriptions: Nullable<[FinancialConnectionsAccountSubscriptionsItem]>
     public var supportedPaymentMethodTypes: [FinancialConnectionsAccountSupportedPaymentMethodTypesItem]
-    public var transactionRefresh: Nullable<FinancialConnectionsAccountTransactionRefresh>
+    public var transactionRefresh: Nullable<BankConnectionsResourceTransactionRefresh>
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(accountHolder: Nullable<FinancialConnectionsAccountAccountHolder>, accountNumbers: Nullable<[BankConnectionsResourceAccountNumberDetails]>, balance: Nullable<FinancialConnectionsAccountBalance>, balanceRefresh: Nullable<FinancialConnectionsAccountBalanceRefresh>, category: FinancialConnectionsAccountCategory, created: StripeTimestamp, displayName: Nullable<String>, id: String, institutionName: String, last4: Nullable<String>, livemode: Bool, object: FinancialConnectionsAccountObject, ownership: Nullable<Expandable<FinancialConnectionsAccountOwnership>>, ownershipRefresh: Nullable<FinancialConnectionsAccountOwnershipRefresh>, permissions: Nullable<[CheckoutFinancialConnectionsPaymentMethodOptionsPermissionsItem]>, status: FinancialConnectionsAccountStatus, statusDetails: BankConnectionsResourceAccountStatusDetails? = nil, subcategory: FinancialConnectionsAccountSubcategory, subscriptions: Nullable<[FinancialConnectionsAccountSubscriptionsItem]>, supportedPaymentMethodTypes: [FinancialConnectionsAccountSupportedPaymentMethodTypesItem], transactionRefresh: Nullable<FinancialConnectionsAccountTransactionRefresh>, unknownFields: [String: JSONValue]? = nil) {
+    public init(accountHolder: Nullable<BankConnectionsResourceAccountholder>, accountNumbers: Nullable<[BankConnectionsResourceAccountNumberDetails]>, balance: Nullable<BankConnectionsResourceBalance>, balanceRefresh: Nullable<BankConnectionsResourceBalanceRefresh>, category: FinancialConnectionsAccountCategory, created: StripeTimestamp, displayName: Nullable<String>, id: String, institutionName: String, last4: Nullable<String>, livemode: Bool, object: FinancialConnectionsAccountObject, ownership: Nullable<Expandable<FinancialConnectionsAccountOwnership>>, ownershipRefresh: Nullable<BankConnectionsResourceOwnershipRefresh>, permissions: Nullable<[CheckoutFinancialConnectionsPaymentMethodOptionsPermissionsItem]>, status: FinancialConnectionsAccountStatus, statusDetails: BankConnectionsResourceAccountStatusDetails? = nil, subcategory: FinancialConnectionsAccountSubcategory, subscriptions: Nullable<[FinancialConnectionsAccountSubscriptionsItem]>, supportedPaymentMethodTypes: [FinancialConnectionsAccountSupportedPaymentMethodTypesItem], transactionRefresh: Nullable<BankConnectionsResourceTransactionRefresh>, unknownFields: [String: JSONValue]? = nil) {
         self.accountHolder = accountHolder
         self.accountNumbers = accountNumbers
         self.balance = balance
@@ -400,27 +300,27 @@ public struct FinancialConnectionsAccount: Sendable, Codable, Equatable, Hashabl
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.accountHolder = try container.decode(Nullable<FinancialConnectionsAccountAccountHolder>.self, forKey: .accountHolder)
-        self.accountNumbers = try container.decode(Nullable<[BankConnectionsResourceAccountNumberDetails]>.self, forKey: .accountNumbers)
-        self.balance = try container.decode(Nullable<FinancialConnectionsAccountBalance>.self, forKey: .balance)
-        self.balanceRefresh = try container.decode(Nullable<FinancialConnectionsAccountBalanceRefresh>.self, forKey: .balanceRefresh)
+        self.accountHolder = try container.decodeIfPresent(Nullable<BankConnectionsResourceAccountholder>.self, forKey: .accountHolder) ?? .null
+        self.accountNumbers = try container.decodeIfPresent(Nullable<[BankConnectionsResourceAccountNumberDetails]>.self, forKey: .accountNumbers) ?? .null
+        self.balance = try container.decodeIfPresent(Nullable<BankConnectionsResourceBalance>.self, forKey: .balance) ?? .null
+        self.balanceRefresh = try container.decodeIfPresent(Nullable<BankConnectionsResourceBalanceRefresh>.self, forKey: .balanceRefresh) ?? .null
         self.category = try container.decode(FinancialConnectionsAccountCategory.self, forKey: .category)
         self.created = try container.decode(StripeTimestamp.self, forKey: .created)
-        self.displayName = try container.decode(Nullable<String>.self, forKey: .displayName)
+        self.displayName = try container.decodeIfPresent(Nullable<String>.self, forKey: .displayName) ?? .null
         self.id = try container.decode(String.self, forKey: .id)
         self.institutionName = try container.decode(String.self, forKey: .institutionName)
-        self.last4 = try container.decode(Nullable<String>.self, forKey: .last4)
+        self.last4 = try container.decodeIfPresent(Nullable<String>.self, forKey: .last4) ?? .null
         self.livemode = try container.decode(Bool.self, forKey: .livemode)
         self.object = try container.decode(FinancialConnectionsAccountObject.self, forKey: .object)
-        self.ownership = try container.decode(Nullable<Expandable<FinancialConnectionsAccountOwnership>>.self, forKey: .ownership)
-        self.ownershipRefresh = try container.decode(Nullable<FinancialConnectionsAccountOwnershipRefresh>.self, forKey: .ownershipRefresh)
-        self.permissions = try container.decode(Nullable<[CheckoutFinancialConnectionsPaymentMethodOptionsPermissionsItem]>.self, forKey: .permissions)
+        self.ownership = try container.decodeIfPresent(Nullable<Expandable<FinancialConnectionsAccountOwnership>>.self, forKey: .ownership) ?? .null
+        self.ownershipRefresh = try container.decodeIfPresent(Nullable<BankConnectionsResourceOwnershipRefresh>.self, forKey: .ownershipRefresh) ?? .null
+        self.permissions = try container.decodeIfPresent(Nullable<[CheckoutFinancialConnectionsPaymentMethodOptionsPermissionsItem]>.self, forKey: .permissions) ?? .null
         self.status = try container.decode(FinancialConnectionsAccountStatus.self, forKey: .status)
         self.statusDetails = try container.decodeIfPresent(BankConnectionsResourceAccountStatusDetails.self, forKey: .statusDetails)
         self.subcategory = try container.decode(FinancialConnectionsAccountSubcategory.self, forKey: .subcategory)
-        self.subscriptions = try container.decode(Nullable<[FinancialConnectionsAccountSubscriptionsItem]>.self, forKey: .subscriptions)
+        self.subscriptions = try container.decodeIfPresent(Nullable<[FinancialConnectionsAccountSubscriptionsItem]>.self, forKey: .subscriptions) ?? .null
         self.supportedPaymentMethodTypes = try container.decode([FinancialConnectionsAccountSupportedPaymentMethodTypesItem].self, forKey: .supportedPaymentMethodTypes)
-        self.transactionRefresh = try container.decode(Nullable<FinancialConnectionsAccountTransactionRefresh>.self, forKey: .transactionRefresh)
+        self.transactionRefresh = try container.decodeIfPresent(Nullable<BankConnectionsResourceTransactionRefresh>.self, forKey: .transactionRefresh) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -1038,14 +938,14 @@ public struct FinancialConnectionsAccountOwner: Sendable, Codable, Equatable, Ha
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.email = try container.decode(Nullable<String>.self, forKey: .email)
+        self.email = try container.decodeIfPresent(Nullable<String>.self, forKey: .email) ?? .null
         self.id = try container.decode(String.self, forKey: .id)
         self.name = try container.decode(String.self, forKey: .name)
         self.object = try container.decode(FinancialConnectionsAccountOwnerObject.self, forKey: .object)
         self.ownership = try container.decode(String.self, forKey: .ownership)
-        self.phone = try container.decode(Nullable<String>.self, forKey: .phone)
-        self.rawAddress = try container.decode(Nullable<String>.self, forKey: .rawAddress)
-        self.refreshedAt = try container.decode(Nullable<StripeTimestamp>.self, forKey: .refreshedAt)
+        self.phone = try container.decodeIfPresent(Nullable<String>.self, forKey: .phone) ?? .null
+        self.rawAddress = try container.decodeIfPresent(Nullable<String>.self, forKey: .rawAddress) ?? .null
+        self.refreshedAt = try container.decodeIfPresent(Nullable<StripeTimestamp>.self, forKey: .refreshedAt) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -1404,26 +1304,6 @@ public struct FinancialConnectionsAuthorizationUpcomingDeactivationEvent: Sendab
     }
 }
 
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum FinancialConnectionsSessionAccountHolder: Sendable, Codable, Equatable, Hashable {
-    case bankConnectionsResourceAccountholder(BankConnectionsResourceAccountholder)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(BankConnectionsResourceAccountholder.self) { self = .bankConnectionsResourceAccountholder(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .bankConnectionsResourceAccountholder(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
 public struct FinancialConnectionsSessionAccounts: Sendable, Codable, Equatable, Hashable {
     public var data: [FinancialConnectionsAccount]
     public var hasMore: Bool
@@ -1513,7 +1393,7 @@ public enum FinancialConnectionsSessionObject: Sendable, Equatable, Hashable, Lo
 }
 
 public struct FinancialConnectionsSession: Sendable, Codable, Equatable, Hashable, StripeIdentified {
-    public var accountHolder: Nullable<FinancialConnectionsSessionAccountHolder>
+    public var accountHolder: Nullable<BankConnectionsResourceAccountholder>
     public var accounts: FinancialConnectionsSessionAccounts
     public var bankAccountToken: Token?
     public var clientSecret: Nullable<String>
@@ -1530,7 +1410,7 @@ public struct FinancialConnectionsSession: Sendable, Codable, Equatable, Hashabl
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(accountHolder: Nullable<FinancialConnectionsSessionAccountHolder>, accounts: FinancialConnectionsSessionAccounts, bankAccountToken: Token? = nil, clientSecret: Nullable<String>, filters: BankConnectionsResourceLinkAccountSessionFilters? = nil, id: String, limits: BankConnectionsResourceLinkAccountSessionLimits? = nil, livemode: Bool, manualEntry: BankConnectionsResourceLinkAccountSessionManualEntry? = nil, object: FinancialConnectionsSessionObject, permissions: [CheckoutFinancialConnectionsPaymentMethodOptionsPermissionsItem], prefetch: Nullable<[CheckoutFinancialConnectionsPaymentMethodOptionsPrefetchItem]>, returnUrl: String? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(accountHolder: Nullable<BankConnectionsResourceAccountholder>, accounts: FinancialConnectionsSessionAccounts, bankAccountToken: Token? = nil, clientSecret: Nullable<String>, filters: BankConnectionsResourceLinkAccountSessionFilters? = nil, id: String, limits: BankConnectionsResourceLinkAccountSessionLimits? = nil, livemode: Bool, manualEntry: BankConnectionsResourceLinkAccountSessionManualEntry? = nil, object: FinancialConnectionsSessionObject, permissions: [CheckoutFinancialConnectionsPaymentMethodOptionsPermissionsItem], prefetch: Nullable<[CheckoutFinancialConnectionsPaymentMethodOptionsPrefetchItem]>, returnUrl: String? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.accountHolder = accountHolder
         self.accounts = accounts
         self.bankAccountToken = bankAccountToken
@@ -1565,10 +1445,10 @@ public struct FinancialConnectionsSession: Sendable, Codable, Equatable, Hashabl
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.accountHolder = try container.decode(Nullable<FinancialConnectionsSessionAccountHolder>.self, forKey: .accountHolder)
+        self.accountHolder = try container.decodeIfPresent(Nullable<BankConnectionsResourceAccountholder>.self, forKey: .accountHolder) ?? .null
         self.accounts = try container.decode(FinancialConnectionsSessionAccounts.self, forKey: .accounts)
         self.bankAccountToken = try container.decodeIfPresent(Token.self, forKey: .bankAccountToken)
-        self.clientSecret = try container.decode(Nullable<String>.self, forKey: .clientSecret)
+        self.clientSecret = try container.decodeIfPresent(Nullable<String>.self, forKey: .clientSecret) ?? .null
         self.filters = try container.decodeIfPresent(BankConnectionsResourceLinkAccountSessionFilters.self, forKey: .filters)
         self.id = try container.decode(String.self, forKey: .id)
         self.limits = try container.decodeIfPresent(BankConnectionsResourceLinkAccountSessionLimits.self, forKey: .limits)
@@ -1576,7 +1456,7 @@ public struct FinancialConnectionsSession: Sendable, Codable, Equatable, Hashabl
         self.manualEntry = try container.decodeIfPresent(BankConnectionsResourceLinkAccountSessionManualEntry.self, forKey: .manualEntry)
         self.object = try container.decode(FinancialConnectionsSessionObject.self, forKey: .object)
         self.permissions = try container.decode([CheckoutFinancialConnectionsPaymentMethodOptionsPermissionsItem].self, forKey: .permissions)
-        self.prefetch = try container.decode(Nullable<[CheckoutFinancialConnectionsPaymentMethodOptionsPrefetchItem]>.self, forKey: .prefetch)
+        self.prefetch = try container.decodeIfPresent(Nullable<[CheckoutFinancialConnectionsPaymentMethodOptionsPrefetchItem]>.self, forKey: .prefetch) ?? .null
         self.returnUrl = try container.decodeIfPresent(String.self, forKey: .returnUrl)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {

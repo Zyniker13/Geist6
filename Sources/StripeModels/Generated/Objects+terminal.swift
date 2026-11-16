@@ -85,9 +85,9 @@ public struct TerminalConfiguration: Sendable, Codable, Equatable, Hashable, Str
         self.bbposWiseposE = try container.decodeIfPresent(TerminalConfigurationConfigurationResourceDeviceTypeSpecificConfig.self, forKey: .bbposWiseposE)
         self.cellular = try container.decodeIfPresent(TerminalConfigurationConfigurationResourceCellularConfig.self, forKey: .cellular)
         self.id = try container.decode(String.self, forKey: .id)
-        self.isAccountDefault = try container.decode(Nullable<Bool>.self, forKey: .isAccountDefault)
+        self.isAccountDefault = try container.decodeIfPresent(Nullable<Bool>.self, forKey: .isAccountDefault) ?? .null
         self.livemode = try container.decode(Bool.self, forKey: .livemode)
-        self.name = try container.decode(Nullable<String>.self, forKey: .name)
+        self.name = try container.decodeIfPresent(Nullable<String>.self, forKey: .name) ?? .null
         self.object = try container.decode(DeletedTerminalConfigurationObject.self, forKey: .object)
         self.offline = try container.decodeIfPresent(TerminalConfigurationConfigurationResourceOfflineConfig.self, forKey: .offline)
         self.readerSecurity = try container.decodeIfPresent(TerminalConfigurationConfigurationResourceReaderSecurityConfig.self, forKey: .readerSecurity)
@@ -420,7 +420,7 @@ public struct TerminalOnboardingLink: Sendable, Codable, Equatable, Hashable {
         self.linkOptions = try container.decode(TerminalOnboardingLinkLinkOptions.self, forKey: .linkOptions)
         self.linkType = try container.decode(TerminalOnboardingLinkLinkType.self, forKey: .linkType)
         self.object = try container.decode(TerminalOnboardingLinkObject.self, forKey: .object)
-        self.onBehalfOf = try container.decode(Nullable<String>.self, forKey: .onBehalfOf)
+        self.onBehalfOf = try container.decodeIfPresent(Nullable<String>.self, forKey: .onBehalfOf) ?? .null
         self.redirectUrl = try container.decode(String.self, forKey: .redirectUrl)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
@@ -450,28 +450,8 @@ public struct TerminalOnboardingLink: Sendable, Codable, Equatable, Hashable {
     }
 }
 
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum TerminalReaderAction: Sendable, Codable, Equatable, Hashable {
-    case terminalReaderReaderResourceReaderAction(TerminalReaderReaderResourceReaderAction)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(TerminalReaderReaderResourceReaderAction.self) { self = .terminalReaderReaderResourceReaderAction(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .terminalReaderReaderResourceReaderAction(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
 public struct TerminalReader: Sendable, Codable, Equatable, Hashable, StripeIdentified {
-    public var action: Nullable<TerminalReaderAction>
+    public var action: Nullable<TerminalReaderReaderResourceReaderAction>
     public var deviceSwVersion: Nullable<String>
     public var deviceType: DeletedTerminalReaderDeviceType
     public var id: String
@@ -488,7 +468,7 @@ public struct TerminalReader: Sendable, Codable, Equatable, Hashable, StripeIden
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(action: Nullable<TerminalReaderAction>, deviceSwVersion: Nullable<String>, deviceType: DeletedTerminalReaderDeviceType, id: String, ipAddress: Nullable<String>, label: String, lastSeenAt: Nullable<StripeTimestamp>, livemode: Bool, location: Nullable<Expandable<TerminalLocation>>, metadata: [String: String], object: DeletedTerminalReaderObject, serialNumber: String, status: Nullable<CustomerAcceptanceType>, unknownFields: [String: JSONValue]? = nil) {
+    public init(action: Nullable<TerminalReaderReaderResourceReaderAction>, deviceSwVersion: Nullable<String>, deviceType: DeletedTerminalReaderDeviceType, id: String, ipAddress: Nullable<String>, label: String, lastSeenAt: Nullable<StripeTimestamp>, livemode: Bool, location: Nullable<Expandable<TerminalLocation>>, metadata: [String: String], object: DeletedTerminalReaderObject, serialNumber: String, status: Nullable<CustomerAcceptanceType>, unknownFields: [String: JSONValue]? = nil) {
         self.action = action
         self.deviceSwVersion = deviceSwVersion
         self.deviceType = deviceType
@@ -523,19 +503,19 @@ public struct TerminalReader: Sendable, Codable, Equatable, Hashable, StripeIden
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.action = try container.decode(Nullable<TerminalReaderAction>.self, forKey: .action)
-        self.deviceSwVersion = try container.decode(Nullable<String>.self, forKey: .deviceSwVersion)
+        self.action = try container.decodeIfPresent(Nullable<TerminalReaderReaderResourceReaderAction>.self, forKey: .action) ?? .null
+        self.deviceSwVersion = try container.decodeIfPresent(Nullable<String>.self, forKey: .deviceSwVersion) ?? .null
         self.deviceType = try container.decode(DeletedTerminalReaderDeviceType.self, forKey: .deviceType)
         self.id = try container.decode(String.self, forKey: .id)
-        self.ipAddress = try container.decode(Nullable<String>.self, forKey: .ipAddress)
+        self.ipAddress = try container.decodeIfPresent(Nullable<String>.self, forKey: .ipAddress) ?? .null
         self.label = try container.decode(String.self, forKey: .label)
-        self.lastSeenAt = try container.decode(Nullable<StripeTimestamp>.self, forKey: .lastSeenAt)
+        self.lastSeenAt = try container.decodeIfPresent(Nullable<StripeTimestamp>.self, forKey: .lastSeenAt) ?? .null
         self.livemode = try container.decode(Bool.self, forKey: .livemode)
-        self.location = try container.decode(Nullable<Expandable<TerminalLocation>>.self, forKey: .location)
+        self.location = try container.decodeIfPresent(Nullable<Expandable<TerminalLocation>>.self, forKey: .location) ?? .null
         self.metadata = try container.decode([String: String].self, forKey: .metadata)
         self.object = try container.decode(DeletedTerminalReaderObject.self, forKey: .object)
         self.serialNumber = try container.decode(String.self, forKey: .serialNumber)
-        self.status = try container.decode(Nullable<CustomerAcceptanceType>.self, forKey: .status)
+        self.status = try container.decodeIfPresent(Nullable<CustomerAcceptanceType>.self, forKey: .status) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -970,7 +950,7 @@ public struct TerminalConfigurationConfigurationResourceOfflineConfig: Sendable,
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.enabled = try container.decode(Nullable<Bool>.self, forKey: .enabled)
+        self.enabled = try container.decodeIfPresent(Nullable<Bool>.self, forKey: .enabled) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -1387,7 +1367,7 @@ public struct TerminalOnboardingLinkAppleTermsAndConditions: Sendable, Codable, 
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.allowRelinking = try container.decode(Nullable<Bool>.self, forKey: .allowRelinking)
+        self.allowRelinking = try container.decodeIfPresent(Nullable<Bool>.self, forKey: .allowRelinking) ?? .null
         self.merchantDisplayName = try container.decode(String.self, forKey: .merchantDisplayName)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
@@ -1414,33 +1394,13 @@ public struct TerminalOnboardingLinkAppleTermsAndConditions: Sendable, Codable, 
     }
 }
 
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum TerminalOnboardingLinkLinkOptionsAppleTermsAndConditions: Sendable, Codable, Equatable, Hashable {
-    case terminalOnboardingLinkAppleTermsAndConditions(TerminalOnboardingLinkAppleTermsAndConditions)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(TerminalOnboardingLinkAppleTermsAndConditions.self) { self = .terminalOnboardingLinkAppleTermsAndConditions(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .terminalOnboardingLinkAppleTermsAndConditions(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
 public struct TerminalOnboardingLinkLinkOptions: Sendable, Codable, Equatable, Hashable {
-    public var appleTermsAndConditions: Nullable<TerminalOnboardingLinkLinkOptionsAppleTermsAndConditions>
+    public var appleTermsAndConditions: Nullable<TerminalOnboardingLinkAppleTermsAndConditions>
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(appleTermsAndConditions: Nullable<TerminalOnboardingLinkLinkOptionsAppleTermsAndConditions>, unknownFields: [String: JSONValue]? = nil) {
+    public init(appleTermsAndConditions: Nullable<TerminalOnboardingLinkAppleTermsAndConditions>, unknownFields: [String: JSONValue]? = nil) {
         self.appleTermsAndConditions = appleTermsAndConditions
         self.unknownFields = unknownFields
     }
@@ -1451,7 +1411,7 @@ public struct TerminalOnboardingLinkLinkOptions: Sendable, Codable, Equatable, H
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.appleTermsAndConditions = try container.decode(Nullable<TerminalOnboardingLinkLinkOptionsAppleTermsAndConditions>.self, forKey: .appleTermsAndConditions)
+        self.appleTermsAndConditions = try container.decodeIfPresent(Nullable<TerminalOnboardingLinkAppleTermsAndConditions>.self, forKey: .appleTermsAndConditions) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -1504,7 +1464,7 @@ public struct TerminalReaderReaderResourceCart: Sendable, Codable, Equatable, Ha
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.currency = try container.decode(String.self, forKey: .currency)
         self.lineItems = try container.decode([TerminalReaderReaderResourceLineItem].self, forKey: .lineItems)
-        self.tax = try container.decode(Nullable<Int>.self, forKey: .tax)
+        self.tax = try container.decodeIfPresent(Nullable<Int>.self, forKey: .tax) ?? .null
         self.total = try container.decode(Int.self, forKey: .total)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
@@ -1590,8 +1550,8 @@ public struct TerminalReaderReaderResourceChoice: Sendable, Codable, Equatable, 
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.id = try container.decode(Nullable<String>.self, forKey: .id)
-        self.style = try container.decode(Nullable<TerminalReaderReaderResourceChoiceStyle>.self, forKey: .style)
+        self.id = try container.decodeIfPresent(Nullable<String>.self, forKey: .id) ?? .null
+        self.style = try container.decodeIfPresent(Nullable<TerminalReaderReaderResourceChoiceStyle>.self, forKey: .style) ?? .null
         self.text = try container.decode(String.self, forKey: .text)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
@@ -1692,7 +1652,7 @@ public struct TerminalReaderReaderResourceCollectInputsAction: Sendable, Codable
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.inputs = try container.decode([TerminalReaderReaderResourceInput].self, forKey: .inputs)
-        self.metadata = try container.decode(Nullable<[String: String]>.self, forKey: .metadata)
+        self.metadata = try container.decodeIfPresent(Nullable<[String: String]>.self, forKey: .metadata) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -1885,10 +1845,10 @@ public struct TerminalReaderReaderResourceCustomText: Sendable, Codable, Equatab
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.description = try container.decode(Nullable<String>.self, forKey: .description)
-        self.skipButton = try container.decode(Nullable<String>.self, forKey: .skipButton)
-        self.submitButton = try container.decode(Nullable<String>.self, forKey: .submitButton)
-        self.title = try container.decode(Nullable<String>.self, forKey: .title)
+        self.description = try container.decodeIfPresent(Nullable<String>.self, forKey: .description) ?? .null
+        self.skipButton = try container.decodeIfPresent(Nullable<String>.self, forKey: .skipButton) ?? .null
+        self.submitButton = try container.decodeIfPresent(Nullable<String>.self, forKey: .submitButton) ?? .null
+        self.title = try container.decodeIfPresent(Nullable<String>.self, forKey: .title) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -1933,7 +1893,7 @@ public struct TerminalReaderReaderResourceEmail: Sendable, Codable, Equatable, H
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.value = try container.decode(Nullable<String>.self, forKey: .value)
+        self.value = try container.decodeIfPresent(Nullable<String>.self, forKey: .value) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -2015,26 +1975,6 @@ public struct TerminalReaderReaderResourceFileMetadata: Sendable, Codable, Equat
     }
 }
 
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum TerminalReaderReaderResourceInputCustomText: Sendable, Codable, Equatable, Hashable {
-    case terminalReaderReaderResourceCustomText(TerminalReaderReaderResourceCustomText)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(TerminalReaderReaderResourceCustomText.self) { self = .terminalReaderReaderResourceCustomText(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .terminalReaderReaderResourceCustomText(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
 /// Lossless enum: values Stripe documents plus any value the API
 /// adds later, kept in `undocumented` instead of dropped.
 public enum TerminalReaderReaderResourceInputType: Sendable, Equatable, Hashable, LosslessEnum {
@@ -2082,7 +2022,7 @@ public enum TerminalReaderReaderResourceInputType: Sendable, Equatable, Hashable
 }
 
 public struct TerminalReaderReaderResourceInput: Sendable, Codable, Equatable, Hashable {
-    public var customText: Nullable<TerminalReaderReaderResourceInputCustomText>
+    public var customText: Nullable<TerminalReaderReaderResourceCustomText>
     public var email: TerminalReaderReaderResourceEmail?
     public var numeric: TerminalReaderReaderResourceNumeric?
     public var phone: TerminalReaderReaderResourcePhone?
@@ -2097,7 +2037,7 @@ public struct TerminalReaderReaderResourceInput: Sendable, Codable, Equatable, H
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(customText: Nullable<TerminalReaderReaderResourceInputCustomText>, email: TerminalReaderReaderResourceEmail? = nil, numeric: TerminalReaderReaderResourceNumeric? = nil, phone: TerminalReaderReaderResourcePhone? = nil, required: Nullable<Bool>, selection: TerminalReaderReaderResourceSelection? = nil, signature: TerminalReaderReaderResourceSignature? = nil, skipped: Bool? = nil, text: TerminalReaderReaderResourceText? = nil, toggles: Nullable<[TerminalReaderReaderResourceToggle]>, type: TerminalReaderReaderResourceInputType, unknownFields: [String: JSONValue]? = nil) {
+    public init(customText: Nullable<TerminalReaderReaderResourceCustomText>, email: TerminalReaderReaderResourceEmail? = nil, numeric: TerminalReaderReaderResourceNumeric? = nil, phone: TerminalReaderReaderResourcePhone? = nil, required: Nullable<Bool>, selection: TerminalReaderReaderResourceSelection? = nil, signature: TerminalReaderReaderResourceSignature? = nil, skipped: Bool? = nil, text: TerminalReaderReaderResourceText? = nil, toggles: Nullable<[TerminalReaderReaderResourceToggle]>, type: TerminalReaderReaderResourceInputType, unknownFields: [String: JSONValue]? = nil) {
         self.customText = customText
         self.email = email
         self.numeric = numeric
@@ -2128,16 +2068,16 @@ public struct TerminalReaderReaderResourceInput: Sendable, Codable, Equatable, H
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.customText = try container.decode(Nullable<TerminalReaderReaderResourceInputCustomText>.self, forKey: .customText)
+        self.customText = try container.decodeIfPresent(Nullable<TerminalReaderReaderResourceCustomText>.self, forKey: .customText) ?? .null
         self.email = try container.decodeIfPresent(TerminalReaderReaderResourceEmail.self, forKey: .email)
         self.numeric = try container.decodeIfPresent(TerminalReaderReaderResourceNumeric.self, forKey: .numeric)
         self.phone = try container.decodeIfPresent(TerminalReaderReaderResourcePhone.self, forKey: .phone)
-        self.required = try container.decode(Nullable<Bool>.self, forKey: .required)
+        self.required = try container.decodeIfPresent(Nullable<Bool>.self, forKey: .required) ?? .null
         self.selection = try container.decodeIfPresent(TerminalReaderReaderResourceSelection.self, forKey: .selection)
         self.signature = try container.decodeIfPresent(TerminalReaderReaderResourceSignature.self, forKey: .signature)
         self.skipped = try container.decodeIfPresent(Bool.self, forKey: .skipped)
         self.text = try container.decodeIfPresent(TerminalReaderReaderResourceText.self, forKey: .text)
-        self.toggles = try container.decode(Nullable<[TerminalReaderReaderResourceToggle]>.self, forKey: .toggles)
+        self.toggles = try container.decodeIfPresent(Nullable<[TerminalReaderReaderResourceToggle]>.self, forKey: .toggles) ?? .null
         self.type = try container.decode(TerminalReaderReaderResourceInputType.self, forKey: .type)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
@@ -2242,7 +2182,7 @@ public struct TerminalReaderReaderResourceNumeric: Sendable, Codable, Equatable,
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.value = try container.decode(Nullable<String>.self, forKey: .value)
+        self.value = try container.decodeIfPresent(Nullable<String>.self, forKey: .value) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -2284,7 +2224,7 @@ public struct TerminalReaderReaderResourcePhone: Sendable, Codable, Equatable, H
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.value = try container.decode(Nullable<String>.self, forKey: .value)
+        self.value = try container.decodeIfPresent(Nullable<String>.self, forKey: .value) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -2585,26 +2525,6 @@ public struct TerminalReaderReaderResourceProcessSetupIntentAction: Sendable, Co
     }
 }
 
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum TerminalReaderReaderResourceReaderActionApiError: Sendable, Codable, Equatable, Hashable {
-    case apiErrors(ApiErrors)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(ApiErrors.self) { self = .apiErrors(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .apiErrors(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
 /// Lossless enum: values Stripe documents plus any value the API
 /// adds later, kept in `undocumented` instead of dropped.
 public enum TerminalReaderReaderResourceReaderActionStatus: Sendable, Equatable, Hashable, LosslessEnum {
@@ -2695,7 +2615,7 @@ public enum TerminalReaderReaderResourceReaderActionType: Sendable, Equatable, H
 }
 
 public struct TerminalReaderReaderResourceReaderAction: Sendable, Codable, Equatable, Hashable {
-    public var apiError: Nullable<TerminalReaderReaderResourceReaderActionApiError>
+    public var apiError: Nullable<ApiErrors>
     public var collectInputs: TerminalReaderReaderResourceCollectInputsAction?
     public var collectPaymentMethod: TerminalReaderReaderResourceCollectPaymentMethodAction?
     public var confirmPaymentIntent: TerminalReaderReaderResourceConfirmPaymentIntentAction?
@@ -2712,7 +2632,7 @@ public struct TerminalReaderReaderResourceReaderAction: Sendable, Codable, Equat
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(apiError: Nullable<TerminalReaderReaderResourceReaderActionApiError>, collectInputs: TerminalReaderReaderResourceCollectInputsAction? = nil, collectPaymentMethod: TerminalReaderReaderResourceCollectPaymentMethodAction? = nil, confirmPaymentIntent: TerminalReaderReaderResourceConfirmPaymentIntentAction? = nil, failureCode: Nullable<String>, failureMessage: Nullable<String>, printContent: TerminalReaderReaderResourcePrintContent? = nil, processPaymentIntent: TerminalReaderReaderResourceProcessPaymentIntentAction? = nil, processSetupIntent: TerminalReaderReaderResourceProcessSetupIntentAction? = nil, refundPayment: TerminalReaderReaderResourceRefundPaymentAction? = nil, setReaderDisplay: TerminalReaderReaderResourceSetReaderDisplayAction? = nil, status: TerminalReaderReaderResourceReaderActionStatus, type: TerminalReaderReaderResourceReaderActionType, unknownFields: [String: JSONValue]? = nil) {
+    public init(apiError: Nullable<ApiErrors>, collectInputs: TerminalReaderReaderResourceCollectInputsAction? = nil, collectPaymentMethod: TerminalReaderReaderResourceCollectPaymentMethodAction? = nil, confirmPaymentIntent: TerminalReaderReaderResourceConfirmPaymentIntentAction? = nil, failureCode: Nullable<String>, failureMessage: Nullable<String>, printContent: TerminalReaderReaderResourcePrintContent? = nil, processPaymentIntent: TerminalReaderReaderResourceProcessPaymentIntentAction? = nil, processSetupIntent: TerminalReaderReaderResourceProcessSetupIntentAction? = nil, refundPayment: TerminalReaderReaderResourceRefundPaymentAction? = nil, setReaderDisplay: TerminalReaderReaderResourceSetReaderDisplayAction? = nil, status: TerminalReaderReaderResourceReaderActionStatus, type: TerminalReaderReaderResourceReaderActionType, unknownFields: [String: JSONValue]? = nil) {
         self.apiError = apiError
         self.collectInputs = collectInputs
         self.collectPaymentMethod = collectPaymentMethod
@@ -2747,12 +2667,12 @@ public struct TerminalReaderReaderResourceReaderAction: Sendable, Codable, Equat
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.apiError = try container.decode(Nullable<TerminalReaderReaderResourceReaderActionApiError>.self, forKey: .apiError)
+        self.apiError = try container.decodeIfPresent(Nullable<ApiErrors>.self, forKey: .apiError) ?? .null
         self.collectInputs = try container.decodeIfPresent(TerminalReaderReaderResourceCollectInputsAction.self, forKey: .collectInputs)
         self.collectPaymentMethod = try container.decodeIfPresent(TerminalReaderReaderResourceCollectPaymentMethodAction.self, forKey: .collectPaymentMethod)
         self.confirmPaymentIntent = try container.decodeIfPresent(TerminalReaderReaderResourceConfirmPaymentIntentAction.self, forKey: .confirmPaymentIntent)
-        self.failureCode = try container.decode(Nullable<String>.self, forKey: .failureCode)
-        self.failureMessage = try container.decode(Nullable<String>.self, forKey: .failureMessage)
+        self.failureCode = try container.decodeIfPresent(Nullable<String>.self, forKey: .failureCode) ?? .null
+        self.failureMessage = try container.decodeIfPresent(Nullable<String>.self, forKey: .failureMessage) ?? .null
         self.printContent = try container.decodeIfPresent(TerminalReaderReaderResourcePrintContent.self, forKey: .printContent)
         self.processPaymentIntent = try container.decodeIfPresent(TerminalReaderReaderResourceProcessPaymentIntentAction.self, forKey: .processPaymentIntent)
         self.processSetupIntent = try container.decodeIfPresent(TerminalReaderReaderResourceProcessSetupIntentAction.self, forKey: .processSetupIntent)
@@ -2981,8 +2901,8 @@ public struct TerminalReaderReaderResourceSelection: Sendable, Codable, Equatabl
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.choices = try container.decode([TerminalReaderReaderResourceChoice].self, forKey: .choices)
-        self.id = try container.decode(Nullable<String>.self, forKey: .id)
-        self.text = try container.decode(Nullable<String>.self, forKey: .text)
+        self.id = try container.decodeIfPresent(Nullable<String>.self, forKey: .id) ?? .null
+        self.text = try container.decodeIfPresent(Nullable<String>.self, forKey: .text) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -3005,26 +2925,6 @@ public struct TerminalReaderReaderResourceSelection: Sendable, Codable, Equatabl
                     try? container.encode(value, forKey: codingKey)
                 }
             }
-        }
-    }
-}
-
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum TerminalReaderReaderResourceSetReaderDisplayActionCart: Sendable, Codable, Equatable, Hashable {
-    case terminalReaderReaderResourceCart(TerminalReaderReaderResourceCart)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(TerminalReaderReaderResourceCart.self) { self = .terminalReaderReaderResourceCart(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .terminalReaderReaderResourceCart(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
         }
     }
 }
@@ -3061,13 +2961,13 @@ public enum TerminalReaderReaderResourceSetReaderDisplayActionType: Sendable, Eq
 }
 
 public struct TerminalReaderReaderResourceSetReaderDisplayAction: Sendable, Codable, Equatable, Hashable {
-    public var cart: Nullable<TerminalReaderReaderResourceSetReaderDisplayActionCart>
+    public var cart: Nullable<TerminalReaderReaderResourceCart>
     public var type: TerminalReaderReaderResourceSetReaderDisplayActionType
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(cart: Nullable<TerminalReaderReaderResourceSetReaderDisplayActionCart>, type: TerminalReaderReaderResourceSetReaderDisplayActionType, unknownFields: [String: JSONValue]? = nil) {
+    public init(cart: Nullable<TerminalReaderReaderResourceCart>, type: TerminalReaderReaderResourceSetReaderDisplayActionType, unknownFields: [String: JSONValue]? = nil) {
         self.cart = cart
         self.type = type
         self.unknownFields = unknownFields
@@ -3080,7 +2980,7 @@ public struct TerminalReaderReaderResourceSetReaderDisplayAction: Sendable, Coda
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.cart = try container.decode(Nullable<TerminalReaderReaderResourceSetReaderDisplayActionCart>.self, forKey: .cart)
+        self.cart = try container.decodeIfPresent(Nullable<TerminalReaderReaderResourceCart>.self, forKey: .cart) ?? .null
         self.type = try container.decode(TerminalReaderReaderResourceSetReaderDisplayActionType.self, forKey: .type)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
@@ -3124,7 +3024,7 @@ public struct TerminalReaderReaderResourceSignature: Sendable, Codable, Equatabl
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.value = try container.decode(Nullable<String>.self, forKey: .value)
+        self.value = try container.decodeIfPresent(Nullable<String>.self, forKey: .value) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -3166,7 +3066,7 @@ public struct TerminalReaderReaderResourceText: Sendable, Codable, Equatable, Ha
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.value = try container.decode(Nullable<String>.self, forKey: .value)
+        self.value = try container.decodeIfPresent(Nullable<String>.self, forKey: .value) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -3259,10 +3159,10 @@ public struct TerminalReaderReaderResourceToggle: Sendable, Codable, Equatable, 
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.defaultValue = try container.decode(Nullable<BalanceSettingsResourcePayoutsStatus>.self, forKey: .defaultValue)
-        self.description = try container.decode(Nullable<String>.self, forKey: .description)
-        self.title = try container.decode(Nullable<String>.self, forKey: .title)
-        self.value = try container.decode(Nullable<BalanceSettingsResourcePayoutsStatus>.self, forKey: .value)
+        self.defaultValue = try container.decodeIfPresent(Nullable<BalanceSettingsResourcePayoutsStatus>.self, forKey: .defaultValue) ?? .null
+        self.description = try container.decodeIfPresent(Nullable<String>.self, forKey: .description) ?? .null
+        self.title = try container.decodeIfPresent(Nullable<String>.self, forKey: .title) ?? .null
+        self.value = try container.decodeIfPresent(Nullable<BalanceSettingsResourcePayoutsStatus>.self, forKey: .value) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {

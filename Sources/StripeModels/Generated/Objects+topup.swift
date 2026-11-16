@@ -69,50 +69,6 @@ public enum TopupObject: Sendable, Equatable, Hashable, LosslessEnum {
     }
 }
 
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum TopupPaymentMethodOptions: Sendable, Codable, Equatable, Hashable {
-    case topupResourcePaymentMethodOptions(TopupResourcePaymentMethodOptions)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(TopupResourcePaymentMethodOptions.self) { self = .topupResourcePaymentMethodOptions(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .topupResourcePaymentMethodOptions(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum TopupSource: Sendable, Codable, Equatable, Hashable {
-    case source(Source)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let raw = try? container.decode([String: JSONValue].self),
-           let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
-            if tag == "source" { self = .source(try container.decode(Source.self)); return }
-        }
-        if let value = try? container.decode(Source.self) { self = .source(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .source(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
 /// Lossless enum: values Stripe documents plus any value the API
 /// adds later, kept in `undocumented` instead of dropped.
 public enum TopupStatus: Sendable, Equatable, Hashable, LosslessEnum {
@@ -171,8 +127,8 @@ public struct Topup: Sendable, Codable, Equatable, Hashable, StripeIdentified {
     public var metadata: [String: String]
     public var object: TopupObject
     public var paymentMethod: Nullable<Expandable<PaymentMethod>>?
-    public var paymentMethodOptions: Nullable<TopupPaymentMethodOptions>?
-    public var source: Nullable<TopupSource>
+    public var paymentMethodOptions: Nullable<TopupResourcePaymentMethodOptions>?
+    public var source: Nullable<Source>
     public var statementDescriptor: Nullable<String>
     public var status: TopupStatus
     public var transferGroup: Nullable<String>
@@ -180,7 +136,7 @@ public struct Topup: Sendable, Codable, Equatable, Hashable, StripeIdentified {
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(amount: Int, balanceTransaction: Nullable<Expandable<BalanceTransaction>>, created: StripeTimestamp, currency: String, description: Nullable<String>, expectedAvailabilityDate: Nullable<Int>, failureCode: Nullable<String>, failureMessage: Nullable<String>, id: String, initiatedBy: Nullable<TopupInitiatedBy>, livemode: Bool, metadata: [String: String], object: TopupObject, paymentMethod: Nullable<Expandable<PaymentMethod>>? = nil, paymentMethodOptions: Nullable<TopupPaymentMethodOptions>? = nil, source: Nullable<TopupSource>, statementDescriptor: Nullable<String>, status: TopupStatus, transferGroup: Nullable<String>, unknownFields: [String: JSONValue]? = nil) {
+    public init(amount: Int, balanceTransaction: Nullable<Expandable<BalanceTransaction>>, created: StripeTimestamp, currency: String, description: Nullable<String>, expectedAvailabilityDate: Nullable<Int>, failureCode: Nullable<String>, failureMessage: Nullable<String>, id: String, initiatedBy: Nullable<TopupInitiatedBy>, livemode: Bool, metadata: [String: String], object: TopupObject, paymentMethod: Nullable<Expandable<PaymentMethod>>? = nil, paymentMethodOptions: Nullable<TopupResourcePaymentMethodOptions>? = nil, source: Nullable<Source>, statementDescriptor: Nullable<String>, status: TopupStatus, transferGroup: Nullable<String>, unknownFields: [String: JSONValue]? = nil) {
         self.amount = amount
         self.balanceTransaction = balanceTransaction
         self.created = created
@@ -228,24 +184,24 @@ public struct Topup: Sendable, Codable, Equatable, Hashable, StripeIdentified {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.amount = try container.decode(Int.self, forKey: .amount)
-        self.balanceTransaction = try container.decode(Nullable<Expandable<BalanceTransaction>>.self, forKey: .balanceTransaction)
+        self.balanceTransaction = try container.decodeIfPresent(Nullable<Expandable<BalanceTransaction>>.self, forKey: .balanceTransaction) ?? .null
         self.created = try container.decode(StripeTimestamp.self, forKey: .created)
         self.currency = try container.decode(String.self, forKey: .currency)
-        self.description = try container.decode(Nullable<String>.self, forKey: .description)
-        self.expectedAvailabilityDate = try container.decode(Nullable<Int>.self, forKey: .expectedAvailabilityDate)
-        self.failureCode = try container.decode(Nullable<String>.self, forKey: .failureCode)
-        self.failureMessage = try container.decode(Nullable<String>.self, forKey: .failureMessage)
+        self.description = try container.decodeIfPresent(Nullable<String>.self, forKey: .description) ?? .null
+        self.expectedAvailabilityDate = try container.decodeIfPresent(Nullable<Int>.self, forKey: .expectedAvailabilityDate) ?? .null
+        self.failureCode = try container.decodeIfPresent(Nullable<String>.self, forKey: .failureCode) ?? .null
+        self.failureMessage = try container.decodeIfPresent(Nullable<String>.self, forKey: .failureMessage) ?? .null
         self.id = try container.decode(String.self, forKey: .id)
-        self.initiatedBy = try container.decode(Nullable<TopupInitiatedBy>.self, forKey: .initiatedBy)
+        self.initiatedBy = try container.decodeIfPresent(Nullable<TopupInitiatedBy>.self, forKey: .initiatedBy) ?? .null
         self.livemode = try container.decode(Bool.self, forKey: .livemode)
         self.metadata = try container.decode([String: String].self, forKey: .metadata)
         self.object = try container.decode(TopupObject.self, forKey: .object)
         self.paymentMethod = try container.decodeIfPresent(Nullable<Expandable<PaymentMethod>>.self, forKey: .paymentMethod)
-        self.paymentMethodOptions = try container.decodeIfPresent(Nullable<TopupPaymentMethodOptions>.self, forKey: .paymentMethodOptions)
-        self.source = try container.decode(Nullable<TopupSource>.self, forKey: .source)
-        self.statementDescriptor = try container.decode(Nullable<String>.self, forKey: .statementDescriptor)
+        self.paymentMethodOptions = try container.decodeIfPresent(Nullable<TopupResourcePaymentMethodOptions>.self, forKey: .paymentMethodOptions)
+        self.source = try container.decodeIfPresent(Nullable<Source>.self, forKey: .source) ?? .null
+        self.statementDescriptor = try container.decodeIfPresent(Nullable<String>.self, forKey: .statementDescriptor) ?? .null
         self.status = try container.decode(TopupStatus.self, forKey: .status)
-        self.transferGroup = try container.decode(Nullable<String>.self, forKey: .transferGroup)
+        self.transferGroup = try container.decodeIfPresent(Nullable<String>.self, forKey: .transferGroup) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -498,33 +454,13 @@ public struct TopupSucceededEvent: Sendable, Codable, Equatable, Hashable {
     }
 }
 
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum TopupResourcePaymentMethodOptionsUsBankAccount: Sendable, Codable, Equatable, Hashable {
-    case topupResourceUsBankAccount(TopupResourceUsBankAccount)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(TopupResourceUsBankAccount.self) { self = .topupResourceUsBankAccount(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .topupResourceUsBankAccount(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
 public struct TopupResourcePaymentMethodOptions: Sendable, Codable, Equatable, Hashable {
-    public var usBankAccount: Nullable<TopupResourcePaymentMethodOptionsUsBankAccount>
+    public var usBankAccount: Nullable<TopupResourceUsBankAccount>
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(usBankAccount: Nullable<TopupResourcePaymentMethodOptionsUsBankAccount>, unknownFields: [String: JSONValue]? = nil) {
+    public init(usBankAccount: Nullable<TopupResourceUsBankAccount>, unknownFields: [String: JSONValue]? = nil) {
         self.usBankAccount = usBankAccount
         self.unknownFields = unknownFields
     }
@@ -535,7 +471,7 @@ public struct TopupResourcePaymentMethodOptions: Sendable, Codable, Equatable, H
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.usBankAccount = try container.decode(Nullable<TopupResourcePaymentMethodOptionsUsBankAccount>.self, forKey: .usBankAccount)
+        self.usBankAccount = try container.decodeIfPresent(Nullable<TopupResourceUsBankAccount>.self, forKey: .usBankAccount) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {

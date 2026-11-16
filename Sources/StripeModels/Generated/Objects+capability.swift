@@ -118,7 +118,7 @@ public struct Capability: Sendable, Codable, Equatable, Hashable, StripeIdentifi
         self.id = try container.decode(String.self, forKey: .id)
         self.object = try container.decode(CapabilityObject.self, forKey: .object)
         self.requested = try container.decode(Bool.self, forKey: .requested)
-        self.requestedAt = try container.decode(Nullable<StripeTimestamp>.self, forKey: .requestedAt)
+        self.requestedAt = try container.decodeIfPresent(Nullable<StripeTimestamp>.self, forKey: .requestedAt) ?? .null
         self.requirements = try container.decodeIfPresent(AccountCapabilityRequirements.self, forKey: .requirements)
         self.status = try container.decode(CapabilityStatus.self, forKey: .status)
         var captured: [String: JSONValue] = [:]

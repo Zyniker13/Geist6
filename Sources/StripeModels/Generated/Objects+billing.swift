@@ -103,26 +103,6 @@ public enum BillingAlertStatus: Sendable, Equatable, Hashable, LosslessEnum {
     }
 }
 
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum BillingAlertUsageThreshold: Sendable, Codable, Equatable, Hashable {
-    case thresholdsResourceUsageThresholdConfig(ThresholdsResourceUsageThresholdConfig)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(ThresholdsResourceUsageThresholdConfig.self) { self = .thresholdsResourceUsageThresholdConfig(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .thresholdsResourceUsageThresholdConfig(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
 public struct BillingAlert: Sendable, Codable, Equatable, Hashable, StripeIdentified {
     public var alertType: BillingAlertAlertType
     public var id: String
@@ -130,12 +110,12 @@ public struct BillingAlert: Sendable, Codable, Equatable, Hashable, StripeIdenti
     public var object: BillingAlertObject
     public var status: Nullable<BillingAlertStatus>
     public var title: String
-    public var usageThreshold: Nullable<BillingAlertUsageThreshold>
+    public var usageThreshold: Nullable<ThresholdsResourceUsageThresholdConfig>
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(alertType: BillingAlertAlertType, id: String, livemode: Bool, object: BillingAlertObject, status: Nullable<BillingAlertStatus>, title: String, usageThreshold: Nullable<BillingAlertUsageThreshold>, unknownFields: [String: JSONValue]? = nil) {
+    public init(alertType: BillingAlertAlertType, id: String, livemode: Bool, object: BillingAlertObject, status: Nullable<BillingAlertStatus>, title: String, usageThreshold: Nullable<ThresholdsResourceUsageThresholdConfig>, unknownFields: [String: JSONValue]? = nil) {
         self.alertType = alertType
         self.id = id
         self.livemode = livemode
@@ -162,9 +142,9 @@ public struct BillingAlert: Sendable, Codable, Equatable, Hashable, StripeIdenti
         self.id = try container.decode(String.self, forKey: .id)
         self.livemode = try container.decode(Bool.self, forKey: .livemode)
         self.object = try container.decode(BillingAlertObject.self, forKey: .object)
-        self.status = try container.decode(Nullable<BillingAlertStatus>.self, forKey: .status)
+        self.status = try container.decodeIfPresent(Nullable<BillingAlertStatus>.self, forKey: .status) ?? .null
         self.title = try container.decode(String.self, forKey: .title)
-        self.usageThreshold = try container.decode(Nullable<BillingAlertUsageThreshold>.self, forKey: .usageThreshold)
+        self.usageThreshold = try container.decodeIfPresent(Nullable<ThresholdsResourceUsageThresholdConfig>.self, forKey: .usageThreshold) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -428,7 +408,7 @@ public struct BillingCreditBalanceSummary: Sendable, Codable, Equatable, Hashabl
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.balances = try container.decode([CreditBalance].self, forKey: .balances)
         self.customer = try container.decode(BillingCreditBalanceSummaryCustomer.self, forKey: .customer)
-        self.customerAccount = try container.decode(Nullable<String>.self, forKey: .customerAccount)
+        self.customerAccount = try container.decodeIfPresent(Nullable<String>.self, forKey: .customerAccount) ?? .null
         self.livemode = try container.decode(Bool.self, forKey: .livemode)
         self.object = try container.decode(BillingCreditBalanceSummaryObject.self, forKey: .object)
         var captured: [String: JSONValue] = [:]
@@ -455,46 +435,6 @@ public struct BillingCreditBalanceSummary: Sendable, Codable, Equatable, Hashabl
                     try? container.encode(value, forKey: codingKey)
                 }
             }
-        }
-    }
-}
-
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum BillingCreditBalanceTransactionCredit: Sendable, Codable, Equatable, Hashable {
-    case billingCreditGrantsResourceBalanceCredit(BillingCreditGrantsResourceBalanceCredit)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(BillingCreditGrantsResourceBalanceCredit.self) { self = .billingCreditGrantsResourceBalanceCredit(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .billingCreditGrantsResourceBalanceCredit(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum BillingCreditBalanceTransactionDebit: Sendable, Codable, Equatable, Hashable {
-    case billingCreditGrantsResourceBalanceDebit(BillingCreditGrantsResourceBalanceDebit)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(BillingCreditGrantsResourceBalanceDebit.self) { self = .billingCreditGrantsResourceBalanceDebit(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .billingCreditGrantsResourceBalanceDebit(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
         }
     }
 }
@@ -566,9 +506,9 @@ public enum BillingCreditBalanceTransactionType: Sendable, Equatable, Hashable, 
 
 public struct BillingCreditBalanceTransaction: Sendable, Codable, Equatable, Hashable, StripeIdentified {
     public var created: StripeTimestamp
-    public var credit: Nullable<BillingCreditBalanceTransactionCredit>
+    public var credit: Nullable<BillingCreditGrantsResourceBalanceCredit>
     public var creditGrant: Expandable<BillingCreditGrant>
-    public var debit: Nullable<BillingCreditBalanceTransactionDebit>
+    public var debit: Nullable<BillingCreditGrantsResourceBalanceDebit>
     public var effectiveAt: StripeTimestamp
     public var id: String
     public var livemode: Bool
@@ -579,7 +519,7 @@ public struct BillingCreditBalanceTransaction: Sendable, Codable, Equatable, Has
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(created: StripeTimestamp, credit: Nullable<BillingCreditBalanceTransactionCredit>, creditGrant: Expandable<BillingCreditGrant>, debit: Nullable<BillingCreditBalanceTransactionDebit>, effectiveAt: StripeTimestamp, id: String, livemode: Bool, object: BillingCreditBalanceTransactionObject, testClock: Nullable<Expandable<TestHelpersTestClock>>, type: Nullable<BillingCreditBalanceTransactionType>, unknownFields: [String: JSONValue]? = nil) {
+    public init(created: StripeTimestamp, credit: Nullable<BillingCreditGrantsResourceBalanceCredit>, creditGrant: Expandable<BillingCreditGrant>, debit: Nullable<BillingCreditGrantsResourceBalanceDebit>, effectiveAt: StripeTimestamp, id: String, livemode: Bool, object: BillingCreditBalanceTransactionObject, testClock: Nullable<Expandable<TestHelpersTestClock>>, type: Nullable<BillingCreditBalanceTransactionType>, unknownFields: [String: JSONValue]? = nil) {
         self.created = created
         self.credit = credit
         self.creditGrant = creditGrant
@@ -609,15 +549,15 @@ public struct BillingCreditBalanceTransaction: Sendable, Codable, Equatable, Has
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.created = try container.decode(StripeTimestamp.self, forKey: .created)
-        self.credit = try container.decode(Nullable<BillingCreditBalanceTransactionCredit>.self, forKey: .credit)
+        self.credit = try container.decodeIfPresent(Nullable<BillingCreditGrantsResourceBalanceCredit>.self, forKey: .credit) ?? .null
         self.creditGrant = try container.decode(Expandable<BillingCreditGrant>.self, forKey: .creditGrant)
-        self.debit = try container.decode(Nullable<BillingCreditBalanceTransactionDebit>.self, forKey: .debit)
+        self.debit = try container.decodeIfPresent(Nullable<BillingCreditGrantsResourceBalanceDebit>.self, forKey: .debit) ?? .null
         self.effectiveAt = try container.decode(StripeTimestamp.self, forKey: .effectiveAt)
         self.id = try container.decode(String.self, forKey: .id)
         self.livemode = try container.decode(Bool.self, forKey: .livemode)
         self.object = try container.decode(BillingCreditBalanceTransactionObject.self, forKey: .object)
-        self.testClock = try container.decode(Nullable<Expandable<TestHelpersTestClock>>.self, forKey: .testClock)
-        self.type = try container.decode(Nullable<BillingCreditBalanceTransactionType>.self, forKey: .type)
+        self.testClock = try container.decodeIfPresent(Nullable<Expandable<TestHelpersTestClock>>.self, forKey: .testClock) ?? .null
+        self.type = try container.decodeIfPresent(Nullable<BillingCreditBalanceTransactionType>.self, forKey: .type) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -859,18 +799,18 @@ public struct BillingCreditGrant: Sendable, Codable, Equatable, Hashable, Stripe
         self.category = try container.decode(BillingCreditGrantCategory.self, forKey: .category)
         self.created = try container.decode(StripeTimestamp.self, forKey: .created)
         self.customer = try container.decode(BillingCreditGrantCustomer.self, forKey: .customer)
-        self.customerAccount = try container.decode(Nullable<String>.self, forKey: .customerAccount)
-        self.effectiveAt = try container.decode(Nullable<StripeTimestamp>.self, forKey: .effectiveAt)
-        self.expiresAt = try container.decode(Nullable<StripeTimestamp>.self, forKey: .expiresAt)
+        self.customerAccount = try container.decodeIfPresent(Nullable<String>.self, forKey: .customerAccount) ?? .null
+        self.effectiveAt = try container.decodeIfPresent(Nullable<StripeTimestamp>.self, forKey: .effectiveAt) ?? .null
+        self.expiresAt = try container.decodeIfPresent(Nullable<StripeTimestamp>.self, forKey: .expiresAt) ?? .null
         self.id = try container.decode(String.self, forKey: .id)
         self.livemode = try container.decode(Bool.self, forKey: .livemode)
         self.metadata = try container.decode([String: String].self, forKey: .metadata)
-        self.name = try container.decode(Nullable<String>.self, forKey: .name)
+        self.name = try container.decodeIfPresent(Nullable<String>.self, forKey: .name) ?? .null
         self.object = try container.decode(BillingCreditGrantObject.self, forKey: .object)
-        self.priority = try container.decode(Nullable<Int>.self, forKey: .priority)
-        self.testClock = try container.decode(Nullable<Expandable<TestHelpersTestClock>>.self, forKey: .testClock)
+        self.priority = try container.decodeIfPresent(Nullable<Int>.self, forKey: .priority) ?? .null
+        self.testClock = try container.decodeIfPresent(Nullable<Expandable<TestHelpersTestClock>>.self, forKey: .testClock) ?? .null
         self.updated = try container.decode(StripeTimestamp.self, forKey: .updated)
-        self.voidedAt = try container.decode(Nullable<StripeTimestamp>.self, forKey: .voidedAt)
+        self.voidedAt = try container.decodeIfPresent(Nullable<StripeTimestamp>.self, forKey: .voidedAt) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -1250,7 +1190,7 @@ public struct BillingMeter: Sendable, Codable, Equatable, Hashable, StripeIdenti
         self.defaultAggregation = try container.decode(BillingMeterResourceAggregationSettings.self, forKey: .defaultAggregation)
         self.displayName = try container.decode(String.self, forKey: .displayName)
         self.eventName = try container.decode(String.self, forKey: .eventName)
-        self.eventTimeWindow = try container.decode(Nullable<BillingMeterEventTimeWindow>.self, forKey: .eventTimeWindow)
+        self.eventTimeWindow = try container.decodeIfPresent(Nullable<BillingMeterEventTimeWindow>.self, forKey: .eventTimeWindow) ?? .null
         self.id = try container.decode(String.self, forKey: .id)
         self.livemode = try container.decode(Bool.self, forKey: .livemode)
         self.object = try container.decode(BillingMeterObject.self, forKey: .object)
@@ -1565,26 +1505,6 @@ public struct BillingMeterEvent: Sendable, Codable, Equatable, Hashable {
     }
 }
 
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum BillingMeterEventAdjustmentCancel: Sendable, Codable, Equatable, Hashable {
-    case billingMeterResourceBillingMeterEventAdjustmentCancel(BillingMeterResourceBillingMeterEventAdjustmentCancel)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(BillingMeterResourceBillingMeterEventAdjustmentCancel.self) { self = .billingMeterResourceBillingMeterEventAdjustmentCancel(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .billingMeterResourceBillingMeterEventAdjustmentCancel(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
 /// Lossless enum: values Stripe documents plus any value the API
 /// adds later, kept in `undocumented` instead of dropped.
 public enum BillingMeterEventAdjustmentObject: Sendable, Equatable, Hashable, LosslessEnum {
@@ -1682,7 +1602,7 @@ public enum BillingMeterEventAdjustmentType: Sendable, Equatable, Hashable, Loss
 }
 
 public struct BillingMeterEventAdjustment: Sendable, Codable, Equatable, Hashable {
-    public var cancel: Nullable<BillingMeterEventAdjustmentCancel>
+    public var cancel: Nullable<BillingMeterResourceBillingMeterEventAdjustmentCancel>
     public var eventName: String
     public var livemode: Bool
     public var object: BillingMeterEventAdjustmentObject
@@ -1692,7 +1612,7 @@ public struct BillingMeterEventAdjustment: Sendable, Codable, Equatable, Hashabl
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(cancel: Nullable<BillingMeterEventAdjustmentCancel>, eventName: String, livemode: Bool, object: BillingMeterEventAdjustmentObject, status: BillingMeterEventAdjustmentStatus, type: BillingMeterEventAdjustmentType, unknownFields: [String: JSONValue]? = nil) {
+    public init(cancel: Nullable<BillingMeterResourceBillingMeterEventAdjustmentCancel>, eventName: String, livemode: Bool, object: BillingMeterEventAdjustmentObject, status: BillingMeterEventAdjustmentStatus, type: BillingMeterEventAdjustmentType, unknownFields: [String: JSONValue]? = nil) {
         self.cancel = cancel
         self.eventName = eventName
         self.livemode = livemode
@@ -1713,7 +1633,7 @@ public struct BillingMeterEventAdjustment: Sendable, Codable, Equatable, Hashabl
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.cancel = try container.decode(Nullable<BillingMeterEventAdjustmentCancel>.self, forKey: .cancel)
+        self.cancel = try container.decodeIfPresent(Nullable<BillingMeterResourceBillingMeterEventAdjustmentCancel>.self, forKey: .cancel) ?? .null
         self.eventName = try container.decode(String.self, forKey: .eventName)
         self.livemode = try container.decode(Bool.self, forKey: .livemode)
         self.object = try container.decode(BillingMeterEventAdjustmentObject.self, forKey: .object)
@@ -1851,26 +1771,6 @@ public struct BillingMeterEventSummary: Sendable, Codable, Equatable, Hashable, 
     }
 }
 
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum BillingBillResourceInvoiceItemParentsInvoiceItemParentSubscriptionDetails: Sendable, Codable, Equatable, Hashable {
-    case billingBillResourceInvoiceItemParentsInvoiceItemSubscriptionParent(BillingBillResourceInvoiceItemParentsInvoiceItemSubscriptionParent)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(BillingBillResourceInvoiceItemParentsInvoiceItemSubscriptionParent.self) { self = .billingBillResourceInvoiceItemParentsInvoiceItemSubscriptionParent(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .billingBillResourceInvoiceItemParentsInvoiceItemSubscriptionParent(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
 /// Lossless enum: values Stripe documents plus any value the API
 /// adds later, kept in `undocumented` instead of dropped.
 public enum BillingBillResourceInvoiceItemParentsInvoiceItemParentType: Sendable, Equatable, Hashable, LosslessEnum {
@@ -1903,13 +1803,13 @@ public enum BillingBillResourceInvoiceItemParentsInvoiceItemParentType: Sendable
 }
 
 public struct BillingBillResourceInvoiceItemParentsInvoiceItemParent: Sendable, Codable, Equatable, Hashable {
-    public var subscriptionDetails: Nullable<BillingBillResourceInvoiceItemParentsInvoiceItemParentSubscriptionDetails>
+    public var subscriptionDetails: Nullable<BillingBillResourceInvoiceItemParentsInvoiceItemSubscriptionParent>
     public var type: BillingBillResourceInvoiceItemParentsInvoiceItemParentType
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(subscriptionDetails: Nullable<BillingBillResourceInvoiceItemParentsInvoiceItemParentSubscriptionDetails>, type: BillingBillResourceInvoiceItemParentsInvoiceItemParentType, unknownFields: [String: JSONValue]? = nil) {
+    public init(subscriptionDetails: Nullable<BillingBillResourceInvoiceItemParentsInvoiceItemSubscriptionParent>, type: BillingBillResourceInvoiceItemParentsInvoiceItemParentType, unknownFields: [String: JSONValue]? = nil) {
         self.subscriptionDetails = subscriptionDetails
         self.type = type
         self.unknownFields = unknownFields
@@ -1922,7 +1822,7 @@ public struct BillingBillResourceInvoiceItemParentsInvoiceItemParent: Sendable, 
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.subscriptionDetails = try container.decode(Nullable<BillingBillResourceInvoiceItemParentsInvoiceItemParentSubscriptionDetails>.self, forKey: .subscriptionDetails)
+        self.subscriptionDetails = try container.decodeIfPresent(Nullable<BillingBillResourceInvoiceItemParentsInvoiceItemSubscriptionParent>.self, forKey: .subscriptionDetails) ?? .null
         self.type = try container.decode(BillingBillResourceInvoiceItemParentsInvoiceItemParentType.self, forKey: .type)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
@@ -2043,33 +1943,13 @@ public struct BillingBillResourceInvoicingLinesCommonCreditedItems: Sendable, Co
     }
 }
 
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum BillingBillResourceInvoicingLinesCommonProrationDetailsCreditedItems: Sendable, Codable, Equatable, Hashable {
-    case billingBillResourceInvoicingLinesCommonCreditedItems(BillingBillResourceInvoicingLinesCommonCreditedItems)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(BillingBillResourceInvoicingLinesCommonCreditedItems.self) { self = .billingBillResourceInvoicingLinesCommonCreditedItems(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .billingBillResourceInvoicingLinesCommonCreditedItems(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
 public struct BillingBillResourceInvoicingLinesCommonProrationDetails: Sendable, Codable, Equatable, Hashable {
-    public var creditedItems: Nullable<BillingBillResourceInvoicingLinesCommonProrationDetailsCreditedItems>
+    public var creditedItems: Nullable<BillingBillResourceInvoicingLinesCommonCreditedItems>
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(creditedItems: Nullable<BillingBillResourceInvoicingLinesCommonProrationDetailsCreditedItems>, unknownFields: [String: JSONValue]? = nil) {
+    public init(creditedItems: Nullable<BillingBillResourceInvoicingLinesCommonCreditedItems>, unknownFields: [String: JSONValue]? = nil) {
         self.creditedItems = creditedItems
         self.unknownFields = unknownFields
     }
@@ -2080,7 +1960,7 @@ public struct BillingBillResourceInvoicingLinesCommonProrationDetails: Sendable,
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.creditedItems = try container.decode(Nullable<BillingBillResourceInvoicingLinesCommonProrationDetailsCreditedItems>.self, forKey: .creditedItems)
+        self.creditedItems = try container.decodeIfPresent(Nullable<BillingBillResourceInvoicingLinesCommonCreditedItems>.self, forKey: .creditedItems) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -2105,36 +1985,16 @@ public struct BillingBillResourceInvoicingLinesCommonProrationDetails: Sendable,
     }
 }
 
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum BillingBillResourceInvoicingLinesParentsInvoiceLineItemInvoiceItemParentProrationDetails: Sendable, Codable, Equatable, Hashable {
-    case billingBillResourceInvoicingLinesCommonProrationDetails(BillingBillResourceInvoicingLinesCommonProrationDetails)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(BillingBillResourceInvoicingLinesCommonProrationDetails.self) { self = .billingBillResourceInvoicingLinesCommonProrationDetails(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .billingBillResourceInvoicingLinesCommonProrationDetails(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
 public struct BillingBillResourceInvoicingLinesParentsInvoiceLineItemInvoiceItemParent: Sendable, Codable, Equatable, Hashable {
     public var invoiceItem: String
     public var proration: Bool
-    public var prorationDetails: Nullable<BillingBillResourceInvoicingLinesParentsInvoiceLineItemInvoiceItemParentProrationDetails>
+    public var prorationDetails: Nullable<BillingBillResourceInvoicingLinesCommonProrationDetails>
     public var subscription: Nullable<String>
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(invoiceItem: String, proration: Bool, prorationDetails: Nullable<BillingBillResourceInvoicingLinesParentsInvoiceLineItemInvoiceItemParentProrationDetails>, subscription: Nullable<String>, unknownFields: [String: JSONValue]? = nil) {
+    public init(invoiceItem: String, proration: Bool, prorationDetails: Nullable<BillingBillResourceInvoicingLinesCommonProrationDetails>, subscription: Nullable<String>, unknownFields: [String: JSONValue]? = nil) {
         self.invoiceItem = invoiceItem
         self.proration = proration
         self.prorationDetails = prorationDetails
@@ -2153,8 +2013,8 @@ public struct BillingBillResourceInvoicingLinesParentsInvoiceLineItemInvoiceItem
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.invoiceItem = try container.decode(String.self, forKey: .invoiceItem)
         self.proration = try container.decode(Bool.self, forKey: .proration)
-        self.prorationDetails = try container.decode(Nullable<BillingBillResourceInvoicingLinesParentsInvoiceLineItemInvoiceItemParentProrationDetails>.self, forKey: .prorationDetails)
-        self.subscription = try container.decode(Nullable<String>.self, forKey: .subscription)
+        self.prorationDetails = try container.decodeIfPresent(Nullable<BillingBillResourceInvoicingLinesCommonProrationDetails>.self, forKey: .prorationDetails) ?? .null
+        self.subscription = try container.decodeIfPresent(Nullable<String>.self, forKey: .subscription) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -2178,46 +2038,6 @@ public struct BillingBillResourceInvoicingLinesParentsInvoiceLineItemInvoiceItem
                     try? container.encode(value, forKey: codingKey)
                 }
             }
-        }
-    }
-}
-
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum BillingBillResourceInvoicingLinesParentsInvoiceLineItemParentInvoiceItemDetails: Sendable, Codable, Equatable, Hashable {
-    case billingBillResourceInvoicingLinesParentsInvoiceLineItemInvoiceItemParent(BillingBillResourceInvoicingLinesParentsInvoiceLineItemInvoiceItemParent)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(BillingBillResourceInvoicingLinesParentsInvoiceLineItemInvoiceItemParent.self) { self = .billingBillResourceInvoicingLinesParentsInvoiceLineItemInvoiceItemParent(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .billingBillResourceInvoicingLinesParentsInvoiceLineItemInvoiceItemParent(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum BillingBillResourceInvoicingLinesParentsInvoiceLineItemParentSubscriptionItemDetails: Sendable, Codable, Equatable, Hashable {
-    case billingBillResourceInvoicingLinesParentsInvoiceLineItemSubscriptionItemParent(BillingBillResourceInvoicingLinesParentsInvoiceLineItemSubscriptionItemParent)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(BillingBillResourceInvoicingLinesParentsInvoiceLineItemSubscriptionItemParent.self) { self = .billingBillResourceInvoicingLinesParentsInvoiceLineItemSubscriptionItemParent(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .billingBillResourceInvoicingLinesParentsInvoiceLineItemSubscriptionItemParent(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
         }
     }
 }
@@ -2257,14 +2077,14 @@ public enum BillingBillResourceInvoicingLinesParentsInvoiceLineItemParentType: S
 }
 
 public struct BillingBillResourceInvoicingLinesParentsInvoiceLineItemParent: Sendable, Codable, Equatable, Hashable {
-    public var invoiceItemDetails: Nullable<BillingBillResourceInvoicingLinesParentsInvoiceLineItemParentInvoiceItemDetails>
-    public var subscriptionItemDetails: Nullable<BillingBillResourceInvoicingLinesParentsInvoiceLineItemParentSubscriptionItemDetails>
+    public var invoiceItemDetails: Nullable<BillingBillResourceInvoicingLinesParentsInvoiceLineItemInvoiceItemParent>
+    public var subscriptionItemDetails: Nullable<BillingBillResourceInvoicingLinesParentsInvoiceLineItemSubscriptionItemParent>
     public var type: BillingBillResourceInvoicingLinesParentsInvoiceLineItemParentType
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(invoiceItemDetails: Nullable<BillingBillResourceInvoicingLinesParentsInvoiceLineItemParentInvoiceItemDetails>, subscriptionItemDetails: Nullable<BillingBillResourceInvoicingLinesParentsInvoiceLineItemParentSubscriptionItemDetails>, type: BillingBillResourceInvoicingLinesParentsInvoiceLineItemParentType, unknownFields: [String: JSONValue]? = nil) {
+    public init(invoiceItemDetails: Nullable<BillingBillResourceInvoicingLinesParentsInvoiceLineItemInvoiceItemParent>, subscriptionItemDetails: Nullable<BillingBillResourceInvoicingLinesParentsInvoiceLineItemSubscriptionItemParent>, type: BillingBillResourceInvoicingLinesParentsInvoiceLineItemParentType, unknownFields: [String: JSONValue]? = nil) {
         self.invoiceItemDetails = invoiceItemDetails
         self.subscriptionItemDetails = subscriptionItemDetails
         self.type = type
@@ -2279,8 +2099,8 @@ public struct BillingBillResourceInvoicingLinesParentsInvoiceLineItemParent: Sen
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.invoiceItemDetails = try container.decode(Nullable<BillingBillResourceInvoicingLinesParentsInvoiceLineItemParentInvoiceItemDetails>.self, forKey: .invoiceItemDetails)
-        self.subscriptionItemDetails = try container.decode(Nullable<BillingBillResourceInvoicingLinesParentsInvoiceLineItemParentSubscriptionItemDetails>.self, forKey: .subscriptionItemDetails)
+        self.invoiceItemDetails = try container.decodeIfPresent(Nullable<BillingBillResourceInvoicingLinesParentsInvoiceLineItemInvoiceItemParent>.self, forKey: .invoiceItemDetails) ?? .null
+        self.subscriptionItemDetails = try container.decodeIfPresent(Nullable<BillingBillResourceInvoicingLinesParentsInvoiceLineItemSubscriptionItemParent>.self, forKey: .subscriptionItemDetails) ?? .null
         self.type = try container.decode(BillingBillResourceInvoicingLinesParentsInvoiceLineItemParentType.self, forKey: .type)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
@@ -2308,37 +2128,17 @@ public struct BillingBillResourceInvoicingLinesParentsInvoiceLineItemParent: Sen
     }
 }
 
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum BillingBillResourceInvoicingLinesParentsInvoiceLineItemSubscriptionItemParentProrationDetails: Sendable, Codable, Equatable, Hashable {
-    case billingBillResourceInvoicingLinesCommonProrationDetails(BillingBillResourceInvoicingLinesCommonProrationDetails)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(BillingBillResourceInvoicingLinesCommonProrationDetails.self) { self = .billingBillResourceInvoicingLinesCommonProrationDetails(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .billingBillResourceInvoicingLinesCommonProrationDetails(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
 public struct BillingBillResourceInvoicingLinesParentsInvoiceLineItemSubscriptionItemParent: Sendable, Codable, Equatable, Hashable {
     public var invoiceItem: Nullable<String>
     public var proration: Bool
-    public var prorationDetails: Nullable<BillingBillResourceInvoicingLinesParentsInvoiceLineItemSubscriptionItemParentProrationDetails>
+    public var prorationDetails: Nullable<BillingBillResourceInvoicingLinesCommonProrationDetails>
     public var subscription: Nullable<String>
     public var subscriptionItem: String
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(invoiceItem: Nullable<String>, proration: Bool, prorationDetails: Nullable<BillingBillResourceInvoicingLinesParentsInvoiceLineItemSubscriptionItemParentProrationDetails>, subscription: Nullable<String>, subscriptionItem: String, unknownFields: [String: JSONValue]? = nil) {
+    public init(invoiceItem: Nullable<String>, proration: Bool, prorationDetails: Nullable<BillingBillResourceInvoicingLinesCommonProrationDetails>, subscription: Nullable<String>, subscriptionItem: String, unknownFields: [String: JSONValue]? = nil) {
         self.invoiceItem = invoiceItem
         self.proration = proration
         self.prorationDetails = prorationDetails
@@ -2357,10 +2157,10 @@ public struct BillingBillResourceInvoicingLinesParentsInvoiceLineItemSubscriptio
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.invoiceItem = try container.decode(Nullable<String>.self, forKey: .invoiceItem)
+        self.invoiceItem = try container.decodeIfPresent(Nullable<String>.self, forKey: .invoiceItem) ?? .null
         self.proration = try container.decode(Bool.self, forKey: .proration)
-        self.prorationDetails = try container.decode(Nullable<BillingBillResourceInvoicingLinesParentsInvoiceLineItemSubscriptionItemParentProrationDetails>.self, forKey: .prorationDetails)
-        self.subscription = try container.decode(Nullable<String>.self, forKey: .subscription)
+        self.prorationDetails = try container.decodeIfPresent(Nullable<BillingBillResourceInvoicingLinesCommonProrationDetails>.self, forKey: .prorationDetails) ?? .null
+        self.subscription = try container.decodeIfPresent(Nullable<String>.self, forKey: .subscription) ?? .null
         self.subscriptionItem = try container.decode(String.self, forKey: .subscriptionItem)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
@@ -2386,46 +2186,6 @@ public struct BillingBillResourceInvoicingLinesParentsInvoiceLineItemSubscriptio
                     try? container.encode(value, forKey: codingKey)
                 }
             }
-        }
-    }
-}
-
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum BillingBillResourceInvoicingParentsInvoiceParentQuoteDetails: Sendable, Codable, Equatable, Hashable {
-    case billingBillResourceInvoicingParentsInvoiceQuoteParent(BillingBillResourceInvoicingParentsInvoiceQuoteParent)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(BillingBillResourceInvoicingParentsInvoiceQuoteParent.self) { self = .billingBillResourceInvoicingParentsInvoiceQuoteParent(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .billingBillResourceInvoicingParentsInvoiceQuoteParent(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum BillingBillResourceInvoicingParentsInvoiceParentSubscriptionDetails: Sendable, Codable, Equatable, Hashable {
-    case billingBillResourceInvoicingParentsInvoiceSubscriptionParent(BillingBillResourceInvoicingParentsInvoiceSubscriptionParent)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(BillingBillResourceInvoicingParentsInvoiceSubscriptionParent.self) { self = .billingBillResourceInvoicingParentsInvoiceSubscriptionParent(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .billingBillResourceInvoicingParentsInvoiceSubscriptionParent(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
         }
     }
 }
@@ -2465,14 +2225,14 @@ public enum BillingBillResourceInvoicingParentsInvoiceParentType: Sendable, Equa
 }
 
 public struct BillingBillResourceInvoicingParentsInvoiceParent: Sendable, Codable, Equatable, Hashable {
-    public var quoteDetails: Nullable<BillingBillResourceInvoicingParentsInvoiceParentQuoteDetails>
-    public var subscriptionDetails: Nullable<BillingBillResourceInvoicingParentsInvoiceParentSubscriptionDetails>
+    public var quoteDetails: Nullable<BillingBillResourceInvoicingParentsInvoiceQuoteParent>
+    public var subscriptionDetails: Nullable<BillingBillResourceInvoicingParentsInvoiceSubscriptionParent>
     public var type: BillingBillResourceInvoicingParentsInvoiceParentType
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(quoteDetails: Nullable<BillingBillResourceInvoicingParentsInvoiceParentQuoteDetails>, subscriptionDetails: Nullable<BillingBillResourceInvoicingParentsInvoiceParentSubscriptionDetails>, type: BillingBillResourceInvoicingParentsInvoiceParentType, unknownFields: [String: JSONValue]? = nil) {
+    public init(quoteDetails: Nullable<BillingBillResourceInvoicingParentsInvoiceQuoteParent>, subscriptionDetails: Nullable<BillingBillResourceInvoicingParentsInvoiceSubscriptionParent>, type: BillingBillResourceInvoicingParentsInvoiceParentType, unknownFields: [String: JSONValue]? = nil) {
         self.quoteDetails = quoteDetails
         self.subscriptionDetails = subscriptionDetails
         self.type = type
@@ -2487,8 +2247,8 @@ public struct BillingBillResourceInvoicingParentsInvoiceParent: Sendable, Codabl
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.quoteDetails = try container.decode(Nullable<BillingBillResourceInvoicingParentsInvoiceParentQuoteDetails>.self, forKey: .quoteDetails)
-        self.subscriptionDetails = try container.decode(Nullable<BillingBillResourceInvoicingParentsInvoiceParentSubscriptionDetails>.self, forKey: .subscriptionDetails)
+        self.quoteDetails = try container.decodeIfPresent(Nullable<BillingBillResourceInvoicingParentsInvoiceQuoteParent>.self, forKey: .quoteDetails) ?? .null
+        self.subscriptionDetails = try container.decodeIfPresent(Nullable<BillingBillResourceInvoicingParentsInvoiceSubscriptionParent>.self, forKey: .subscriptionDetails) ?? .null
         self.type = try container.decode(BillingBillResourceInvoicingParentsInvoiceParentType.self, forKey: .type)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
@@ -2581,7 +2341,7 @@ public struct BillingBillResourceInvoicingParentsInvoiceSubscriptionParent: Send
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.metadata = try container.decode(Nullable<[String: String]>.self, forKey: .metadata)
+        self.metadata = try container.decodeIfPresent(Nullable<[String: String]>.self, forKey: .metadata) ?? .null
         self.subscription = try container.decode(Expandable<Subscription>.self, forKey: .subscription)
         self.subscriptionProrationDate = try container.decodeIfPresent(StripeTimestamp.self, forKey: .subscriptionProrationDate)
         var captured: [String: JSONValue] = [:]
@@ -2666,7 +2426,7 @@ public struct BillingBillResourceInvoicingPricingPricing: Sendable, Codable, Equ
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.priceDetails = try container.decodeIfPresent(BillingBillResourceInvoicingPricingPricingPriceDetails.self, forKey: .priceDetails)
         self.type = try container.decode(BillingBillResourceInvoicingPricingPricingType.self, forKey: .type)
-        self.unitAmountDecimal = try container.decode(Nullable<String>.self, forKey: .unitAmountDecimal)
+        self.unitAmountDecimal = try container.decodeIfPresent(Nullable<String>.self, forKey: .unitAmountDecimal) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -2771,26 +2531,6 @@ public enum BillingBillResourceInvoicingTaxesTaxTaxBehavior: Sendable, Equatable
     public func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
         try container.encode(rawValue)
-    }
-}
-
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum BillingBillResourceInvoicingTaxesTaxTaxRateDetails: Sendable, Codable, Equatable, Hashable {
-    case billingBillResourceInvoicingTaxesTaxRateDetails(BillingBillResourceInvoicingTaxesTaxRateDetails)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(BillingBillResourceInvoicingTaxesTaxRateDetails.self) { self = .billingBillResourceInvoicingTaxesTaxRateDetails(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .billingBillResourceInvoicingTaxesTaxRateDetails(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
     }
 }
 
@@ -2904,7 +2644,7 @@ public enum BillingBillResourceInvoicingTaxesTaxType: Sendable, Equatable, Hasha
 public struct BillingBillResourceInvoicingTaxesTax: Sendable, Codable, Equatable, Hashable {
     public var amount: Int
     public var taxBehavior: BillingBillResourceInvoicingTaxesTaxTaxBehavior
-    public var taxRateDetails: Nullable<BillingBillResourceInvoicingTaxesTaxTaxRateDetails>
+    public var taxRateDetails: Nullable<BillingBillResourceInvoicingTaxesTaxRateDetails>
     public var taxabilityReason: BillingBillResourceInvoicingTaxesTaxTaxabilityReason
     public var taxableAmount: Nullable<Int>
     public var type: BillingBillResourceInvoicingTaxesTaxType
@@ -2912,7 +2652,7 @@ public struct BillingBillResourceInvoicingTaxesTax: Sendable, Codable, Equatable
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(amount: Int, taxBehavior: BillingBillResourceInvoicingTaxesTaxTaxBehavior, taxRateDetails: Nullable<BillingBillResourceInvoicingTaxesTaxTaxRateDetails>, taxabilityReason: BillingBillResourceInvoicingTaxesTaxTaxabilityReason, taxableAmount: Nullable<Int>, type: BillingBillResourceInvoicingTaxesTaxType, unknownFields: [String: JSONValue]? = nil) {
+    public init(amount: Int, taxBehavior: BillingBillResourceInvoicingTaxesTaxTaxBehavior, taxRateDetails: Nullable<BillingBillResourceInvoicingTaxesTaxRateDetails>, taxabilityReason: BillingBillResourceInvoicingTaxesTaxTaxabilityReason, taxableAmount: Nullable<Int>, type: BillingBillResourceInvoicingTaxesTaxType, unknownFields: [String: JSONValue]? = nil) {
         self.amount = amount
         self.taxBehavior = taxBehavior
         self.taxRateDetails = taxRateDetails
@@ -2935,9 +2675,9 @@ public struct BillingBillResourceInvoicingTaxesTax: Sendable, Codable, Equatable
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.amount = try container.decode(Int.self, forKey: .amount)
         self.taxBehavior = try container.decode(BillingBillResourceInvoicingTaxesTaxTaxBehavior.self, forKey: .taxBehavior)
-        self.taxRateDetails = try container.decode(Nullable<BillingBillResourceInvoicingTaxesTaxTaxRateDetails>.self, forKey: .taxRateDetails)
+        self.taxRateDetails = try container.decodeIfPresent(Nullable<BillingBillResourceInvoicingTaxesTaxRateDetails>.self, forKey: .taxRateDetails) ?? .null
         self.taxabilityReason = try container.decode(BillingBillResourceInvoicingTaxesTaxTaxabilityReason.self, forKey: .taxabilityReason)
-        self.taxableAmount = try container.decode(Nullable<Int>.self, forKey: .taxableAmount)
+        self.taxableAmount = try container.decodeIfPresent(Nullable<Int>.self, forKey: .taxableAmount) ?? .null
         self.type = try container.decode(BillingBillResourceInvoicingTaxesTaxType.self, forKey: .type)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
@@ -3094,26 +2834,6 @@ public struct BillingClocksResourceStatusDetailsStatusDetails: Sendable, Codable
     }
 }
 
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum BillingCreditGrantsResourceAmountMonetary: Sendable, Codable, Equatable, Hashable {
-    case billingCreditGrantsResourceMonetaryAmount(BillingCreditGrantsResourceMonetaryAmount)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(BillingCreditGrantsResourceMonetaryAmount.self) { self = .billingCreditGrantsResourceMonetaryAmount(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .billingCreditGrantsResourceMonetaryAmount(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
 /// Lossless enum: values Stripe documents plus any value the API
 /// adds later, kept in `undocumented` instead of dropped.
 public enum BillingCreditGrantsResourceAmountType: Sendable, Equatable, Hashable, LosslessEnum {
@@ -3146,13 +2866,13 @@ public enum BillingCreditGrantsResourceAmountType: Sendable, Equatable, Hashable
 }
 
 public struct BillingCreditGrantsResourceAmount: Sendable, Codable, Equatable, Hashable {
-    public var monetary: Nullable<BillingCreditGrantsResourceAmountMonetary>
+    public var monetary: Nullable<BillingCreditGrantsResourceMonetaryAmount>
     public var type: BillingCreditGrantsResourceAmountType
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(monetary: Nullable<BillingCreditGrantsResourceAmountMonetary>, type: BillingCreditGrantsResourceAmountType, unknownFields: [String: JSONValue]? = nil) {
+    public init(monetary: Nullable<BillingCreditGrantsResourceMonetaryAmount>, type: BillingCreditGrantsResourceAmountType, unknownFields: [String: JSONValue]? = nil) {
         self.monetary = monetary
         self.type = type
         self.unknownFields = unknownFields
@@ -3165,7 +2885,7 @@ public struct BillingCreditGrantsResourceAmount: Sendable, Codable, Equatable, H
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.monetary = try container.decode(Nullable<BillingCreditGrantsResourceAmountMonetary>.self, forKey: .monetary)
+        self.monetary = try container.decodeIfPresent(Nullable<BillingCreditGrantsResourceMonetaryAmount>.self, forKey: .monetary) ?? .null
         self.type = try container.decode(BillingCreditGrantsResourceAmountType.self, forKey: .type)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
@@ -3251,7 +2971,7 @@ public struct BillingCreditGrantsResourceApplicablePrice: Sendable, Codable, Equ
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.id = try container.decode(Nullable<String>.self, forKey: .id)
+        self.id = try container.decodeIfPresent(Nullable<String>.self, forKey: .id) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -3272,26 +2992,6 @@ public struct BillingCreditGrantsResourceApplicablePrice: Sendable, Codable, Equ
                     try? container.encode(value, forKey: codingKey)
                 }
             }
-        }
-    }
-}
-
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum BillingCreditGrantsResourceBalanceCreditCreditsApplicationInvoiceVoided: Sendable, Codable, Equatable, Hashable {
-    case billingCreditGrantsResourceBalanceCreditsApplicationInvoiceVoided(BillingCreditGrantsResourceBalanceCreditsApplicationInvoiceVoided)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(BillingCreditGrantsResourceBalanceCreditsApplicationInvoiceVoided.self) { self = .billingCreditGrantsResourceBalanceCreditsApplicationInvoiceVoided(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .billingCreditGrantsResourceBalanceCreditsApplicationInvoiceVoided(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
         }
     }
 }
@@ -3332,13 +3032,13 @@ public enum BillingCreditGrantsResourceBalanceCreditType: Sendable, Equatable, H
 
 public struct BillingCreditGrantsResourceBalanceCredit: Sendable, Codable, Equatable, Hashable {
     public var amount: BillingCreditGrantsResourceAmount
-    public var creditsApplicationInvoiceVoided: Nullable<BillingCreditGrantsResourceBalanceCreditCreditsApplicationInvoiceVoided>
+    public var creditsApplicationInvoiceVoided: Nullable<BillingCreditGrantsResourceBalanceCreditsApplicationInvoiceVoided>
     public var type: BillingCreditGrantsResourceBalanceCreditType
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(amount: BillingCreditGrantsResourceAmount, creditsApplicationInvoiceVoided: Nullable<BillingCreditGrantsResourceBalanceCreditCreditsApplicationInvoiceVoided>, type: BillingCreditGrantsResourceBalanceCreditType, unknownFields: [String: JSONValue]? = nil) {
+    public init(amount: BillingCreditGrantsResourceAmount, creditsApplicationInvoiceVoided: Nullable<BillingCreditGrantsResourceBalanceCreditsApplicationInvoiceVoided>, type: BillingCreditGrantsResourceBalanceCreditType, unknownFields: [String: JSONValue]? = nil) {
         self.amount = amount
         self.creditsApplicationInvoiceVoided = creditsApplicationInvoiceVoided
         self.type = type
@@ -3354,7 +3054,7 @@ public struct BillingCreditGrantsResourceBalanceCredit: Sendable, Codable, Equat
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.amount = try container.decode(BillingCreditGrantsResourceAmount.self, forKey: .amount)
-        self.creditsApplicationInvoiceVoided = try container.decode(Nullable<BillingCreditGrantsResourceBalanceCreditCreditsApplicationInvoiceVoided>.self, forKey: .creditsApplicationInvoiceVoided)
+        self.creditsApplicationInvoiceVoided = try container.decodeIfPresent(Nullable<BillingCreditGrantsResourceBalanceCreditsApplicationInvoiceVoided>.self, forKey: .creditsApplicationInvoiceVoided) ?? .null
         self.type = try container.decode(BillingCreditGrantsResourceBalanceCreditType.self, forKey: .type)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
@@ -3476,26 +3176,6 @@ public struct BillingCreditGrantsResourceBalanceCreditsApplied: Sendable, Codabl
     }
 }
 
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum BillingCreditGrantsResourceBalanceDebitCreditsApplied: Sendable, Codable, Equatable, Hashable {
-    case billingCreditGrantsResourceBalanceCreditsApplied(BillingCreditGrantsResourceBalanceCreditsApplied)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(BillingCreditGrantsResourceBalanceCreditsApplied.self) { self = .billingCreditGrantsResourceBalanceCreditsApplied(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .billingCreditGrantsResourceBalanceCreditsApplied(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
 /// Lossless enum: values Stripe documents plus any value the API
 /// adds later, kept in `undocumented` instead of dropped.
 public enum BillingCreditGrantsResourceBalanceDebitType: Sendable, Equatable, Hashable, LosslessEnum {
@@ -3535,13 +3215,13 @@ public enum BillingCreditGrantsResourceBalanceDebitType: Sendable, Equatable, Ha
 
 public struct BillingCreditGrantsResourceBalanceDebit: Sendable, Codable, Equatable, Hashable {
     public var amount: BillingCreditGrantsResourceAmount
-    public var creditsApplied: Nullable<BillingCreditGrantsResourceBalanceDebitCreditsApplied>
+    public var creditsApplied: Nullable<BillingCreditGrantsResourceBalanceCreditsApplied>
     public var type: BillingCreditGrantsResourceBalanceDebitType
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(amount: BillingCreditGrantsResourceAmount, creditsApplied: Nullable<BillingCreditGrantsResourceBalanceDebitCreditsApplied>, type: BillingCreditGrantsResourceBalanceDebitType, unknownFields: [String: JSONValue]? = nil) {
+    public init(amount: BillingCreditGrantsResourceAmount, creditsApplied: Nullable<BillingCreditGrantsResourceBalanceCreditsApplied>, type: BillingCreditGrantsResourceBalanceDebitType, unknownFields: [String: JSONValue]? = nil) {
         self.amount = amount
         self.creditsApplied = creditsApplied
         self.type = type
@@ -3557,7 +3237,7 @@ public struct BillingCreditGrantsResourceBalanceDebit: Sendable, Codable, Equata
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.amount = try container.decode(BillingCreditGrantsResourceAmount.self, forKey: .amount)
-        self.creditsApplied = try container.decode(Nullable<BillingCreditGrantsResourceBalanceDebitCreditsApplied>.self, forKey: .creditsApplied)
+        self.creditsApplied = try container.decodeIfPresent(Nullable<BillingCreditGrantsResourceBalanceCreditsApplied>.self, forKey: .creditsApplied) ?? .null
         self.type = try container.decode(BillingCreditGrantsResourceBalanceDebitType.self, forKey: .type)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
@@ -3710,28 +3390,8 @@ public struct BillingCreditGrantsResourceScope: Sendable, Codable, Equatable, Ha
     }
 }
 
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum BillingDetailsAddress: Sendable, Codable, Equatable, Hashable {
-    case address(Address)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(Address.self) { self = .address(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .address(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
 public struct BillingDetails: Sendable, Codable, Equatable, Hashable {
-    public var address: Nullable<BillingDetailsAddress>
+    public var address: Nullable<Address>
     public var email: Nullable<String>
     public var name: Nullable<String>
     public var phone: Nullable<String>
@@ -3740,7 +3400,7 @@ public struct BillingDetails: Sendable, Codable, Equatable, Hashable {
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(address: Nullable<BillingDetailsAddress>, email: Nullable<String>, name: Nullable<String>, phone: Nullable<String>, taxId: Nullable<String>, unknownFields: [String: JSONValue]? = nil) {
+    public init(address: Nullable<Address>, email: Nullable<String>, name: Nullable<String>, phone: Nullable<String>, taxId: Nullable<String>, unknownFields: [String: JSONValue]? = nil) {
         self.address = address
         self.email = email
         self.name = name
@@ -3759,11 +3419,11 @@ public struct BillingDetails: Sendable, Codable, Equatable, Hashable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.address = try container.decode(Nullable<BillingDetailsAddress>.self, forKey: .address)
-        self.email = try container.decode(Nullable<String>.self, forKey: .email)
-        self.name = try container.decode(Nullable<String>.self, forKey: .name)
-        self.phone = try container.decode(Nullable<String>.self, forKey: .phone)
-        self.taxId = try container.decode(Nullable<String>.self, forKey: .taxId)
+        self.address = try container.decodeIfPresent(Nullable<Address>.self, forKey: .address) ?? .null
+        self.email = try container.decodeIfPresent(Nullable<String>.self, forKey: .email) ?? .null
+        self.name = try container.decodeIfPresent(Nullable<String>.self, forKey: .name) ?? .null
+        self.phone = try container.decodeIfPresent(Nullable<String>.self, forKey: .phone) ?? .null
+        self.taxId = try container.decodeIfPresent(Nullable<String>.self, forKey: .taxId) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -3888,7 +3548,7 @@ public struct BillingMeterResourceBillingMeterEventAdjustmentCancel: Sendable, C
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.identifier = try container.decode(Nullable<String>.self, forKey: .identifier)
+        self.identifier = try container.decodeIfPresent(Nullable<String>.self, forKey: .identifier) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -3930,7 +3590,7 @@ public struct BillingMeterResourceBillingMeterStatusTransitions: Sendable, Codab
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.deactivatedAt = try container.decode(Nullable<StripeTimestamp>.self, forKey: .deactivatedAt)
+        self.deactivatedAt = try container.decodeIfPresent(Nullable<StripeTimestamp>.self, forKey: .deactivatedAt) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -4194,17 +3854,17 @@ public struct BillingPortalConfiguration: Sendable, Codable, Equatable, Hashable
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.active = try container.decode(Bool.self, forKey: .active)
-        self.application = try container.decode(Nullable<BillingPortalConfigurationApplication>.self, forKey: .application)
+        self.application = try container.decodeIfPresent(Nullable<BillingPortalConfigurationApplication>.self, forKey: .application) ?? .null
         self.businessProfile = try container.decode(PortalBusinessProfile.self, forKey: .businessProfile)
         self.created = try container.decode(StripeTimestamp.self, forKey: .created)
-        self.defaultReturnUrl = try container.decode(Nullable<String>.self, forKey: .defaultReturnUrl)
+        self.defaultReturnUrl = try container.decodeIfPresent(Nullable<String>.self, forKey: .defaultReturnUrl) ?? .null
         self.features = try container.decode(PortalFeatures.self, forKey: .features)
         self.id = try container.decode(String.self, forKey: .id)
         self.isDefault = try container.decode(Bool.self, forKey: .isDefault)
         self.livemode = try container.decode(Bool.self, forKey: .livemode)
         self.loginPage = try container.decode(PortalLoginPage.self, forKey: .loginPage)
-        self.metadata = try container.decode(Nullable<[String: String]>.self, forKey: .metadata)
-        self.name = try container.decode(Nullable<String>.self, forKey: .name)
+        self.metadata = try container.decodeIfPresent(Nullable<[String: String]>.self, forKey: .metadata) ?? .null
+        self.name = try container.decodeIfPresent(Nullable<String>.self, forKey: .name) ?? .null
         self.object = try container.decode(BillingPortalConfigurationObject.self, forKey: .object)
         self.updated = try container.decode(StripeTimestamp.self, forKey: .updated)
         var captured: [String: JSONValue] = [:]
@@ -4324,50 +3984,6 @@ public struct BillingPortalConfigurationUpdatedEvent: Sendable, Codable, Equatab
                     try? container.encode(value, forKey: codingKey)
                 }
             }
-        }
-    }
-}
-
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum BillingPortalSessionAfterExpiration: Sendable, Codable, Equatable, Hashable {
-    case portalAfterExpiration(PortalAfterExpiration)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let raw = try? container.decode([String: JSONValue].self),
-           let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
-            if tag == "customer_login" { self = .portalAfterExpiration(try container.decode(PortalAfterExpiration.self)); return }
-        }
-        if let value = try? container.decode(PortalAfterExpiration.self) { self = .portalAfterExpiration(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .portalAfterExpiration(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum BillingPortalSessionFlow: Sendable, Codable, Equatable, Hashable {
-    case portalFlowsFlow(PortalFlowsFlow)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(PortalFlowsFlow.self) { self = .portalFlowsFlow(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .portalFlowsFlow(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
         }
     }
 }
@@ -4573,12 +4189,12 @@ public enum BillingPortalSessionObject: Sendable, Equatable, Hashable, LosslessE
 }
 
 public struct BillingPortalSession: Sendable, Codable, Equatable, Hashable, StripeIdentified {
-    public var afterExpiration: Nullable<BillingPortalSessionAfterExpiration>?
+    public var afterExpiration: Nullable<PortalAfterExpiration>?
     public var configuration: Expandable<BillingPortalConfiguration>
     public var created: StripeTimestamp
     public var customer: String
     public var customerAccount: Nullable<String>
-    public var flow: Nullable<BillingPortalSessionFlow>
+    public var flow: Nullable<PortalFlowsFlow>
     public var id: String
     public var livemode: Bool
     public var locale: Nullable<BillingPortalSessionLocale>
@@ -4590,7 +4206,7 @@ public struct BillingPortalSession: Sendable, Codable, Equatable, Hashable, Stri
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(afterExpiration: Nullable<BillingPortalSessionAfterExpiration>? = nil, configuration: Expandable<BillingPortalConfiguration>, created: StripeTimestamp, customer: String, customerAccount: Nullable<String>, flow: Nullable<BillingPortalSessionFlow>, id: String, livemode: Bool, locale: Nullable<BillingPortalSessionLocale>, object: BillingPortalSessionObject, onBehalfOf: Nullable<String>, returnUrl: Nullable<String>, url: String, unknownFields: [String: JSONValue]? = nil) {
+    public init(afterExpiration: Nullable<PortalAfterExpiration>? = nil, configuration: Expandable<BillingPortalConfiguration>, created: StripeTimestamp, customer: String, customerAccount: Nullable<String>, flow: Nullable<PortalFlowsFlow>, id: String, livemode: Bool, locale: Nullable<BillingPortalSessionLocale>, object: BillingPortalSessionObject, onBehalfOf: Nullable<String>, returnUrl: Nullable<String>, url: String, unknownFields: [String: JSONValue]? = nil) {
         self.afterExpiration = afterExpiration
         self.configuration = configuration
         self.created = created
@@ -4625,18 +4241,18 @@ public struct BillingPortalSession: Sendable, Codable, Equatable, Hashable, Stri
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.afterExpiration = try container.decodeIfPresent(Nullable<BillingPortalSessionAfterExpiration>.self, forKey: .afterExpiration)
+        self.afterExpiration = try container.decodeIfPresent(Nullable<PortalAfterExpiration>.self, forKey: .afterExpiration)
         self.configuration = try container.decode(Expandable<BillingPortalConfiguration>.self, forKey: .configuration)
         self.created = try container.decode(StripeTimestamp.self, forKey: .created)
         self.customer = try container.decode(String.self, forKey: .customer)
-        self.customerAccount = try container.decode(Nullable<String>.self, forKey: .customerAccount)
-        self.flow = try container.decode(Nullable<BillingPortalSessionFlow>.self, forKey: .flow)
+        self.customerAccount = try container.decodeIfPresent(Nullable<String>.self, forKey: .customerAccount) ?? .null
+        self.flow = try container.decodeIfPresent(Nullable<PortalFlowsFlow>.self, forKey: .flow) ?? .null
         self.id = try container.decode(String.self, forKey: .id)
         self.livemode = try container.decode(Bool.self, forKey: .livemode)
-        self.locale = try container.decode(Nullable<BillingPortalSessionLocale>.self, forKey: .locale)
+        self.locale = try container.decodeIfPresent(Nullable<BillingPortalSessionLocale>.self, forKey: .locale) ?? .null
         self.object = try container.decode(BillingPortalSessionObject.self, forKey: .object)
-        self.onBehalfOf = try container.decode(Nullable<String>.self, forKey: .onBehalfOf)
-        self.returnUrl = try container.decode(Nullable<String>.self, forKey: .returnUrl)
+        self.onBehalfOf = try container.decodeIfPresent(Nullable<String>.self, forKey: .onBehalfOf) ?? .null
+        self.returnUrl = try container.decodeIfPresent(Nullable<String>.self, forKey: .returnUrl) ?? .null
         self.url = try container.decode(String.self, forKey: .url)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {

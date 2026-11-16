@@ -24,7 +24,7 @@ public struct CustomLogo: Sendable, Codable, Equatable, Hashable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.contentType = try container.decode(Nullable<String>.self, forKey: .contentType)
+        self.contentType = try container.decodeIfPresent(Nullable<String>.self, forKey: .contentType) ?? .null
         self.url = try container.decode(String.self, forKey: .url)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
@@ -74,9 +74,9 @@ public struct CustomUnitAmount: Sendable, Codable, Equatable, Hashable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.maximum = try container.decode(Nullable<Int>.self, forKey: .maximum)
-        self.minimum = try container.decode(Nullable<Int>.self, forKey: .minimum)
-        self.preset = try container.decode(Nullable<Int>.self, forKey: .preset)
+        self.maximum = try container.decodeIfPresent(Nullable<Int>.self, forKey: .maximum) ?? .null
+        self.minimum = try container.decodeIfPresent(Nullable<Int>.self, forKey: .minimum) ?? .null
+        self.preset = try container.decodeIfPresent(Nullable<Int>.self, forKey: .preset) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {

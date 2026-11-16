@@ -24,8 +24,8 @@ public struct OnlineAcceptance: Sendable, Codable, Equatable, Hashable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.ipAddress = try container.decode(Nullable<String>.self, forKey: .ipAddress)
-        self.userAgent = try container.decode(Nullable<String>.self, forKey: .userAgent)
+        self.ipAddress = try container.decodeIfPresent(Nullable<String>.self, forKey: .ipAddress) ?? .null
+        self.userAgent = try container.decodeIfPresent(Nullable<String>.self, forKey: .userAgent) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {

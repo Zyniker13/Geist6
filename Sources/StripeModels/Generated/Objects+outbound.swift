@@ -245,14 +245,14 @@ public struct OutboundPaymentsPaymentMethodDetailsUsBankAccount: Sendable, Codab
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.accountHolderType = try container.decode(Nullable<InboundTransfersPaymentMethodDetailsUsBankAccountAccountHolderType>.self, forKey: .accountHolderType)
-        self.accountType = try container.decode(Nullable<CheckoutFinancialConnectionsPaymentMethodOptionsFiltersAccountSubcategoriesItem>.self, forKey: .accountType)
-        self.bankName = try container.decode(Nullable<String>.self, forKey: .bankName)
-        self.fingerprint = try container.decode(Nullable<String>.self, forKey: .fingerprint)
-        self.last4 = try container.decode(Nullable<String>.self, forKey: .last4)
+        self.accountHolderType = try container.decodeIfPresent(Nullable<InboundTransfersPaymentMethodDetailsUsBankAccountAccountHolderType>.self, forKey: .accountHolderType) ?? .null
+        self.accountType = try container.decodeIfPresent(Nullable<CheckoutFinancialConnectionsPaymentMethodOptionsFiltersAccountSubcategoriesItem>.self, forKey: .accountType) ?? .null
+        self.bankName = try container.decodeIfPresent(Nullable<String>.self, forKey: .bankName) ?? .null
+        self.fingerprint = try container.decodeIfPresent(Nullable<String>.self, forKey: .fingerprint) ?? .null
+        self.last4 = try container.decodeIfPresent(Nullable<String>.self, forKey: .last4) ?? .null
         self.mandate = try container.decodeIfPresent(Expandable<Mandate>.self, forKey: .mandate)
         self.network = try container.decode(OutboundPaymentsPaymentMethodDetailsUsBankAccountNetwork.self, forKey: .network)
-        self.routingNumber = try container.decode(Nullable<String>.self, forKey: .routingNumber)
+        self.routingNumber = try container.decodeIfPresent(Nullable<String>.self, forKey: .routingNumber) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -426,14 +426,14 @@ public struct OutboundTransfersPaymentMethodDetailsUsBankAccount: Sendable, Coda
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.accountHolderType = try container.decode(Nullable<InboundTransfersPaymentMethodDetailsUsBankAccountAccountHolderType>.self, forKey: .accountHolderType)
-        self.accountType = try container.decode(Nullable<CheckoutFinancialConnectionsPaymentMethodOptionsFiltersAccountSubcategoriesItem>.self, forKey: .accountType)
-        self.bankName = try container.decode(Nullable<String>.self, forKey: .bankName)
-        self.fingerprint = try container.decode(Nullable<String>.self, forKey: .fingerprint)
-        self.last4 = try container.decode(Nullable<String>.self, forKey: .last4)
+        self.accountHolderType = try container.decodeIfPresent(Nullable<InboundTransfersPaymentMethodDetailsUsBankAccountAccountHolderType>.self, forKey: .accountHolderType) ?? .null
+        self.accountType = try container.decodeIfPresent(Nullable<CheckoutFinancialConnectionsPaymentMethodOptionsFiltersAccountSubcategoriesItem>.self, forKey: .accountType) ?? .null
+        self.bankName = try container.decodeIfPresent(Nullable<String>.self, forKey: .bankName) ?? .null
+        self.fingerprint = try container.decodeIfPresent(Nullable<String>.self, forKey: .fingerprint) ?? .null
+        self.last4 = try container.decodeIfPresent(Nullable<String>.self, forKey: .last4) ?? .null
         self.mandate = try container.decodeIfPresent(Expandable<Mandate>.self, forKey: .mandate)
         self.network = try container.decode(OutboundPaymentsPaymentMethodDetailsUsBankAccountNetwork.self, forKey: .network)
-        self.routingNumber = try container.decode(Nullable<String>.self, forKey: .routingNumber)
+        self.routingNumber = try container.decodeIfPresent(Nullable<String>.self, forKey: .routingNumber) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {

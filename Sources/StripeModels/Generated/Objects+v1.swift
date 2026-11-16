@@ -307,7 +307,7 @@ public struct V1AccountApplicationAuthorizedEvent: Sendable, Codable, Equatable,
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1AccountApplicationAuthorizedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1AccountApplicationAuthorizedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1AccountApplicationAuthorizedEventData.self, forKey: .data)
@@ -591,7 +591,7 @@ public struct V1AccountApplicationDeauthorizedEvent: Sendable, Codable, Equatabl
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1AccountApplicationDeauthorizedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1AccountApplicationDeauthorizedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1AccountApplicationDeauthorizedEventData.self, forKey: .data)
@@ -875,7 +875,7 @@ public struct V1AccountExternalAccountCreatedEvent: Sendable, Codable, Equatable
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1AccountExternalAccountCreatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1AccountExternalAccountCreatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1AccountExternalAccountCreatedEventData.self, forKey: .data)
@@ -1159,7 +1159,7 @@ public struct V1AccountExternalAccountDeletedEvent: Sendable, Codable, Equatable
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1AccountExternalAccountDeletedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1AccountExternalAccountDeletedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1AccountExternalAccountDeletedEventData.self, forKey: .data)
@@ -1526,7 +1526,7 @@ public struct V1AccountExternalAccountUpdatedEvent: Sendable, Codable, Equatable
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1AccountExternalAccountUpdatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1AccountExternalAccountUpdatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1AccountExternalAccountUpdatedEventData.self, forKey: .data)
@@ -1948,7 +1948,7 @@ public struct V1AccountUpdatedEvent: Sendable, Codable, Equatable, Hashable, Str
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1AccountUpdatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1AccountUpdatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1AccountUpdatedEventData.self, forKey: .data)
@@ -2289,7 +2289,7 @@ public struct V1ApplicationFeeCreatedEvent: Sendable, Codable, Equatable, Hashab
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1ApplicationFeeCreatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1ApplicationFeeCreatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1ApplicationFeeCreatedEventData.self, forKey: .data)
@@ -2713,7 +2713,7 @@ public struct V1ApplicationFeeRefundUpdatedEvent: Sendable, Codable, Equatable, 
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1ApplicationFeeRefundUpdatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1ApplicationFeeRefundUpdatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1ApplicationFeeRefundUpdatedEventData.self, forKey: .data)
@@ -3137,7 +3137,7 @@ public struct V1ApplicationFeeRefundedEvent: Sendable, Codable, Equatable, Hasha
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1ApplicationFeeRefundedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1ApplicationFeeRefundedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1ApplicationFeeRefundedEventData.self, forKey: .data)
@@ -3371,7 +3371,7 @@ public struct V1BalanceAvailableEventRelatedObject: Sendable, Codable, Equatable
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.id = try container.decode(Nullable<String>.self, forKey: .id)
+        self.id = try container.decodeIfPresent(Nullable<String>.self, forKey: .id) ?? .null
         self.type = try container.decode(BalanceObject.self, forKey: .type)
         self.url = try container.decode(String.self, forKey: .url)
         var captured: [String: JSONValue] = [:]
@@ -3478,7 +3478,7 @@ public struct V1BalanceAvailableEvent: Sendable, Codable, Equatable, Hashable, S
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1BalanceAvailableEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1BalanceAvailableEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1BalanceAvailableEventData.self, forKey: .data)
@@ -3795,7 +3795,7 @@ public struct V1BalanceSettingsUpdatedEventRelatedObject: Sendable, Codable, Equ
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.id = try container.decode(Nullable<String>.self, forKey: .id)
+        self.id = try container.decodeIfPresent(Nullable<String>.self, forKey: .id) ?? .null
         self.type = try container.decode(BalanceSettingsObject.self, forKey: .type)
         self.url = try container.decode(String.self, forKey: .url)
         var captured: [String: JSONValue] = [:]
@@ -3902,7 +3902,7 @@ public struct V1BalanceSettingsUpdatedEvent: Sendable, Codable, Equatable, Hasha
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1BalanceSettingsUpdatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1BalanceSettingsUpdatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1BalanceSettingsUpdatedEventData.self, forKey: .data)
@@ -4243,7 +4243,7 @@ public struct V1BillingAlertTriggeredEvent: Sendable, Codable, Equatable, Hashab
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1BillingAlertTriggeredEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1BillingAlertTriggeredEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1BillingAlertTriggeredEventData.self, forKey: .data)
@@ -4584,7 +4584,7 @@ public struct V1BillingCreditBalanceTransactionCreatedEvent: Sendable, Codable, 
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1BillingCreditBalanceTransactionCreatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1BillingCreditBalanceTransactionCreatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1BillingCreditBalanceTransactionCreatedEventData.self, forKey: .data)
@@ -4925,7 +4925,7 @@ public struct V1BillingCreditGrantCreatedEvent: Sendable, Codable, Equatable, Ha
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1BillingCreditGrantCreatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1BillingCreditGrantCreatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1BillingCreditGrantCreatedEventData.self, forKey: .data)
@@ -5349,7 +5349,7 @@ public struct V1BillingCreditGrantUpdatedEvent: Sendable, Codable, Equatable, Ha
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1BillingCreditGrantUpdatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1BillingCreditGrantUpdatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1BillingCreditGrantUpdatedEventData.self, forKey: .data)
@@ -5690,7 +5690,7 @@ public struct V1BillingMeterCreatedEvent: Sendable, Codable, Equatable, Hashable
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1BillingMeterCreatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1BillingMeterCreatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1BillingMeterCreatedEventData.self, forKey: .data)
@@ -6114,7 +6114,7 @@ public struct V1BillingMeterDeactivatedEvent: Sendable, Codable, Equatable, Hash
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1BillingMeterDeactivatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1BillingMeterDeactivatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1BillingMeterDeactivatedEventData.self, forKey: .data)
@@ -6722,7 +6722,7 @@ public struct V1BillingMeterErrorReportTriggeredEvent: Sendable, Codable, Equata
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1BillingMeterErrorReportTriggeredEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1BillingMeterErrorReportTriggeredEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1BillingMeterErrorReportTriggeredEventData.self, forKey: .data)
@@ -7217,7 +7217,7 @@ public struct V1BillingMeterNoMeterFoundEvent: Sendable, Codable, Equatable, Has
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1BillingMeterNoMeterFoundEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1BillingMeterNoMeterFoundEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1BillingMeterNoMeterFoundEventData.self, forKey: .data)
@@ -7639,7 +7639,7 @@ public struct V1BillingMeterReactivatedEvent: Sendable, Codable, Equatable, Hash
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1BillingMeterReactivatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1BillingMeterReactivatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1BillingMeterReactivatedEventData.self, forKey: .data)
@@ -8063,7 +8063,7 @@ public struct V1BillingMeterUpdatedEvent: Sendable, Codable, Equatable, Hashable
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1BillingMeterUpdatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1BillingMeterUpdatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1BillingMeterUpdatedEventData.self, forKey: .data)
@@ -8404,7 +8404,7 @@ public struct V1BillingPortalConfigurationCreatedEvent: Sendable, Codable, Equat
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1BillingPortalConfigurationCreatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1BillingPortalConfigurationCreatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1BillingPortalConfigurationCreatedEventData.self, forKey: .data)
@@ -8828,7 +8828,7 @@ public struct V1BillingPortalConfigurationUpdatedEvent: Sendable, Codable, Equat
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1BillingPortalConfigurationUpdatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1BillingPortalConfigurationUpdatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1BillingPortalConfigurationUpdatedEventData.self, forKey: .data)
@@ -9114,7 +9114,7 @@ public struct V1BillingPortalSessionCreatedEvent: Sendable, Codable, Equatable, 
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1BillingPortalSessionCreatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1BillingPortalSessionCreatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1BillingPortalSessionCreatedEventData.self, forKey: .data)
@@ -9536,7 +9536,7 @@ public struct V1CapabilityUpdatedEvent: Sendable, Codable, Equatable, Hashable, 
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1CapabilityUpdatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1CapabilityUpdatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1CapabilityUpdatedEventData.self, forKey: .data)
@@ -9853,7 +9853,7 @@ public struct V1CashBalanceFundsAvailableEventRelatedObject: Sendable, Codable, 
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.id = try container.decode(Nullable<String>.self, forKey: .id)
+        self.id = try container.decodeIfPresent(Nullable<String>.self, forKey: .id) ?? .null
         self.type = try container.decode(CashBalanceObject.self, forKey: .type)
         self.url = try container.decode(String.self, forKey: .url)
         var captured: [String: JSONValue] = [:]
@@ -9960,7 +9960,7 @@ public struct V1CashBalanceFundsAvailableEvent: Sendable, Codable, Equatable, Ha
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1CashBalanceFundsAvailableEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1CashBalanceFundsAvailableEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1CashBalanceFundsAvailableEventData.self, forKey: .data)
@@ -10384,7 +10384,7 @@ public struct V1ChargeCapturedEvent: Sendable, Codable, Equatable, Hashable, Str
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1ChargeCapturedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1ChargeCapturedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1ChargeCapturedEventData.self, forKey: .data)
@@ -10808,7 +10808,7 @@ public struct V1ChargeDisputeClosedEvent: Sendable, Codable, Equatable, Hashable
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1ChargeDisputeClosedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1ChargeDisputeClosedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1ChargeDisputeClosedEventData.self, forKey: .data)
@@ -11149,7 +11149,7 @@ public struct V1ChargeDisputeCreatedEvent: Sendable, Codable, Equatable, Hashabl
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1ChargeDisputeCreatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1ChargeDisputeCreatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1ChargeDisputeCreatedEventData.self, forKey: .data)
@@ -11573,7 +11573,7 @@ public struct V1ChargeDisputeFundsReinstatedEvent: Sendable, Codable, Equatable,
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1ChargeDisputeFundsReinstatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1ChargeDisputeFundsReinstatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1ChargeDisputeFundsReinstatedEventData.self, forKey: .data)
@@ -11997,7 +11997,7 @@ public struct V1ChargeDisputeFundsWithdrawnEvent: Sendable, Codable, Equatable, 
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1ChargeDisputeFundsWithdrawnEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1ChargeDisputeFundsWithdrawnEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1ChargeDisputeFundsWithdrawnEventData.self, forKey: .data)
@@ -12421,7 +12421,7 @@ public struct V1ChargeDisputeUpdatedEvent: Sendable, Codable, Equatable, Hashabl
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1ChargeDisputeUpdatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1ChargeDisputeUpdatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1ChargeDisputeUpdatedEventData.self, forKey: .data)
@@ -12845,7 +12845,7 @@ public struct V1ChargeExpiredEvent: Sendable, Codable, Equatable, Hashable, Stri
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1ChargeExpiredEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1ChargeExpiredEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1ChargeExpiredEventData.self, forKey: .data)
@@ -13269,7 +13269,7 @@ public struct V1ChargeFailedEvent: Sendable, Codable, Equatable, Hashable, Strip
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1ChargeFailedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1ChargeFailedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1ChargeFailedEventData.self, forKey: .data)
@@ -13693,7 +13693,7 @@ public struct V1ChargePendingEvent: Sendable, Codable, Equatable, Hashable, Stri
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1ChargePendingEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1ChargePendingEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1ChargePendingEventData.self, forKey: .data)
@@ -14117,7 +14117,7 @@ public struct V1ChargeRefundUpdatedEvent: Sendable, Codable, Equatable, Hashable
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1ChargeRefundUpdatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1ChargeRefundUpdatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1ChargeRefundUpdatedEventData.self, forKey: .data)
@@ -14541,7 +14541,7 @@ public struct V1ChargeRefundedEvent: Sendable, Codable, Equatable, Hashable, Str
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1ChargeRefundedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1ChargeRefundedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1ChargeRefundedEventData.self, forKey: .data)
@@ -14965,7 +14965,7 @@ public struct V1ChargeSucceededEvent: Sendable, Codable, Equatable, Hashable, St
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1ChargeSucceededEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1ChargeSucceededEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1ChargeSucceededEventData.self, forKey: .data)
@@ -15389,7 +15389,7 @@ public struct V1ChargeUpdatedEvent: Sendable, Codable, Equatable, Hashable, Stri
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1ChargeUpdatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1ChargeUpdatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1ChargeUpdatedEventData.self, forKey: .data)
@@ -15813,7 +15813,7 @@ public struct V1CheckoutSessionAsyncPaymentFailedEvent: Sendable, Codable, Equat
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1CheckoutSessionAsyncPaymentFailedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1CheckoutSessionAsyncPaymentFailedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1CheckoutSessionAsyncPaymentFailedEventData.self, forKey: .data)
@@ -16237,7 +16237,7 @@ public struct V1CheckoutSessionAsyncPaymentSucceededEvent: Sendable, Codable, Eq
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1CheckoutSessionAsyncPaymentSucceededEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1CheckoutSessionAsyncPaymentSucceededEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1CheckoutSessionAsyncPaymentSucceededEventData.self, forKey: .data)
@@ -16661,7 +16661,7 @@ public struct V1CheckoutSessionCompletedEvent: Sendable, Codable, Equatable, Has
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1CheckoutSessionCompletedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1CheckoutSessionCompletedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1CheckoutSessionCompletedEventData.self, forKey: .data)
@@ -17085,7 +17085,7 @@ public struct V1CheckoutSessionExpiredEvent: Sendable, Codable, Equatable, Hasha
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1CheckoutSessionExpiredEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1CheckoutSessionExpiredEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1CheckoutSessionExpiredEventData.self, forKey: .data)
@@ -17509,7 +17509,7 @@ public struct V1ClimateOrderCanceledEvent: Sendable, Codable, Equatable, Hashabl
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1ClimateOrderCanceledEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1ClimateOrderCanceledEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1ClimateOrderCanceledEventData.self, forKey: .data)
@@ -17850,7 +17850,7 @@ public struct V1ClimateOrderCreatedEvent: Sendable, Codable, Equatable, Hashable
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1ClimateOrderCreatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1ClimateOrderCreatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1ClimateOrderCreatedEventData.self, forKey: .data)
@@ -18274,7 +18274,7 @@ public struct V1ClimateOrderDelayedEvent: Sendable, Codable, Equatable, Hashable
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1ClimateOrderDelayedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1ClimateOrderDelayedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1ClimateOrderDelayedEventData.self, forKey: .data)
@@ -18698,7 +18698,7 @@ public struct V1ClimateOrderDeliveredEvent: Sendable, Codable, Equatable, Hashab
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1ClimateOrderDeliveredEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1ClimateOrderDeliveredEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1ClimateOrderDeliveredEventData.self, forKey: .data)
@@ -19122,7 +19122,7 @@ public struct V1ClimateOrderProductSubstitutedEvent: Sendable, Codable, Equatabl
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1ClimateOrderProductSubstitutedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1ClimateOrderProductSubstitutedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1ClimateOrderProductSubstitutedEventData.self, forKey: .data)
@@ -19463,7 +19463,7 @@ public struct V1ClimateProductCreatedEvent: Sendable, Codable, Equatable, Hashab
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1ClimateProductCreatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1ClimateProductCreatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1ClimateProductCreatedEventData.self, forKey: .data)
@@ -19887,7 +19887,7 @@ public struct V1ClimateProductPricingUpdatedEvent: Sendable, Codable, Equatable,
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1ClimateProductPricingUpdatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1ClimateProductPricingUpdatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1ClimateProductPricingUpdatedEventData.self, forKey: .data)
@@ -20228,7 +20228,7 @@ public struct V1CouponCreatedEvent: Sendable, Codable, Equatable, Hashable, Stri
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1CouponCreatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1CouponCreatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1CouponCreatedEventData.self, forKey: .data)
@@ -20569,7 +20569,7 @@ public struct V1CouponDeletedEvent: Sendable, Codable, Equatable, Hashable, Stri
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1CouponDeletedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1CouponDeletedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1CouponDeletedEventData.self, forKey: .data)
@@ -20993,7 +20993,7 @@ public struct V1CouponUpdatedEvent: Sendable, Codable, Equatable, Hashable, Stri
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1CouponUpdatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1CouponUpdatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1CouponUpdatedEventData.self, forKey: .data)
@@ -21334,7 +21334,7 @@ public struct V1CreditNoteCreatedEvent: Sendable, Codable, Equatable, Hashable, 
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1CreditNoteCreatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1CreditNoteCreatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1CreditNoteCreatedEventData.self, forKey: .data)
@@ -21758,7 +21758,7 @@ public struct V1CreditNoteUpdatedEvent: Sendable, Codable, Equatable, Hashable, 
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1CreditNoteUpdatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1CreditNoteUpdatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1CreditNoteUpdatedEventData.self, forKey: .data)
@@ -22182,7 +22182,7 @@ public struct V1CreditNoteVoidedEvent: Sendable, Codable, Equatable, Hashable, S
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1CreditNoteVoidedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1CreditNoteVoidedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1CreditNoteVoidedEventData.self, forKey: .data)
@@ -22523,7 +22523,7 @@ public struct V1CustomerCreatedEvent: Sendable, Codable, Equatable, Hashable, St
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1CustomerCreatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1CustomerCreatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1CustomerCreatedEventData.self, forKey: .data)
@@ -22864,7 +22864,7 @@ public struct V1CustomerDeletedEvent: Sendable, Codable, Equatable, Hashable, St
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1CustomerDeletedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1CustomerDeletedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1CustomerDeletedEventData.self, forKey: .data)
@@ -23098,7 +23098,7 @@ public struct V1CustomerDiscountCreatedEventRelatedObject: Sendable, Codable, Eq
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.id = try container.decode(Nullable<String>.self, forKey: .id)
+        self.id = try container.decodeIfPresent(Nullable<String>.self, forKey: .id) ?? .null
         self.type = try container.decode(DeletedDiscountObject.self, forKey: .type)
         self.url = try container.decode(String.self, forKey: .url)
         var captured: [String: JSONValue] = [:]
@@ -23205,7 +23205,7 @@ public struct V1CustomerDiscountCreatedEvent: Sendable, Codable, Equatable, Hash
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1CustomerDiscountCreatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1CustomerDiscountCreatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1CustomerDiscountCreatedEventData.self, forKey: .data)
@@ -23439,7 +23439,7 @@ public struct V1CustomerDiscountDeletedEventRelatedObject: Sendable, Codable, Eq
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.id = try container.decode(Nullable<String>.self, forKey: .id)
+        self.id = try container.decodeIfPresent(Nullable<String>.self, forKey: .id) ?? .null
         self.type = try container.decode(DeletedDiscountObject.self, forKey: .type)
         self.url = try container.decode(String.self, forKey: .url)
         var captured: [String: JSONValue] = [:]
@@ -23546,7 +23546,7 @@ public struct V1CustomerDiscountDeletedEvent: Sendable, Codable, Equatable, Hash
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1CustomerDiscountDeletedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1CustomerDiscountDeletedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1CustomerDiscountDeletedEventData.self, forKey: .data)
@@ -23832,7 +23832,7 @@ public struct V1CustomerDiscountSourceChangedEvent: Sendable, Codable, Equatable
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1CustomerDiscountSourceChangedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1CustomerDiscountSourceChangedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1CustomerDiscountSourceChangedEventData.self, forKey: .data)
@@ -24147,7 +24147,7 @@ public struct V1CustomerDiscountUpdatedEventRelatedObject: Sendable, Codable, Eq
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.id = try container.decode(Nullable<String>.self, forKey: .id)
+        self.id = try container.decodeIfPresent(Nullable<String>.self, forKey: .id) ?? .null
         self.type = try container.decode(DeletedDiscountObject.self, forKey: .type)
         self.url = try container.decode(String.self, forKey: .url)
         var captured: [String: JSONValue] = [:]
@@ -24254,7 +24254,7 @@ public struct V1CustomerDiscountUpdatedEvent: Sendable, Codable, Equatable, Hash
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1CustomerDiscountUpdatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1CustomerDiscountUpdatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1CustomerDiscountUpdatedEventData.self, forKey: .data)
@@ -24595,7 +24595,7 @@ public struct V1CustomerSubscriptionActiveEvent: Sendable, Codable, Equatable, H
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1CustomerSubscriptionActiveEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1CustomerSubscriptionActiveEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1CustomerSubscriptionActiveEventData.self, forKey: .data)
@@ -24936,7 +24936,7 @@ public struct V1CustomerSubscriptionCancelAtChangedEvent: Sendable, Codable, Equ
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1CustomerSubscriptionCancelAtChangedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1CustomerSubscriptionCancelAtChangedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1CustomerSubscriptionCancelAtChangedEventData.self, forKey: .data)
@@ -25277,7 +25277,7 @@ public struct V1CustomerSubscriptionCreatedEvent: Sendable, Codable, Equatable, 
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1CustomerSubscriptionCreatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1CustomerSubscriptionCreatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1CustomerSubscriptionCreatedEventData.self, forKey: .data)
@@ -25618,7 +25618,7 @@ public struct V1CustomerSubscriptionDefaultPaymentMethodChangedEvent: Sendable, 
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1CustomerSubscriptionDefaultPaymentMethodChangedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1CustomerSubscriptionDefaultPaymentMethodChangedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1CustomerSubscriptionDefaultPaymentMethodChangedEventData.self, forKey: .data)
@@ -25959,7 +25959,7 @@ public struct V1CustomerSubscriptionDeletedEvent: Sendable, Codable, Equatable, 
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1CustomerSubscriptionDeletedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1CustomerSubscriptionDeletedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1CustomerSubscriptionDeletedEventData.self, forKey: .data)
@@ -26300,7 +26300,7 @@ public struct V1CustomerSubscriptionIncompleteEvent: Sendable, Codable, Equatabl
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1CustomerSubscriptionIncompleteEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1CustomerSubscriptionIncompleteEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1CustomerSubscriptionIncompleteEventData.self, forKey: .data)
@@ -26641,7 +26641,7 @@ public struct V1CustomerSubscriptionIncompleteExpiredEvent: Sendable, Codable, E
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1CustomerSubscriptionIncompleteExpiredEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1CustomerSubscriptionIncompleteExpiredEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1CustomerSubscriptionIncompleteExpiredEventData.self, forKey: .data)
@@ -26982,7 +26982,7 @@ public struct V1CustomerSubscriptionItemAddedEvent: Sendable, Codable, Equatable
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1CustomerSubscriptionItemAddedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1CustomerSubscriptionItemAddedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1CustomerSubscriptionItemAddedEventData.self, forKey: .data)
@@ -27323,7 +27323,7 @@ public struct V1CustomerSubscriptionItemPriceChangedEvent: Sendable, Codable, Eq
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1CustomerSubscriptionItemPriceChangedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1CustomerSubscriptionItemPriceChangedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1CustomerSubscriptionItemPriceChangedEventData.self, forKey: .data)
@@ -27664,7 +27664,7 @@ public struct V1CustomerSubscriptionItemQuantityChangedEvent: Sendable, Codable,
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1CustomerSubscriptionItemQuantityChangedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1CustomerSubscriptionItemQuantityChangedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1CustomerSubscriptionItemQuantityChangedEventData.self, forKey: .data)
@@ -28005,7 +28005,7 @@ public struct V1CustomerSubscriptionItemRemovedEvent: Sendable, Codable, Equatab
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1CustomerSubscriptionItemRemovedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1CustomerSubscriptionItemRemovedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1CustomerSubscriptionItemRemovedEventData.self, forKey: .data)
@@ -28346,7 +28346,7 @@ public struct V1CustomerSubscriptionItemTaxRatesChangedEvent: Sendable, Codable,
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1CustomerSubscriptionItemTaxRatesChangedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1CustomerSubscriptionItemTaxRatesChangedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1CustomerSubscriptionItemTaxRatesChangedEventData.self, forKey: .data)
@@ -28687,7 +28687,7 @@ public struct V1CustomerSubscriptionPastDueEvent: Sendable, Codable, Equatable, 
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1CustomerSubscriptionPastDueEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1CustomerSubscriptionPastDueEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1CustomerSubscriptionPastDueEventData.self, forKey: .data)
@@ -29111,7 +29111,7 @@ public struct V1CustomerSubscriptionPausedEvent: Sendable, Codable, Equatable, H
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1CustomerSubscriptionPausedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1CustomerSubscriptionPausedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1CustomerSubscriptionPausedEventData.self, forKey: .data)
@@ -29535,7 +29535,7 @@ public struct V1CustomerSubscriptionPendingUpdateAppliedEvent: Sendable, Codable
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1CustomerSubscriptionPendingUpdateAppliedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1CustomerSubscriptionPendingUpdateAppliedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1CustomerSubscriptionPendingUpdateAppliedEventData.self, forKey: .data)
@@ -29876,7 +29876,7 @@ public struct V1CustomerSubscriptionPendingUpdateExpiredEvent: Sendable, Codable
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1CustomerSubscriptionPendingUpdateExpiredEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1CustomerSubscriptionPendingUpdateExpiredEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1CustomerSubscriptionPendingUpdateExpiredEventData.self, forKey: .data)
@@ -30300,7 +30300,7 @@ public struct V1CustomerSubscriptionResumedEvent: Sendable, Codable, Equatable, 
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1CustomerSubscriptionResumedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1CustomerSubscriptionResumedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1CustomerSubscriptionResumedEventData.self, forKey: .data)
@@ -30641,7 +30641,7 @@ public struct V1CustomerSubscriptionTrialWillEndEvent: Sendable, Codable, Equata
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1CustomerSubscriptionTrialWillEndEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1CustomerSubscriptionTrialWillEndEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1CustomerSubscriptionTrialWillEndEventData.self, forKey: .data)
@@ -30982,7 +30982,7 @@ public struct V1CustomerSubscriptionTrialingEvent: Sendable, Codable, Equatable,
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1CustomerSubscriptionTrialingEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1CustomerSubscriptionTrialingEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1CustomerSubscriptionTrialingEventData.self, forKey: .data)
@@ -31323,7 +31323,7 @@ public struct V1CustomerSubscriptionUnpaidEvent: Sendable, Codable, Equatable, H
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1CustomerSubscriptionUnpaidEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1CustomerSubscriptionUnpaidEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1CustomerSubscriptionUnpaidEventData.self, forKey: .data)
@@ -31747,7 +31747,7 @@ public struct V1CustomerSubscriptionUpdatedEvent: Sendable, Codable, Equatable, 
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1CustomerSubscriptionUpdatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1CustomerSubscriptionUpdatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1CustomerSubscriptionUpdatedEventData.self, forKey: .data)
@@ -32088,7 +32088,7 @@ public struct V1CustomerTaxIdCreatedEvent: Sendable, Codable, Equatable, Hashabl
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1CustomerTaxIdCreatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1CustomerTaxIdCreatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1CustomerTaxIdCreatedEventData.self, forKey: .data)
@@ -32512,7 +32512,7 @@ public struct V1CustomerTaxIdDeletedEvent: Sendable, Codable, Equatable, Hashabl
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1CustomerTaxIdDeletedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1CustomerTaxIdDeletedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1CustomerTaxIdDeletedEventData.self, forKey: .data)
@@ -32936,7 +32936,7 @@ public struct V1CustomerTaxIdUpdatedEvent: Sendable, Codable, Equatable, Hashabl
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1CustomerTaxIdUpdatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1CustomerTaxIdUpdatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1CustomerTaxIdUpdatedEventData.self, forKey: .data)
@@ -33360,7 +33360,7 @@ public struct V1CustomerUpdatedEvent: Sendable, Codable, Equatable, Hashable, St
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1CustomerUpdatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1CustomerUpdatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1CustomerUpdatedEventData.self, forKey: .data)
@@ -33701,7 +33701,7 @@ public struct V1CustomerCashBalanceTransactionCreatedEvent: Sendable, Codable, E
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1CustomerCashBalanceTransactionCreatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1CustomerCashBalanceTransactionCreatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1CustomerCashBalanceTransactionCreatedEventData.self, forKey: .data)
@@ -33987,7 +33987,7 @@ public struct V1EntitlementsActiveEntitlementSummaryEntitlementAddedEvent: Senda
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1EntitlementsActiveEntitlementSummaryEntitlementAddedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1EntitlementsActiveEntitlementSummaryEntitlementAddedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1EntitlementsActiveEntitlementSummaryEntitlementAddedEventData.self, forKey: .data)
@@ -34271,7 +34271,7 @@ public struct V1EntitlementsActiveEntitlementSummaryEntitlementRemovedEvent: Sen
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1EntitlementsActiveEntitlementSummaryEntitlementRemovedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1EntitlementsActiveEntitlementSummaryEntitlementRemovedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1EntitlementsActiveEntitlementSummaryEntitlementRemovedEventData.self, forKey: .data)
@@ -34638,7 +34638,7 @@ public struct V1EntitlementsActiveEntitlementSummaryUpdatedEvent: Sendable, Coda
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1EntitlementsActiveEntitlementSummaryUpdatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1EntitlementsActiveEntitlementSummaryUpdatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1EntitlementsActiveEntitlementSummaryUpdatedEventData.self, forKey: .data)
@@ -34977,7 +34977,7 @@ public struct V1FileCreatedEvent: Sendable, Codable, Equatable, Hashable, Stripe
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1FileCreatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1FileCreatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1FileCreatedEventData.self, forKey: .data)
@@ -35401,7 +35401,7 @@ public struct V1FinancialConnectionsAccountAccountNumbersUpdatedEvent: Sendable,
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1FinancialConnectionsAccountAccountNumbersUpdatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1FinancialConnectionsAccountAccountNumbersUpdatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1FinancialConnectionsAccountAccountNumbersUpdatedEventData.self, forKey: .data)
@@ -35742,7 +35742,7 @@ public struct V1FinancialConnectionsAccountBalanceRefreshFailedEvent: Sendable, 
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1FinancialConnectionsAccountBalanceRefreshFailedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1FinancialConnectionsAccountBalanceRefreshFailedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1FinancialConnectionsAccountBalanceRefreshFailedEventData.self, forKey: .data)
@@ -36083,7 +36083,7 @@ public struct V1FinancialConnectionsAccountBalanceRefreshSucceededEvent: Sendabl
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1FinancialConnectionsAccountBalanceRefreshSucceededEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1FinancialConnectionsAccountBalanceRefreshSucceededEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1FinancialConnectionsAccountBalanceRefreshSucceededEventData.self, forKey: .data)
@@ -36424,7 +36424,7 @@ public struct V1FinancialConnectionsAccountCreatedEvent: Sendable, Codable, Equa
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1FinancialConnectionsAccountCreatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1FinancialConnectionsAccountCreatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1FinancialConnectionsAccountCreatedEventData.self, forKey: .data)
@@ -36848,7 +36848,7 @@ public struct V1FinancialConnectionsAccountDeactivatedEvent: Sendable, Codable, 
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1FinancialConnectionsAccountDeactivatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1FinancialConnectionsAccountDeactivatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1FinancialConnectionsAccountDeactivatedEventData.self, forKey: .data)
@@ -37272,7 +37272,7 @@ public struct V1FinancialConnectionsAccountDisconnectedEvent: Sendable, Codable,
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1FinancialConnectionsAccountDisconnectedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1FinancialConnectionsAccountDisconnectedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1FinancialConnectionsAccountDisconnectedEventData.self, forKey: .data)
@@ -37696,7 +37696,7 @@ public struct V1FinancialConnectionsAccountExpectedDeactivationDateUpdatedEvent:
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1FinancialConnectionsAccountExpectedDeactivationDateUpdatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1FinancialConnectionsAccountExpectedDeactivationDateUpdatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1FinancialConnectionsAccountExpectedDeactivationDateUpdatedEventData.self, forKey: .data)
@@ -38037,7 +38037,7 @@ public struct V1FinancialConnectionsAccountInferredBalancesRefreshFailedEvent: S
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1FinancialConnectionsAccountInferredBalancesRefreshFailedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1FinancialConnectionsAccountInferredBalancesRefreshFailedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1FinancialConnectionsAccountInferredBalancesRefreshFailedEventData.self, forKey: .data)
@@ -38378,7 +38378,7 @@ public struct V1FinancialConnectionsAccountInferredBalancesRefreshSucceededEvent
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1FinancialConnectionsAccountInferredBalancesRefreshSucceededEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1FinancialConnectionsAccountInferredBalancesRefreshSucceededEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1FinancialConnectionsAccountInferredBalancesRefreshSucceededEventData.self, forKey: .data)
@@ -38719,7 +38719,7 @@ public struct V1FinancialConnectionsAccountOwnershipRefreshFailedEvent: Sendable
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1FinancialConnectionsAccountOwnershipRefreshFailedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1FinancialConnectionsAccountOwnershipRefreshFailedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1FinancialConnectionsAccountOwnershipRefreshFailedEventData.self, forKey: .data)
@@ -39060,7 +39060,7 @@ public struct V1FinancialConnectionsAccountOwnershipRefreshSucceededEvent: Senda
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1FinancialConnectionsAccountOwnershipRefreshSucceededEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1FinancialConnectionsAccountOwnershipRefreshSucceededEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1FinancialConnectionsAccountOwnershipRefreshSucceededEventData.self, forKey: .data)
@@ -39484,7 +39484,7 @@ public struct V1FinancialConnectionsAccountReactivatedEvent: Sendable, Codable, 
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1FinancialConnectionsAccountReactivatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1FinancialConnectionsAccountReactivatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1FinancialConnectionsAccountReactivatedEventData.self, forKey: .data)
@@ -39908,7 +39908,7 @@ public struct V1FinancialConnectionsAccountRefreshedBalanceEvent: Sendable, Coda
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1FinancialConnectionsAccountRefreshedBalanceEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1FinancialConnectionsAccountRefreshedBalanceEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1FinancialConnectionsAccountRefreshedBalanceEventData.self, forKey: .data)
@@ -40332,7 +40332,7 @@ public struct V1FinancialConnectionsAccountRefreshedOwnershipEvent: Sendable, Co
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1FinancialConnectionsAccountRefreshedOwnershipEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1FinancialConnectionsAccountRefreshedOwnershipEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1FinancialConnectionsAccountRefreshedOwnershipEventData.self, forKey: .data)
@@ -40756,7 +40756,7 @@ public struct V1FinancialConnectionsAccountRefreshedTransactionsEvent: Sendable,
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1FinancialConnectionsAccountRefreshedTransactionsEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1FinancialConnectionsAccountRefreshedTransactionsEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1FinancialConnectionsAccountRefreshedTransactionsEventData.self, forKey: .data)
@@ -41097,7 +41097,7 @@ public struct V1FinancialConnectionsAccountRiskIntelligenceRefreshFailedEvent: S
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1FinancialConnectionsAccountRiskIntelligenceRefreshFailedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1FinancialConnectionsAccountRiskIntelligenceRefreshFailedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1FinancialConnectionsAccountRiskIntelligenceRefreshFailedEventData.self, forKey: .data)
@@ -41438,7 +41438,7 @@ public struct V1FinancialConnectionsAccountRiskIntelligenceRefreshSucceededEvent
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1FinancialConnectionsAccountRiskIntelligenceRefreshSucceededEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1FinancialConnectionsAccountRiskIntelligenceRefreshSucceededEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1FinancialConnectionsAccountRiskIntelligenceRefreshSucceededEventData.self, forKey: .data)
@@ -41862,7 +41862,7 @@ public struct V1FinancialConnectionsAccountSupportedPaymentMethodTypesUpdatedEve
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1FinancialConnectionsAccountSupportedPaymentMethodTypesUpdatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1FinancialConnectionsAccountSupportedPaymentMethodTypesUpdatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1FinancialConnectionsAccountSupportedPaymentMethodTypesUpdatedEventData.self, forKey: .data)
@@ -42203,7 +42203,7 @@ public struct V1FinancialConnectionsAccountTransactionsRefreshFailedEvent: Senda
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1FinancialConnectionsAccountTransactionsRefreshFailedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1FinancialConnectionsAccountTransactionsRefreshFailedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1FinancialConnectionsAccountTransactionsRefreshFailedEventData.self, forKey: .data)
@@ -42544,7 +42544,7 @@ public struct V1FinancialConnectionsAccountTransactionsRefreshSucceededEvent: Se
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1FinancialConnectionsAccountTransactionsRefreshSucceededEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1FinancialConnectionsAccountTransactionsRefreshSucceededEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1FinancialConnectionsAccountTransactionsRefreshSucceededEventData.self, forKey: .data)
@@ -42885,7 +42885,7 @@ public struct V1FinancialConnectionsAccountUpcomingAccountNumberExpiryEvent: Sen
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1FinancialConnectionsAccountUpcomingAccountNumberExpiryEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1FinancialConnectionsAccountUpcomingAccountNumberExpiryEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1FinancialConnectionsAccountUpcomingAccountNumberExpiryEventData.self, forKey: .data)
@@ -43226,7 +43226,7 @@ public struct V1FinancialConnectionsAccountUpcomingDeactivationEvent: Sendable, 
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1FinancialConnectionsAccountUpcomingDeactivationEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1FinancialConnectionsAccountUpcomingDeactivationEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1FinancialConnectionsAccountUpcomingDeactivationEventData.self, forKey: .data)
@@ -43650,7 +43650,7 @@ public struct V1IdentityVerificationSessionCanceledEvent: Sendable, Codable, Equ
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1IdentityVerificationSessionCanceledEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1IdentityVerificationSessionCanceledEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1IdentityVerificationSessionCanceledEventData.self, forKey: .data)
@@ -43991,7 +43991,7 @@ public struct V1IdentityVerificationSessionCreatedEvent: Sendable, Codable, Equa
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1IdentityVerificationSessionCreatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1IdentityVerificationSessionCreatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1IdentityVerificationSessionCreatedEventData.self, forKey: .data)
@@ -44415,7 +44415,7 @@ public struct V1IdentityVerificationSessionProcessingEvent: Sendable, Codable, E
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1IdentityVerificationSessionProcessingEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1IdentityVerificationSessionProcessingEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1IdentityVerificationSessionProcessingEventData.self, forKey: .data)
@@ -44839,7 +44839,7 @@ public struct V1IdentityVerificationSessionRedactedEvent: Sendable, Codable, Equ
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1IdentityVerificationSessionRedactedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1IdentityVerificationSessionRedactedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1IdentityVerificationSessionRedactedEventData.self, forKey: .data)
@@ -45263,7 +45263,7 @@ public struct V1IdentityVerificationSessionRequiresInputEvent: Sendable, Codable
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1IdentityVerificationSessionRequiresInputEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1IdentityVerificationSessionRequiresInputEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1IdentityVerificationSessionRequiresInputEventData.self, forKey: .data)
@@ -45687,7 +45687,7 @@ public struct V1IdentityVerificationSessionVerifiedEvent: Sendable, Codable, Equ
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1IdentityVerificationSessionVerifiedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1IdentityVerificationSessionVerifiedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1IdentityVerificationSessionVerifiedEventData.self, forKey: .data)
@@ -46028,7 +46028,7 @@ public struct V1InvoiceCreatedEvent: Sendable, Codable, Equatable, Hashable, Str
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1InvoiceCreatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1InvoiceCreatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1InvoiceCreatedEventData.self, forKey: .data)
@@ -46369,7 +46369,7 @@ public struct V1InvoiceDeletedEvent: Sendable, Codable, Equatable, Hashable, Str
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1InvoiceDeletedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1InvoiceDeletedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1InvoiceDeletedEventData.self, forKey: .data)
@@ -46710,7 +46710,7 @@ public struct V1InvoiceDiscountAddedEvent: Sendable, Codable, Equatable, Hashabl
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1InvoiceDiscountAddedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1InvoiceDiscountAddedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1InvoiceDiscountAddedEventData.self, forKey: .data)
@@ -47051,7 +47051,7 @@ public struct V1InvoiceDiscountRemovedEvent: Sendable, Codable, Equatable, Hasha
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1InvoiceDiscountRemovedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1InvoiceDiscountRemovedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1InvoiceDiscountRemovedEventData.self, forKey: .data)
@@ -47475,7 +47475,7 @@ public struct V1InvoiceFinalizationFailedEvent: Sendable, Codable, Equatable, Ha
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1InvoiceFinalizationFailedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1InvoiceFinalizationFailedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1InvoiceFinalizationFailedEventData.self, forKey: .data)
@@ -47899,7 +47899,7 @@ public struct V1InvoiceFinalizedEvent: Sendable, Codable, Equatable, Hashable, S
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1InvoiceFinalizedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1InvoiceFinalizedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1InvoiceFinalizedEventData.self, forKey: .data)
@@ -48240,7 +48240,7 @@ public struct V1InvoiceLineItemAddedEvent: Sendable, Codable, Equatable, Hashabl
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1InvoiceLineItemAddedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1InvoiceLineItemAddedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1InvoiceLineItemAddedEventData.self, forKey: .data)
@@ -48581,7 +48581,7 @@ public struct V1InvoiceLineItemPricingChangedEvent: Sendable, Codable, Equatable
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1InvoiceLineItemPricingChangedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1InvoiceLineItemPricingChangedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1InvoiceLineItemPricingChangedEventData.self, forKey: .data)
@@ -48922,7 +48922,7 @@ public struct V1InvoiceLineItemQuantityChangedEvent: Sendable, Codable, Equatabl
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1InvoiceLineItemQuantityChangedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1InvoiceLineItemQuantityChangedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1InvoiceLineItemQuantityChangedEventData.self, forKey: .data)
@@ -49263,7 +49263,7 @@ public struct V1InvoiceLineItemRemovedEvent: Sendable, Codable, Equatable, Hasha
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1InvoiceLineItemRemovedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1InvoiceLineItemRemovedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1InvoiceLineItemRemovedEventData.self, forKey: .data)
@@ -49687,7 +49687,7 @@ public struct V1InvoiceMarkedUncollectibleEvent: Sendable, Codable, Equatable, H
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1InvoiceMarkedUncollectibleEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1InvoiceMarkedUncollectibleEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1InvoiceMarkedUncollectibleEventData.self, forKey: .data)
@@ -50028,7 +50028,7 @@ public struct V1InvoiceOverdueEvent: Sendable, Codable, Equatable, Hashable, Str
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1InvoiceOverdueEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1InvoiceOverdueEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1InvoiceOverdueEventData.self, forKey: .data)
@@ -50452,7 +50452,7 @@ public struct V1InvoiceOverpaidEvent: Sendable, Codable, Equatable, Hashable, St
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1InvoiceOverpaidEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1InvoiceOverpaidEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1InvoiceOverpaidEventData.self, forKey: .data)
@@ -50876,7 +50876,7 @@ public struct V1InvoicePaidEvent: Sendable, Codable, Equatable, Hashable, Stripe
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1InvoicePaidEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1InvoicePaidEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1InvoicePaidEventData.self, forKey: .data)
@@ -51300,7 +51300,7 @@ public struct V1InvoicePaymentActionRequiredEvent: Sendable, Codable, Equatable,
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1InvoicePaymentActionRequiredEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1InvoicePaymentActionRequiredEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1InvoicePaymentActionRequiredEventData.self, forKey: .data)
@@ -51641,7 +51641,7 @@ public struct V1InvoicePaymentAttemptRequiredEvent: Sendable, Codable, Equatable
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1InvoicePaymentAttemptRequiredEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1InvoicePaymentAttemptRequiredEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1InvoicePaymentAttemptRequiredEventData.self, forKey: .data)
@@ -52065,7 +52065,7 @@ public struct V1InvoicePaymentFailedEvent: Sendable, Codable, Equatable, Hashabl
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1InvoicePaymentFailedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1InvoicePaymentFailedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1InvoicePaymentFailedEventData.self, forKey: .data)
@@ -52489,7 +52489,7 @@ public struct V1InvoicePaymentSucceededEvent: Sendable, Codable, Equatable, Hash
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1InvoicePaymentSucceededEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1InvoicePaymentSucceededEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1InvoicePaymentSucceededEventData.self, forKey: .data)
@@ -52913,7 +52913,7 @@ public struct V1InvoiceSentEvent: Sendable, Codable, Equatable, Hashable, Stripe
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1InvoiceSentEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1InvoiceSentEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1InvoiceSentEventData.self, forKey: .data)
@@ -53210,7 +53210,7 @@ public struct V1InvoiceUpcomingEvent: Sendable, Codable, Equatable, Hashable, St
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1InvoiceUpcomingEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1InvoiceUpcomingEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1InvoiceUpcomingEventData.self, forKey: .data)
@@ -53632,7 +53632,7 @@ public struct V1InvoiceUpdatedEvent: Sendable, Codable, Equatable, Hashable, Str
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1InvoiceUpdatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1InvoiceUpdatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1InvoiceUpdatedEventData.self, forKey: .data)
@@ -54056,7 +54056,7 @@ public struct V1InvoiceVoidedEvent: Sendable, Codable, Equatable, Hashable, Stri
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1InvoiceVoidedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1InvoiceVoidedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1InvoiceVoidedEventData.self, forKey: .data)
@@ -54397,7 +54397,7 @@ public struct V1InvoiceWillBeDueEvent: Sendable, Codable, Equatable, Hashable, S
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1InvoiceWillBeDueEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1InvoiceWillBeDueEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1InvoiceWillBeDueEventData.self, forKey: .data)
@@ -54738,7 +54738,7 @@ public struct V1InvoicePaymentCanceledEvent: Sendable, Codable, Equatable, Hasha
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1InvoicePaymentCanceledEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1InvoicePaymentCanceledEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1InvoicePaymentCanceledEventData.self, forKey: .data)
@@ -55079,7 +55079,7 @@ public struct V1InvoicePaymentOpenEvent: Sendable, Codable, Equatable, Hashable,
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1InvoicePaymentOpenEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1InvoicePaymentOpenEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1InvoicePaymentOpenEventData.self, forKey: .data)
@@ -55503,7 +55503,7 @@ public struct V1InvoicePaymentPaidEvent: Sendable, Codable, Equatable, Hashable,
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1InvoicePaymentPaidEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1InvoicePaymentPaidEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1InvoicePaymentPaidEventData.self, forKey: .data)
@@ -55844,7 +55844,7 @@ public struct V1InvoiceitemAmountChangedEvent: Sendable, Codable, Equatable, Has
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1InvoiceitemAmountChangedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1InvoiceitemAmountChangedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1InvoiceitemAmountChangedEventData.self, forKey: .data)
@@ -56185,7 +56185,7 @@ public struct V1InvoiceitemCreatedEvent: Sendable, Codable, Equatable, Hashable,
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1InvoiceitemCreatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1InvoiceitemCreatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1InvoiceitemCreatedEventData.self, forKey: .data)
@@ -56526,7 +56526,7 @@ public struct V1InvoiceitemDeletedEvent: Sendable, Codable, Equatable, Hashable,
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1InvoiceitemDeletedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1InvoiceitemDeletedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1InvoiceitemDeletedEventData.self, forKey: .data)
@@ -56867,7 +56867,7 @@ public struct V1InvoiceitemDiscountAddedEvent: Sendable, Codable, Equatable, Has
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1InvoiceitemDiscountAddedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1InvoiceitemDiscountAddedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1InvoiceitemDiscountAddedEventData.self, forKey: .data)
@@ -57208,7 +57208,7 @@ public struct V1InvoiceitemDiscountRemovedEvent: Sendable, Codable, Equatable, H
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1InvoiceitemDiscountRemovedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1InvoiceitemDiscountRemovedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1InvoiceitemDiscountRemovedEventData.self, forKey: .data)
@@ -57549,7 +57549,7 @@ public struct V1IssuingAuthorizationCreatedEvent: Sendable, Codable, Equatable, 
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1IssuingAuthorizationCreatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1IssuingAuthorizationCreatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1IssuingAuthorizationCreatedEventData.self, forKey: .data)
@@ -57890,7 +57890,7 @@ public struct V1IssuingAuthorizationRequestEvent: Sendable, Codable, Equatable, 
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1IssuingAuthorizationRequestEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1IssuingAuthorizationRequestEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1IssuingAuthorizationRequestEventData.self, forKey: .data)
@@ -58314,7 +58314,7 @@ public struct V1IssuingAuthorizationUpdatedEvent: Sendable, Codable, Equatable, 
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1IssuingAuthorizationUpdatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1IssuingAuthorizationUpdatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1IssuingAuthorizationUpdatedEventData.self, forKey: .data)
@@ -58655,7 +58655,7 @@ public struct V1IssuingCardCreatedEvent: Sendable, Codable, Equatable, Hashable,
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1IssuingCardCreatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1IssuingCardCreatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1IssuingCardCreatedEventData.self, forKey: .data)
@@ -59079,7 +59079,7 @@ public struct V1IssuingCardUpdatedEvent: Sendable, Codable, Equatable, Hashable,
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1IssuingCardUpdatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1IssuingCardUpdatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1IssuingCardUpdatedEventData.self, forKey: .data)
@@ -59420,7 +59420,7 @@ public struct V1IssuingCardholderCreatedEvent: Sendable, Codable, Equatable, Has
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1IssuingCardholderCreatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1IssuingCardholderCreatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1IssuingCardholderCreatedEventData.self, forKey: .data)
@@ -59844,7 +59844,7 @@ public struct V1IssuingCardholderUpdatedEvent: Sendable, Codable, Equatable, Has
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1IssuingCardholderUpdatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1IssuingCardholderUpdatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1IssuingCardholderUpdatedEventData.self, forKey: .data)
@@ -60268,7 +60268,7 @@ public struct V1IssuingDisputeClosedEvent: Sendable, Codable, Equatable, Hashabl
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1IssuingDisputeClosedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1IssuingDisputeClosedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1IssuingDisputeClosedEventData.self, forKey: .data)
@@ -60609,7 +60609,7 @@ public struct V1IssuingDisputeCreatedEvent: Sendable, Codable, Equatable, Hashab
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1IssuingDisputeCreatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1IssuingDisputeCreatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1IssuingDisputeCreatedEventData.self, forKey: .data)
@@ -60950,7 +60950,7 @@ public struct V1IssuingDisputeFundsReinstatedEvent: Sendable, Codable, Equatable
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1IssuingDisputeFundsReinstatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1IssuingDisputeFundsReinstatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1IssuingDisputeFundsReinstatedEventData.self, forKey: .data)
@@ -61291,7 +61291,7 @@ public struct V1IssuingDisputeFundsRescindedEvent: Sendable, Codable, Equatable,
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1IssuingDisputeFundsRescindedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1IssuingDisputeFundsRescindedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1IssuingDisputeFundsRescindedEventData.self, forKey: .data)
@@ -61715,7 +61715,7 @@ public struct V1IssuingDisputeSubmittedEvent: Sendable, Codable, Equatable, Hash
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1IssuingDisputeSubmittedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1IssuingDisputeSubmittedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1IssuingDisputeSubmittedEventData.self, forKey: .data)
@@ -62139,7 +62139,7 @@ public struct V1IssuingDisputeUpdatedEvent: Sendable, Codable, Equatable, Hashab
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1IssuingDisputeUpdatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1IssuingDisputeUpdatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1IssuingDisputeUpdatedEventData.self, forKey: .data)
@@ -62563,7 +62563,7 @@ public struct V1IssuingPersonalizationDesignActivatedEvent: Sendable, Codable, E
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1IssuingPersonalizationDesignActivatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1IssuingPersonalizationDesignActivatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1IssuingPersonalizationDesignActivatedEventData.self, forKey: .data)
@@ -62987,7 +62987,7 @@ public struct V1IssuingPersonalizationDesignDeactivatedEvent: Sendable, Codable,
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1IssuingPersonalizationDesignDeactivatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1IssuingPersonalizationDesignDeactivatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1IssuingPersonalizationDesignDeactivatedEventData.self, forKey: .data)
@@ -63411,7 +63411,7 @@ public struct V1IssuingPersonalizationDesignRejectedEvent: Sendable, Codable, Eq
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1IssuingPersonalizationDesignRejectedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1IssuingPersonalizationDesignRejectedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1IssuingPersonalizationDesignRejectedEventData.self, forKey: .data)
@@ -63835,7 +63835,7 @@ public struct V1IssuingPersonalizationDesignUpdatedEvent: Sendable, Codable, Equ
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1IssuingPersonalizationDesignUpdatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1IssuingPersonalizationDesignUpdatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1IssuingPersonalizationDesignUpdatedEventData.self, forKey: .data)
@@ -64176,7 +64176,7 @@ public struct V1IssuingTokenCreatedEvent: Sendable, Codable, Equatable, Hashable
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1IssuingTokenCreatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1IssuingTokenCreatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1IssuingTokenCreatedEventData.self, forKey: .data)
@@ -64600,7 +64600,7 @@ public struct V1IssuingTokenUpdatedEvent: Sendable, Codable, Equatable, Hashable
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1IssuingTokenUpdatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1IssuingTokenUpdatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1IssuingTokenUpdatedEventData.self, forKey: .data)
@@ -64941,7 +64941,7 @@ public struct V1IssuingTransactionCreatedEvent: Sendable, Codable, Equatable, Ha
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1IssuingTransactionCreatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1IssuingTransactionCreatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1IssuingTransactionCreatedEventData.self, forKey: .data)
@@ -65365,7 +65365,7 @@ public struct V1IssuingTransactionPurchaseDetailsReceiptUpdatedEvent: Sendable, 
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1IssuingTransactionPurchaseDetailsReceiptUpdatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1IssuingTransactionPurchaseDetailsReceiptUpdatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1IssuingTransactionPurchaseDetailsReceiptUpdatedEventData.self, forKey: .data)
@@ -65789,7 +65789,7 @@ public struct V1IssuingTransactionUpdatedEvent: Sendable, Codable, Equatable, Ha
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1IssuingTransactionUpdatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1IssuingTransactionUpdatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1IssuingTransactionUpdatedEventData.self, forKey: .data)
@@ -66213,7 +66213,7 @@ public struct V1MandateUpdatedEvent: Sendable, Codable, Equatable, Hashable, Str
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1MandateUpdatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1MandateUpdatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1MandateUpdatedEventData.self, forKey: .data)
@@ -66637,7 +66637,7 @@ public struct V1PaymentIntentAmountCapturableUpdatedEvent: Sendable, Codable, Eq
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1PaymentIntentAmountCapturableUpdatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1PaymentIntentAmountCapturableUpdatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1PaymentIntentAmountCapturableUpdatedEventData.self, forKey: .data)
@@ -67061,7 +67061,7 @@ public struct V1PaymentIntentCanceledEvent: Sendable, Codable, Equatable, Hashab
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1PaymentIntentCanceledEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1PaymentIntentCanceledEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1PaymentIntentCanceledEventData.self, forKey: .data)
@@ -67402,7 +67402,7 @@ public struct V1PaymentIntentCreatedEvent: Sendable, Codable, Equatable, Hashabl
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1PaymentIntentCreatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1PaymentIntentCreatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1PaymentIntentCreatedEventData.self, forKey: .data)
@@ -67826,7 +67826,7 @@ public struct V1PaymentIntentPartiallyFundedEvent: Sendable, Codable, Equatable,
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1PaymentIntentPartiallyFundedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1PaymentIntentPartiallyFundedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1PaymentIntentPartiallyFundedEventData.self, forKey: .data)
@@ -68250,7 +68250,7 @@ public struct V1PaymentIntentPaymentFailedEvent: Sendable, Codable, Equatable, H
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1PaymentIntentPaymentFailedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1PaymentIntentPaymentFailedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1PaymentIntentPaymentFailedEventData.self, forKey: .data)
@@ -68674,7 +68674,7 @@ public struct V1PaymentIntentProcessingEvent: Sendable, Codable, Equatable, Hash
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1PaymentIntentProcessingEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1PaymentIntentProcessingEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1PaymentIntentProcessingEventData.self, forKey: .data)
@@ -69098,7 +69098,7 @@ public struct V1PaymentIntentRequiresActionEvent: Sendable, Codable, Equatable, 
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1PaymentIntentRequiresActionEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1PaymentIntentRequiresActionEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1PaymentIntentRequiresActionEventData.self, forKey: .data)
@@ -69522,7 +69522,7 @@ public struct V1PaymentIntentSucceededEvent: Sendable, Codable, Equatable, Hasha
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1PaymentIntentSucceededEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1PaymentIntentSucceededEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1PaymentIntentSucceededEventData.self, forKey: .data)
@@ -69863,7 +69863,7 @@ public struct V1PaymentLinkCreatedEvent: Sendable, Codable, Equatable, Hashable,
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1PaymentLinkCreatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1PaymentLinkCreatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1PaymentLinkCreatedEventData.self, forKey: .data)
@@ -70287,7 +70287,7 @@ public struct V1PaymentLinkUpdatedEvent: Sendable, Codable, Equatable, Hashable,
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1PaymentLinkUpdatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1PaymentLinkUpdatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1PaymentLinkUpdatedEventData.self, forKey: .data)
@@ -70711,7 +70711,7 @@ public struct V1PaymentMethodAttachedEvent: Sendable, Codable, Equatable, Hashab
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1PaymentMethodAttachedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1PaymentMethodAttachedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1PaymentMethodAttachedEventData.self, forKey: .data)
@@ -71135,7 +71135,7 @@ public struct V1PaymentMethodAutomaticallyUpdatedEvent: Sendable, Codable, Equat
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1PaymentMethodAutomaticallyUpdatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1PaymentMethodAutomaticallyUpdatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1PaymentMethodAutomaticallyUpdatedEventData.self, forKey: .data)
@@ -71559,7 +71559,7 @@ public struct V1PaymentMethodDetachedEvent: Sendable, Codable, Equatable, Hashab
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1PaymentMethodDetachedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1PaymentMethodDetachedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1PaymentMethodDetachedEventData.self, forKey: .data)
@@ -71983,7 +71983,7 @@ public struct V1PaymentMethodUpdatedEvent: Sendable, Codable, Equatable, Hashabl
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1PaymentMethodUpdatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1PaymentMethodUpdatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1PaymentMethodUpdatedEventData.self, forKey: .data)
@@ -72407,7 +72407,7 @@ public struct V1PayoutCanceledEvent: Sendable, Codable, Equatable, Hashable, Str
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1PayoutCanceledEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1PayoutCanceledEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1PayoutCanceledEventData.self, forKey: .data)
@@ -72748,7 +72748,7 @@ public struct V1PayoutCreatedEvent: Sendable, Codable, Equatable, Hashable, Stri
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1PayoutCreatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1PayoutCreatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1PayoutCreatedEventData.self, forKey: .data)
@@ -73172,7 +73172,7 @@ public struct V1PayoutFailedEvent: Sendable, Codable, Equatable, Hashable, Strip
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1PayoutFailedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1PayoutFailedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1PayoutFailedEventData.self, forKey: .data)
@@ -73596,7 +73596,7 @@ public struct V1PayoutPaidEvent: Sendable, Codable, Equatable, Hashable, StripeI
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1PayoutPaidEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1PayoutPaidEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1PayoutPaidEventData.self, forKey: .data)
@@ -74020,7 +74020,7 @@ public struct V1PayoutReconciliationCompletedEvent: Sendable, Codable, Equatable
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1PayoutReconciliationCompletedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1PayoutReconciliationCompletedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1PayoutReconciliationCompletedEventData.self, forKey: .data)
@@ -74444,7 +74444,7 @@ public struct V1PayoutUpdatedEvent: Sendable, Codable, Equatable, Hashable, Stri
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1PayoutUpdatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1PayoutUpdatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1PayoutUpdatedEventData.self, forKey: .data)
@@ -74785,7 +74785,7 @@ public struct V1PersonCreatedEvent: Sendable, Codable, Equatable, Hashable, Stri
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1PersonCreatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1PersonCreatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1PersonCreatedEventData.self, forKey: .data)
@@ -75126,7 +75126,7 @@ public struct V1PersonDeletedEvent: Sendable, Codable, Equatable, Hashable, Stri
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1PersonDeletedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1PersonDeletedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1PersonDeletedEventData.self, forKey: .data)
@@ -75550,7 +75550,7 @@ public struct V1PersonUpdatedEvent: Sendable, Codable, Equatable, Hashable, Stri
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1PersonUpdatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1PersonUpdatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1PersonUpdatedEventData.self, forKey: .data)
@@ -75891,7 +75891,7 @@ public struct V1PlanCreatedEvent: Sendable, Codable, Equatable, Hashable, Stripe
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1PlanCreatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1PlanCreatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1PlanCreatedEventData.self, forKey: .data)
@@ -76232,7 +76232,7 @@ public struct V1PlanDeletedEvent: Sendable, Codable, Equatable, Hashable, Stripe
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1PlanDeletedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1PlanDeletedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1PlanDeletedEventData.self, forKey: .data)
@@ -76656,7 +76656,7 @@ public struct V1PlanUpdatedEvent: Sendable, Codable, Equatable, Hashable, Stripe
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1PlanUpdatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1PlanUpdatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1PlanUpdatedEventData.self, forKey: .data)
@@ -76997,7 +76997,7 @@ public struct V1PriceActivatedEvent: Sendable, Codable, Equatable, Hashable, Str
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1PriceActivatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1PriceActivatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1PriceActivatedEventData.self, forKey: .data)
@@ -77338,7 +77338,7 @@ public struct V1PriceCreatedEvent: Sendable, Codable, Equatable, Hashable, Strip
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1PriceCreatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1PriceCreatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1PriceCreatedEventData.self, forKey: .data)
@@ -77679,7 +77679,7 @@ public struct V1PriceDeactivatedEvent: Sendable, Codable, Equatable, Hashable, S
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1PriceDeactivatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1PriceDeactivatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1PriceDeactivatedEventData.self, forKey: .data)
@@ -78020,7 +78020,7 @@ public struct V1PriceDeletedEvent: Sendable, Codable, Equatable, Hashable, Strip
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1PriceDeletedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1PriceDeletedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1PriceDeletedEventData.self, forKey: .data)
@@ -78361,7 +78361,7 @@ public struct V1PriceLookupKeyChangedEvent: Sendable, Codable, Equatable, Hashab
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1PriceLookupKeyChangedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1PriceLookupKeyChangedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1PriceLookupKeyChangedEventData.self, forKey: .data)
@@ -78702,7 +78702,7 @@ public struct V1PriceTaxBehaviorChangedEvent: Sendable, Codable, Equatable, Hash
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1PriceTaxBehaviorChangedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1PriceTaxBehaviorChangedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1PriceTaxBehaviorChangedEventData.self, forKey: .data)
@@ -79126,7 +79126,7 @@ public struct V1PriceUpdatedEvent: Sendable, Codable, Equatable, Hashable, Strip
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1PriceUpdatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1PriceUpdatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1PriceUpdatedEventData.self, forKey: .data)
@@ -79467,7 +79467,7 @@ public struct V1ProductActivatedEvent: Sendable, Codable, Equatable, Hashable, S
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1ProductActivatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1ProductActivatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1ProductActivatedEventData.self, forKey: .data)
@@ -79808,7 +79808,7 @@ public struct V1ProductCreatedEvent: Sendable, Codable, Equatable, Hashable, Str
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1ProductCreatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1ProductCreatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1ProductCreatedEventData.self, forKey: .data)
@@ -80149,7 +80149,7 @@ public struct V1ProductDeactivatedEvent: Sendable, Codable, Equatable, Hashable,
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1ProductDeactivatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1ProductDeactivatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1ProductDeactivatedEventData.self, forKey: .data)
@@ -80490,7 +80490,7 @@ public struct V1ProductDefaultPriceChangedEvent: Sendable, Codable, Equatable, H
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1ProductDefaultPriceChangedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1ProductDefaultPriceChangedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1ProductDefaultPriceChangedEventData.self, forKey: .data)
@@ -80831,7 +80831,7 @@ public struct V1ProductDeletedEvent: Sendable, Codable, Equatable, Hashable, Str
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1ProductDeletedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1ProductDeletedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1ProductDeletedEventData.self, forKey: .data)
@@ -81172,7 +81172,7 @@ public struct V1ProductTaxCodeChangedEvent: Sendable, Codable, Equatable, Hashab
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1ProductTaxCodeChangedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1ProductTaxCodeChangedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1ProductTaxCodeChangedEventData.self, forKey: .data)
@@ -81596,7 +81596,7 @@ public struct V1ProductUpdatedEvent: Sendable, Codable, Equatable, Hashable, Str
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1ProductUpdatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1ProductUpdatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1ProductUpdatedEventData.self, forKey: .data)
@@ -81937,7 +81937,7 @@ public struct V1PromotionCodeCreatedEvent: Sendable, Codable, Equatable, Hashabl
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1PromotionCodeCreatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1PromotionCodeCreatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1PromotionCodeCreatedEventData.self, forKey: .data)
@@ -82278,7 +82278,7 @@ public struct V1PromotionCodeFullyRedeemedEvent: Sendable, Codable, Equatable, H
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1PromotionCodeFullyRedeemedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1PromotionCodeFullyRedeemedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1PromotionCodeFullyRedeemedEventData.self, forKey: .data)
@@ -82702,7 +82702,7 @@ public struct V1PromotionCodeUpdatedEvent: Sendable, Codable, Equatable, Hashabl
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1PromotionCodeUpdatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1PromotionCodeUpdatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1PromotionCodeUpdatedEventData.self, forKey: .data)
@@ -83126,7 +83126,7 @@ public struct V1QuoteAcceptedEvent: Sendable, Codable, Equatable, Hashable, Stri
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1QuoteAcceptedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1QuoteAcceptedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1QuoteAcceptedEventData.self, forKey: .data)
@@ -83550,7 +83550,7 @@ public struct V1QuoteCanceledEvent: Sendable, Codable, Equatable, Hashable, Stri
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1QuoteCanceledEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1QuoteCanceledEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1QuoteCanceledEventData.self, forKey: .data)
@@ -83891,7 +83891,7 @@ public struct V1QuoteCreatedEvent: Sendable, Codable, Equatable, Hashable, Strip
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1QuoteCreatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1QuoteCreatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1QuoteCreatedEventData.self, forKey: .data)
@@ -84315,7 +84315,7 @@ public struct V1QuoteFinalizedEvent: Sendable, Codable, Equatable, Hashable, Str
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1QuoteFinalizedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1QuoteFinalizedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1QuoteFinalizedEventData.self, forKey: .data)
@@ -84656,7 +84656,7 @@ public struct V1RadarEarlyFraudWarningCreatedEvent: Sendable, Codable, Equatable
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1RadarEarlyFraudWarningCreatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1RadarEarlyFraudWarningCreatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1RadarEarlyFraudWarningCreatedEventData.self, forKey: .data)
@@ -85080,7 +85080,7 @@ public struct V1RadarEarlyFraudWarningUpdatedEvent: Sendable, Codable, Equatable
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1RadarEarlyFraudWarningUpdatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1RadarEarlyFraudWarningUpdatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1RadarEarlyFraudWarningUpdatedEventData.self, forKey: .data)
@@ -85421,7 +85421,7 @@ public struct V1RefundCreatedEvent: Sendable, Codable, Equatable, Hashable, Stri
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1RefundCreatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1RefundCreatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1RefundCreatedEventData.self, forKey: .data)
@@ -85845,7 +85845,7 @@ public struct V1RefundFailedEvent: Sendable, Codable, Equatable, Hashable, Strip
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1RefundFailedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1RefundFailedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1RefundFailedEventData.self, forKey: .data)
@@ -86269,7 +86269,7 @@ public struct V1RefundUpdatedEvent: Sendable, Codable, Equatable, Hashable, Stri
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1RefundUpdatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1RefundUpdatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1RefundUpdatedEventData.self, forKey: .data)
@@ -86693,7 +86693,7 @@ public struct V1ReviewClosedEvent: Sendable, Codable, Equatable, Hashable, Strip
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1ReviewClosedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1ReviewClosedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1ReviewClosedEventData.self, forKey: .data)
@@ -87034,7 +87034,7 @@ public struct V1ReviewOpenedEvent: Sendable, Codable, Equatable, Hashable, Strip
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1ReviewOpenedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1ReviewOpenedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1ReviewOpenedEventData.self, forKey: .data)
@@ -87458,7 +87458,7 @@ public struct V1SetupIntentCanceledEvent: Sendable, Codable, Equatable, Hashable
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1SetupIntentCanceledEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1SetupIntentCanceledEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1SetupIntentCanceledEventData.self, forKey: .data)
@@ -87799,7 +87799,7 @@ public struct V1SetupIntentCreatedEvent: Sendable, Codable, Equatable, Hashable,
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1SetupIntentCreatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1SetupIntentCreatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1SetupIntentCreatedEventData.self, forKey: .data)
@@ -88223,7 +88223,7 @@ public struct V1SetupIntentRequiresActionEvent: Sendable, Codable, Equatable, Ha
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1SetupIntentRequiresActionEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1SetupIntentRequiresActionEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1SetupIntentRequiresActionEventData.self, forKey: .data)
@@ -88647,7 +88647,7 @@ public struct V1SetupIntentSetupFailedEvent: Sendable, Codable, Equatable, Hasha
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1SetupIntentSetupFailedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1SetupIntentSetupFailedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1SetupIntentSetupFailedEventData.self, forKey: .data)
@@ -89071,7 +89071,7 @@ public struct V1SetupIntentSucceededEvent: Sendable, Codable, Equatable, Hashabl
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1SetupIntentSucceededEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1SetupIntentSucceededEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1SetupIntentSucceededEventData.self, forKey: .data)
@@ -89412,7 +89412,7 @@ public struct V1SigmaScheduledQueryRunCreatedEvent: Sendable, Codable, Equatable
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1SigmaScheduledQueryRunCreatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1SigmaScheduledQueryRunCreatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1SigmaScheduledQueryRunCreatedEventData.self, forKey: .data)
@@ -89836,7 +89836,7 @@ public struct V1SourceCanceledEvent: Sendable, Codable, Equatable, Hashable, Str
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1SourceCanceledEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1SourceCanceledEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1SourceCanceledEventData.self, forKey: .data)
@@ -90260,7 +90260,7 @@ public struct V1SourceChargeableEvent: Sendable, Codable, Equatable, Hashable, S
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1SourceChargeableEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1SourceChargeableEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1SourceChargeableEventData.self, forKey: .data)
@@ -90684,7 +90684,7 @@ public struct V1SourceFailedEvent: Sendable, Codable, Equatable, Hashable, Strip
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1SourceFailedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1SourceFailedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1SourceFailedEventData.self, forKey: .data)
@@ -91025,7 +91025,7 @@ public struct V1SourceRefundAttributesRequiredEvent: Sendable, Codable, Equatabl
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1SourceRefundAttributesRequiredEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1SourceRefundAttributesRequiredEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1SourceRefundAttributesRequiredEventData.self, forKey: .data)
@@ -91449,7 +91449,7 @@ public struct V1SubscriptionScheduleAbortedEvent: Sendable, Codable, Equatable, 
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1SubscriptionScheduleAbortedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1SubscriptionScheduleAbortedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1SubscriptionScheduleAbortedEventData.self, forKey: .data)
@@ -91873,7 +91873,7 @@ public struct V1SubscriptionScheduleCanceledEvent: Sendable, Codable, Equatable,
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1SubscriptionScheduleCanceledEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1SubscriptionScheduleCanceledEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1SubscriptionScheduleCanceledEventData.self, forKey: .data)
@@ -92297,7 +92297,7 @@ public struct V1SubscriptionScheduleCompletedEvent: Sendable, Codable, Equatable
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1SubscriptionScheduleCompletedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1SubscriptionScheduleCompletedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1SubscriptionScheduleCompletedEventData.self, forKey: .data)
@@ -92638,7 +92638,7 @@ public struct V1SubscriptionScheduleCreatedEvent: Sendable, Codable, Equatable, 
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1SubscriptionScheduleCreatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1SubscriptionScheduleCreatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1SubscriptionScheduleCreatedEventData.self, forKey: .data)
@@ -92979,7 +92979,7 @@ public struct V1SubscriptionScheduleExpiringEvent: Sendable, Codable, Equatable,
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1SubscriptionScheduleExpiringEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1SubscriptionScheduleExpiringEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1SubscriptionScheduleExpiringEventData.self, forKey: .data)
@@ -93320,7 +93320,7 @@ public struct V1SubscriptionSchedulePhaseAddedEvent: Sendable, Codable, Equatabl
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1SubscriptionSchedulePhaseAddedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1SubscriptionSchedulePhaseAddedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1SubscriptionSchedulePhaseAddedEventData.self, forKey: .data)
@@ -93661,7 +93661,7 @@ public struct V1SubscriptionSchedulePhaseDefaultTaxRatesChangedEvent: Sendable, 
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1SubscriptionSchedulePhaseDefaultTaxRatesChangedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1SubscriptionSchedulePhaseDefaultTaxRatesChangedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1SubscriptionSchedulePhaseDefaultTaxRatesChangedEventData.self, forKey: .data)
@@ -94002,7 +94002,7 @@ public struct V1SubscriptionSchedulePhaseEndDateChangedEvent: Sendable, Codable,
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1SubscriptionSchedulePhaseEndDateChangedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1SubscriptionSchedulePhaseEndDateChangedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1SubscriptionSchedulePhaseEndDateChangedEventData.self, forKey: .data)
@@ -94343,7 +94343,7 @@ public struct V1SubscriptionSchedulePhaseRemovedEvent: Sendable, Codable, Equata
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1SubscriptionSchedulePhaseRemovedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1SubscriptionSchedulePhaseRemovedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1SubscriptionSchedulePhaseRemovedEventData.self, forKey: .data)
@@ -94684,7 +94684,7 @@ public struct V1SubscriptionSchedulePhaseTrialEndChangedEvent: Sendable, Codable
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1SubscriptionSchedulePhaseTrialEndChangedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1SubscriptionSchedulePhaseTrialEndChangedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1SubscriptionSchedulePhaseTrialEndChangedEventData.self, forKey: .data)
@@ -95108,7 +95108,7 @@ public struct V1SubscriptionScheduleReleasedEvent: Sendable, Codable, Equatable,
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1SubscriptionScheduleReleasedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1SubscriptionScheduleReleasedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1SubscriptionScheduleReleasedEventData.self, forKey: .data)
@@ -95532,7 +95532,7 @@ public struct V1SubscriptionScheduleUpdatedEvent: Sendable, Codable, Equatable, 
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1SubscriptionScheduleUpdatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1SubscriptionScheduleUpdatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1SubscriptionScheduleUpdatedEventData.self, forKey: .data)
@@ -95849,7 +95849,7 @@ public struct V1TaxSettingsUpdatedEventRelatedObject: Sendable, Codable, Equatab
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.id = try container.decode(Nullable<String>.self, forKey: .id)
+        self.id = try container.decodeIfPresent(Nullable<String>.self, forKey: .id) ?? .null
         self.type = try container.decode(TaxSettingsObject.self, forKey: .type)
         self.url = try container.decode(String.self, forKey: .url)
         var captured: [String: JSONValue] = [:]
@@ -95956,7 +95956,7 @@ public struct V1TaxSettingsUpdatedEvent: Sendable, Codable, Equatable, Hashable,
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1TaxSettingsUpdatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1TaxSettingsUpdatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1TaxSettingsUpdatedEventData.self, forKey: .data)
@@ -96297,7 +96297,7 @@ public struct V1TaxRateCreatedEvent: Sendable, Codable, Equatable, Hashable, Str
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1TaxRateCreatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1TaxRateCreatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1TaxRateCreatedEventData.self, forKey: .data)
@@ -96721,7 +96721,7 @@ public struct V1TaxRateUpdatedEvent: Sendable, Codable, Equatable, Hashable, Str
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1TaxRateUpdatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1TaxRateUpdatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1TaxRateUpdatedEventData.self, forKey: .data)
@@ -97145,7 +97145,7 @@ public struct V1TerminalReaderActionFailedEvent: Sendable, Codable, Equatable, H
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1TerminalReaderActionFailedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1TerminalReaderActionFailedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1TerminalReaderActionFailedEventData.self, forKey: .data)
@@ -97569,7 +97569,7 @@ public struct V1TerminalReaderActionSucceededEvent: Sendable, Codable, Equatable
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1TerminalReaderActionSucceededEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1TerminalReaderActionSucceededEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1TerminalReaderActionSucceededEventData.self, forKey: .data)
@@ -97993,7 +97993,7 @@ public struct V1TerminalReaderActionUpdatedEvent: Sendable, Codable, Equatable, 
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1TerminalReaderActionUpdatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1TerminalReaderActionUpdatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1TerminalReaderActionUpdatedEventData.self, forKey: .data)
@@ -98417,7 +98417,7 @@ public struct V1TestHelpersTestClockAdvancingEvent: Sendable, Codable, Equatable
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1TestHelpersTestClockAdvancingEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1TestHelpersTestClockAdvancingEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1TestHelpersTestClockAdvancingEventData.self, forKey: .data)
@@ -98758,7 +98758,7 @@ public struct V1TestHelpersTestClockCreatedEvent: Sendable, Codable, Equatable, 
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1TestHelpersTestClockCreatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1TestHelpersTestClockCreatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1TestHelpersTestClockCreatedEventData.self, forKey: .data)
@@ -99099,7 +99099,7 @@ public struct V1TestHelpersTestClockDeletedEvent: Sendable, Codable, Equatable, 
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1TestHelpersTestClockDeletedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1TestHelpersTestClockDeletedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1TestHelpersTestClockDeletedEventData.self, forKey: .data)
@@ -99523,7 +99523,7 @@ public struct V1TestHelpersTestClockInternalFailureEvent: Sendable, Codable, Equ
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1TestHelpersTestClockInternalFailureEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1TestHelpersTestClockInternalFailureEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1TestHelpersTestClockInternalFailureEventData.self, forKey: .data)
@@ -99947,7 +99947,7 @@ public struct V1TestHelpersTestClockReadyEvent: Sendable, Codable, Equatable, Ha
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1TestHelpersTestClockReadyEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1TestHelpersTestClockReadyEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1TestHelpersTestClockReadyEventData.self, forKey: .data)
@@ -100371,7 +100371,7 @@ public struct V1TopupCanceledEvent: Sendable, Codable, Equatable, Hashable, Stri
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1TopupCanceledEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1TopupCanceledEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1TopupCanceledEventData.self, forKey: .data)
@@ -100712,7 +100712,7 @@ public struct V1TopupCreatedEvent: Sendable, Codable, Equatable, Hashable, Strip
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1TopupCreatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1TopupCreatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1TopupCreatedEventData.self, forKey: .data)
@@ -101136,7 +101136,7 @@ public struct V1TopupFailedEvent: Sendable, Codable, Equatable, Hashable, Stripe
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1TopupFailedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1TopupFailedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1TopupFailedEventData.self, forKey: .data)
@@ -101560,7 +101560,7 @@ public struct V1TopupReversedEvent: Sendable, Codable, Equatable, Hashable, Stri
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1TopupReversedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1TopupReversedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1TopupReversedEventData.self, forKey: .data)
@@ -101984,7 +101984,7 @@ public struct V1TopupSucceededEvent: Sendable, Codable, Equatable, Hashable, Str
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1TopupSucceededEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1TopupSucceededEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1TopupSucceededEventData.self, forKey: .data)
@@ -102325,7 +102325,7 @@ public struct V1TransferCreatedEvent: Sendable, Codable, Equatable, Hashable, St
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1TransferCreatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1TransferCreatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1TransferCreatedEventData.self, forKey: .data)
@@ -102749,7 +102749,7 @@ public struct V1TransferReversedEvent: Sendable, Codable, Equatable, Hashable, S
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1TransferReversedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1TransferReversedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1TransferReversedEventData.self, forKey: .data)
@@ -103173,7 +103173,7 @@ public struct V1TransferUpdatedEvent: Sendable, Codable, Equatable, Hashable, St
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V1TransferUpdatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V1TransferUpdatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V1TransferUpdatedEventData.self, forKey: .data)

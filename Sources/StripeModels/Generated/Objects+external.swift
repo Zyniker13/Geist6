@@ -58,10 +58,10 @@ public struct ExternalAccountRequirements: Sendable, Codable, Equatable, Hashabl
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.currentlyDue = try container.decode(Nullable<[String]>.self, forKey: .currentlyDue)
-        self.errors = try container.decode(Nullable<[AccountRequirementsError]>.self, forKey: .errors)
-        self.pastDue = try container.decode(Nullable<[String]>.self, forKey: .pastDue)
-        self.pendingVerification = try container.decode(Nullable<[String]>.self, forKey: .pendingVerification)
+        self.currentlyDue = try container.decodeIfPresent(Nullable<[String]>.self, forKey: .currentlyDue) ?? .null
+        self.errors = try container.decodeIfPresent(Nullable<[AccountRequirementsError]>.self, forKey: .errors) ?? .null
+        self.pastDue = try container.decodeIfPresent(Nullable<[String]>.self, forKey: .pastDue) ?? .null
+        self.pendingVerification = try container.decodeIfPresent(Nullable<[String]>.self, forKey: .pendingVerification) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {

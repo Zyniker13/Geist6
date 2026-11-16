@@ -4,34 +4,14 @@
 //  Do not edit by hand: rerun `swift run stripe-gen`.
 //
 import Foundation
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum ProrationDetailsCreditedItems: Sendable, Codable, Equatable, Hashable {
-    case invoiceItemProrationCreditedItems(InvoiceItemProrationCreditedItems)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(InvoiceItemProrationCreditedItems.self) { self = .invoiceItemProrationCreditedItems(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .invoiceItemProrationCreditedItems(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
 public struct ProrationDetails: Sendable, Codable, Equatable, Hashable {
-    public var creditedItems: Nullable<ProrationDetailsCreditedItems>
+    public var creditedItems: Nullable<InvoiceItemProrationCreditedItems>
     public var discountAmounts: [DiscountsResourceDiscountAmount]
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(creditedItems: Nullable<ProrationDetailsCreditedItems>, discountAmounts: [DiscountsResourceDiscountAmount], unknownFields: [String: JSONValue]? = nil) {
+    public init(creditedItems: Nullable<InvoiceItemProrationCreditedItems>, discountAmounts: [DiscountsResourceDiscountAmount], unknownFields: [String: JSONValue]? = nil) {
         self.creditedItems = creditedItems
         self.discountAmounts = discountAmounts
         self.unknownFields = unknownFields
@@ -44,7 +24,7 @@ public struct ProrationDetails: Sendable, Codable, Equatable, Hashable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.creditedItems = try container.decode(Nullable<ProrationDetailsCreditedItems>.self, forKey: .creditedItems)
+        self.creditedItems = try container.decodeIfPresent(Nullable<InvoiceItemProrationCreditedItems>.self, forKey: .creditedItems) ?? .null
         self.discountAmounts = try container.decode([DiscountsResourceDiscountAmount].self, forKey: .discountAmounts)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {

@@ -122,10 +122,10 @@ public struct CancellationDetails: Sendable, Codable, Equatable, Hashable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.comment = try container.decode(Nullable<String>.self, forKey: .comment)
-        self.feedback = try container.decode(Nullable<CancellationDetailsFeedback>.self, forKey: .feedback)
-        self.feedbackOption = try container.decode(Nullable<Expandable<BillingFeedbackOption>>.self, forKey: .feedbackOption)
-        self.reason = try container.decode(Nullable<CancellationDetailsReason>.self, forKey: .reason)
+        self.comment = try container.decodeIfPresent(Nullable<String>.self, forKey: .comment) ?? .null
+        self.feedback = try container.decodeIfPresent(Nullable<CancellationDetailsFeedback>.self, forKey: .feedback) ?? .null
+        self.feedbackOption = try container.decodeIfPresent(Nullable<Expandable<BillingFeedbackOption>>.self, forKey: .feedbackOption) ?? .null
+        self.reason = try container.decodeIfPresent(Nullable<CancellationDetailsReason>.self, forKey: .reason) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {

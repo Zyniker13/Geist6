@@ -18481,7 +18481,7 @@ public struct V2CoreAccountCreatedEventChanges: Sendable, Codable, Equatable, Ha
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.after = try container.decode(V2CoreAccountCreatedEventChangesAfter.self, forKey: .after)
-        self.before = try container.decode(Nullable<V2CoreAccountCreatedEventChangesBefore>.self, forKey: .before)
+        self.before = try container.decodeIfPresent(Nullable<V2CoreAccountCreatedEventChangesBefore>.self, forKey: .before) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -24052,7 +24052,7 @@ public struct V2CoreAccountLinkReturnedEvent: Sendable, Codable, Equatable, Hash
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V2CoreAccountLinkReturnedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V2CoreAccountLinkReturnedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V2CoreAccountLinkReturnedEventData.self, forKey: .data)
@@ -25570,7 +25570,7 @@ public struct V2CoreAccountPersonCreatedEventChanges: Sendable, Codable, Equatab
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.after = try container.decode(V2CoreAccountPersonCreatedEventChangesAfter.self, forKey: .after)
-        self.before = try container.decode(Nullable<V2CoreAccountPersonCreatedEventChangesBefore>.self, forKey: .before)
+        self.before = try container.decodeIfPresent(Nullable<V2CoreAccountPersonCreatedEventChangesBefore>.self, forKey: .before) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -25999,7 +25999,7 @@ public struct V2CoreAccountPersonDeletedEventChanges: Sendable, Codable, Equatab
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.after = try container.decode(Nullable<V2CoreAccountPersonDeletedEventChangesAfter>.self, forKey: .after)
+        self.after = try container.decodeIfPresent(Nullable<V2CoreAccountPersonDeletedEventChangesAfter>.self, forKey: .after) ?? .null
         self.before = try container.decode(V2CoreAccountPersonDeletedEventChangesBefore.self, forKey: .before)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
@@ -28486,7 +28486,7 @@ public struct V2CoreEventDestinationPingEvent: Sendable, Codable, Equatable, Has
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V2CoreEventDestinationPingEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V2CoreEventDestinationPingEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V2CoreEventDestinationPingEventData.self, forKey: .data)
@@ -73243,7 +73243,7 @@ public struct V2MoneyManagementAdjustmentCreatedEventChanges: Sendable, Codable,
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.after = try container.decode(V2MoneyManagementAdjustmentCreatedEventChangesAfter.self, forKey: .after)
-        self.before = try container.decode(Nullable<V2MoneyManagementAdjustmentCreatedEventChangesBefore>.self, forKey: .before)
+        self.before = try container.decodeIfPresent(Nullable<V2MoneyManagementAdjustmentCreatedEventChangesBefore>.self, forKey: .before) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -74124,7 +74124,7 @@ public struct V2MoneyManagementFinancialAccountCreatedEventChanges: Sendable, Co
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.after = try container.decode(V2MoneyManagementFinancialAccountCreatedEventChangesAfter.self, forKey: .after)
-        self.before = try container.decode(Nullable<V2MoneyManagementFinancialAccountCreatedEventChangesBefore>.self, forKey: .before)
+        self.before = try container.decodeIfPresent(Nullable<V2MoneyManagementFinancialAccountCreatedEventChangesBefore>.self, forKey: .before) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -75670,7 +75670,7 @@ public struct V2MoneyManagementFinancialAddressActivatedEvent: Sendable, Codable
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V2MoneyManagementFinancialAddressActivatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V2MoneyManagementFinancialAddressActivatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V2MoneyManagementFinancialAddressActivatedEventData.self, forKey: .data)
@@ -76011,7 +76011,7 @@ public struct V2MoneyManagementFinancialAddressFailedEvent: Sendable, Codable, E
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V2MoneyManagementFinancialAddressFailedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V2MoneyManagementFinancialAddressFailedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V2MoneyManagementFinancialAddressFailedEventData.self, forKey: .data)
@@ -77196,7 +77196,7 @@ public struct V2MoneyManagementInboundTransferAvailableEvent: Sendable, Codable,
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V2MoneyManagementInboundTransferAvailableEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V2MoneyManagementInboundTransferAvailableEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V2MoneyManagementInboundTransferAvailableEventData.self, forKey: .data)
@@ -77537,7 +77537,7 @@ public struct V2MoneyManagementInboundTransferBankDebitFailedEvent: Sendable, Co
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V2MoneyManagementInboundTransferBankDebitFailedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V2MoneyManagementInboundTransferBankDebitFailedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V2MoneyManagementInboundTransferBankDebitFailedEventData.self, forKey: .data)
@@ -77878,7 +77878,7 @@ public struct V2MoneyManagementInboundTransferBankDebitProcessingEvent: Sendable
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V2MoneyManagementInboundTransferBankDebitProcessingEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V2MoneyManagementInboundTransferBankDebitProcessingEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V2MoneyManagementInboundTransferBankDebitProcessingEventData.self, forKey: .data)
@@ -78219,7 +78219,7 @@ public struct V2MoneyManagementInboundTransferBankDebitQueuedEvent: Sendable, Co
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V2MoneyManagementInboundTransferBankDebitQueuedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V2MoneyManagementInboundTransferBankDebitQueuedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V2MoneyManagementInboundTransferBankDebitQueuedEventData.self, forKey: .data)
@@ -78560,7 +78560,7 @@ public struct V2MoneyManagementInboundTransferBankDebitReturnedEvent: Sendable, 
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V2MoneyManagementInboundTransferBankDebitReturnedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V2MoneyManagementInboundTransferBankDebitReturnedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V2MoneyManagementInboundTransferBankDebitReturnedEventData.self, forKey: .data)
@@ -78901,7 +78901,7 @@ public struct V2MoneyManagementInboundTransferBankDebitSucceededEvent: Sendable,
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V2MoneyManagementInboundTransferBankDebitSucceededEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V2MoneyManagementInboundTransferBankDebitSucceededEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V2MoneyManagementInboundTransferBankDebitSucceededEventData.self, forKey: .data)
@@ -80575,7 +80575,7 @@ public struct V2MoneyManagementOutboundPaymentCanceledEvent: Sendable, Codable, 
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V2MoneyManagementOutboundPaymentCanceledEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V2MoneyManagementOutboundPaymentCanceledEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V2MoneyManagementOutboundPaymentCanceledEventData.self, forKey: .data)
@@ -80916,7 +80916,7 @@ public struct V2MoneyManagementOutboundPaymentCreatedEvent: Sendable, Codable, E
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V2MoneyManagementOutboundPaymentCreatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V2MoneyManagementOutboundPaymentCreatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V2MoneyManagementOutboundPaymentCreatedEventData.self, forKey: .data)
@@ -81257,7 +81257,7 @@ public struct V2MoneyManagementOutboundPaymentFailedEvent: Sendable, Codable, Eq
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V2MoneyManagementOutboundPaymentFailedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V2MoneyManagementOutboundPaymentFailedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V2MoneyManagementOutboundPaymentFailedEventData.self, forKey: .data)
@@ -81598,7 +81598,7 @@ public struct V2MoneyManagementOutboundPaymentPostedEvent: Sendable, Codable, Eq
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V2MoneyManagementOutboundPaymentPostedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V2MoneyManagementOutboundPaymentPostedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V2MoneyManagementOutboundPaymentPostedEventData.self, forKey: .data)
@@ -81939,7 +81939,7 @@ public struct V2MoneyManagementOutboundPaymentReturnedEvent: Sendable, Codable, 
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V2MoneyManagementOutboundPaymentReturnedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V2MoneyManagementOutboundPaymentReturnedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V2MoneyManagementOutboundPaymentReturnedEventData.self, forKey: .data)
@@ -85405,7 +85405,7 @@ public struct V2MoneyManagementPayoutIntentCreatedEventChanges: Sendable, Codabl
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.after = try container.decode(V2MoneyManagementPayoutIntentCreatedEventChangesAfter.self, forKey: .after)
-        self.before = try container.decode(Nullable<V2MoneyManagementPayoutIntentCreatedEventChangesBefore>.self, forKey: .before)
+        self.before = try container.decodeIfPresent(Nullable<V2MoneyManagementPayoutIntentCreatedEventChangesBefore>.self, forKey: .before) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -88346,7 +88346,7 @@ public struct V2MoneyManagementPayoutMethodCreatedEventChanges: Sendable, Codabl
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.after = try container.decode(V2MoneyManagementPayoutMethodCreatedEventChangesAfter.self, forKey: .after)
-        self.before = try container.decode(Nullable<V2MoneyManagementPayoutMethodCreatedEventChangesBefore>.self, forKey: .before)
+        self.before = try container.decodeIfPresent(Nullable<V2MoneyManagementPayoutMethodCreatedEventChangesBefore>.self, forKey: .before) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -90492,7 +90492,7 @@ public struct V2MoneyManagementReceivedCreditAvailableEvent: Sendable, Codable, 
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V2MoneyManagementReceivedCreditAvailableEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V2MoneyManagementReceivedCreditAvailableEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V2MoneyManagementReceivedCreditAvailableEventData.self, forKey: .data)
@@ -90833,7 +90833,7 @@ public struct V2MoneyManagementReceivedCreditFailedEvent: Sendable, Codable, Equ
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V2MoneyManagementReceivedCreditFailedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V2MoneyManagementReceivedCreditFailedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V2MoneyManagementReceivedCreditFailedEventData.self, forKey: .data)
@@ -91174,7 +91174,7 @@ public struct V2MoneyManagementReceivedCreditReturnedEvent: Sendable, Codable, E
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V2MoneyManagementReceivedCreditReturnedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V2MoneyManagementReceivedCreditReturnedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V2MoneyManagementReceivedCreditReturnedEventData.self, forKey: .data)
@@ -91515,7 +91515,7 @@ public struct V2MoneyManagementReceivedCreditSucceededEvent: Sendable, Codable, 
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V2MoneyManagementReceivedCreditSucceededEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V2MoneyManagementReceivedCreditSucceededEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V2MoneyManagementReceivedCreditSucceededEventData.self, forKey: .data)
@@ -92253,7 +92253,7 @@ public struct V2MoneyManagementRecipientVerificationCreatedEvent: Sendable, Coda
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V2MoneyManagementRecipientVerificationCreatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V2MoneyManagementRecipientVerificationCreatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V2MoneyManagementRecipientVerificationCreatedEventData.self, forKey: .data)
@@ -92594,7 +92594,7 @@ public struct V2MoneyManagementRecipientVerificationUpdatedEvent: Sendable, Coda
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V2MoneyManagementRecipientVerificationUpdatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V2MoneyManagementRecipientVerificationUpdatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V2MoneyManagementRecipientVerificationUpdatedEventData.self, forKey: .data)
@@ -93714,7 +93714,7 @@ public struct V2MoneyManagementTransactionCreatedEvent: Sendable, Codable, Equat
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V2MoneyManagementTransactionCreatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V2MoneyManagementTransactionCreatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V2MoneyManagementTransactionCreatedEventData.self, forKey: .data)
@@ -94061,7 +94061,7 @@ public struct V2MoneyManagementTransactionUpdatedEvent: Sendable, Codable, Equat
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.changes = try container.decode(Nullable<V2MoneyManagementTransactionUpdatedEventChanges>.self, forKey: .changes)
+        self.changes = try container.decodeIfPresent(Nullable<V2MoneyManagementTransactionUpdatedEventChanges>.self, forKey: .changes) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(String.self, forKey: .created)
         self.data = try container.decode(V2MoneyManagementTransactionUpdatedEventData.self, forKey: .data)
@@ -104451,8 +104451,8 @@ public struct AccountPage: Sendable, Codable, Equatable, Hashable, V2Page {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.data = try container.decode([V2CoreAccount].self, forKey: .data)
-        self.nextPageUrl = try container.decode(Nullable<String>.self, forKey: .nextPageUrl)
-        self.previousPageUrl = try container.decode(Nullable<String>.self, forKey: .previousPageUrl)
+        self.nextPageUrl = try container.decodeIfPresent(Nullable<String>.self, forKey: .nextPageUrl) ?? .null
+        self.previousPageUrl = try container.decodeIfPresent(Nullable<String>.self, forKey: .previousPageUrl) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -104521,8 +104521,8 @@ public struct AccountPersonPage: Sendable, Codable, Equatable, Hashable, V2Page 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.data = try container.decode([V2CoreAccountPerson].self, forKey: .data)
-        self.nextPageUrl = try container.decode(Nullable<String>.self, forKey: .nextPageUrl)
-        self.previousPageUrl = try container.decode(Nullable<String>.self, forKey: .previousPageUrl)
+        self.nextPageUrl = try container.decodeIfPresent(Nullable<String>.self, forKey: .nextPageUrl) ?? .null
+        self.previousPageUrl = try container.decodeIfPresent(Nullable<String>.self, forKey: .previousPageUrl) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -104591,8 +104591,8 @@ public struct AdjustmentPage: Sendable, Codable, Equatable, Hashable, V2Page {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.data = try container.decode([V2MoneyManagementAdjustment].self, forKey: .data)
-        self.nextPageUrl = try container.decode(Nullable<String>.self, forKey: .nextPageUrl)
-        self.previousPageUrl = try container.decode(Nullable<String>.self, forKey: .previousPageUrl)
+        self.nextPageUrl = try container.decodeIfPresent(Nullable<String>.self, forKey: .nextPageUrl) ?? .null
+        self.previousPageUrl = try container.decodeIfPresent(Nullable<String>.self, forKey: .previousPageUrl) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -104661,8 +104661,8 @@ public struct EventPage: Sendable, Codable, Equatable, Hashable, V2Page {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.data = try container.decode([V2CoreEvent].self, forKey: .data)
-        self.nextPageUrl = try container.decode(Nullable<String>.self, forKey: .nextPageUrl)
-        self.previousPageUrl = try container.decode(Nullable<String>.self, forKey: .previousPageUrl)
+        self.nextPageUrl = try container.decodeIfPresent(Nullable<String>.self, forKey: .nextPageUrl) ?? .null
+        self.previousPageUrl = try container.decodeIfPresent(Nullable<String>.self, forKey: .previousPageUrl) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -104731,8 +104731,8 @@ public struct EventDestinationPage: Sendable, Codable, Equatable, Hashable, V2Pa
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.data = try container.decode([V2CoreEventDestination].self, forKey: .data)
-        self.nextPageUrl = try container.decode(Nullable<String>.self, forKey: .nextPageUrl)
-        self.previousPageUrl = try container.decode(Nullable<String>.self, forKey: .previousPageUrl)
+        self.nextPageUrl = try container.decodeIfPresent(Nullable<String>.self, forKey: .nextPageUrl) ?? .null
+        self.previousPageUrl = try container.decodeIfPresent(Nullable<String>.self, forKey: .previousPageUrl) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -104801,8 +104801,8 @@ public struct FinancialAccountPage: Sendable, Codable, Equatable, Hashable, V2Pa
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.data = try container.decode([V2MoneyManagementFinancialAccount].self, forKey: .data)
-        self.nextPageUrl = try container.decode(Nullable<String>.self, forKey: .nextPageUrl)
-        self.previousPageUrl = try container.decode(Nullable<String>.self, forKey: .previousPageUrl)
+        self.nextPageUrl = try container.decodeIfPresent(Nullable<String>.self, forKey: .nextPageUrl) ?? .null
+        self.previousPageUrl = try container.decodeIfPresent(Nullable<String>.self, forKey: .previousPageUrl) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -104871,8 +104871,8 @@ public struct FinancialAddressPage: Sendable, Codable, Equatable, Hashable, V2Pa
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.data = try container.decode([V2MoneyManagementFinancialAddress].self, forKey: .data)
-        self.nextPageUrl = try container.decode(Nullable<String>.self, forKey: .nextPageUrl)
-        self.previousPageUrl = try container.decode(Nullable<String>.self, forKey: .previousPageUrl)
+        self.nextPageUrl = try container.decodeIfPresent(Nullable<String>.self, forKey: .nextPageUrl) ?? .null
+        self.previousPageUrl = try container.decodeIfPresent(Nullable<String>.self, forKey: .previousPageUrl) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -104941,8 +104941,8 @@ public struct GbBankAccountPage: Sendable, Codable, Equatable, Hashable, V2Page 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.data = try container.decode([V2CoreVaultGbBankAccount].self, forKey: .data)
-        self.nextPageUrl = try container.decode(Nullable<String>.self, forKey: .nextPageUrl)
-        self.previousPageUrl = try container.decode(Nullable<String>.self, forKey: .previousPageUrl)
+        self.nextPageUrl = try container.decodeIfPresent(Nullable<String>.self, forKey: .nextPageUrl) ?? .null
+        self.previousPageUrl = try container.decodeIfPresent(Nullable<String>.self, forKey: .previousPageUrl) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -105011,8 +105011,8 @@ public struct InboundTransferPage: Sendable, Codable, Equatable, Hashable, V2Pag
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.data = try container.decode([V2MoneyManagementInboundTransfer].self, forKey: .data)
-        self.nextPageUrl = try container.decode(Nullable<String>.self, forKey: .nextPageUrl)
-        self.previousPageUrl = try container.decode(Nullable<String>.self, forKey: .previousPageUrl)
+        self.nextPageUrl = try container.decodeIfPresent(Nullable<String>.self, forKey: .nextPageUrl) ?? .null
+        self.previousPageUrl = try container.decodeIfPresent(Nullable<String>.self, forKey: .previousPageUrl) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -105081,8 +105081,8 @@ public struct OutboundPaymentPage: Sendable, Codable, Equatable, Hashable, V2Pag
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.data = try container.decode([V2MoneyManagementOutboundPayment].self, forKey: .data)
-        self.nextPageUrl = try container.decode(Nullable<String>.self, forKey: .nextPageUrl)
-        self.previousPageUrl = try container.decode(Nullable<String>.self, forKey: .previousPageUrl)
+        self.nextPageUrl = try container.decodeIfPresent(Nullable<String>.self, forKey: .nextPageUrl) ?? .null
+        self.previousPageUrl = try container.decodeIfPresent(Nullable<String>.self, forKey: .previousPageUrl) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -105151,8 +105151,8 @@ public struct OutboundSetupIntentPage: Sendable, Codable, Equatable, Hashable, V
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.data = try container.decode([V2MoneyManagementOutboundSetupIntent].self, forKey: .data)
-        self.nextPageUrl = try container.decode(Nullable<String>.self, forKey: .nextPageUrl)
-        self.previousPageUrl = try container.decode(Nullable<String>.self, forKey: .previousPageUrl)
+        self.nextPageUrl = try container.decodeIfPresent(Nullable<String>.self, forKey: .nextPageUrl) ?? .null
+        self.previousPageUrl = try container.decodeIfPresent(Nullable<String>.self, forKey: .previousPageUrl) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -105221,8 +105221,8 @@ public struct PayoutIntentPage: Sendable, Codable, Equatable, Hashable, V2Page {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.data = try container.decode([V2MoneyManagementPayoutIntent].self, forKey: .data)
-        self.nextPageUrl = try container.decode(Nullable<String>.self, forKey: .nextPageUrl)
-        self.previousPageUrl = try container.decode(Nullable<String>.self, forKey: .previousPageUrl)
+        self.nextPageUrl = try container.decodeIfPresent(Nullable<String>.self, forKey: .nextPageUrl) ?? .null
+        self.previousPageUrl = try container.decodeIfPresent(Nullable<String>.self, forKey: .previousPageUrl) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -105291,8 +105291,8 @@ public struct PayoutMethodPage: Sendable, Codable, Equatable, Hashable, V2Page {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.data = try container.decode([V2MoneyManagementPayoutMethod].self, forKey: .data)
-        self.nextPageUrl = try container.decode(Nullable<String>.self, forKey: .nextPageUrl)
-        self.previousPageUrl = try container.decode(Nullable<String>.self, forKey: .previousPageUrl)
+        self.nextPageUrl = try container.decodeIfPresent(Nullable<String>.self, forKey: .nextPageUrl) ?? .null
+        self.previousPageUrl = try container.decodeIfPresent(Nullable<String>.self, forKey: .previousPageUrl) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -105361,8 +105361,8 @@ public struct ProductCatalogImportPage: Sendable, Codable, Equatable, Hashable, 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.data = try container.decode([V2CommerceProductCatalogImport].self, forKey: .data)
-        self.nextPageUrl = try container.decode(Nullable<String>.self, forKey: .nextPageUrl)
-        self.previousPageUrl = try container.decode(Nullable<String>.self, forKey: .previousPageUrl)
+        self.nextPageUrl = try container.decodeIfPresent(Nullable<String>.self, forKey: .nextPageUrl) ?? .null
+        self.previousPageUrl = try container.decodeIfPresent(Nullable<String>.self, forKey: .previousPageUrl) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -105431,8 +105431,8 @@ public struct ReceivedCreditPage: Sendable, Codable, Equatable, Hashable, V2Page
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.data = try container.decode([V2MoneyManagementReceivedCredit].self, forKey: .data)
-        self.nextPageUrl = try container.decode(Nullable<String>.self, forKey: .nextPageUrl)
-        self.previousPageUrl = try container.decode(Nullable<String>.self, forKey: .previousPageUrl)
+        self.nextPageUrl = try container.decodeIfPresent(Nullable<String>.self, forKey: .nextPageUrl) ?? .null
+        self.previousPageUrl = try container.decodeIfPresent(Nullable<String>.self, forKey: .previousPageUrl) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -105501,8 +105501,8 @@ public struct TransactionPage: Sendable, Codable, Equatable, Hashable, V2Page {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.data = try container.decode([V2MoneyManagementTransaction].self, forKey: .data)
-        self.nextPageUrl = try container.decode(Nullable<String>.self, forKey: .nextPageUrl)
-        self.previousPageUrl = try container.decode(Nullable<String>.self, forKey: .previousPageUrl)
+        self.nextPageUrl = try container.decodeIfPresent(Nullable<String>.self, forKey: .nextPageUrl) ?? .null
+        self.previousPageUrl = try container.decodeIfPresent(Nullable<String>.self, forKey: .previousPageUrl) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -105571,8 +105571,8 @@ public struct TransactionEntryPage: Sendable, Codable, Equatable, Hashable, V2Pa
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.data = try container.decode([V2MoneyManagementTransactionEntry].self, forKey: .data)
-        self.nextPageUrl = try container.decode(Nullable<String>.self, forKey: .nextPageUrl)
-        self.previousPageUrl = try container.decode(Nullable<String>.self, forKey: .previousPageUrl)
+        self.nextPageUrl = try container.decodeIfPresent(Nullable<String>.self, forKey: .nextPageUrl) ?? .null
+        self.previousPageUrl = try container.decodeIfPresent(Nullable<String>.self, forKey: .previousPageUrl) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -105641,8 +105641,8 @@ public struct UsBankAccountPage: Sendable, Codable, Equatable, Hashable, V2Page 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.data = try container.decode([V2CoreVaultUsBankAccount].self, forKey: .data)
-        self.nextPageUrl = try container.decode(Nullable<String>.self, forKey: .nextPageUrl)
-        self.previousPageUrl = try container.decode(Nullable<String>.self, forKey: .previousPageUrl)
+        self.nextPageUrl = try container.decodeIfPresent(Nullable<String>.self, forKey: .nextPageUrl) ?? .null
+        self.previousPageUrl = try container.decodeIfPresent(Nullable<String>.self, forKey: .previousPageUrl) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {

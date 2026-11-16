@@ -143,26 +143,6 @@ public enum PlanTiersMode: Sendable, Equatable, Hashable, LosslessEnum {
     }
 }
 
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum PlanTransformUsage: Sendable, Codable, Equatable, Hashable {
-    case transformUsage(TransformUsage)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(TransformUsage.self) { self = .transformUsage(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .transformUsage(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
 /// Lossless enum: values Stripe documents plus any value the API
 /// adds later, kept in `undocumented` instead of dropped.
 public enum PlanUsageType: Sendable, Equatable, Hashable, LosslessEnum {
@@ -215,14 +195,14 @@ public struct Plan: Sendable, Codable, Equatable, Hashable, StripeIdentified {
     public var product: Nullable<PlanProduct>
     public var tiers: [PlanTier]?
     public var tiersMode: Nullable<PlanTiersMode>
-    public var transformUsage: Nullable<PlanTransformUsage>
+    public var transformUsage: Nullable<TransformUsage>
     public var trialPeriodDays: Nullable<Int>
     public var usageType: PlanUsageType
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(active: Bool, amount: Nullable<Int>, amountDecimal: Nullable<String>, billingScheme: PlanBillingScheme, created: StripeTimestamp, currency: String, id: String, interval: PlanInterval, intervalCount: Int, livemode: Bool, metadata: Nullable<[String: String]>, meter: Nullable<String>, nickname: Nullable<String>, object: DeletedPlanObject, product: Nullable<PlanProduct>, tiers: [PlanTier]? = nil, tiersMode: Nullable<PlanTiersMode>, transformUsage: Nullable<PlanTransformUsage>, trialPeriodDays: Nullable<Int>, usageType: PlanUsageType, unknownFields: [String: JSONValue]? = nil) {
+    public init(active: Bool, amount: Nullable<Int>, amountDecimal: Nullable<String>, billingScheme: PlanBillingScheme, created: StripeTimestamp, currency: String, id: String, interval: PlanInterval, intervalCount: Int, livemode: Bool, metadata: Nullable<[String: String]>, meter: Nullable<String>, nickname: Nullable<String>, object: DeletedPlanObject, product: Nullable<PlanProduct>, tiers: [PlanTier]? = nil, tiersMode: Nullable<PlanTiersMode>, transformUsage: Nullable<TransformUsage>, trialPeriodDays: Nullable<Int>, usageType: PlanUsageType, unknownFields: [String: JSONValue]? = nil) {
         self.active = active
         self.amount = amount
         self.amountDecimal = amountDecimal
@@ -272,8 +252,8 @@ public struct Plan: Sendable, Codable, Equatable, Hashable, StripeIdentified {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.active = try container.decode(Bool.self, forKey: .active)
-        self.amount = try container.decode(Nullable<Int>.self, forKey: .amount)
-        self.amountDecimal = try container.decode(Nullable<String>.self, forKey: .amountDecimal)
+        self.amount = try container.decodeIfPresent(Nullable<Int>.self, forKey: .amount) ?? .null
+        self.amountDecimal = try container.decodeIfPresent(Nullable<String>.self, forKey: .amountDecimal) ?? .null
         self.billingScheme = try container.decode(PlanBillingScheme.self, forKey: .billingScheme)
         self.created = try container.decode(StripeTimestamp.self, forKey: .created)
         self.currency = try container.decode(String.self, forKey: .currency)
@@ -281,15 +261,15 @@ public struct Plan: Sendable, Codable, Equatable, Hashable, StripeIdentified {
         self.interval = try container.decode(PlanInterval.self, forKey: .interval)
         self.intervalCount = try container.decode(Int.self, forKey: .intervalCount)
         self.livemode = try container.decode(Bool.self, forKey: .livemode)
-        self.metadata = try container.decode(Nullable<[String: String]>.self, forKey: .metadata)
-        self.meter = try container.decode(Nullable<String>.self, forKey: .meter)
-        self.nickname = try container.decode(Nullable<String>.self, forKey: .nickname)
+        self.metadata = try container.decodeIfPresent(Nullable<[String: String]>.self, forKey: .metadata) ?? .null
+        self.meter = try container.decodeIfPresent(Nullable<String>.self, forKey: .meter) ?? .null
+        self.nickname = try container.decodeIfPresent(Nullable<String>.self, forKey: .nickname) ?? .null
         self.object = try container.decode(DeletedPlanObject.self, forKey: .object)
-        self.product = try container.decode(Nullable<PlanProduct>.self, forKey: .product)
+        self.product = try container.decodeIfPresent(Nullable<PlanProduct>.self, forKey: .product) ?? .null
         self.tiers = try container.decodeIfPresent([PlanTier].self, forKey: .tiers)
-        self.tiersMode = try container.decode(Nullable<PlanTiersMode>.self, forKey: .tiersMode)
-        self.transformUsage = try container.decode(Nullable<PlanTransformUsage>.self, forKey: .transformUsage)
-        self.trialPeriodDays = try container.decode(Nullable<Int>.self, forKey: .trialPeriodDays)
+        self.tiersMode = try container.decodeIfPresent(Nullable<PlanTiersMode>.self, forKey: .tiersMode) ?? .null
+        self.transformUsage = try container.decodeIfPresent(Nullable<TransformUsage>.self, forKey: .transformUsage) ?? .null
+        self.trialPeriodDays = try container.decodeIfPresent(Nullable<Int>.self, forKey: .trialPeriodDays) ?? .null
         self.usageType = try container.decode(PlanUsageType.self, forKey: .usageType)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
@@ -489,11 +469,11 @@ public struct PlanTier: Sendable, Codable, Equatable, Hashable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.flatAmount = try container.decode(Nullable<Int>.self, forKey: .flatAmount)
-        self.flatAmountDecimal = try container.decode(Nullable<String>.self, forKey: .flatAmountDecimal)
-        self.unitAmount = try container.decode(Nullable<Int>.self, forKey: .unitAmount)
-        self.unitAmountDecimal = try container.decode(Nullable<String>.self, forKey: .unitAmountDecimal)
-        self.upTo = try container.decode(Nullable<Int>.self, forKey: .upTo)
+        self.flatAmount = try container.decodeIfPresent(Nullable<Int>.self, forKey: .flatAmount) ?? .null
+        self.flatAmountDecimal = try container.decodeIfPresent(Nullable<String>.self, forKey: .flatAmountDecimal) ?? .null
+        self.unitAmount = try container.decodeIfPresent(Nullable<Int>.self, forKey: .unitAmount) ?? .null
+        self.unitAmountDecimal = try container.decodeIfPresent(Nullable<String>.self, forKey: .unitAmountDecimal) ?? .null
+        self.upTo = try container.decodeIfPresent(Nullable<Int>.self, forKey: .upTo) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {

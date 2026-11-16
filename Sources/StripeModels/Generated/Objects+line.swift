@@ -35,50 +35,6 @@ public enum LineItemObject: Sendable, Equatable, Hashable, LosslessEnum {
     }
 }
 
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum LineItemParent: Sendable, Codable, Equatable, Hashable {
-    case billingBillResourceInvoicingLinesParentsInvoiceLineItemParent(BillingBillResourceInvoicingLinesParentsInvoiceLineItemParent)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(BillingBillResourceInvoicingLinesParentsInvoiceLineItemParent.self) { self = .billingBillResourceInvoicingLinesParentsInvoiceLineItemParent(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .billingBillResourceInvoicingLinesParentsInvoiceLineItemParent(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum LineItemPricing: Sendable, Codable, Equatable, Hashable {
-    case billingBillResourceInvoicingPricingPricing(BillingBillResourceInvoicingPricingPricing)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let raw = try? container.decode([String: JSONValue].self),
-           let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
-            if tag == "price_details" { self = .billingBillResourceInvoicingPricingPricing(try container.decode(BillingBillResourceInvoicingPricingPricing.self)); return }
-        }
-        if let value = try? container.decode(BillingBillResourceInvoicingPricingPricing.self) { self = .billingBillResourceInvoicingPricingPricing(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .billingBillResourceInvoicingPricingPricing(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
 public struct LineItem: Sendable, Codable, Equatable, Hashable, StripeIdentified {
     public var amount: Int
     public var currency: String
@@ -91,10 +47,10 @@ public struct LineItem: Sendable, Codable, Equatable, Hashable, StripeIdentified
     public var livemode: Bool
     public var metadata: [String: String]
     public var object: LineItemObject
-    public var parent: Nullable<LineItemParent>
+    public var parent: Nullable<BillingBillResourceInvoicingLinesParentsInvoiceLineItemParent>
     public var period: InvoiceLineItemPeriod
     public var pretaxCreditAmounts: Nullable<[InvoicesResourcePretaxCreditAmount]>
-    public var pricing: Nullable<LineItemPricing>
+    public var pricing: Nullable<BillingBillResourceInvoicingPricingPricing>
     public var quantity: Nullable<Int>
     public var quantityDecimal: Nullable<String>
     public var subscription: Nullable<Expandable<Subscription>>
@@ -104,7 +60,7 @@ public struct LineItem: Sendable, Codable, Equatable, Hashable, StripeIdentified
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(amount: Int, currency: String, description: Nullable<String>, discountAmounts: Nullable<[DiscountsResourceDiscountAmount]>, discountable: Bool, discounts: [Expandable<Discount>], id: String, invoice: Nullable<String>, livemode: Bool, metadata: [String: String], object: LineItemObject, parent: Nullable<LineItemParent>, period: InvoiceLineItemPeriod, pretaxCreditAmounts: Nullable<[InvoicesResourcePretaxCreditAmount]>, pricing: Nullable<LineItemPricing>, quantity: Nullable<Int>, quantityDecimal: Nullable<String>, subscription: Nullable<Expandable<Subscription>>, subtotal: Int, taxes: Nullable<[BillingBillResourceInvoicingTaxesTax]>, unknownFields: [String: JSONValue]? = nil) {
+    public init(amount: Int, currency: String, description: Nullable<String>, discountAmounts: Nullable<[DiscountsResourceDiscountAmount]>, discountable: Bool, discounts: [Expandable<Discount>], id: String, invoice: Nullable<String>, livemode: Bool, metadata: [String: String], object: LineItemObject, parent: Nullable<BillingBillResourceInvoicingLinesParentsInvoiceLineItemParent>, period: InvoiceLineItemPeriod, pretaxCreditAmounts: Nullable<[InvoicesResourcePretaxCreditAmount]>, pricing: Nullable<BillingBillResourceInvoicingPricingPricing>, quantity: Nullable<Int>, quantityDecimal: Nullable<String>, subscription: Nullable<Expandable<Subscription>>, subtotal: Int, taxes: Nullable<[BillingBillResourceInvoicingTaxesTax]>, unknownFields: [String: JSONValue]? = nil) {
         self.amount = amount
         self.currency = currency
         self.description = description
@@ -155,24 +111,24 @@ public struct LineItem: Sendable, Codable, Equatable, Hashable, StripeIdentified
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.amount = try container.decode(Int.self, forKey: .amount)
         self.currency = try container.decode(String.self, forKey: .currency)
-        self.description = try container.decode(Nullable<String>.self, forKey: .description)
-        self.discountAmounts = try container.decode(Nullable<[DiscountsResourceDiscountAmount]>.self, forKey: .discountAmounts)
+        self.description = try container.decodeIfPresent(Nullable<String>.self, forKey: .description) ?? .null
+        self.discountAmounts = try container.decodeIfPresent(Nullable<[DiscountsResourceDiscountAmount]>.self, forKey: .discountAmounts) ?? .null
         self.discountable = try container.decode(Bool.self, forKey: .discountable)
         self.discounts = try container.decode([Expandable<Discount>].self, forKey: .discounts)
         self.id = try container.decode(String.self, forKey: .id)
-        self.invoice = try container.decode(Nullable<String>.self, forKey: .invoice)
+        self.invoice = try container.decodeIfPresent(Nullable<String>.self, forKey: .invoice) ?? .null
         self.livemode = try container.decode(Bool.self, forKey: .livemode)
         self.metadata = try container.decode([String: String].self, forKey: .metadata)
         self.object = try container.decode(LineItemObject.self, forKey: .object)
-        self.parent = try container.decode(Nullable<LineItemParent>.self, forKey: .parent)
+        self.parent = try container.decodeIfPresent(Nullable<BillingBillResourceInvoicingLinesParentsInvoiceLineItemParent>.self, forKey: .parent) ?? .null
         self.period = try container.decode(InvoiceLineItemPeriod.self, forKey: .period)
-        self.pretaxCreditAmounts = try container.decode(Nullable<[InvoicesResourcePretaxCreditAmount]>.self, forKey: .pretaxCreditAmounts)
-        self.pricing = try container.decode(Nullable<LineItemPricing>.self, forKey: .pricing)
-        self.quantity = try container.decode(Nullable<Int>.self, forKey: .quantity)
-        self.quantityDecimal = try container.decode(Nullable<String>.self, forKey: .quantityDecimal)
-        self.subscription = try container.decode(Nullable<Expandable<Subscription>>.self, forKey: .subscription)
+        self.pretaxCreditAmounts = try container.decodeIfPresent(Nullable<[InvoicesResourcePretaxCreditAmount]>.self, forKey: .pretaxCreditAmounts) ?? .null
+        self.pricing = try container.decodeIfPresent(Nullable<BillingBillResourceInvoicingPricingPricing>.self, forKey: .pricing) ?? .null
+        self.quantity = try container.decodeIfPresent(Nullable<Int>.self, forKey: .quantity) ?? .null
+        self.quantityDecimal = try container.decodeIfPresent(Nullable<String>.self, forKey: .quantityDecimal) ?? .null
+        self.subscription = try container.decodeIfPresent(Nullable<Expandable<Subscription>>.self, forKey: .subscription) ?? .null
         self.subtotal = try container.decode(Int.self, forKey: .subtotal)
-        self.taxes = try container.decode(Nullable<[BillingBillResourceInvoicingTaxesTax]>.self, forKey: .taxes)
+        self.taxes = try container.decodeIfPresent(Nullable<[BillingBillResourceInvoicingTaxesTax]>.self, forKey: .taxes) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -240,8 +196,8 @@ public struct LineItemsAdjustableQuantity: Sendable, Codable, Equatable, Hashabl
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.enabled = try container.decode(Bool.self, forKey: .enabled)
-        self.maximum = try container.decode(Nullable<Int>.self, forKey: .maximum)
-        self.minimum = try container.decode(Nullable<Int>.self, forKey: .minimum)
+        self.maximum = try container.decodeIfPresent(Nullable<Int>.self, forKey: .maximum) ?? .null
+        self.minimum = try container.decodeIfPresent(Nullable<Int>.self, forKey: .minimum) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -416,8 +372,8 @@ public struct LineItemsTaxAmount: Sendable, Codable, Equatable, Hashable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.amount = try container.decode(Int.self, forKey: .amount)
         self.rate = try container.decode(TaxRate.self, forKey: .rate)
-        self.taxabilityReason = try container.decode(Nullable<LineItemsTaxAmountTaxabilityReason>.self, forKey: .taxabilityReason)
-        self.taxableAmount = try container.decode(Nullable<Int>.self, forKey: .taxableAmount)
+        self.taxabilityReason = try container.decodeIfPresent(Nullable<LineItemsTaxAmountTaxabilityReason>.self, forKey: .taxabilityReason) ?? .null
+        self.taxableAmount = try container.decodeIfPresent(Nullable<Int>.self, forKey: .taxableAmount) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {

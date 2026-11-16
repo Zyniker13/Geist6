@@ -125,13 +125,13 @@ public struct PromotionCode: Sendable, Codable, Equatable, Hashable, StripeIdent
         self.active = try container.decode(Bool.self, forKey: .active)
         self.code = try container.decode(String.self, forKey: .code)
         self.created = try container.decode(StripeTimestamp.self, forKey: .created)
-        self.customer = try container.decode(Nullable<PromotionCodeCustomer>.self, forKey: .customer)
-        self.customerAccount = try container.decode(Nullable<String>.self, forKey: .customerAccount)
-        self.expiresAt = try container.decode(Nullable<StripeTimestamp>.self, forKey: .expiresAt)
+        self.customer = try container.decodeIfPresent(Nullable<PromotionCodeCustomer>.self, forKey: .customer) ?? .null
+        self.customerAccount = try container.decodeIfPresent(Nullable<String>.self, forKey: .customerAccount) ?? .null
+        self.expiresAt = try container.decodeIfPresent(Nullable<StripeTimestamp>.self, forKey: .expiresAt) ?? .null
         self.id = try container.decode(String.self, forKey: .id)
         self.livemode = try container.decode(Bool.self, forKey: .livemode)
-        self.maxRedemptions = try container.decode(Nullable<Int>.self, forKey: .maxRedemptions)
-        self.metadata = try container.decode(Nullable<[String: String]>.self, forKey: .metadata)
+        self.maxRedemptions = try container.decodeIfPresent(Nullable<Int>.self, forKey: .maxRedemptions) ?? .null
+        self.metadata = try container.decodeIfPresent(Nullable<[String: String]>.self, forKey: .metadata) ?? .null
         self.object = try container.decode(PromotionCodeObject.self, forKey: .object)
         self.promotion = try container.decode(PromotionCodesResourcePromotion.self, forKey: .promotion)
         self.restrictions = try container.decode(PromotionCodesResourceRestrictions.self, forKey: .restrictions)
@@ -319,7 +319,7 @@ public struct PromotionCodesResourcePromotion: Sendable, Codable, Equatable, Has
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.coupon = try container.decode(Nullable<Expandable<Coupon>>.self, forKey: .coupon)
+        self.coupon = try container.decodeIfPresent(Nullable<Expandable<Coupon>>.self, forKey: .coupon) ?? .null
         self.type = try container.decode(CouponObject.self, forKey: .type)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
@@ -374,8 +374,8 @@ public struct PromotionCodesResourceRestrictions: Sendable, Codable, Equatable, 
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.currencyOptions = try container.decodeIfPresent([String: JSONValue].self, forKey: .currencyOptions)
         self.firstTimeTransaction = try container.decode(Bool.self, forKey: .firstTimeTransaction)
-        self.minimumAmount = try container.decode(Nullable<Int>.self, forKey: .minimumAmount)
-        self.minimumAmountCurrency = try container.decode(Nullable<String>.self, forKey: .minimumAmountCurrency)
+        self.minimumAmount = try container.decodeIfPresent(Nullable<Int>.self, forKey: .minimumAmount) ?? .null
+        self.minimumAmountCurrency = try container.decodeIfPresent(Nullable<String>.self, forKey: .minimumAmountCurrency) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {

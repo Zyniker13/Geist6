@@ -128,7 +128,7 @@ public struct IdentityVerificationReport: Sendable, Codable, Equatable, Hashable
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.clientReferenceId = try container.decode(Nullable<String>.self, forKey: .clientReferenceId)
+        self.clientReferenceId = try container.decodeIfPresent(Nullable<String>.self, forKey: .clientReferenceId) ?? .null
         self.created = try container.decode(StripeTimestamp.self, forKey: .created)
         self.document = try container.decodeIfPresent(GelatoDocumentReport.self, forKey: .document)
         self.email = try container.decodeIfPresent(GelatoEmailReport.self, forKey: .email)
@@ -141,7 +141,7 @@ public struct IdentityVerificationReport: Sendable, Codable, Equatable, Hashable
         self.selfie = try container.decodeIfPresent(GelatoSelfieReport.self, forKey: .selfie)
         self.type = try container.decode(IdentityVerificationReportType.self, forKey: .type)
         self.verificationFlow = try container.decodeIfPresent(String.self, forKey: .verificationFlow)
-        self.verificationSession = try container.decode(Nullable<String>.self, forKey: .verificationSession)
+        self.verificationSession = try container.decodeIfPresent(Nullable<String>.self, forKey: .verificationSession) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -179,26 +179,6 @@ public struct IdentityVerificationReport: Sendable, Codable, Equatable, Hashable
     }
 }
 
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum IdentityVerificationSessionLastError: Sendable, Codable, Equatable, Hashable {
-    case gelatoSessionLastError(GelatoSessionLastError)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(GelatoSessionLastError.self) { self = .gelatoSessionLastError(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .gelatoSessionLastError(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
 /// Lossless enum: values Stripe documents plus any value the API
 /// adds later, kept in `undocumented` instead of dropped.
 public enum IdentityVerificationSessionObject: Sendable, Equatable, Hashable, LosslessEnum {
@@ -227,66 +207,6 @@ public enum IdentityVerificationSessionObject: Sendable, Equatable, Hashable, Lo
     public func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
         try container.encode(rawValue)
-    }
-}
-
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum IdentityVerificationSessionOptions: Sendable, Codable, Equatable, Hashable {
-    case gelatoVerificationSessionOptions(GelatoVerificationSessionOptions)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(GelatoVerificationSessionOptions.self) { self = .gelatoVerificationSessionOptions(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .gelatoVerificationSessionOptions(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum IdentityVerificationSessionProvidedDetails: Sendable, Codable, Equatable, Hashable {
-    case gelatoProvidedDetails(GelatoProvidedDetails)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(GelatoProvidedDetails.self) { self = .gelatoProvidedDetails(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .gelatoProvidedDetails(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum IdentityVerificationSessionRedaction: Sendable, Codable, Equatable, Hashable {
-    case verificationSessionRedaction(VerificationSessionRedaction)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(VerificationSessionRedaction.self) { self = .verificationSessionRedaction(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .verificationSessionRedaction(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
     }
 }
 
@@ -330,39 +250,19 @@ public enum IdentityVerificationSessionStatus: Sendable, Equatable, Hashable, Lo
     }
 }
 
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum IdentityVerificationSessionVerifiedOutputs: Sendable, Codable, Equatable, Hashable {
-    case gelatoVerifiedOutputs(GelatoVerifiedOutputs)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(GelatoVerifiedOutputs.self) { self = .gelatoVerifiedOutputs(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .gelatoVerifiedOutputs(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
 public struct IdentityVerificationSession: Sendable, Codable, Equatable, Hashable, StripeIdentified {
     public var clientReferenceId: Nullable<String>
     public var clientSecret: Nullable<String>
     public var created: StripeTimestamp
     public var id: String
-    public var lastError: Nullable<IdentityVerificationSessionLastError>
+    public var lastError: Nullable<GelatoSessionLastError>
     public var lastVerificationReport: Nullable<Expandable<IdentityVerificationReport>>
     public var livemode: Bool
     public var metadata: [String: String]
     public var object: IdentityVerificationSessionObject
-    public var options: Nullable<IdentityVerificationSessionOptions>
-    public var providedDetails: Nullable<IdentityVerificationSessionProvidedDetails>?
-    public var redaction: Nullable<IdentityVerificationSessionRedaction>
+    public var options: Nullable<GelatoVerificationSessionOptions>
+    public var providedDetails: Nullable<GelatoProvidedDetails>?
+    public var redaction: Nullable<VerificationSessionRedaction>
     public var relatedCustomer: Nullable<String>
     public var relatedCustomerAccount: Nullable<String>
     public var relatedPerson: GelatoRelatedPerson?
@@ -370,12 +270,12 @@ public struct IdentityVerificationSession: Sendable, Codable, Equatable, Hashabl
     public var type: IdentityVerificationReportType
     public var url: Nullable<String>
     public var verificationFlow: String?
-    public var verifiedOutputs: Nullable<IdentityVerificationSessionVerifiedOutputs>?
+    public var verifiedOutputs: Nullable<GelatoVerifiedOutputs>?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(clientReferenceId: Nullable<String>, clientSecret: Nullable<String>, created: StripeTimestamp, id: String, lastError: Nullable<IdentityVerificationSessionLastError>, lastVerificationReport: Nullable<Expandable<IdentityVerificationReport>>, livemode: Bool, metadata: [String: String], object: IdentityVerificationSessionObject, options: Nullable<IdentityVerificationSessionOptions>, providedDetails: Nullable<IdentityVerificationSessionProvidedDetails>? = nil, redaction: Nullable<IdentityVerificationSessionRedaction>, relatedCustomer: Nullable<String>, relatedCustomerAccount: Nullable<String>, relatedPerson: GelatoRelatedPerson? = nil, status: IdentityVerificationSessionStatus, type: IdentityVerificationReportType, url: Nullable<String>, verificationFlow: String? = nil, verifiedOutputs: Nullable<IdentityVerificationSessionVerifiedOutputs>? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(clientReferenceId: Nullable<String>, clientSecret: Nullable<String>, created: StripeTimestamp, id: String, lastError: Nullable<GelatoSessionLastError>, lastVerificationReport: Nullable<Expandable<IdentityVerificationReport>>, livemode: Bool, metadata: [String: String], object: IdentityVerificationSessionObject, options: Nullable<GelatoVerificationSessionOptions>, providedDetails: Nullable<GelatoProvidedDetails>? = nil, redaction: Nullable<VerificationSessionRedaction>, relatedCustomer: Nullable<String>, relatedCustomerAccount: Nullable<String>, relatedPerson: GelatoRelatedPerson? = nil, status: IdentityVerificationSessionStatus, type: IdentityVerificationReportType, url: Nullable<String>, verificationFlow: String? = nil, verifiedOutputs: Nullable<GelatoVerifiedOutputs>? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.clientReferenceId = clientReferenceId
         self.clientSecret = clientSecret
         self.created = created
@@ -424,26 +324,26 @@ public struct IdentityVerificationSession: Sendable, Codable, Equatable, Hashabl
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.clientReferenceId = try container.decode(Nullable<String>.self, forKey: .clientReferenceId)
-        self.clientSecret = try container.decode(Nullable<String>.self, forKey: .clientSecret)
+        self.clientReferenceId = try container.decodeIfPresent(Nullable<String>.self, forKey: .clientReferenceId) ?? .null
+        self.clientSecret = try container.decodeIfPresent(Nullable<String>.self, forKey: .clientSecret) ?? .null
         self.created = try container.decode(StripeTimestamp.self, forKey: .created)
         self.id = try container.decode(String.self, forKey: .id)
-        self.lastError = try container.decode(Nullable<IdentityVerificationSessionLastError>.self, forKey: .lastError)
-        self.lastVerificationReport = try container.decode(Nullable<Expandable<IdentityVerificationReport>>.self, forKey: .lastVerificationReport)
+        self.lastError = try container.decodeIfPresent(Nullable<GelatoSessionLastError>.self, forKey: .lastError) ?? .null
+        self.lastVerificationReport = try container.decodeIfPresent(Nullable<Expandable<IdentityVerificationReport>>.self, forKey: .lastVerificationReport) ?? .null
         self.livemode = try container.decode(Bool.self, forKey: .livemode)
         self.metadata = try container.decode([String: String].self, forKey: .metadata)
         self.object = try container.decode(IdentityVerificationSessionObject.self, forKey: .object)
-        self.options = try container.decode(Nullable<IdentityVerificationSessionOptions>.self, forKey: .options)
-        self.providedDetails = try container.decodeIfPresent(Nullable<IdentityVerificationSessionProvidedDetails>.self, forKey: .providedDetails)
-        self.redaction = try container.decode(Nullable<IdentityVerificationSessionRedaction>.self, forKey: .redaction)
-        self.relatedCustomer = try container.decode(Nullable<String>.self, forKey: .relatedCustomer)
-        self.relatedCustomerAccount = try container.decode(Nullable<String>.self, forKey: .relatedCustomerAccount)
+        self.options = try container.decodeIfPresent(Nullable<GelatoVerificationSessionOptions>.self, forKey: .options) ?? .null
+        self.providedDetails = try container.decodeIfPresent(Nullable<GelatoProvidedDetails>.self, forKey: .providedDetails)
+        self.redaction = try container.decodeIfPresent(Nullable<VerificationSessionRedaction>.self, forKey: .redaction) ?? .null
+        self.relatedCustomer = try container.decodeIfPresent(Nullable<String>.self, forKey: .relatedCustomer) ?? .null
+        self.relatedCustomerAccount = try container.decodeIfPresent(Nullable<String>.self, forKey: .relatedCustomerAccount) ?? .null
         self.relatedPerson = try container.decodeIfPresent(GelatoRelatedPerson.self, forKey: .relatedPerson)
         self.status = try container.decode(IdentityVerificationSessionStatus.self, forKey: .status)
         self.type = try container.decode(IdentityVerificationReportType.self, forKey: .type)
-        self.url = try container.decode(Nullable<String>.self, forKey: .url)
+        self.url = try container.decodeIfPresent(Nullable<String>.self, forKey: .url) ?? .null
         self.verificationFlow = try container.decodeIfPresent(String.self, forKey: .verificationFlow)
-        self.verifiedOutputs = try container.decodeIfPresent(Nullable<IdentityVerificationSessionVerifiedOutputs>.self, forKey: .verifiedOutputs)
+        self.verifiedOutputs = try container.decodeIfPresent(Nullable<GelatoVerifiedOutputs>.self, forKey: .verifiedOutputs)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {

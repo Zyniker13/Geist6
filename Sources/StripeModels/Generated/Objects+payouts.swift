@@ -25,7 +25,7 @@ public struct PayoutsTraceId: Sendable, Codable, Equatable, Hashable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.status = try container.decode(String.self, forKey: .status)
-        self.value = try container.decode(Nullable<String>.self, forKey: .value)
+        self.value = try container.decodeIfPresent(Nullable<String>.self, forKey: .value) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {

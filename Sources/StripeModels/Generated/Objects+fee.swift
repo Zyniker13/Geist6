@@ -34,9 +34,9 @@ public struct Fee: Sendable, Codable, Equatable, Hashable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.amount = try container.decode(Int.self, forKey: .amount)
-        self.application = try container.decode(Nullable<String>.self, forKey: .application)
+        self.application = try container.decodeIfPresent(Nullable<String>.self, forKey: .application) ?? .null
         self.currency = try container.decode(String.self, forKey: .currency)
-        self.description = try container.decode(Nullable<String>.self, forKey: .description)
+        self.description = try container.decodeIfPresent(Nullable<String>.self, forKey: .description) ?? .null
         self.type = try container.decode(String.self, forKey: .type)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
@@ -136,12 +136,12 @@ public struct FeeRefund: Sendable, Codable, Equatable, Hashable, StripeIdentifie
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.amount = try container.decode(Int.self, forKey: .amount)
-        self.balanceTransaction = try container.decode(Nullable<Expandable<BalanceTransaction>>.self, forKey: .balanceTransaction)
+        self.balanceTransaction = try container.decodeIfPresent(Nullable<Expandable<BalanceTransaction>>.self, forKey: .balanceTransaction) ?? .null
         self.created = try container.decode(StripeTimestamp.self, forKey: .created)
         self.currency = try container.decode(String.self, forKey: .currency)
         self.fee = try container.decode(Expandable<ApplicationFee>.self, forKey: .fee)
         self.id = try container.decode(String.self, forKey: .id)
-        self.metadata = try container.decode(Nullable<[String: String]>.self, forKey: .metadata)
+        self.metadata = try container.decodeIfPresent(Nullable<[String: String]>.self, forKey: .metadata) ?? .null
         self.object = try container.decode(FeeRefundObject.self, forKey: .object)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {

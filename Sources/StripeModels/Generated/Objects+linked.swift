@@ -32,7 +32,7 @@ public struct LinkedAccountOptionsCommon: Sendable, Codable, Equatable, Hashable
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.filters = try container.decodeIfPresent(PaymentFlowsPrivatePaymentMethodsFinancialConnectionsCommonLinkedAccountOptionsFilters.self, forKey: .filters)
         self.permissions = try container.decodeIfPresent([CheckoutFinancialConnectionsPaymentMethodOptionsPermissionsItem].self, forKey: .permissions)
-        self.prefetch = try container.decode(Nullable<[CheckoutFinancialConnectionsPaymentMethodOptionsPrefetchItem]>.self, forKey: .prefetch)
+        self.prefetch = try container.decodeIfPresent(Nullable<[CheckoutFinancialConnectionsPaymentMethodOptionsPrefetchItem]>.self, forKey: .prefetch) ?? .null
         self.returnUrl = try container.decodeIfPresent(String.self, forKey: .returnUrl)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {

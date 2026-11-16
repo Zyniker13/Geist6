@@ -38,26 +38,6 @@ public enum AutomaticTaxDisabledReason: Sendable, Equatable, Hashable, LosslessE
     }
 }
 
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum AutomaticTaxLiability: Sendable, Codable, Equatable, Hashable {
-    case connectAccountReference(ConnectAccountReference)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(ConnectAccountReference.self) { self = .connectAccountReference(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .connectAccountReference(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
 /// Lossless enum: values Stripe documents plus any value the API
 /// adds later, kept in `undocumented` instead of dropped.
 public enum AutomaticTaxStatus: Sendable, Equatable, Hashable, LosslessEnum {
@@ -98,14 +78,14 @@ public enum AutomaticTaxStatus: Sendable, Equatable, Hashable, LosslessEnum {
 public struct AutomaticTax: Sendable, Codable, Equatable, Hashable {
     public var disabledReason: Nullable<AutomaticTaxDisabledReason>
     public var enabled: Bool
-    public var liability: Nullable<AutomaticTaxLiability>
+    public var liability: Nullable<ConnectAccountReference>
     public var provider: Nullable<String>
     public var status: Nullable<AutomaticTaxStatus>
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(disabledReason: Nullable<AutomaticTaxDisabledReason>, enabled: Bool, liability: Nullable<AutomaticTaxLiability>, provider: Nullable<String>, status: Nullable<AutomaticTaxStatus>, unknownFields: [String: JSONValue]? = nil) {
+    public init(disabledReason: Nullable<AutomaticTaxDisabledReason>, enabled: Bool, liability: Nullable<ConnectAccountReference>, provider: Nullable<String>, status: Nullable<AutomaticTaxStatus>, unknownFields: [String: JSONValue]? = nil) {
         self.disabledReason = disabledReason
         self.enabled = enabled
         self.liability = liability
@@ -124,11 +104,11 @@ public struct AutomaticTax: Sendable, Codable, Equatable, Hashable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.disabledReason = try container.decode(Nullable<AutomaticTaxDisabledReason>.self, forKey: .disabledReason)
+        self.disabledReason = try container.decodeIfPresent(Nullable<AutomaticTaxDisabledReason>.self, forKey: .disabledReason) ?? .null
         self.enabled = try container.decode(Bool.self, forKey: .enabled)
-        self.liability = try container.decode(Nullable<AutomaticTaxLiability>.self, forKey: .liability)
-        self.provider = try container.decode(Nullable<String>.self, forKey: .provider)
-        self.status = try container.decode(Nullable<AutomaticTaxStatus>.self, forKey: .status)
+        self.liability = try container.decodeIfPresent(Nullable<ConnectAccountReference>.self, forKey: .liability) ?? .null
+        self.provider = try container.decodeIfPresent(Nullable<String>.self, forKey: .provider) ?? .null
+        self.status = try container.decodeIfPresent(Nullable<AutomaticTaxStatus>.self, forKey: .status) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {

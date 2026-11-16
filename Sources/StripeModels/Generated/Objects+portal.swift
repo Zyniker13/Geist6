@@ -4,26 +4,6 @@
 //  Do not edit by hand: rerun `swift run stripe-gen`.
 //
 import Foundation
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum PortalAfterExpirationCustomerLogin: Sendable, Codable, Equatable, Hashable {
-    indirect case portalAfterExpirationCustomerLogin(PortalAfterExpirationCustomerLogin)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(PortalAfterExpirationCustomerLogin.self) { self = .portalAfterExpirationCustomerLogin(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .portalAfterExpirationCustomerLogin(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
 /// Lossless enum: values Stripe documents plus any value the API
 /// adds later, kept in `undocumented` instead of dropped.
 public enum PortalAfterExpirationType: Sendable, Equatable, Hashable, LosslessEnum {
@@ -75,7 +55,7 @@ public struct PortalAfterExpiration: Sendable, Codable, Equatable, Hashable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.customerLogin = try container.decode(Nullable<PortalAfterExpirationCustomerLogin>.self, forKey: .customerLogin)
+        self.customerLogin = try container.decodeIfPresent(Nullable<PortalAfterExpirationCustomerLogin>.self, forKey: .customerLogin) ?? .null
         self.type = try container.decode(PortalAfterExpirationType.self, forKey: .type)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
@@ -92,6 +72,48 @@ public struct PortalAfterExpiration: Sendable, Codable, Equatable, Hashable {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encodeIfPresent(self.customerLogin, forKey: .customerLogin)
         try container.encodeIfPresent(self.type, forKey: .type)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct PortalAfterExpirationCustomerLogin: Sendable, Codable, Equatable, Hashable {
+    public var expiresAt: Nullable<StripeTimestamp>
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(expiresAt: Nullable<StripeTimestamp>, unknownFields: [String: JSONValue]? = nil) {
+        self.expiresAt = expiresAt
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case expiresAt = "expires_at"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.expiresAt = try container.decodeIfPresent(Nullable<StripeTimestamp>.self, forKey: .expiresAt) ?? .null
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .expiresAt: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.expiresAt, forKey: .expiresAt)
         if let unknownFields = unknownFields {
             for (key, value) in unknownFields {
                 if let codingKey = CodingKeys(stringValue: key) {
@@ -125,9 +147,9 @@ public struct PortalBusinessProfile: Sendable, Codable, Equatable, Hashable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.headline = try container.decode(Nullable<String>.self, forKey: .headline)
-        self.privacyPolicyUrl = try container.decode(Nullable<String>.self, forKey: .privacyPolicyUrl)
-        self.termsOfServiceUrl = try container.decode(Nullable<String>.self, forKey: .termsOfServiceUrl)
+        self.headline = try container.decodeIfPresent(Nullable<String>.self, forKey: .headline) ?? .null
+        self.privacyPolicyUrl = try container.decodeIfPresent(Nullable<String>.self, forKey: .privacyPolicyUrl) ?? .null
+        self.termsOfServiceUrl = try container.decodeIfPresent(Nullable<String>.self, forKey: .termsOfServiceUrl) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -331,7 +353,7 @@ public struct PortalFlowsAfterCompletionHostedConfirmation: Sendable, Codable, E
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.customMessage = try container.decode(Nullable<String>.self, forKey: .customMessage)
+        self.customMessage = try container.decodeIfPresent(Nullable<String>.self, forKey: .customMessage) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -440,106 +462,6 @@ public struct PortalFlowsCouponOffer: Sendable, Codable, Equatable, Hashable {
     }
 }
 
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum PortalFlowsFlowCustomerUpdate: Sendable, Codable, Equatable, Hashable {
-    indirect case portalFlowsFlowCustomerUpdate(PortalFlowsFlowCustomerUpdate)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(PortalFlowsFlowCustomerUpdate.self) { self = .portalFlowsFlowCustomerUpdate(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .portalFlowsFlowCustomerUpdate(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum PortalFlowsFlowSubscriptionCancel: Sendable, Codable, Equatable, Hashable {
-    indirect case portalFlowsFlowSubscriptionCancel(PortalFlowsFlowSubscriptionCancel)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(PortalFlowsFlowSubscriptionCancel.self) { self = .portalFlowsFlowSubscriptionCancel(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .portalFlowsFlowSubscriptionCancel(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum PortalFlowsFlowSubscriptionPause: Sendable, Codable, Equatable, Hashable {
-    indirect case portalFlowsFlowSubscriptionPause(PortalFlowsFlowSubscriptionPause)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(PortalFlowsFlowSubscriptionPause.self) { self = .portalFlowsFlowSubscriptionPause(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .portalFlowsFlowSubscriptionPause(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum PortalFlowsFlowSubscriptionUpdate: Sendable, Codable, Equatable, Hashable {
-    indirect case portalFlowsFlowSubscriptionUpdate(PortalFlowsFlowSubscriptionUpdate)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(PortalFlowsFlowSubscriptionUpdate.self) { self = .portalFlowsFlowSubscriptionUpdate(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .portalFlowsFlowSubscriptionUpdate(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum PortalFlowsFlowSubscriptionUpdateConfirm: Sendable, Codable, Equatable, Hashable {
-    indirect case portalFlowsFlowSubscriptionUpdateConfirm(PortalFlowsFlowSubscriptionUpdateConfirm)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(PortalFlowsFlowSubscriptionUpdateConfirm.self) { self = .portalFlowsFlowSubscriptionUpdateConfirm(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .portalFlowsFlowSubscriptionUpdateConfirm(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
 /// Lossless enum: values Stripe documents plus any value the API
 /// adds later, kept in `undocumented` instead of dropped.
 public enum PortalFlowsFlowType: Sendable, Equatable, Hashable, LosslessEnum {
@@ -622,11 +544,11 @@ public struct PortalFlowsFlow: Sendable, Codable, Equatable, Hashable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.afterCompletion = try container.decode(PortalFlowsFlowAfterCompletion.self, forKey: .afterCompletion)
-        self.customerUpdate = try container.decode(Nullable<PortalFlowsFlowCustomerUpdate>.self, forKey: .customerUpdate)
-        self.subscriptionCancel = try container.decode(Nullable<PortalFlowsFlowSubscriptionCancel>.self, forKey: .subscriptionCancel)
-        self.subscriptionPause = try container.decode(Nullable<PortalFlowsFlowSubscriptionPause>.self, forKey: .subscriptionPause)
-        self.subscriptionUpdate = try container.decode(Nullable<PortalFlowsFlowSubscriptionUpdate>.self, forKey: .subscriptionUpdate)
-        self.subscriptionUpdateConfirm = try container.decode(Nullable<PortalFlowsFlowSubscriptionUpdateConfirm>.self, forKey: .subscriptionUpdateConfirm)
+        self.customerUpdate = try container.decodeIfPresent(Nullable<PortalFlowsFlowCustomerUpdate>.self, forKey: .customerUpdate) ?? .null
+        self.subscriptionCancel = try container.decodeIfPresent(Nullable<PortalFlowsFlowSubscriptionCancel>.self, forKey: .subscriptionCancel) ?? .null
+        self.subscriptionPause = try container.decodeIfPresent(Nullable<PortalFlowsFlowSubscriptionPause>.self, forKey: .subscriptionPause) ?? .null
+        self.subscriptionUpdate = try container.decodeIfPresent(Nullable<PortalFlowsFlowSubscriptionUpdate>.self, forKey: .subscriptionUpdate) ?? .null
+        self.subscriptionUpdateConfirm = try container.decodeIfPresent(Nullable<PortalFlowsFlowSubscriptionUpdateConfirm>.self, forKey: .subscriptionUpdateConfirm) ?? .null
         self.type = try container.decode(PortalFlowsFlowType.self, forKey: .type)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
@@ -654,46 +576,6 @@ public struct PortalFlowsFlow: Sendable, Codable, Equatable, Hashable {
                     try? container.encode(value, forKey: codingKey)
                 }
             }
-        }
-    }
-}
-
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum PortalFlowsFlowAfterCompletionHostedConfirmation: Sendable, Codable, Equatable, Hashable {
-    case portalFlowsAfterCompletionHostedConfirmation(PortalFlowsAfterCompletionHostedConfirmation)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(PortalFlowsAfterCompletionHostedConfirmation.self) { self = .portalFlowsAfterCompletionHostedConfirmation(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .portalFlowsAfterCompletionHostedConfirmation(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum PortalFlowsFlowAfterCompletionRedirect: Sendable, Codable, Equatable, Hashable {
-    case portalFlowsAfterCompletionRedirect(PortalFlowsAfterCompletionRedirect)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(PortalFlowsAfterCompletionRedirect.self) { self = .portalFlowsAfterCompletionRedirect(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .portalFlowsAfterCompletionRedirect(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
         }
     }
 }
@@ -736,14 +618,14 @@ public enum PortalFlowsFlowAfterCompletionType: Sendable, Equatable, Hashable, L
 }
 
 public struct PortalFlowsFlowAfterCompletion: Sendable, Codable, Equatable, Hashable {
-    public var hostedConfirmation: Nullable<PortalFlowsFlowAfterCompletionHostedConfirmation>
-    public var redirect: Nullable<PortalFlowsFlowAfterCompletionRedirect>
+    public var hostedConfirmation: Nullable<PortalFlowsAfterCompletionHostedConfirmation>
+    public var redirect: Nullable<PortalFlowsAfterCompletionRedirect>
     public var type: PortalFlowsFlowAfterCompletionType
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(hostedConfirmation: Nullable<PortalFlowsFlowAfterCompletionHostedConfirmation>, redirect: Nullable<PortalFlowsFlowAfterCompletionRedirect>, type: PortalFlowsFlowAfterCompletionType, unknownFields: [String: JSONValue]? = nil) {
+    public init(hostedConfirmation: Nullable<PortalFlowsAfterCompletionHostedConfirmation>, redirect: Nullable<PortalFlowsAfterCompletionRedirect>, type: PortalFlowsFlowAfterCompletionType, unknownFields: [String: JSONValue]? = nil) {
         self.hostedConfirmation = hostedConfirmation
         self.redirect = redirect
         self.type = type
@@ -758,8 +640,8 @@ public struct PortalFlowsFlowAfterCompletion: Sendable, Codable, Equatable, Hash
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.hostedConfirmation = try container.decode(Nullable<PortalFlowsFlowAfterCompletionHostedConfirmation>.self, forKey: .hostedConfirmation)
-        self.redirect = try container.decode(Nullable<PortalFlowsFlowAfterCompletionRedirect>.self, forKey: .redirect)
+        self.hostedConfirmation = try container.decodeIfPresent(Nullable<PortalFlowsAfterCompletionHostedConfirmation>.self, forKey: .hostedConfirmation) ?? .null
+        self.redirect = try container.decodeIfPresent(Nullable<PortalFlowsAfterCompletionRedirect>.self, forKey: .redirect) ?? .null
         self.type = try container.decode(PortalFlowsFlowAfterCompletionType.self, forKey: .type)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
@@ -787,22 +669,221 @@ public struct PortalFlowsFlowAfterCompletion: Sendable, Codable, Equatable, Hash
     }
 }
 
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum PortalFlowsRetentionCouponOffer: Sendable, Codable, Equatable, Hashable {
-    case portalFlowsCouponOffer(PortalFlowsCouponOffer)
-    case other(JSONValue)
+public struct PortalFlowsFlowCustomerUpdate: Sendable, Codable, Equatable, Hashable {
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(unknownFields: [String: JSONValue]? = nil) {
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: CodingKey {
+    }
 
     public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(PortalFlowsCouponOffer.self) { self = .portalFlowsCouponOffer(value); return }
-        self = .other(try container.decode(JSONValue.self))
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
     }
 
     public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .portalFlowsCouponOffer(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct PortalFlowsFlowSubscriptionCancel: Sendable, Codable, Equatable, Hashable {
+    public var retention: Nullable<PortalFlowsRetention>
+    public var subscription: String
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(retention: Nullable<PortalFlowsRetention>, subscription: String, unknownFields: [String: JSONValue]? = nil) {
+        self.retention = retention
+        self.subscription = subscription
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case retention
+        case subscription
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.retention = try container.decodeIfPresent(Nullable<PortalFlowsRetention>.self, forKey: .retention) ?? .null
+        self.subscription = try container.decode(String.self, forKey: .subscription)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .retention, .subscription: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.retention, forKey: .retention)
+        try container.encodeIfPresent(self.subscription, forKey: .subscription)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct PortalFlowsFlowSubscriptionPause: Sendable, Codable, Equatable, Hashable {
+    public var subscription: String
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(subscription: String, unknownFields: [String: JSONValue]? = nil) {
+        self.subscription = subscription
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case subscription
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.subscription = try container.decode(String.self, forKey: .subscription)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .subscription: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.subscription, forKey: .subscription)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct PortalFlowsFlowSubscriptionUpdate: Sendable, Codable, Equatable, Hashable {
+    public var subscription: String
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(subscription: String, unknownFields: [String: JSONValue]? = nil) {
+        self.subscription = subscription
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case subscription
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.subscription = try container.decode(String.self, forKey: .subscription)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .subscription: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.subscription, forKey: .subscription)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct PortalFlowsFlowSubscriptionUpdateConfirm: Sendable, Codable, Equatable, Hashable {
+    public var discounts: Nullable<[PortalFlowsSubscriptionUpdateConfirmDiscount]>
+    public var items: [PortalFlowsSubscriptionUpdateConfirmItem]
+    public var subscription: String
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(discounts: Nullable<[PortalFlowsSubscriptionUpdateConfirmDiscount]>, items: [PortalFlowsSubscriptionUpdateConfirmItem], subscription: String, unknownFields: [String: JSONValue]? = nil) {
+        self.discounts = discounts
+        self.items = items
+        self.subscription = subscription
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case discounts
+        case items
+        case subscription
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.discounts = try container.decodeIfPresent(Nullable<[PortalFlowsSubscriptionUpdateConfirmDiscount]>.self, forKey: .discounts) ?? .null
+        self.items = try container.decode([PortalFlowsSubscriptionUpdateConfirmItem].self, forKey: .items)
+        self.subscription = try container.decode(String.self, forKey: .subscription)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .discounts, .items, .subscription: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.discounts, forKey: .discounts)
+        try container.encodeIfPresent(self.items, forKey: .items)
+        try container.encodeIfPresent(self.subscription, forKey: .subscription)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
         }
     }
 }
@@ -839,13 +920,13 @@ public enum PortalFlowsRetentionType: Sendable, Equatable, Hashable, LosslessEnu
 }
 
 public struct PortalFlowsRetention: Sendable, Codable, Equatable, Hashable {
-    public var couponOffer: Nullable<PortalFlowsRetentionCouponOffer>
+    public var couponOffer: Nullable<PortalFlowsCouponOffer>
     public var type: PortalFlowsRetentionType
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(couponOffer: Nullable<PortalFlowsRetentionCouponOffer>, type: PortalFlowsRetentionType, unknownFields: [String: JSONValue]? = nil) {
+    public init(couponOffer: Nullable<PortalFlowsCouponOffer>, type: PortalFlowsRetentionType, unknownFields: [String: JSONValue]? = nil) {
         self.couponOffer = couponOffer
         self.type = type
         self.unknownFields = unknownFields
@@ -858,7 +939,7 @@ public struct PortalFlowsRetention: Sendable, Codable, Equatable, Hashable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.couponOffer = try container.decode(Nullable<PortalFlowsRetentionCouponOffer>.self, forKey: .couponOffer)
+        self.couponOffer = try container.decodeIfPresent(Nullable<PortalFlowsCouponOffer>.self, forKey: .couponOffer) ?? .null
         self.type = try container.decode(PortalFlowsRetentionType.self, forKey: .type)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
@@ -905,8 +986,8 @@ public struct PortalFlowsSubscriptionUpdateConfirmDiscount: Sendable, Codable, E
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.coupon = try container.decode(Nullable<String>.self, forKey: .coupon)
-        self.promotionCode = try container.decode(Nullable<String>.self, forKey: .promotionCode)
+        self.coupon = try container.decodeIfPresent(Nullable<String>.self, forKey: .coupon) ?? .null
+        self.promotionCode = try container.decodeIfPresent(Nullable<String>.self, forKey: .promotionCode) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -955,8 +1036,8 @@ public struct PortalFlowsSubscriptionUpdateConfirmItem: Sendable, Codable, Equat
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.id = try container.decode(Nullable<String>.self, forKey: .id)
-        self.price = try container.decode(Nullable<String>.self, forKey: .price)
+        self.id = try container.decodeIfPresent(Nullable<String>.self, forKey: .id) ?? .null
+        self.price = try container.decodeIfPresent(Nullable<String>.self, forKey: .price) ?? .null
         self.quantity = try container.decodeIfPresent(Int.self, forKey: .quantity)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
@@ -1047,7 +1128,7 @@ public struct PortalLoginPage: Sendable, Codable, Equatable, Hashable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.enabled = try container.decode(Bool.self, forKey: .enabled)
-        self.url = try container.decode(Nullable<String>.self, forKey: .url)
+        self.url = try container.decodeIfPresent(Nullable<String>.self, forKey: .url) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -1094,7 +1175,7 @@ public struct PortalPaymentMethodUpdate: Sendable, Codable, Equatable, Hashable 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.enabled = try container.decode(Bool.self, forKey: .enabled)
-        self.paymentMethodConfiguration = try container.decode(Nullable<String>.self, forKey: .paymentMethodConfiguration)
+        self.paymentMethodConfiguration = try container.decodeIfPresent(Nullable<String>.self, forKey: .paymentMethodConfiguration) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -1390,7 +1471,7 @@ public struct PortalSubscriptionCancellationReason: Sendable, Codable, Equatable
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.enabled = try container.decode(Bool.self, forKey: .enabled)
-        self.feedbackOptions = try container.decode(Nullable<[Expandable<BillingFeedbackOption>]>.self, forKey: .feedbackOptions)
+        self.feedbackOptions = try container.decodeIfPresent(Nullable<[Expandable<BillingFeedbackOption>]>.self, forKey: .feedbackOptions) ?? .null
         self.options = try container.decode([CancellationDetailsFeedback].self, forKey: .options)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
@@ -1733,7 +1814,7 @@ public struct PortalSubscriptionUpdate: Sendable, Codable, Equatable, Hashable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.billingCycleAnchor = try container.decode(Nullable<PortalSubscriptionUpdateBillingCycleAnchor>.self, forKey: .billingCycleAnchor)
+        self.billingCycleAnchor = try container.decodeIfPresent(Nullable<PortalSubscriptionUpdateBillingCycleAnchor>.self, forKey: .billingCycleAnchor) ?? .null
         self.defaultAllowedUpdates = try container.decode([PortalSubscriptionUpdateDefaultAllowedUpdatesItem].self, forKey: .defaultAllowedUpdates)
         self.enabled = try container.decode(Bool.self, forKey: .enabled)
         self.products = try container.decodeIfPresent(Nullable<[PortalSubscriptionUpdateProduct]>.self, forKey: .products)
@@ -1846,7 +1927,7 @@ public struct PortalSubscriptionUpdateProductAdjustableQuantity: Sendable, Codab
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.enabled = try container.decode(Bool.self, forKey: .enabled)
-        self.maximum = try container.decode(Nullable<Int>.self, forKey: .maximum)
+        self.maximum = try container.decodeIfPresent(Nullable<Int>.self, forKey: .maximum) ?? .null
         self.minimum = try container.decode(Int.self, forKey: .minimum)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {

@@ -223,24 +223,24 @@ public struct Card: Sendable, Codable, Equatable, Hashable, StripeIdentified {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.account = try container.decodeIfPresent(Nullable<Expandable<Account>>.self, forKey: .account)
-        self.addressCity = try container.decode(Nullable<String>.self, forKey: .addressCity)
-        self.addressCountry = try container.decode(Nullable<String>.self, forKey: .addressCountry)
-        self.addressLine1 = try container.decode(Nullable<String>.self, forKey: .addressLine1)
-        self.addressLine1Check = try container.decode(Nullable<String>.self, forKey: .addressLine1Check)
-        self.addressLine2 = try container.decode(Nullable<String>.self, forKey: .addressLine2)
-        self.addressState = try container.decode(Nullable<String>.self, forKey: .addressState)
-        self.addressZip = try container.decode(Nullable<String>.self, forKey: .addressZip)
-        self.addressZipCheck = try container.decode(Nullable<String>.self, forKey: .addressZipCheck)
+        self.addressCity = try container.decodeIfPresent(Nullable<String>.self, forKey: .addressCity) ?? .null
+        self.addressCountry = try container.decodeIfPresent(Nullable<String>.self, forKey: .addressCountry) ?? .null
+        self.addressLine1 = try container.decodeIfPresent(Nullable<String>.self, forKey: .addressLine1) ?? .null
+        self.addressLine1Check = try container.decodeIfPresent(Nullable<String>.self, forKey: .addressLine1Check) ?? .null
+        self.addressLine2 = try container.decodeIfPresent(Nullable<String>.self, forKey: .addressLine2) ?? .null
+        self.addressState = try container.decodeIfPresent(Nullable<String>.self, forKey: .addressState) ?? .null
+        self.addressZip = try container.decodeIfPresent(Nullable<String>.self, forKey: .addressZip) ?? .null
+        self.addressZipCheck = try container.decodeIfPresent(Nullable<String>.self, forKey: .addressZipCheck) ?? .null
         self.allowRedisplay = try container.decodeIfPresent(Nullable<CardAllowRedisplay>.self, forKey: .allowRedisplay)
         self.availablePayoutMethods = try container.decodeIfPresent(Nullable<[BankAccountAvailablePayoutMethodsItem]>.self, forKey: .availablePayoutMethods)
         self.brand = try container.decode(String.self, forKey: .brand)
-        self.country = try container.decode(Nullable<String>.self, forKey: .country)
+        self.country = try container.decodeIfPresent(Nullable<String>.self, forKey: .country) ?? .null
         self.currency = try container.decodeIfPresent(Nullable<String>.self, forKey: .currency)
         self.customer = try container.decodeIfPresent(Nullable<CardCustomer>.self, forKey: .customer)
-        self.cvcCheck = try container.decode(Nullable<String>.self, forKey: .cvcCheck)
+        self.cvcCheck = try container.decodeIfPresent(Nullable<String>.self, forKey: .cvcCheck) ?? .null
         self.defaultForCurrency = try container.decodeIfPresent(Nullable<Bool>.self, forKey: .defaultForCurrency)
         self.description = try container.decodeIfPresent(String.self, forKey: .description)
-        self.dynamicLast4 = try container.decode(Nullable<String>.self, forKey: .dynamicLast4)
+        self.dynamicLast4 = try container.decodeIfPresent(Nullable<String>.self, forKey: .dynamicLast4) ?? .null
         self.expMonth = try container.decode(Int.self, forKey: .expMonth)
         self.expYear = try container.decode(Int.self, forKey: .expYear)
         self.fingerprint = try container.decodeIfPresent(Nullable<String>.self, forKey: .fingerprint)
@@ -249,13 +249,13 @@ public struct Card: Sendable, Codable, Equatable, Hashable, StripeIdentified {
         self.iin = try container.decodeIfPresent(String.self, forKey: .iin)
         self.issuer = try container.decodeIfPresent(String.self, forKey: .issuer)
         self.last4 = try container.decode(String.self, forKey: .last4)
-        self.metadata = try container.decode(Nullable<[String: String]>.self, forKey: .metadata)
-        self.name = try container.decode(Nullable<String>.self, forKey: .name)
+        self.metadata = try container.decodeIfPresent(Nullable<[String: String]>.self, forKey: .metadata) ?? .null
+        self.name = try container.decodeIfPresent(Nullable<String>.self, forKey: .name) ?? .null
         self.networks = try container.decodeIfPresent(TokenCardNetworks.self, forKey: .networks)
         self.object = try container.decode(AmazonPayUnderlyingPaymentMethodFundingDetailsType.self, forKey: .object)
-        self.regulatedStatus = try container.decode(Nullable<CardRegulatedStatus>.self, forKey: .regulatedStatus)
+        self.regulatedStatus = try container.decodeIfPresent(Nullable<CardRegulatedStatus>.self, forKey: .regulatedStatus) ?? .null
         self.status = try container.decodeIfPresent(Nullable<String>.self, forKey: .status)
-        self.tokenizationMethod = try container.decode(Nullable<String>.self, forKey: .tokenizationMethod)
+        self.tokenizationMethod = try container.decodeIfPresent(Nullable<String>.self, forKey: .tokenizationMethod) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -383,8 +383,8 @@ public struct CardIssuingAccountTermsOfService: Sendable, Codable, Equatable, Ha
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.date = try container.decode(Nullable<Int>.self, forKey: .date)
-        self.ip = try container.decode(Nullable<String>.self, forKey: .ip)
+        self.date = try container.decodeIfPresent(Nullable<Int>.self, forKey: .date) ?? .null
+        self.ip = try container.decodeIfPresent(Nullable<String>.self, forKey: .ip) ?? .null
         self.userAgent = try container.decodeIfPresent(String.self, forKey: .userAgent)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
@@ -520,7 +520,7 @@ public struct CardMandatePaymentMethodDetailsIndia: Sendable, Codable, Equatable
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.inactiveReason = try container.decode(Nullable<CardMandatePaymentMethodDetailsIndiaInactiveReason>.self, forKey: .inactiveReason)
+        self.inactiveReason = try container.decodeIfPresent(Nullable<CardMandatePaymentMethodDetailsIndiaInactiveReason>.self, forKey: .inactiveReason) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {

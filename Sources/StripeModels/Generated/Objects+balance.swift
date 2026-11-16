@@ -634,7 +634,7 @@ public struct BalanceSettingsResourceAutomaticTransferRule: Sendable, Codable, E
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.payoutMethod = try container.decode(String.self, forKey: .payoutMethod)
-        self.transferUpToAmount = try container.decode(Nullable<Int>.self, forKey: .transferUpToAmount)
+        self.transferUpToAmount = try container.decodeIfPresent(Nullable<Int>.self, forKey: .transferUpToAmount) ?? .null
         self.type = try container.decode(BalanceSettingsResourceAutomaticTransferRuleType.self, forKey: .type)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
@@ -662,35 +662,15 @@ public struct BalanceSettingsResourceAutomaticTransferRule: Sendable, Codable, E
     }
 }
 
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum BalanceSettingsResourcePaymentsPayouts: Sendable, Codable, Equatable, Hashable {
-    case balanceSettingsResourcePayouts(BalanceSettingsResourcePayouts)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(BalanceSettingsResourcePayouts.self) { self = .balanceSettingsResourcePayouts(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .balanceSettingsResourcePayouts(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
 public struct BalanceSettingsResourcePayments: Sendable, Codable, Equatable, Hashable {
     public var debitNegativeBalances: Nullable<Bool>
-    public var payouts: Nullable<BalanceSettingsResourcePaymentsPayouts>
+    public var payouts: Nullable<BalanceSettingsResourcePayouts>
     public var settlementTiming: BalanceSettingsResourceSettlementTiming
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(debitNegativeBalances: Nullable<Bool>, payouts: Nullable<BalanceSettingsResourcePaymentsPayouts>, settlementTiming: BalanceSettingsResourceSettlementTiming, unknownFields: [String: JSONValue]? = nil) {
+    public init(debitNegativeBalances: Nullable<Bool>, payouts: Nullable<BalanceSettingsResourcePayouts>, settlementTiming: BalanceSettingsResourceSettlementTiming, unknownFields: [String: JSONValue]? = nil) {
         self.debitNegativeBalances = debitNegativeBalances
         self.payouts = payouts
         self.settlementTiming = settlementTiming
@@ -705,8 +685,8 @@ public struct BalanceSettingsResourcePayments: Sendable, Codable, Equatable, Has
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.debitNegativeBalances = try container.decode(Nullable<Bool>.self, forKey: .debitNegativeBalances)
-        self.payouts = try container.decode(Nullable<BalanceSettingsResourcePaymentsPayouts>.self, forKey: .payouts)
+        self.debitNegativeBalances = try container.decodeIfPresent(Nullable<Bool>.self, forKey: .debitNegativeBalances) ?? .null
+        self.payouts = try container.decodeIfPresent(Nullable<BalanceSettingsResourcePayouts>.self, forKey: .payouts) ?? .null
         self.settlementTiming = try container.decode(BalanceSettingsResourceSettlementTiming.self, forKey: .settlementTiming)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
@@ -840,7 +820,7 @@ public struct BalanceSettingsResourcePayoutSchedule: Sendable, Codable, Equatabl
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.interval = try container.decode(Nullable<BalanceSettingsResourcePayoutScheduleInterval>.self, forKey: .interval)
+        self.interval = try container.decodeIfPresent(Nullable<BalanceSettingsResourcePayoutScheduleInterval>.self, forKey: .interval) ?? .null
         self.monthlyPayoutDays = try container.decodeIfPresent([Int].self, forKey: .monthlyPayoutDays)
         self.weeklyPayoutDays = try container.decodeIfPresent([BalanceSettingsResourcePayoutScheduleWeeklyPayoutDaysItem].self, forKey: .weeklyPayoutDays)
         var captured: [String: JSONValue] = [:]
@@ -865,26 +845,6 @@ public struct BalanceSettingsResourcePayoutSchedule: Sendable, Codable, Equatabl
                     try? container.encode(value, forKey: codingKey)
                 }
             }
-        }
-    }
-}
-
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum BalanceSettingsResourcePayoutsSchedule: Sendable, Codable, Equatable, Hashable {
-    case balanceSettingsResourcePayoutSchedule(BalanceSettingsResourcePayoutSchedule)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(BalanceSettingsResourcePayoutSchedule.self) { self = .balanceSettingsResourcePayoutSchedule(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .balanceSettingsResourcePayoutSchedule(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
         }
     }
 }
@@ -926,14 +886,14 @@ public enum BalanceSettingsResourcePayoutsStatus: Sendable, Equatable, Hashable,
 public struct BalanceSettingsResourcePayouts: Sendable, Codable, Equatable, Hashable {
     public var automaticTransferRulesByCurrency: Nullable<[String: JSONValue]>
     public var minimumBalanceByCurrency: Nullable<[String: JSONValue]>
-    public var schedule: Nullable<BalanceSettingsResourcePayoutsSchedule>
+    public var schedule: Nullable<BalanceSettingsResourcePayoutSchedule>
     public var statementDescriptor: Nullable<String>
     public var status: BalanceSettingsResourcePayoutsStatus
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(automaticTransferRulesByCurrency: Nullable<[String: JSONValue]>, minimumBalanceByCurrency: Nullable<[String: JSONValue]>, schedule: Nullable<BalanceSettingsResourcePayoutsSchedule>, statementDescriptor: Nullable<String>, status: BalanceSettingsResourcePayoutsStatus, unknownFields: [String: JSONValue]? = nil) {
+    public init(automaticTransferRulesByCurrency: Nullable<[String: JSONValue]>, minimumBalanceByCurrency: Nullable<[String: JSONValue]>, schedule: Nullable<BalanceSettingsResourcePayoutSchedule>, statementDescriptor: Nullable<String>, status: BalanceSettingsResourcePayoutsStatus, unknownFields: [String: JSONValue]? = nil) {
         self.automaticTransferRulesByCurrency = automaticTransferRulesByCurrency
         self.minimumBalanceByCurrency = minimumBalanceByCurrency
         self.schedule = schedule
@@ -952,10 +912,10 @@ public struct BalanceSettingsResourcePayouts: Sendable, Codable, Equatable, Hash
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.automaticTransferRulesByCurrency = try container.decode(Nullable<[String: JSONValue]>.self, forKey: .automaticTransferRulesByCurrency)
-        self.minimumBalanceByCurrency = try container.decode(Nullable<[String: JSONValue]>.self, forKey: .minimumBalanceByCurrency)
-        self.schedule = try container.decode(Nullable<BalanceSettingsResourcePayoutsSchedule>.self, forKey: .schedule)
-        self.statementDescriptor = try container.decode(Nullable<String>.self, forKey: .statementDescriptor)
+        self.automaticTransferRulesByCurrency = try container.decodeIfPresent(Nullable<[String: JSONValue]>.self, forKey: .automaticTransferRulesByCurrency) ?? .null
+        self.minimumBalanceByCurrency = try container.decodeIfPresent(Nullable<[String: JSONValue]>.self, forKey: .minimumBalanceByCurrency) ?? .null
+        self.schedule = try container.decodeIfPresent(Nullable<BalanceSettingsResourcePayoutSchedule>.self, forKey: .schedule) ?? .null
+        self.statementDescriptor = try container.decodeIfPresent(Nullable<String>.self, forKey: .statementDescriptor) ?? .null
         self.status = try container.decode(BalanceSettingsResourcePayoutsStatus.self, forKey: .status)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
@@ -985,35 +945,15 @@ public struct BalanceSettingsResourcePayouts: Sendable, Codable, Equatable, Hash
     }
 }
 
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum BalanceSettingsResourceSettlementTimingStartOfDay: Sendable, Codable, Equatable, Hashable {
-    case balanceSettingsResourceStartOfDay(BalanceSettingsResourceStartOfDay)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(BalanceSettingsResourceStartOfDay.self) { self = .balanceSettingsResourceStartOfDay(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .balanceSettingsResourceStartOfDay(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
 public struct BalanceSettingsResourceSettlementTiming: Sendable, Codable, Equatable, Hashable {
     public var delayDays: Int
     public var delayDaysOverride: Int?
-    public var startOfDay: Nullable<BalanceSettingsResourceSettlementTimingStartOfDay>
+    public var startOfDay: Nullable<BalanceSettingsResourceStartOfDay>
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(delayDays: Int, delayDaysOverride: Int? = nil, startOfDay: Nullable<BalanceSettingsResourceSettlementTimingStartOfDay>, unknownFields: [String: JSONValue]? = nil) {
+    public init(delayDays: Int, delayDaysOverride: Int? = nil, startOfDay: Nullable<BalanceSettingsResourceStartOfDay>, unknownFields: [String: JSONValue]? = nil) {
         self.delayDays = delayDays
         self.delayDaysOverride = delayDaysOverride
         self.startOfDay = startOfDay
@@ -1030,7 +970,7 @@ public struct BalanceSettingsResourceSettlementTiming: Sendable, Codable, Equata
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.delayDays = try container.decode(Int.self, forKey: .delayDays)
         self.delayDaysOverride = try container.decodeIfPresent(Int.self, forKey: .delayDaysOverride)
-        self.startOfDay = try container.decode(Nullable<BalanceSettingsResourceSettlementTimingStartOfDay>.self, forKey: .startOfDay)
+        self.startOfDay = try container.decodeIfPresent(Nullable<BalanceSettingsResourceStartOfDay>.self, forKey: .startOfDay) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -1431,15 +1371,15 @@ public struct BalanceTransaction: Sendable, Codable, Equatable, Hashable, Stripe
         self.balanceType = try container.decode(BalanceTransactionBalanceType.self, forKey: .balanceType)
         self.created = try container.decode(StripeTimestamp.self, forKey: .created)
         self.currency = try container.decode(String.self, forKey: .currency)
-        self.description = try container.decode(Nullable<String>.self, forKey: .description)
-        self.exchangeRate = try container.decode(Nullable<Decimal>.self, forKey: .exchangeRate)
+        self.description = try container.decodeIfPresent(Nullable<String>.self, forKey: .description) ?? .null
+        self.exchangeRate = try container.decodeIfPresent(Nullable<Decimal>.self, forKey: .exchangeRate) ?? .null
         self.fee = try container.decode(Int.self, forKey: .fee)
         self.feeDetails = try container.decode([Fee].self, forKey: .feeDetails)
         self.id = try container.decode(String.self, forKey: .id)
         self.net = try container.decode(Int.self, forKey: .net)
         self.object = try container.decode(BalanceTransactionObject.self, forKey: .object)
         self.reportingCategory = try container.decode(String.self, forKey: .reportingCategory)
-        self.source = try container.decode(Nullable<Expandable<BalanceTransactionSource>>.self, forKey: .source)
+        self.source = try container.decodeIfPresent(Nullable<Expandable<BalanceTransactionSource>>.self, forKey: .source) ?? .null
         self.status = try container.decode(String.self, forKey: .status)
         self.type = try container.decode(BalanceTransactionType.self, forKey: .type)
         var captured: [String: JSONValue] = [:]

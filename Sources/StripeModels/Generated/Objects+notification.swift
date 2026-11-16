@@ -143,8 +143,8 @@ public struct NotificationEventRequest: Sendable, Codable, Equatable, Hashable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.id = try container.decode(Nullable<String>.self, forKey: .id)
-        self.idempotencyKey = try container.decode(Nullable<String>.self, forKey: .idempotencyKey)
+        self.id = try container.decodeIfPresent(Nullable<String>.self, forKey: .id) ?? .null
+        self.idempotencyKey = try container.decodeIfPresent(Nullable<String>.self, forKey: .idempotencyKey) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {

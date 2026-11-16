@@ -24,7 +24,7 @@ public struct ThresholdsResourceUsageAlertFilter: Sendable, Codable, Equatable, 
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.customer = try container.decode(Nullable<Expandable<Customer>>.self, forKey: .customer)
+        self.customer = try container.decodeIfPresent(Nullable<Expandable<Customer>>.self, forKey: .customer) ?? .null
         self.type = try container.decode(CustomerObject.self, forKey: .type)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
@@ -108,7 +108,7 @@ public struct ThresholdsResourceUsageThresholdConfig: Sendable, Codable, Equatab
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.filters = try container.decode(Nullable<[ThresholdsResourceUsageAlertFilter]>.self, forKey: .filters)
+        self.filters = try container.decodeIfPresent(Nullable<[ThresholdsResourceUsageAlertFilter]>.self, forKey: .filters) ?? .null
         self.gte = try container.decode(Int.self, forKey: .gte)
         self.meter = try container.decode(Expandable<BillingMeter>.self, forKey: .meter)
         self.recurrence = try container.decode(ThresholdsResourceUsageThresholdConfigRecurrence.self, forKey: .recurrence)

@@ -4,30 +4,6 @@
 //  Do not edit by hand: rerun `swift run stripe-gen`.
 //
 import Foundation
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum ScheduledQueryRunFile: Sendable, Codable, Equatable, Hashable {
-    case file(File)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let raw = try? container.decode([String: JSONValue].self),
-           let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
-            if tag == "file" { self = .file(try container.decode(File.self)); return }
-        }
-        if let value = try? container.decode(File.self) { self = .file(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .file(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
 /// Lossless enum: values Stripe documents plus any value the API
 /// adds later, kept in `undocumented` instead of dropped.
 public enum ScheduledQueryRunObject: Sendable, Equatable, Hashable, LosslessEnum {
@@ -63,7 +39,7 @@ public struct ScheduledQueryRun: Sendable, Codable, Equatable, Hashable, StripeI
     public var created: StripeTimestamp
     public var dataLoadTime: StripeTimestamp
     public var error: SigmaScheduledQueryRunError?
-    public var file: Nullable<ScheduledQueryRunFile>
+    public var file: Nullable<File>
     public var id: String
     public var livemode: Bool
     public var object: ScheduledQueryRunObject
@@ -75,7 +51,7 @@ public struct ScheduledQueryRun: Sendable, Codable, Equatable, Hashable, StripeI
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(created: StripeTimestamp, dataLoadTime: StripeTimestamp, error: SigmaScheduledQueryRunError? = nil, file: Nullable<ScheduledQueryRunFile>, id: String, livemode: Bool, object: ScheduledQueryRunObject, resultAvailableUntil: StripeTimestamp, sql: String, status: String, title: String, unknownFields: [String: JSONValue]? = nil) {
+    public init(created: StripeTimestamp, dataLoadTime: StripeTimestamp, error: SigmaScheduledQueryRunError? = nil, file: Nullable<File>, id: String, livemode: Bool, object: ScheduledQueryRunObject, resultAvailableUntil: StripeTimestamp, sql: String, status: String, title: String, unknownFields: [String: JSONValue]? = nil) {
         self.created = created
         self.dataLoadTime = dataLoadTime
         self.error = error
@@ -109,7 +85,7 @@ public struct ScheduledQueryRun: Sendable, Codable, Equatable, Hashable, StripeI
         self.created = try container.decode(StripeTimestamp.self, forKey: .created)
         self.dataLoadTime = try container.decode(StripeTimestamp.self, forKey: .dataLoadTime)
         self.error = try container.decodeIfPresent(SigmaScheduledQueryRunError.self, forKey: .error)
-        self.file = try container.decode(Nullable<ScheduledQueryRunFile>.self, forKey: .file)
+        self.file = try container.decodeIfPresent(Nullable<File>.self, forKey: .file) ?? .null
         self.id = try container.decode(String.self, forKey: .id)
         self.livemode = try container.decode(Bool.self, forKey: .livemode)
         self.object = try container.decode(ScheduledQueryRunObject.self, forKey: .object)

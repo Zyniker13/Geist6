@@ -36,12 +36,12 @@ public struct Address: Sendable, Codable, Equatable, Hashable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.city = try container.decode(Nullable<String>.self, forKey: .city)
-        self.country = try container.decode(Nullable<String>.self, forKey: .country)
-        self.line1 = try container.decode(Nullable<String>.self, forKey: .line1)
-        self.line2 = try container.decode(Nullable<String>.self, forKey: .line2)
-        self.postalCode = try container.decode(Nullable<String>.self, forKey: .postalCode)
-        self.state = try container.decode(Nullable<String>.self, forKey: .state)
+        self.city = try container.decodeIfPresent(Nullable<String>.self, forKey: .city) ?? .null
+        self.country = try container.decodeIfPresent(Nullable<String>.self, forKey: .country) ?? .null
+        self.line1 = try container.decodeIfPresent(Nullable<String>.self, forKey: .line1) ?? .null
+        self.line2 = try container.decodeIfPresent(Nullable<String>.self, forKey: .line2) ?? .null
+        self.postalCode = try container.decodeIfPresent(Nullable<String>.self, forKey: .postalCode) ?? .null
+        self.state = try container.decodeIfPresent(Nullable<String>.self, forKey: .state) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -103,12 +103,12 @@ public struct AddressApiResourceTerminal: Sendable, Codable, Equatable, Hashable
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.city = try container.decode(Nullable<String>.self, forKey: .city)
-        self.country = try container.decode(Nullable<String>.self, forKey: .country)
-        self.line1 = try container.decode(Nullable<String>.self, forKey: .line1)
-        self.line2 = try container.decode(Nullable<String>.self, forKey: .line2)
-        self.postalCode = try container.decode(Nullable<String>.self, forKey: .postalCode)
-        self.state = try container.decode(Nullable<String>.self, forKey: .state)
+        self.city = try container.decodeIfPresent(Nullable<String>.self, forKey: .city) ?? .null
+        self.country = try container.decodeIfPresent(Nullable<String>.self, forKey: .country) ?? .null
+        self.line1 = try container.decodeIfPresent(Nullable<String>.self, forKey: .line1) ?? .null
+        self.line2 = try container.decodeIfPresent(Nullable<String>.self, forKey: .line2) ?? .null
+        self.postalCode = try container.decodeIfPresent(Nullable<String>.self, forKey: .postalCode) ?? .null
+        self.state = try container.decodeIfPresent(Nullable<String>.self, forKey: .state) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {

@@ -95,7 +95,7 @@ public struct PaypalSellerProtection: Sendable, Codable, Equatable, Hashable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.disputeCategories = try container.decode(Nullable<[PaypalSellerProtectionDisputeCategoriesItem]>.self, forKey: .disputeCategories)
+        self.disputeCategories = try container.decodeIfPresent(Nullable<[PaypalSellerProtectionDisputeCategoriesItem]>.self, forKey: .disputeCategories) ?? .null
         self.status = try container.decode(PaypalSellerProtectionStatus.self, forKey: .status)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {

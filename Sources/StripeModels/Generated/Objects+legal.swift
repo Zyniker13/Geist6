@@ -4,86 +4,6 @@
 //  Do not edit by hand: rerun `swift run stripe-gen`.
 //
 import Foundation
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum LegalEntityCompanyAddressKana: Sendable, Codable, Equatable, Hashable {
-    case legalEntityJapanAddress(LegalEntityJapanAddress)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(LegalEntityJapanAddress.self) { self = .legalEntityJapanAddress(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .legalEntityJapanAddress(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum LegalEntityCompanyAddressKanji: Sendable, Codable, Equatable, Hashable {
-    case legalEntityJapanAddress(LegalEntityJapanAddress)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(LegalEntityJapanAddress.self) { self = .legalEntityJapanAddress(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .legalEntityJapanAddress(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum LegalEntityCompanyDirectorshipDeclaration: Sendable, Codable, Equatable, Hashable {
-    case legalEntityDirectorshipDeclaration(LegalEntityDirectorshipDeclaration)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(LegalEntityDirectorshipDeclaration.self) { self = .legalEntityDirectorshipDeclaration(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .legalEntityDirectorshipDeclaration(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum LegalEntityCompanyOwnershipDeclaration: Sendable, Codable, Equatable, Hashable {
-    case legalEntityUboDeclaration(LegalEntityUboDeclaration)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(LegalEntityUboDeclaration.self) { self = .legalEntityUboDeclaration(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .legalEntityUboDeclaration(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
 /// Lossless enum: values Stripe documents plus any value the API
 /// adds later, kept in `undocumented` instead of dropped.
 public enum LegalEntityCompanyOwnershipExemptionReason: Sendable, Equatable, Hashable, LosslessEnum {
@@ -115,26 +35,6 @@ public enum LegalEntityCompanyOwnershipExemptionReason: Sendable, Equatable, Has
     public func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
         try container.encode(rawValue)
-    }
-}
-
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum LegalEntityCompanyRepresentativeDeclaration: Sendable, Codable, Equatable, Hashable {
-    case legalEntityRepresentativeDeclaration(LegalEntityRepresentativeDeclaration)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(LegalEntityRepresentativeDeclaration.self) { self = .legalEntityRepresentativeDeclaration(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .legalEntityRepresentativeDeclaration(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
     }
 }
 
@@ -235,33 +135,13 @@ public enum LegalEntityCompanyStructure: Sendable, Equatable, Hashable, Lossless
     }
 }
 
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum LegalEntityCompanyVerification: Sendable, Codable, Equatable, Hashable {
-    indirect case legalEntityCompanyVerification(LegalEntityCompanyVerification)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(LegalEntityCompanyVerification.self) { self = .legalEntityCompanyVerification(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .legalEntityCompanyVerification(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
 public struct LegalEntityCompany: Sendable, Codable, Equatable, Hashable {
     public var address: Address?
-    public var addressKana: Nullable<LegalEntityCompanyAddressKana>?
-    public var addressKanji: Nullable<LegalEntityCompanyAddressKanji>?
+    public var addressKana: Nullable<LegalEntityJapanAddress>?
+    public var addressKanji: Nullable<LegalEntityJapanAddress>?
     public var administrativeAddress: Address?
     public var directorsProvided: Bool?
-    public var directorshipDeclaration: Nullable<LegalEntityCompanyDirectorshipDeclaration>?
+    public var directorshipDeclaration: Nullable<LegalEntityDirectorshipDeclaration>?
     public var executivesProvided: Bool?
     public var exportLicenseId: String?
     public var exportPurposeCode: String?
@@ -269,13 +149,13 @@ public struct LegalEntityCompany: Sendable, Codable, Equatable, Hashable {
     public var nameKana: Nullable<String>?
     public var nameKanji: Nullable<String>?
     public var ownersProvided: Bool?
-    public var ownershipDeclaration: Nullable<LegalEntityCompanyOwnershipDeclaration>?
+    public var ownershipDeclaration: Nullable<LegalEntityUboDeclaration>?
     public var ownershipExemptionReason: LegalEntityCompanyOwnershipExemptionReason?
     public var phone: Nullable<String>?
     public var physicalAddress: Address?
     public var principalPlaceOfBusiness: Address?
     public var registrationDate: LegalEntityRegistrationDate?
-    public var representativeDeclaration: Nullable<LegalEntityCompanyRepresentativeDeclaration>?
+    public var representativeDeclaration: Nullable<LegalEntityRepresentativeDeclaration>?
     public var structure: LegalEntityCompanyStructure?
     public var taxIdProvided: Bool?
     public var taxIdRegistrar: String?
@@ -285,7 +165,7 @@ public struct LegalEntityCompany: Sendable, Codable, Equatable, Hashable {
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(address: Address? = nil, addressKana: Nullable<LegalEntityCompanyAddressKana>? = nil, addressKanji: Nullable<LegalEntityCompanyAddressKanji>? = nil, administrativeAddress: Address? = nil, directorsProvided: Bool? = nil, directorshipDeclaration: Nullable<LegalEntityCompanyDirectorshipDeclaration>? = nil, executivesProvided: Bool? = nil, exportLicenseId: String? = nil, exportPurposeCode: String? = nil, name: Nullable<String>? = nil, nameKana: Nullable<String>? = nil, nameKanji: Nullable<String>? = nil, ownersProvided: Bool? = nil, ownershipDeclaration: Nullable<LegalEntityCompanyOwnershipDeclaration>? = nil, ownershipExemptionReason: LegalEntityCompanyOwnershipExemptionReason? = nil, phone: Nullable<String>? = nil, physicalAddress: Address? = nil, principalPlaceOfBusiness: Address? = nil, registrationDate: LegalEntityRegistrationDate? = nil, representativeDeclaration: Nullable<LegalEntityCompanyRepresentativeDeclaration>? = nil, structure: LegalEntityCompanyStructure? = nil, taxIdProvided: Bool? = nil, taxIdRegistrar: String? = nil, vatIdProvided: Bool? = nil, verification: Nullable<LegalEntityCompanyVerification>? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(address: Address? = nil, addressKana: Nullable<LegalEntityJapanAddress>? = nil, addressKanji: Nullable<LegalEntityJapanAddress>? = nil, administrativeAddress: Address? = nil, directorsProvided: Bool? = nil, directorshipDeclaration: Nullable<LegalEntityDirectorshipDeclaration>? = nil, executivesProvided: Bool? = nil, exportLicenseId: String? = nil, exportPurposeCode: String? = nil, name: Nullable<String>? = nil, nameKana: Nullable<String>? = nil, nameKanji: Nullable<String>? = nil, ownersProvided: Bool? = nil, ownershipDeclaration: Nullable<LegalEntityUboDeclaration>? = nil, ownershipExemptionReason: LegalEntityCompanyOwnershipExemptionReason? = nil, phone: Nullable<String>? = nil, physicalAddress: Address? = nil, principalPlaceOfBusiness: Address? = nil, registrationDate: LegalEntityRegistrationDate? = nil, representativeDeclaration: Nullable<LegalEntityRepresentativeDeclaration>? = nil, structure: LegalEntityCompanyStructure? = nil, taxIdProvided: Bool? = nil, taxIdRegistrar: String? = nil, vatIdProvided: Bool? = nil, verification: Nullable<LegalEntityCompanyVerification>? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.address = address
         self.addressKana = addressKana
         self.addressKanji = addressKanji
@@ -345,11 +225,11 @@ public struct LegalEntityCompany: Sendable, Codable, Equatable, Hashable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.address = try container.decodeIfPresent(Address.self, forKey: .address)
-        self.addressKana = try container.decodeIfPresent(Nullable<LegalEntityCompanyAddressKana>.self, forKey: .addressKana)
-        self.addressKanji = try container.decodeIfPresent(Nullable<LegalEntityCompanyAddressKanji>.self, forKey: .addressKanji)
+        self.addressKana = try container.decodeIfPresent(Nullable<LegalEntityJapanAddress>.self, forKey: .addressKana)
+        self.addressKanji = try container.decodeIfPresent(Nullable<LegalEntityJapanAddress>.self, forKey: .addressKanji)
         self.administrativeAddress = try container.decodeIfPresent(Address.self, forKey: .administrativeAddress)
         self.directorsProvided = try container.decodeIfPresent(Bool.self, forKey: .directorsProvided)
-        self.directorshipDeclaration = try container.decodeIfPresent(Nullable<LegalEntityCompanyDirectorshipDeclaration>.self, forKey: .directorshipDeclaration)
+        self.directorshipDeclaration = try container.decodeIfPresent(Nullable<LegalEntityDirectorshipDeclaration>.self, forKey: .directorshipDeclaration)
         self.executivesProvided = try container.decodeIfPresent(Bool.self, forKey: .executivesProvided)
         self.exportLicenseId = try container.decodeIfPresent(String.self, forKey: .exportLicenseId)
         self.exportPurposeCode = try container.decodeIfPresent(String.self, forKey: .exportPurposeCode)
@@ -357,13 +237,13 @@ public struct LegalEntityCompany: Sendable, Codable, Equatable, Hashable {
         self.nameKana = try container.decodeIfPresent(Nullable<String>.self, forKey: .nameKana)
         self.nameKanji = try container.decodeIfPresent(Nullable<String>.self, forKey: .nameKanji)
         self.ownersProvided = try container.decodeIfPresent(Bool.self, forKey: .ownersProvided)
-        self.ownershipDeclaration = try container.decodeIfPresent(Nullable<LegalEntityCompanyOwnershipDeclaration>.self, forKey: .ownershipDeclaration)
+        self.ownershipDeclaration = try container.decodeIfPresent(Nullable<LegalEntityUboDeclaration>.self, forKey: .ownershipDeclaration)
         self.ownershipExemptionReason = try container.decodeIfPresent(LegalEntityCompanyOwnershipExemptionReason.self, forKey: .ownershipExemptionReason)
         self.phone = try container.decodeIfPresent(Nullable<String>.self, forKey: .phone)
         self.physicalAddress = try container.decodeIfPresent(Address.self, forKey: .physicalAddress)
         self.principalPlaceOfBusiness = try container.decodeIfPresent(Address.self, forKey: .principalPlaceOfBusiness)
         self.registrationDate = try container.decodeIfPresent(LegalEntityRegistrationDate.self, forKey: .registrationDate)
-        self.representativeDeclaration = try container.decodeIfPresent(Nullable<LegalEntityCompanyRepresentativeDeclaration>.self, forKey: .representativeDeclaration)
+        self.representativeDeclaration = try container.decodeIfPresent(Nullable<LegalEntityRepresentativeDeclaration>.self, forKey: .representativeDeclaration)
         self.structure = try container.decodeIfPresent(LegalEntityCompanyStructure.self, forKey: .structure)
         self.taxIdProvided = try container.decodeIfPresent(Bool.self, forKey: .taxIdProvided)
         self.taxIdRegistrar = try container.decodeIfPresent(String.self, forKey: .taxIdRegistrar)
@@ -417,6 +297,48 @@ public struct LegalEntityCompany: Sendable, Codable, Equatable, Hashable {
     }
 }
 
+public struct LegalEntityCompanyVerification: Sendable, Codable, Equatable, Hashable {
+    public var document: LegalEntityCompanyVerificationDocument
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(document: LegalEntityCompanyVerificationDocument, unknownFields: [String: JSONValue]? = nil) {
+        self.document = document
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case document
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.document = try container.decode(LegalEntityCompanyVerificationDocument.self, forKey: .document)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .document: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.document, forKey: .document)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
 public struct LegalEntityCompanyVerificationDocument: Sendable, Codable, Equatable, Hashable {
     public var back: Nullable<Expandable<File>>
     public var details: Nullable<String>
@@ -443,10 +365,10 @@ public struct LegalEntityCompanyVerificationDocument: Sendable, Codable, Equatab
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.back = try container.decode(Nullable<Expandable<File>>.self, forKey: .back)
-        self.details = try container.decode(Nullable<String>.self, forKey: .details)
-        self.detailsCode = try container.decode(Nullable<String>.self, forKey: .detailsCode)
-        self.front = try container.decode(Nullable<Expandable<File>>.self, forKey: .front)
+        self.back = try container.decodeIfPresent(Nullable<Expandable<File>>.self, forKey: .back) ?? .null
+        self.details = try container.decodeIfPresent(Nullable<String>.self, forKey: .details) ?? .null
+        self.detailsCode = try container.decodeIfPresent(Nullable<String>.self, forKey: .detailsCode) ?? .null
+        self.front = try container.decodeIfPresent(Nullable<Expandable<File>>.self, forKey: .front) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -497,9 +419,9 @@ public struct LegalEntityDirectorshipDeclaration: Sendable, Codable, Equatable, 
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.date = try container.decode(Nullable<StripeTimestamp>.self, forKey: .date)
-        self.ip = try container.decode(Nullable<String>.self, forKey: .ip)
-        self.userAgent = try container.decode(Nullable<String>.self, forKey: .userAgent)
+        self.date = try container.decodeIfPresent(Nullable<StripeTimestamp>.self, forKey: .date) ?? .null
+        self.ip = try container.decodeIfPresent(Nullable<String>.self, forKey: .ip) ?? .null
+        self.userAgent = try container.decodeIfPresent(Nullable<String>.self, forKey: .userAgent) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -549,9 +471,9 @@ public struct LegalEntityDob: Sendable, Codable, Equatable, Hashable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.day = try container.decode(Nullable<Int>.self, forKey: .day)
-        self.month = try container.decode(Nullable<Int>.self, forKey: .month)
-        self.year = try container.decode(Nullable<Int>.self, forKey: .year)
+        self.day = try container.decodeIfPresent(Nullable<Int>.self, forKey: .day) ?? .null
+        self.month = try container.decodeIfPresent(Nullable<Int>.self, forKey: .month) ?? .null
+        self.year = try container.decodeIfPresent(Nullable<Int>.self, forKey: .year) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -613,13 +535,13 @@ public struct LegalEntityJapanAddress: Sendable, Codable, Equatable, Hashable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.city = try container.decode(Nullable<String>.self, forKey: .city)
-        self.country = try container.decode(Nullable<String>.self, forKey: .country)
-        self.line1 = try container.decode(Nullable<String>.self, forKey: .line1)
-        self.line2 = try container.decode(Nullable<String>.self, forKey: .line2)
-        self.postalCode = try container.decode(Nullable<String>.self, forKey: .postalCode)
-        self.state = try container.decode(Nullable<String>.self, forKey: .state)
-        self.town = try container.decode(Nullable<String>.self, forKey: .town)
+        self.city = try container.decodeIfPresent(Nullable<String>.self, forKey: .city) ?? .null
+        self.country = try container.decodeIfPresent(Nullable<String>.self, forKey: .country) ?? .null
+        self.line1 = try container.decodeIfPresent(Nullable<String>.self, forKey: .line1) ?? .null
+        self.line2 = try container.decodeIfPresent(Nullable<String>.self, forKey: .line2) ?? .null
+        self.postalCode = try container.decodeIfPresent(Nullable<String>.self, forKey: .postalCode) ?? .null
+        self.state = try container.decodeIfPresent(Nullable<String>.self, forKey: .state) ?? .null
+        self.town = try container.decodeIfPresent(Nullable<String>.self, forKey: .town) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -650,28 +572,8 @@ public struct LegalEntityJapanAddress: Sendable, Codable, Equatable, Hashable {
     }
 }
 
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum LegalEntityPersonVerificationAdditionalDocument: Sendable, Codable, Equatable, Hashable {
-    case legalEntityPersonVerificationDocument(LegalEntityPersonVerificationDocument)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(LegalEntityPersonVerificationDocument.self) { self = .legalEntityPersonVerificationDocument(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .legalEntityPersonVerificationDocument(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
 public struct LegalEntityPersonVerification: Sendable, Codable, Equatable, Hashable {
-    public var additionalDocument: Nullable<LegalEntityPersonVerificationAdditionalDocument>?
+    public var additionalDocument: Nullable<LegalEntityPersonVerificationDocument>?
     public var details: Nullable<String>?
     public var detailsCode: Nullable<String>?
     public var document: LegalEntityPersonVerificationDocument?
@@ -680,7 +582,7 @@ public struct LegalEntityPersonVerification: Sendable, Codable, Equatable, Hasha
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(additionalDocument: Nullable<LegalEntityPersonVerificationAdditionalDocument>? = nil, details: Nullable<String>? = nil, detailsCode: Nullable<String>? = nil, document: LegalEntityPersonVerificationDocument? = nil, status: String, unknownFields: [String: JSONValue]? = nil) {
+    public init(additionalDocument: Nullable<LegalEntityPersonVerificationDocument>? = nil, details: Nullable<String>? = nil, detailsCode: Nullable<String>? = nil, document: LegalEntityPersonVerificationDocument? = nil, status: String, unknownFields: [String: JSONValue]? = nil) {
         self.additionalDocument = additionalDocument
         self.details = details
         self.detailsCode = detailsCode
@@ -699,7 +601,7 @@ public struct LegalEntityPersonVerification: Sendable, Codable, Equatable, Hasha
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.additionalDocument = try container.decodeIfPresent(Nullable<LegalEntityPersonVerificationAdditionalDocument>.self, forKey: .additionalDocument)
+        self.additionalDocument = try container.decodeIfPresent(Nullable<LegalEntityPersonVerificationDocument>.self, forKey: .additionalDocument)
         self.details = try container.decodeIfPresent(Nullable<String>.self, forKey: .details)
         self.detailsCode = try container.decodeIfPresent(Nullable<String>.self, forKey: .detailsCode)
         self.document = try container.decodeIfPresent(LegalEntityPersonVerificationDocument.self, forKey: .document)
@@ -758,10 +660,10 @@ public struct LegalEntityPersonVerificationDocument: Sendable, Codable, Equatabl
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.back = try container.decode(Nullable<Expandable<File>>.self, forKey: .back)
-        self.details = try container.decode(Nullable<String>.self, forKey: .details)
-        self.detailsCode = try container.decode(Nullable<String>.self, forKey: .detailsCode)
-        self.front = try container.decode(Nullable<Expandable<File>>.self, forKey: .front)
+        self.back = try container.decodeIfPresent(Nullable<Expandable<File>>.self, forKey: .back) ?? .null
+        self.details = try container.decodeIfPresent(Nullable<String>.self, forKey: .details) ?? .null
+        self.detailsCode = try container.decodeIfPresent(Nullable<String>.self, forKey: .detailsCode) ?? .null
+        self.front = try container.decodeIfPresent(Nullable<Expandable<File>>.self, forKey: .front) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -812,9 +714,9 @@ public struct LegalEntityRegistrationDate: Sendable, Codable, Equatable, Hashabl
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.day = try container.decode(Nullable<Int>.self, forKey: .day)
-        self.month = try container.decode(Nullable<Int>.self, forKey: .month)
-        self.year = try container.decode(Nullable<Int>.self, forKey: .year)
+        self.day = try container.decodeIfPresent(Nullable<Int>.self, forKey: .day) ?? .null
+        self.month = try container.decodeIfPresent(Nullable<Int>.self, forKey: .month) ?? .null
+        self.year = try container.decodeIfPresent(Nullable<Int>.self, forKey: .year) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -864,9 +766,9 @@ public struct LegalEntityRepresentativeDeclaration: Sendable, Codable, Equatable
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.date = try container.decode(Nullable<StripeTimestamp>.self, forKey: .date)
-        self.ip = try container.decode(Nullable<String>.self, forKey: .ip)
-        self.userAgent = try container.decode(Nullable<String>.self, forKey: .userAgent)
+        self.date = try container.decodeIfPresent(Nullable<StripeTimestamp>.self, forKey: .date) ?? .null
+        self.ip = try container.decodeIfPresent(Nullable<String>.self, forKey: .ip) ?? .null
+        self.userAgent = try container.decodeIfPresent(Nullable<String>.self, forKey: .userAgent) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -916,9 +818,9 @@ public struct LegalEntityUboDeclaration: Sendable, Codable, Equatable, Hashable 
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.date = try container.decode(Nullable<StripeTimestamp>.self, forKey: .date)
-        self.ip = try container.decode(Nullable<String>.self, forKey: .ip)
-        self.userAgent = try container.decode(Nullable<String>.self, forKey: .userAgent)
+        self.date = try container.decodeIfPresent(Nullable<StripeTimestamp>.self, forKey: .date) ?? .null
+        self.ip = try container.decodeIfPresent(Nullable<String>.self, forKey: .ip) ?? .null
+        self.userAgent = try container.decodeIfPresent(Nullable<String>.self, forKey: .userAgent) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {

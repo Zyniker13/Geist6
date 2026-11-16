@@ -98,26 +98,6 @@ public enum PayoutReconciliationStatus: Sendable, Equatable, Hashable, LosslessE
     }
 }
 
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum PayoutTraceId: Sendable, Codable, Equatable, Hashable {
-    case payoutsTraceId(PayoutsTraceId)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(PayoutsTraceId.self) { self = .payoutsTraceId(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .payoutsTraceId(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
 /// Lossless enum: values Stripe documents plus any value the API
 /// adds later, kept in `undocumented` instead of dropped.
 public enum PayoutType: Sendable, Equatable, Hashable, LosslessEnum {
@@ -178,13 +158,13 @@ public struct Payout: Sendable, Codable, Equatable, Hashable, StripeIdentified {
     public var sourceType: String
     public var statementDescriptor: Nullable<String>
     public var status: String
-    public var traceId: Nullable<PayoutTraceId>
+    public var traceId: Nullable<PayoutsTraceId>
     public var type: PayoutType
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(amount: Int, applicationFee: Nullable<Expandable<ApplicationFee>>, applicationFeeAmount: Nullable<Int>, arrivalDate: StripeTimestamp, automatic: Bool, balanceTransaction: Nullable<Expandable<BalanceTransaction>>, created: StripeTimestamp, currency: String, description: Nullable<String>, destination: Nullable<PayoutDestination>, failureBalanceTransaction: Nullable<Expandable<BalanceTransaction>>, failureCode: Nullable<String>, failureMessage: Nullable<String>, id: String, livemode: Bool, metadata: Nullable<[String: String]>, method: String, object: PayoutObject, originalPayout: Nullable<Expandable<Payout>>, payoutMethod: Nullable<String>, reconciliationStatus: PayoutReconciliationStatus, reversedBy: Nullable<Expandable<Payout>>, sourceType: String, statementDescriptor: Nullable<String>, status: String, traceId: Nullable<PayoutTraceId>, type: PayoutType, unknownFields: [String: JSONValue]? = nil) {
+    public init(amount: Int, applicationFee: Nullable<Expandable<ApplicationFee>>, applicationFeeAmount: Nullable<Int>, arrivalDate: StripeTimestamp, automatic: Bool, balanceTransaction: Nullable<Expandable<BalanceTransaction>>, created: StripeTimestamp, currency: String, description: Nullable<String>, destination: Nullable<PayoutDestination>, failureBalanceTransaction: Nullable<Expandable<BalanceTransaction>>, failureCode: Nullable<String>, failureMessage: Nullable<String>, id: String, livemode: Bool, metadata: Nullable<[String: String]>, method: String, object: PayoutObject, originalPayout: Nullable<Expandable<Payout>>, payoutMethod: Nullable<String>, reconciliationStatus: PayoutReconciliationStatus, reversedBy: Nullable<Expandable<Payout>>, sourceType: String, statementDescriptor: Nullable<String>, status: String, traceId: Nullable<PayoutsTraceId>, type: PayoutType, unknownFields: [String: JSONValue]? = nil) {
         self.amount = amount
         self.applicationFee = applicationFee
         self.applicationFeeAmount = applicationFeeAmount
@@ -248,31 +228,31 @@ public struct Payout: Sendable, Codable, Equatable, Hashable, StripeIdentified {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.amount = try container.decode(Int.self, forKey: .amount)
-        self.applicationFee = try container.decode(Nullable<Expandable<ApplicationFee>>.self, forKey: .applicationFee)
-        self.applicationFeeAmount = try container.decode(Nullable<Int>.self, forKey: .applicationFeeAmount)
+        self.applicationFee = try container.decodeIfPresent(Nullable<Expandable<ApplicationFee>>.self, forKey: .applicationFee) ?? .null
+        self.applicationFeeAmount = try container.decodeIfPresent(Nullable<Int>.self, forKey: .applicationFeeAmount) ?? .null
         self.arrivalDate = try container.decode(StripeTimestamp.self, forKey: .arrivalDate)
         self.automatic = try container.decode(Bool.self, forKey: .automatic)
-        self.balanceTransaction = try container.decode(Nullable<Expandable<BalanceTransaction>>.self, forKey: .balanceTransaction)
+        self.balanceTransaction = try container.decodeIfPresent(Nullable<Expandable<BalanceTransaction>>.self, forKey: .balanceTransaction) ?? .null
         self.created = try container.decode(StripeTimestamp.self, forKey: .created)
         self.currency = try container.decode(String.self, forKey: .currency)
-        self.description = try container.decode(Nullable<String>.self, forKey: .description)
-        self.destination = try container.decode(Nullable<PayoutDestination>.self, forKey: .destination)
-        self.failureBalanceTransaction = try container.decode(Nullable<Expandable<BalanceTransaction>>.self, forKey: .failureBalanceTransaction)
-        self.failureCode = try container.decode(Nullable<String>.self, forKey: .failureCode)
-        self.failureMessage = try container.decode(Nullable<String>.self, forKey: .failureMessage)
+        self.description = try container.decodeIfPresent(Nullable<String>.self, forKey: .description) ?? .null
+        self.destination = try container.decodeIfPresent(Nullable<PayoutDestination>.self, forKey: .destination) ?? .null
+        self.failureBalanceTransaction = try container.decodeIfPresent(Nullable<Expandable<BalanceTransaction>>.self, forKey: .failureBalanceTransaction) ?? .null
+        self.failureCode = try container.decodeIfPresent(Nullable<String>.self, forKey: .failureCode) ?? .null
+        self.failureMessage = try container.decodeIfPresent(Nullable<String>.self, forKey: .failureMessage) ?? .null
         self.id = try container.decode(String.self, forKey: .id)
         self.livemode = try container.decode(Bool.self, forKey: .livemode)
-        self.metadata = try container.decode(Nullable<[String: String]>.self, forKey: .metadata)
+        self.metadata = try container.decodeIfPresent(Nullable<[String: String]>.self, forKey: .metadata) ?? .null
         self.method = try container.decode(String.self, forKey: .method)
         self.object = try container.decode(PayoutObject.self, forKey: .object)
-        self.originalPayout = try container.decode(Nullable<Expandable<Payout>>.self, forKey: .originalPayout)
-        self.payoutMethod = try container.decode(Nullable<String>.self, forKey: .payoutMethod)
+        self.originalPayout = try container.decodeIfPresent(Nullable<Expandable<Payout>>.self, forKey: .originalPayout) ?? .null
+        self.payoutMethod = try container.decodeIfPresent(Nullable<String>.self, forKey: .payoutMethod) ?? .null
         self.reconciliationStatus = try container.decode(PayoutReconciliationStatus.self, forKey: .reconciliationStatus)
-        self.reversedBy = try container.decode(Nullable<Expandable<Payout>>.self, forKey: .reversedBy)
+        self.reversedBy = try container.decodeIfPresent(Nullable<Expandable<Payout>>.self, forKey: .reversedBy) ?? .null
         self.sourceType = try container.decode(String.self, forKey: .sourceType)
-        self.statementDescriptor = try container.decode(Nullable<String>.self, forKey: .statementDescriptor)
+        self.statementDescriptor = try container.decodeIfPresent(Nullable<String>.self, forKey: .statementDescriptor) ?? .null
         self.status = try container.decode(String.self, forKey: .status)
-        self.traceId = try container.decode(Nullable<PayoutTraceId>.self, forKey: .traceId)
+        self.traceId = try container.decodeIfPresent(Nullable<PayoutsTraceId>.self, forKey: .traceId) ?? .null
         self.type = try container.decode(PayoutType.self, forKey: .type)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {

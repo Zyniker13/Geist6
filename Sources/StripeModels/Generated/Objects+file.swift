@@ -231,16 +231,16 @@ public struct File: Sendable, Codable, Equatable, Hashable, StripeIdentified {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.created = try container.decode(StripeTimestamp.self, forKey: .created)
-        self.expiresAt = try container.decode(Nullable<StripeTimestamp>.self, forKey: .expiresAt)
-        self.filename = try container.decode(Nullable<String>.self, forKey: .filename)
+        self.expiresAt = try container.decodeIfPresent(Nullable<StripeTimestamp>.self, forKey: .expiresAt) ?? .null
+        self.filename = try container.decodeIfPresent(Nullable<String>.self, forKey: .filename) ?? .null
         self.id = try container.decode(String.self, forKey: .id)
         self.links = try container.decodeIfPresent(Nullable<FileLinks>.self, forKey: .links)
         self.object = try container.decode(FileObject.self, forKey: .object)
         self.purpose = try container.decode(FilePurpose.self, forKey: .purpose)
         self.size = try container.decode(Int.self, forKey: .size)
-        self.title = try container.decode(Nullable<String>.self, forKey: .title)
-        self.type = try container.decode(Nullable<String>.self, forKey: .type)
-        self.url = try container.decode(Nullable<String>.self, forKey: .url)
+        self.title = try container.decodeIfPresent(Nullable<String>.self, forKey: .title) ?? .null
+        self.type = try container.decodeIfPresent(Nullable<String>.self, forKey: .type) ?? .null
+        self.url = try container.decodeIfPresent(Nullable<String>.self, forKey: .url) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -391,13 +391,13 @@ public struct FileLink: Sendable, Codable, Equatable, Hashable, StripeIdentified
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.created = try container.decode(StripeTimestamp.self, forKey: .created)
         self.expired = try container.decode(Bool.self, forKey: .expired)
-        self.expiresAt = try container.decode(Nullable<StripeTimestamp>.self, forKey: .expiresAt)
+        self.expiresAt = try container.decodeIfPresent(Nullable<StripeTimestamp>.self, forKey: .expiresAt) ?? .null
         self.file = try container.decode(Expandable<File>.self, forKey: .file)
         self.id = try container.decode(String.self, forKey: .id)
         self.livemode = try container.decode(Bool.self, forKey: .livemode)
         self.metadata = try container.decode([String: String].self, forKey: .metadata)
         self.object = try container.decode(FileLinkObject.self, forKey: .object)
-        self.url = try container.decode(Nullable<String>.self, forKey: .url)
+        self.url = try container.decodeIfPresent(Nullable<String>.self, forKey: .url) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {

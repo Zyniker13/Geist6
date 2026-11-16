@@ -199,14 +199,14 @@ public struct ClimateOrder: Sendable, Codable, Equatable, Hashable, StripeIdenti
         self.amountSubtotal = try container.decode(Int.self, forKey: .amountSubtotal)
         self.amountTotal = try container.decode(Int.self, forKey: .amountTotal)
         self.beneficiary = try container.decodeIfPresent(ClimateRemovalsBeneficiary.self, forKey: .beneficiary)
-        self.canceledAt = try container.decode(Nullable<StripeTimestamp>.self, forKey: .canceledAt)
-        self.cancellationReason = try container.decode(Nullable<ClimateOrderCancellationReason>.self, forKey: .cancellationReason)
-        self.certificate = try container.decode(Nullable<String>.self, forKey: .certificate)
-        self.confirmedAt = try container.decode(Nullable<StripeTimestamp>.self, forKey: .confirmedAt)
+        self.canceledAt = try container.decodeIfPresent(Nullable<StripeTimestamp>.self, forKey: .canceledAt) ?? .null
+        self.cancellationReason = try container.decodeIfPresent(Nullable<ClimateOrderCancellationReason>.self, forKey: .cancellationReason) ?? .null
+        self.certificate = try container.decodeIfPresent(Nullable<String>.self, forKey: .certificate) ?? .null
+        self.confirmedAt = try container.decodeIfPresent(Nullable<StripeTimestamp>.self, forKey: .confirmedAt) ?? .null
         self.created = try container.decode(StripeTimestamp.self, forKey: .created)
         self.currency = try container.decode(String.self, forKey: .currency)
-        self.delayedAt = try container.decode(Nullable<StripeTimestamp>.self, forKey: .delayedAt)
-        self.deliveredAt = try container.decode(Nullable<StripeTimestamp>.self, forKey: .deliveredAt)
+        self.delayedAt = try container.decodeIfPresent(Nullable<StripeTimestamp>.self, forKey: .delayedAt) ?? .null
+        self.deliveredAt = try container.decodeIfPresent(Nullable<StripeTimestamp>.self, forKey: .deliveredAt) ?? .null
         self.deliveryDetails = try container.decode([ClimateRemovalsOrderDeliveries].self, forKey: .deliveryDetails)
         self.expectedDeliveryYear = try container.decode(Int.self, forKey: .expectedDeliveryYear)
         self.id = try container.decode(String.self, forKey: .id)
@@ -215,7 +215,7 @@ public struct ClimateOrder: Sendable, Codable, Equatable, Hashable, StripeIdenti
         self.metricTons = try container.decode(String.self, forKey: .metricTons)
         self.object = try container.decode(ClimateOrderObject.self, forKey: .object)
         self.product = try container.decode(Expandable<ClimateProduct>.self, forKey: .product)
-        self.productSubstitutedAt = try container.decode(Nullable<StripeTimestamp>.self, forKey: .productSubstitutedAt)
+        self.productSubstitutedAt = try container.decodeIfPresent(Nullable<StripeTimestamp>.self, forKey: .productSubstitutedAt) ?? .null
         self.status = try container.decode(ClimateOrderStatus.self, forKey: .status)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
@@ -546,7 +546,7 @@ public struct ClimateProduct: Sendable, Codable, Equatable, Hashable, StripeIden
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.created = try container.decode(StripeTimestamp.self, forKey: .created)
         self.currentPricesPerMetricTon = try container.decode([String: JSONValue].self, forKey: .currentPricesPerMetricTon)
-        self.deliveryYear = try container.decode(Nullable<Int>.self, forKey: .deliveryYear)
+        self.deliveryYear = try container.decodeIfPresent(Nullable<Int>.self, forKey: .deliveryYear) ?? .null
         self.id = try container.decode(String.self, forKey: .id)
         self.livemode = try container.decode(Bool.self, forKey: .livemode)
         self.metricTonsAvailable = try container.decode(String.self, forKey: .metricTonsAvailable)
@@ -883,11 +883,11 @@ public struct ClimateRemovalsLocation: Sendable, Codable, Equatable, Hashable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.city = try container.decode(Nullable<String>.self, forKey: .city)
+        self.city = try container.decodeIfPresent(Nullable<String>.self, forKey: .city) ?? .null
         self.country = try container.decode(String.self, forKey: .country)
-        self.latitude = try container.decode(Nullable<Decimal>.self, forKey: .latitude)
-        self.longitude = try container.decode(Nullable<Decimal>.self, forKey: .longitude)
-        self.region = try container.decode(Nullable<String>.self, forKey: .region)
+        self.latitude = try container.decodeIfPresent(Nullable<Decimal>.self, forKey: .latitude) ?? .null
+        self.longitude = try container.decodeIfPresent(Nullable<Decimal>.self, forKey: .longitude) ?? .null
+        self.region = try container.decodeIfPresent(Nullable<String>.self, forKey: .region) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -916,29 +916,9 @@ public struct ClimateRemovalsLocation: Sendable, Codable, Equatable, Hashable {
     }
 }
 
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum ClimateRemovalsOrderDeliveriesLocation: Sendable, Codable, Equatable, Hashable {
-    case climateRemovalsLocation(ClimateRemovalsLocation)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(ClimateRemovalsLocation.self) { self = .climateRemovalsLocation(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .climateRemovalsLocation(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
 public struct ClimateRemovalsOrderDeliveries: Sendable, Codable, Equatable, Hashable {
     public var deliveredAt: StripeTimestamp
-    public var location: Nullable<ClimateRemovalsOrderDeliveriesLocation>
+    public var location: Nullable<ClimateRemovalsLocation>
     public var metricTons: String
     public var registryUrl: Nullable<String>
     public var supplier: ClimateSupplier
@@ -946,7 +926,7 @@ public struct ClimateRemovalsOrderDeliveries: Sendable, Codable, Equatable, Hash
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(deliveredAt: StripeTimestamp, location: Nullable<ClimateRemovalsOrderDeliveriesLocation>, metricTons: String, registryUrl: Nullable<String>, supplier: ClimateSupplier, unknownFields: [String: JSONValue]? = nil) {
+    public init(deliveredAt: StripeTimestamp, location: Nullable<ClimateRemovalsLocation>, metricTons: String, registryUrl: Nullable<String>, supplier: ClimateSupplier, unknownFields: [String: JSONValue]? = nil) {
         self.deliveredAt = deliveredAt
         self.location = location
         self.metricTons = metricTons
@@ -966,9 +946,9 @@ public struct ClimateRemovalsOrderDeliveries: Sendable, Codable, Equatable, Hash
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.deliveredAt = try container.decode(StripeTimestamp.self, forKey: .deliveredAt)
-        self.location = try container.decode(Nullable<ClimateRemovalsOrderDeliveriesLocation>.self, forKey: .location)
+        self.location = try container.decodeIfPresent(Nullable<ClimateRemovalsLocation>.self, forKey: .location) ?? .null
         self.metricTons = try container.decode(String.self, forKey: .metricTons)
-        self.registryUrl = try container.decode(Nullable<String>.self, forKey: .registryUrl)
+        self.registryUrl = try container.decodeIfPresent(Nullable<String>.self, forKey: .registryUrl) ?? .null
         self.supplier = try container.decode(ClimateSupplier.self, forKey: .supplier)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {

@@ -36,12 +36,12 @@ public struct PaymentsPrimitivesPaymentRecordsResourceAddress: Sendable, Codable
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.city = try container.decode(Nullable<String>.self, forKey: .city)
-        self.country = try container.decode(Nullable<String>.self, forKey: .country)
-        self.line1 = try container.decode(Nullable<String>.self, forKey: .line1)
-        self.line2 = try container.decode(Nullable<String>.self, forKey: .line2)
-        self.postalCode = try container.decode(Nullable<String>.self, forKey: .postalCode)
-        self.state = try container.decode(Nullable<String>.self, forKey: .state)
+        self.city = try container.decodeIfPresent(Nullable<String>.self, forKey: .city) ?? .null
+        self.country = try container.decodeIfPresent(Nullable<String>.self, forKey: .country) ?? .null
+        self.line1 = try container.decodeIfPresent(Nullable<String>.self, forKey: .line1) ?? .null
+        self.line2 = try container.decodeIfPresent(Nullable<String>.self, forKey: .line2) ?? .null
+        self.postalCode = try container.decodeIfPresent(Nullable<String>.self, forKey: .postalCode) ?? .null
+        self.state = try container.decodeIfPresent(Nullable<String>.self, forKey: .state) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -145,9 +145,9 @@ public struct PaymentsPrimitivesPaymentRecordsResourceBillingDetails: Sendable, 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.address = try container.decode(PaymentsPrimitivesPaymentRecordsResourceAddress.self, forKey: .address)
-        self.email = try container.decode(Nullable<String>.self, forKey: .email)
-        self.name = try container.decode(Nullable<String>.self, forKey: .name)
-        self.phone = try container.decode(Nullable<String>.self, forKey: .phone)
+        self.email = try container.decodeIfPresent(Nullable<String>.self, forKey: .email) ?? .null
+        self.name = try container.decodeIfPresent(Nullable<String>.self, forKey: .name) ?? .null
+        self.phone = try container.decodeIfPresent(Nullable<String>.self, forKey: .phone) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -201,10 +201,10 @@ public struct PaymentsPrimitivesPaymentRecordsResourceCustomerDetails: Sendable,
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.customer = try container.decode(Nullable<String>.self, forKey: .customer)
-        self.email = try container.decode(Nullable<String>.self, forKey: .email)
-        self.name = try container.decode(Nullable<String>.self, forKey: .name)
-        self.phone = try container.decode(Nullable<String>.self, forKey: .phone)
+        self.customer = try container.decodeIfPresent(Nullable<String>.self, forKey: .customer) ?? .null
+        self.email = try container.decodeIfPresent(Nullable<String>.self, forKey: .email) ?? .null
+        self.name = try container.decodeIfPresent(Nullable<String>.self, forKey: .name) ?? .null
+        self.phone = try container.decodeIfPresent(Nullable<String>.self, forKey: .phone) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -295,7 +295,7 @@ public struct PaymentsPrimitivesPaymentRecordsResourcePaymentMethodAmazonPayDeta
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.card = try container.decodeIfPresent(PaymentsPrimitivesPaymentRecordsResourcePaymentMethodAmazonPayDetailsResourceFundingResourceFundingCard.self, forKey: .card)
-        self.type = try container.decode(Nullable<AmazonPayUnderlyingPaymentMethodFundingDetailsType>.self, forKey: .type)
+        self.type = try container.decodeIfPresent(Nullable<AmazonPayUnderlyingPaymentMethodFundingDetailsType>.self, forKey: .type) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -353,12 +353,12 @@ public struct PaymentsPrimitivesPaymentRecordsResourcePaymentMethodAmazonPayDeta
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.brand = try container.decode(Nullable<String>.self, forKey: .brand)
-        self.country = try container.decode(Nullable<String>.self, forKey: .country)
-        self.expMonth = try container.decode(Nullable<Int>.self, forKey: .expMonth)
-        self.expYear = try container.decode(Nullable<Int>.self, forKey: .expYear)
-        self.funding = try container.decode(Nullable<String>.self, forKey: .funding)
-        self.last4 = try container.decode(Nullable<String>.self, forKey: .last4)
+        self.brand = try container.decodeIfPresent(Nullable<String>.self, forKey: .brand) ?? .null
+        self.country = try container.decodeIfPresent(Nullable<String>.self, forKey: .country) ?? .null
+        self.expMonth = try container.decodeIfPresent(Nullable<Int>.self, forKey: .expMonth) ?? .null
+        self.expYear = try container.decodeIfPresent(Nullable<Int>.self, forKey: .expYear) ?? .null
+        self.funding = try container.decodeIfPresent(Nullable<String>.self, forKey: .funding) ?? .null
+        self.last4 = try container.decodeIfPresent(Nullable<String>.self, forKey: .last4) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -452,26 +452,6 @@ public enum PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsBran
     }
 }
 
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsChecks: Sendable, Codable, Equatable, Hashable {
-    case paymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceChecks(PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceChecks)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceChecks.self) { self = .paymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceChecks(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .paymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceChecks(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
 /// Lossless enum: values Stripe documents plus any value the API
 /// adds later, kept in `undocumented` instead of dropped.
 public enum PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsFunding: Sendable, Equatable, Hashable, LosslessEnum {
@@ -512,91 +492,11 @@ public enum PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsFund
     }
 }
 
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsInstallments: Sendable, Codable, Equatable, Hashable {
-    case paymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceInstallments(PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceInstallments)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceInstallments.self) { self = .paymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceInstallments(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .paymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceInstallments(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsNetworkToken: Sendable, Codable, Equatable, Hashable {
-    case paymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceNetworkToken(PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceNetworkToken)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceNetworkToken.self) { self = .paymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceNetworkToken(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .paymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceNetworkToken(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsThreeDSecure: Sendable, Codable, Equatable, Hashable {
-    case paymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceThreeDSecure(PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceThreeDSecure)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceThreeDSecure.self) { self = .paymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceThreeDSecure(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .paymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceThreeDSecure(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsWallet: Sendable, Codable, Equatable, Hashable {
-    case paymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceWallet(PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceWallet)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceWallet.self) { self = .paymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceWallet(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .paymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceWallet(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
 public struct PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetails: Sendable, Codable, Equatable, Hashable {
     public var authorizationCode: Nullable<String>
     public var brand: Nullable<PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsBrand>
     public var captureBefore: StripeTimestamp?
-    public var checks: Nullable<PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsChecks>
+    public var checks: Nullable<PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceChecks>
     public var country: Nullable<String>
     public var description: Nullable<String>?
     public var expMonth: Nullable<Int>
@@ -604,23 +504,23 @@ public struct PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetails: 
     public var fingerprint: Nullable<String>?
     public var funding: Nullable<PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsFunding>
     public var iin: Nullable<String>?
-    public var installments: Nullable<PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsInstallments>
+    public var installments: Nullable<PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceInstallments>
     public var issuer: Nullable<String>?
     public var last4: Nullable<String>
     public var moto: Nullable<Bool>?
     public var network: Nullable<PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsBrand>
     public var networkAdviceCode: Nullable<String>
     public var networkDeclineCode: Nullable<String>
-    public var networkToken: Nullable<PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsNetworkToken>?
+    public var networkToken: Nullable<PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceNetworkToken>?
     public var networkTransactionId: Nullable<String>
     public var storedCredentialUsage: Nullable<PaymentIntentPaymentMethodOptionsCardSetupCredentialUsage>?
-    public var threeDSecure: Nullable<PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsThreeDSecure>
-    public var wallet: Nullable<PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsWallet>
+    public var threeDSecure: Nullable<PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceThreeDSecure>
+    public var wallet: Nullable<PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceWallet>
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(authorizationCode: Nullable<String>, brand: Nullable<PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsBrand>, captureBefore: StripeTimestamp? = nil, checks: Nullable<PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsChecks>, country: Nullable<String>, description: Nullable<String>? = nil, expMonth: Nullable<Int>, expYear: Nullable<Int>, fingerprint: Nullable<String>? = nil, funding: Nullable<PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsFunding>, iin: Nullable<String>? = nil, installments: Nullable<PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsInstallments>, issuer: Nullable<String>? = nil, last4: Nullable<String>, moto: Nullable<Bool>? = nil, network: Nullable<PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsBrand>, networkAdviceCode: Nullable<String>, networkDeclineCode: Nullable<String>, networkToken: Nullable<PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsNetworkToken>? = nil, networkTransactionId: Nullable<String>, storedCredentialUsage: Nullable<PaymentIntentPaymentMethodOptionsCardSetupCredentialUsage>? = nil, threeDSecure: Nullable<PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsThreeDSecure>, wallet: Nullable<PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsWallet>, unknownFields: [String: JSONValue]? = nil) {
+    public init(authorizationCode: Nullable<String>, brand: Nullable<PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsBrand>, captureBefore: StripeTimestamp? = nil, checks: Nullable<PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceChecks>, country: Nullable<String>, description: Nullable<String>? = nil, expMonth: Nullable<Int>, expYear: Nullable<Int>, fingerprint: Nullable<String>? = nil, funding: Nullable<PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsFunding>, iin: Nullable<String>? = nil, installments: Nullable<PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceInstallments>, issuer: Nullable<String>? = nil, last4: Nullable<String>, moto: Nullable<Bool>? = nil, network: Nullable<PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsBrand>, networkAdviceCode: Nullable<String>, networkDeclineCode: Nullable<String>, networkToken: Nullable<PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceNetworkToken>? = nil, networkTransactionId: Nullable<String>, storedCredentialUsage: Nullable<PaymentIntentPaymentMethodOptionsCardSetupCredentialUsage>? = nil, threeDSecure: Nullable<PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceThreeDSecure>, wallet: Nullable<PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceWallet>, unknownFields: [String: JSONValue]? = nil) {
         self.authorizationCode = authorizationCode
         self.brand = brand
         self.captureBefore = captureBefore
@@ -675,29 +575,29 @@ public struct PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetails: 
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.authorizationCode = try container.decode(Nullable<String>.self, forKey: .authorizationCode)
-        self.brand = try container.decode(Nullable<PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsBrand>.self, forKey: .brand)
+        self.authorizationCode = try container.decodeIfPresent(Nullable<String>.self, forKey: .authorizationCode) ?? .null
+        self.brand = try container.decodeIfPresent(Nullable<PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsBrand>.self, forKey: .brand) ?? .null
         self.captureBefore = try container.decodeIfPresent(StripeTimestamp.self, forKey: .captureBefore)
-        self.checks = try container.decode(Nullable<PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsChecks>.self, forKey: .checks)
-        self.country = try container.decode(Nullable<String>.self, forKey: .country)
+        self.checks = try container.decodeIfPresent(Nullable<PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceChecks>.self, forKey: .checks) ?? .null
+        self.country = try container.decodeIfPresent(Nullable<String>.self, forKey: .country) ?? .null
         self.description = try container.decodeIfPresent(Nullable<String>.self, forKey: .description)
-        self.expMonth = try container.decode(Nullable<Int>.self, forKey: .expMonth)
-        self.expYear = try container.decode(Nullable<Int>.self, forKey: .expYear)
+        self.expMonth = try container.decodeIfPresent(Nullable<Int>.self, forKey: .expMonth) ?? .null
+        self.expYear = try container.decodeIfPresent(Nullable<Int>.self, forKey: .expYear) ?? .null
         self.fingerprint = try container.decodeIfPresent(Nullable<String>.self, forKey: .fingerprint)
-        self.funding = try container.decode(Nullable<PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsFunding>.self, forKey: .funding)
+        self.funding = try container.decodeIfPresent(Nullable<PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsFunding>.self, forKey: .funding) ?? .null
         self.iin = try container.decodeIfPresent(Nullable<String>.self, forKey: .iin)
-        self.installments = try container.decode(Nullable<PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsInstallments>.self, forKey: .installments)
+        self.installments = try container.decodeIfPresent(Nullable<PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceInstallments>.self, forKey: .installments) ?? .null
         self.issuer = try container.decodeIfPresent(Nullable<String>.self, forKey: .issuer)
-        self.last4 = try container.decode(Nullable<String>.self, forKey: .last4)
+        self.last4 = try container.decodeIfPresent(Nullable<String>.self, forKey: .last4) ?? .null
         self.moto = try container.decodeIfPresent(Nullable<Bool>.self, forKey: .moto)
-        self.network = try container.decode(Nullable<PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsBrand>.self, forKey: .network)
-        self.networkAdviceCode = try container.decode(Nullable<String>.self, forKey: .networkAdviceCode)
-        self.networkDeclineCode = try container.decode(Nullable<String>.self, forKey: .networkDeclineCode)
-        self.networkToken = try container.decodeIfPresent(Nullable<PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsNetworkToken>.self, forKey: .networkToken)
-        self.networkTransactionId = try container.decode(Nullable<String>.self, forKey: .networkTransactionId)
+        self.network = try container.decodeIfPresent(Nullable<PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsBrand>.self, forKey: .network) ?? .null
+        self.networkAdviceCode = try container.decodeIfPresent(Nullable<String>.self, forKey: .networkAdviceCode) ?? .null
+        self.networkDeclineCode = try container.decodeIfPresent(Nullable<String>.self, forKey: .networkDeclineCode) ?? .null
+        self.networkToken = try container.decodeIfPresent(Nullable<PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceNetworkToken>.self, forKey: .networkToken)
+        self.networkTransactionId = try container.decodeIfPresent(Nullable<String>.self, forKey: .networkTransactionId) ?? .null
         self.storedCredentialUsage = try container.decodeIfPresent(Nullable<PaymentIntentPaymentMethodOptionsCardSetupCredentialUsage>.self, forKey: .storedCredentialUsage)
-        self.threeDSecure = try container.decode(Nullable<PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsThreeDSecure>.self, forKey: .threeDSecure)
-        self.wallet = try container.decode(Nullable<PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsWallet>.self, forKey: .wallet)
+        self.threeDSecure = try container.decodeIfPresent(Nullable<PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceThreeDSecure>.self, forKey: .threeDSecure) ?? .null
+        self.wallet = try container.decodeIfPresent(Nullable<PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceWallet>.self, forKey: .wallet) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -767,9 +667,9 @@ public struct PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsRe
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.addressLine1Check = try container.decode(Nullable<InsightsResourcesPaymentEvaluationRejectedCardAddressLine1Check>.self, forKey: .addressLine1Check)
-        self.addressPostalCodeCheck = try container.decode(Nullable<InsightsResourcesPaymentEvaluationRejectedCardAddressLine1Check>.self, forKey: .addressPostalCodeCheck)
-        self.cvcCheck = try container.decode(Nullable<InsightsResourcesPaymentEvaluationRejectedCardAddressLine1Check>.self, forKey: .cvcCheck)
+        self.addressLine1Check = try container.decodeIfPresent(Nullable<InsightsResourcesPaymentEvaluationRejectedCardAddressLine1Check>.self, forKey: .addressLine1Check) ?? .null
+        self.addressPostalCodeCheck = try container.decodeIfPresent(Nullable<InsightsResourcesPaymentEvaluationRejectedCardAddressLine1Check>.self, forKey: .addressPostalCodeCheck) ?? .null
+        self.cvcCheck = try container.decodeIfPresent(Nullable<InsightsResourcesPaymentEvaluationRejectedCardAddressLine1Check>.self, forKey: .cvcCheck) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -819,8 +719,8 @@ public struct PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsRe
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.count = try container.decode(Nullable<Int>.self, forKey: .count)
-        self.interval = try container.decode(Nullable<PaymentMethodDetailsCardInstallmentsPlanInterval>.self, forKey: .interval)
+        self.count = try container.decodeIfPresent(Nullable<Int>.self, forKey: .count) ?? .null
+        self.interval = try container.decodeIfPresent(Nullable<PaymentMethodDetailsCardInstallmentsPlanInterval>.self, forKey: .interval) ?? .null
         self.type = try container.decode(PaymentMethodDetailsCardInstallmentsPlanType.self, forKey: .type)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
@@ -848,33 +748,13 @@ public struct PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsRe
     }
 }
 
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceInstallmentsPlan: Sendable, Codable, Equatable, Hashable {
-    case paymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceInstallmentPlan(PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceInstallmentPlan)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceInstallmentPlan.self) { self = .paymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceInstallmentPlan(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .paymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceInstallmentPlan(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
 public struct PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceInstallments: Sendable, Codable, Equatable, Hashable {
-    public var plan: Nullable<PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceInstallmentsPlan>
+    public var plan: Nullable<PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceInstallmentPlan>
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(plan: Nullable<PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceInstallmentsPlan>, unknownFields: [String: JSONValue]? = nil) {
+    public init(plan: Nullable<PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceInstallmentPlan>, unknownFields: [String: JSONValue]? = nil) {
         self.plan = plan
         self.unknownFields = unknownFields
     }
@@ -885,7 +765,7 @@ public struct PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsRe
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.plan = try container.decode(Nullable<PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceInstallmentsPlan>.self, forKey: .plan)
+        self.plan = try container.decodeIfPresent(Nullable<PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceInstallmentPlan>.self, forKey: .plan) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -1245,13 +1125,13 @@ public struct PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsRe
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.authenticationFlow = try container.decode(Nullable<PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceThreeDSecureAuthenticationFlow>.self, forKey: .authenticationFlow)
-        self.electronicCommerceIndicator = try container.decode(Nullable<PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceThreeDSecureElectronicCommerceIndicator>.self, forKey: .electronicCommerceIndicator)
-        self.exemptionIndicator = try container.decode(Nullable<PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceThreeDSecureExemptionIndicator>.self, forKey: .exemptionIndicator)
-        self.exemptionIndicatorApplied = try container.decode(Nullable<Bool>.self, forKey: .exemptionIndicatorApplied)
-        self.result = try container.decode(Nullable<PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceThreeDSecureResult>.self, forKey: .result)
-        self.resultReason = try container.decode(Nullable<PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceThreeDSecureResultReason>.self, forKey: .resultReason)
-        self.version = try container.decode(Nullable<PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceThreeDSecureVersion>.self, forKey: .version)
+        self.authenticationFlow = try container.decodeIfPresent(Nullable<PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceThreeDSecureAuthenticationFlow>.self, forKey: .authenticationFlow) ?? .null
+        self.electronicCommerceIndicator = try container.decodeIfPresent(Nullable<PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceThreeDSecureElectronicCommerceIndicator>.self, forKey: .electronicCommerceIndicator) ?? .null
+        self.exemptionIndicator = try container.decodeIfPresent(Nullable<PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceThreeDSecureExemptionIndicator>.self, forKey: .exemptionIndicator) ?? .null
+        self.exemptionIndicatorApplied = try container.decodeIfPresent(Nullable<Bool>.self, forKey: .exemptionIndicatorApplied) ?? .null
+        self.result = try container.decodeIfPresent(Nullable<PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceThreeDSecureResult>.self, forKey: .result) ?? .null
+        self.resultReason = try container.decodeIfPresent(Nullable<PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceThreeDSecureResultReason>.self, forKey: .resultReason) ?? .null
+        self.version = try container.decodeIfPresent(Nullable<PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceThreeDSecureVersion>.self, forKey: .version) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -1479,7 +1359,7 @@ public struct PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCustomDetails
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.displayName = try container.decode(String.self, forKey: .displayName)
-        self.type = try container.decode(Nullable<String>.self, forKey: .type)
+        self.type = try container.decodeIfPresent(Nullable<String>.self, forKey: .type) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -1505,26 +1385,6 @@ public struct PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCustomDetails
     }
 }
 
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum PaymentsPrimitivesPaymentRecordsResourcePaymentMethodDetailsBillingDetails: Sendable, Codable, Equatable, Hashable {
-    case paymentsPrimitivesPaymentRecordsResourceBillingDetails(PaymentsPrimitivesPaymentRecordsResourceBillingDetails)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(PaymentsPrimitivesPaymentRecordsResourceBillingDetails.self) { self = .paymentsPrimitivesPaymentRecordsResourceBillingDetails(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .paymentsPrimitivesPaymentRecordsResourceBillingDetails(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
 public struct PaymentsPrimitivesPaymentRecordsResourcePaymentMethodDetails: Sendable, Codable, Equatable, Hashable {
     public var achCreditTransfer: PaymentMethodDetailsAchCreditTransfer?
     public var achDebit: PaymentMethodDetailsAchDebit?
@@ -1538,7 +1398,7 @@ public struct PaymentsPrimitivesPaymentRecordsResourcePaymentMethodDetails: Send
     public var bacsDebit: PaymentMethodDetailsPaymentRecordBacsDebit?
     public var bancontact: PaymentMethodDetailsPaymentRecordBancontact?
     public var billie: PaymentMethodDetailsPaymentRecordBillie?
-    public var billingDetails: Nullable<PaymentsPrimitivesPaymentRecordsResourcePaymentMethodDetailsBillingDetails>
+    public var billingDetails: Nullable<PaymentsPrimitivesPaymentRecordsResourceBillingDetails>
     public var bizum: PaymentMethodDetailsPaymentRecordBizum?
     public var blik: PaymentMethodDetailsPaymentRecordBlik?
     public var boleto: PaymentMethodDetailsPaymentRecordBoleto?
@@ -1598,7 +1458,7 @@ public struct PaymentsPrimitivesPaymentRecordsResourcePaymentMethodDetails: Send
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(achCreditTransfer: PaymentMethodDetailsAchCreditTransfer? = nil, achDebit: PaymentMethodDetailsAchDebit? = nil, acssDebit: PaymentMethodDetailsPaymentRecordAcssDebit? = nil, affirm: PaymentMethodDetailsPaymentRecordAffirm? = nil, afterpayClearpay: PaymentMethodDetailsPaymentRecordAfterpayClearpay? = nil, alipay: PaymentMethodDetailsPaymentRecordAlipay? = nil, alma: PaymentMethodDetailsPaymentRecordAlma? = nil, amazonPay: PaymentMethodDetailsPaymentRecordAmazonPay? = nil, auBecsDebit: PaymentMethodDetailsPaymentRecordAuBecsDebit? = nil, bacsDebit: PaymentMethodDetailsPaymentRecordBacsDebit? = nil, bancontact: PaymentMethodDetailsPaymentRecordBancontact? = nil, billie: PaymentMethodDetailsPaymentRecordBillie? = nil, billingDetails: Nullable<PaymentsPrimitivesPaymentRecordsResourcePaymentMethodDetailsBillingDetails>, bizum: PaymentMethodDetailsPaymentRecordBizum? = nil, blik: PaymentMethodDetailsPaymentRecordBlik? = nil, boleto: PaymentMethodDetailsPaymentRecordBoleto? = nil, card: PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetails? = nil, cardPresent: PaymentMethodDetailsCardPresent? = nil, cashapp: PaymentMethodDetailsPaymentRecordCashapp? = nil, crypto: PaymentMethodDetailsCrypto? = nil, custom: PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCustomDetails? = nil, customerBalance: PaymentMethodDetailsCustomerBalance? = nil, eps: PaymentMethodDetailsPaymentRecordEps? = nil, fpx: PaymentMethodDetailsFpx? = nil, giropay: PaymentMethodDetailsPaymentRecordGiropay? = nil, grabpay: PaymentMethodDetailsGrabpay? = nil, ideal: PaymentMethodDetailsPaymentRecordIdeal? = nil, interacPresent: PaymentMethodDetailsInteracPresent? = nil, kakaoPay: PaymentMethodDetailsPaymentRecordKakaoPay? = nil, klarna: PaymentMethodDetailsPaymentRecordKlarna? = nil, konbini: PaymentMethodDetailsPaymentRecordKonbini? = nil, krCard: PaymentMethodDetailsKrCard? = nil, link: PaymentMethodDetailsPaymentRecordLink? = nil, mbWay: PaymentMethodDetailsPaymentRecordMbWay? = nil, mobilepay: PaymentMethodDetailsPaymentRecordMobilepay? = nil, momo: PaymentMethodDetailsPaymentRecordMomo? = nil, multibanco: PaymentMethodDetailsPaymentRecordMultibanco? = nil, naverPay: PaymentMethodDetailsPaymentRecordNaverPay? = nil, nzBankAccount: PaymentMethodDetailsPaymentRecordNzBankAccount? = nil, oxxo: PaymentMethodDetailsPaymentRecordOxxo? = nil, p24: PaymentMethodDetailsPaymentRecordP24? = nil, payByBank: PaymentMethodDetailsPaymentRecordPayByBank? = nil, payco: PaymentMethodDetailsPaymentRecordPayco? = nil, paymentMethod: Nullable<String>, paynow: PaymentMethodDetailsPaymentRecordPaynow? = nil, paypal: PaymentMethodDetailsPaypal? = nil, paypay: PaymentMethodDetailsPaymentRecordPaypay? = nil, payto: PaymentMethodDetailsPaymentRecordPayto? = nil, pix: PaymentMethodDetailsPaymentRecordPix? = nil, promptpay: PaymentMethodDetailsPaymentRecordPromptpay? = nil, revolutPay: PaymentMethodDetailsPaymentRecordRevolutPay? = nil, samsungPay: PaymentMethodDetailsPaymentRecordSamsungPay? = nil, satispay: PaymentMethodDetailsPaymentRecordSatispay? = nil, scalapay: PaymentMethodDetailsPaymentRecordScalapay? = nil, sepaCreditTransfer: PaymentMethodDetailsSepaCreditTransfer? = nil, sepaDebit: PaymentMethodDetailsPaymentRecordSepaDebit? = nil, sequra: PaymentMethodDetailsPaymentRecordSequra? = nil, sofort: PaymentMethodDetailsPaymentRecordSofort? = nil, stripeAccount: PaymentMethodDetailsStripeAccount? = nil, sunbit: PaymentMethodDetailsPaymentRecordSunbit? = nil, swish: PaymentMethodDetailsPaymentRecordSwish? = nil, twint: PaymentMethodDetailsPaymentRecordTwint? = nil, type: String, upi: PaymentMethodDetailsPaymentRecordUpi? = nil, usBankAccount: PaymentMethodDetailsPaymentRecordUsBankAccount? = nil, wechat: PaymentMethodDetailsWechat? = nil, wechatPay: PaymentMethodDetailsPaymentRecordWechatPay? = nil, zip: PaymentMethodDetailsPaymentRecordZip? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(achCreditTransfer: PaymentMethodDetailsAchCreditTransfer? = nil, achDebit: PaymentMethodDetailsAchDebit? = nil, acssDebit: PaymentMethodDetailsPaymentRecordAcssDebit? = nil, affirm: PaymentMethodDetailsPaymentRecordAffirm? = nil, afterpayClearpay: PaymentMethodDetailsPaymentRecordAfterpayClearpay? = nil, alipay: PaymentMethodDetailsPaymentRecordAlipay? = nil, alma: PaymentMethodDetailsPaymentRecordAlma? = nil, amazonPay: PaymentMethodDetailsPaymentRecordAmazonPay? = nil, auBecsDebit: PaymentMethodDetailsPaymentRecordAuBecsDebit? = nil, bacsDebit: PaymentMethodDetailsPaymentRecordBacsDebit? = nil, bancontact: PaymentMethodDetailsPaymentRecordBancontact? = nil, billie: PaymentMethodDetailsPaymentRecordBillie? = nil, billingDetails: Nullable<PaymentsPrimitivesPaymentRecordsResourceBillingDetails>, bizum: PaymentMethodDetailsPaymentRecordBizum? = nil, blik: PaymentMethodDetailsPaymentRecordBlik? = nil, boleto: PaymentMethodDetailsPaymentRecordBoleto? = nil, card: PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetails? = nil, cardPresent: PaymentMethodDetailsCardPresent? = nil, cashapp: PaymentMethodDetailsPaymentRecordCashapp? = nil, crypto: PaymentMethodDetailsCrypto? = nil, custom: PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCustomDetails? = nil, customerBalance: PaymentMethodDetailsCustomerBalance? = nil, eps: PaymentMethodDetailsPaymentRecordEps? = nil, fpx: PaymentMethodDetailsFpx? = nil, giropay: PaymentMethodDetailsPaymentRecordGiropay? = nil, grabpay: PaymentMethodDetailsGrabpay? = nil, ideal: PaymentMethodDetailsPaymentRecordIdeal? = nil, interacPresent: PaymentMethodDetailsInteracPresent? = nil, kakaoPay: PaymentMethodDetailsPaymentRecordKakaoPay? = nil, klarna: PaymentMethodDetailsPaymentRecordKlarna? = nil, konbini: PaymentMethodDetailsPaymentRecordKonbini? = nil, krCard: PaymentMethodDetailsKrCard? = nil, link: PaymentMethodDetailsPaymentRecordLink? = nil, mbWay: PaymentMethodDetailsPaymentRecordMbWay? = nil, mobilepay: PaymentMethodDetailsPaymentRecordMobilepay? = nil, momo: PaymentMethodDetailsPaymentRecordMomo? = nil, multibanco: PaymentMethodDetailsPaymentRecordMultibanco? = nil, naverPay: PaymentMethodDetailsPaymentRecordNaverPay? = nil, nzBankAccount: PaymentMethodDetailsPaymentRecordNzBankAccount? = nil, oxxo: PaymentMethodDetailsPaymentRecordOxxo? = nil, p24: PaymentMethodDetailsPaymentRecordP24? = nil, payByBank: PaymentMethodDetailsPaymentRecordPayByBank? = nil, payco: PaymentMethodDetailsPaymentRecordPayco? = nil, paymentMethod: Nullable<String>, paynow: PaymentMethodDetailsPaymentRecordPaynow? = nil, paypal: PaymentMethodDetailsPaypal? = nil, paypay: PaymentMethodDetailsPaymentRecordPaypay? = nil, payto: PaymentMethodDetailsPaymentRecordPayto? = nil, pix: PaymentMethodDetailsPaymentRecordPix? = nil, promptpay: PaymentMethodDetailsPaymentRecordPromptpay? = nil, revolutPay: PaymentMethodDetailsPaymentRecordRevolutPay? = nil, samsungPay: PaymentMethodDetailsPaymentRecordSamsungPay? = nil, satispay: PaymentMethodDetailsPaymentRecordSatispay? = nil, scalapay: PaymentMethodDetailsPaymentRecordScalapay? = nil, sepaCreditTransfer: PaymentMethodDetailsSepaCreditTransfer? = nil, sepaDebit: PaymentMethodDetailsPaymentRecordSepaDebit? = nil, sequra: PaymentMethodDetailsPaymentRecordSequra? = nil, sofort: PaymentMethodDetailsPaymentRecordSofort? = nil, stripeAccount: PaymentMethodDetailsStripeAccount? = nil, sunbit: PaymentMethodDetailsPaymentRecordSunbit? = nil, swish: PaymentMethodDetailsPaymentRecordSwish? = nil, twint: PaymentMethodDetailsPaymentRecordTwint? = nil, type: String, upi: PaymentMethodDetailsPaymentRecordUpi? = nil, usBankAccount: PaymentMethodDetailsPaymentRecordUsBankAccount? = nil, wechat: PaymentMethodDetailsWechat? = nil, wechatPay: PaymentMethodDetailsPaymentRecordWechatPay? = nil, zip: PaymentMethodDetailsPaymentRecordZip? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.achCreditTransfer = achCreditTransfer
         self.achDebit = achDebit
         self.acssDebit = acssDebit
@@ -1755,7 +1615,7 @@ public struct PaymentsPrimitivesPaymentRecordsResourcePaymentMethodDetails: Send
         self.bacsDebit = try container.decodeIfPresent(PaymentMethodDetailsPaymentRecordBacsDebit.self, forKey: .bacsDebit)
         self.bancontact = try container.decodeIfPresent(PaymentMethodDetailsPaymentRecordBancontact.self, forKey: .bancontact)
         self.billie = try container.decodeIfPresent(PaymentMethodDetailsPaymentRecordBillie.self, forKey: .billie)
-        self.billingDetails = try container.decode(Nullable<PaymentsPrimitivesPaymentRecordsResourcePaymentMethodDetailsBillingDetails>.self, forKey: .billingDetails)
+        self.billingDetails = try container.decodeIfPresent(Nullable<PaymentsPrimitivesPaymentRecordsResourceBillingDetails>.self, forKey: .billingDetails) ?? .null
         self.bizum = try container.decodeIfPresent(PaymentMethodDetailsPaymentRecordBizum.self, forKey: .bizum)
         self.blik = try container.decodeIfPresent(PaymentMethodDetailsPaymentRecordBlik.self, forKey: .blik)
         self.boleto = try container.decodeIfPresent(PaymentMethodDetailsPaymentRecordBoleto.self, forKey: .boleto)
@@ -1786,7 +1646,7 @@ public struct PaymentsPrimitivesPaymentRecordsResourcePaymentMethodDetails: Send
         self.p24 = try container.decodeIfPresent(PaymentMethodDetailsPaymentRecordP24.self, forKey: .p24)
         self.payByBank = try container.decodeIfPresent(PaymentMethodDetailsPaymentRecordPayByBank.self, forKey: .payByBank)
         self.payco = try container.decodeIfPresent(PaymentMethodDetailsPaymentRecordPayco.self, forKey: .payco)
-        self.paymentMethod = try container.decode(Nullable<String>.self, forKey: .paymentMethod)
+        self.paymentMethod = try container.decodeIfPresent(Nullable<String>.self, forKey: .paymentMethod) ?? .null
         self.paynow = try container.decodeIfPresent(PaymentMethodDetailsPaymentRecordPaynow.self, forKey: .paynow)
         self.paypal = try container.decodeIfPresent(PaymentMethodDetailsPaypal.self, forKey: .paypal)
         self.paypay = try container.decodeIfPresent(PaymentMethodDetailsPaymentRecordPaypay.self, forKey: .paypay)
@@ -1902,33 +1762,13 @@ public struct PaymentsPrimitivesPaymentRecordsResourcePaymentMethodDetails: Send
     }
 }
 
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum PaymentsPrimitivesPaymentRecordsResourcePaymentMethodKlarnaDetailsResourcePayerDetailsAddress: Sendable, Codable, Equatable, Hashable {
-    case paymentsPrimitivesPaymentRecordsResourcePaymentMethodKlarnaDetailsResourcePayerDetailsResourcePayerDetailsAddress(PaymentsPrimitivesPaymentRecordsResourcePaymentMethodKlarnaDetailsResourcePayerDetailsResourcePayerDetailsAddress)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(PaymentsPrimitivesPaymentRecordsResourcePaymentMethodKlarnaDetailsResourcePayerDetailsResourcePayerDetailsAddress.self) { self = .paymentsPrimitivesPaymentRecordsResourcePaymentMethodKlarnaDetailsResourcePayerDetailsResourcePayerDetailsAddress(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .paymentsPrimitivesPaymentRecordsResourcePaymentMethodKlarnaDetailsResourcePayerDetailsResourcePayerDetailsAddress(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
 public struct PaymentsPrimitivesPaymentRecordsResourcePaymentMethodKlarnaDetailsResourcePayerDetails: Sendable, Codable, Equatable, Hashable {
-    public var address: Nullable<PaymentsPrimitivesPaymentRecordsResourcePaymentMethodKlarnaDetailsResourcePayerDetailsAddress>
+    public var address: Nullable<PaymentsPrimitivesPaymentRecordsResourcePaymentMethodKlarnaDetailsResourcePayerDetailsResourcePayerDetailsAddress>
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(address: Nullable<PaymentsPrimitivesPaymentRecordsResourcePaymentMethodKlarnaDetailsResourcePayerDetailsAddress>, unknownFields: [String: JSONValue]? = nil) {
+    public init(address: Nullable<PaymentsPrimitivesPaymentRecordsResourcePaymentMethodKlarnaDetailsResourcePayerDetailsResourcePayerDetailsAddress>, unknownFields: [String: JSONValue]? = nil) {
         self.address = address
         self.unknownFields = unknownFields
     }
@@ -1939,7 +1779,7 @@ public struct PaymentsPrimitivesPaymentRecordsResourcePaymentMethodKlarnaDetails
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.address = try container.decode(Nullable<PaymentsPrimitivesPaymentRecordsResourcePaymentMethodKlarnaDetailsResourcePayerDetailsAddress>.self, forKey: .address)
+        self.address = try container.decodeIfPresent(Nullable<PaymentsPrimitivesPaymentRecordsResourcePaymentMethodKlarnaDetailsResourcePayerDetailsResourcePayerDetailsAddress>.self, forKey: .address) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -1981,7 +1821,7 @@ public struct PaymentsPrimitivesPaymentRecordsResourcePaymentMethodKlarnaDetails
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.country = try container.decode(Nullable<String>.self, forKey: .country)
+        self.country = try container.decodeIfPresent(Nullable<String>.self, forKey: .country) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -2023,7 +1863,7 @@ public struct PaymentsPrimitivesPaymentRecordsResourcePaymentMethodKonbiniDetail
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.chain = try container.decode(Nullable<PaymentFlowsPrivatePaymentMethodsKonbiniDetailsResourceStoreChain>.self, forKey: .chain)
+        self.chain = try container.decodeIfPresent(Nullable<PaymentFlowsPrivatePaymentMethodsKonbiniDetailsResourceStoreChain>.self, forKey: .chain) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -2077,11 +1917,11 @@ public struct PaymentsPrimitivesPaymentRecordsResourcePaymentMethodMobilepayDeta
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.brand = try container.decode(Nullable<String>.self, forKey: .brand)
-        self.country = try container.decode(Nullable<String>.self, forKey: .country)
-        self.expMonth = try container.decode(Nullable<Int>.self, forKey: .expMonth)
-        self.expYear = try container.decode(Nullable<Int>.self, forKey: .expYear)
-        self.last4 = try container.decode(Nullable<String>.self, forKey: .last4)
+        self.brand = try container.decodeIfPresent(Nullable<String>.self, forKey: .brand) ?? .null
+        self.country = try container.decodeIfPresent(Nullable<String>.self, forKey: .country) ?? .null
+        self.expMonth = try container.decodeIfPresent(Nullable<Int>.self, forKey: .expMonth) ?? .null
+        self.expYear = try container.decodeIfPresent(Nullable<Int>.self, forKey: .expYear) ?? .null
+        self.last4 = try container.decodeIfPresent(Nullable<String>.self, forKey: .last4) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -2131,7 +1971,7 @@ public struct PaymentsPrimitivesPaymentRecordsResourcePaymentMethodRevolutPayDet
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.card = try container.decodeIfPresent(PaymentsPrimitivesPaymentRecordsResourcePaymentMethodRevolutPayDetailsResourceFundingResourceFundingCard.self, forKey: .card)
-        self.type = try container.decode(Nullable<AmazonPayUnderlyingPaymentMethodFundingDetailsType>.self, forKey: .type)
+        self.type = try container.decodeIfPresent(Nullable<AmazonPayUnderlyingPaymentMethodFundingDetailsType>.self, forKey: .type) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -2189,12 +2029,12 @@ public struct PaymentsPrimitivesPaymentRecordsResourcePaymentMethodRevolutPayDet
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.brand = try container.decode(Nullable<String>.self, forKey: .brand)
-        self.country = try container.decode(Nullable<String>.self, forKey: .country)
-        self.expMonth = try container.decode(Nullable<Int>.self, forKey: .expMonth)
-        self.expYear = try container.decode(Nullable<Int>.self, forKey: .expYear)
-        self.funding = try container.decode(Nullable<String>.self, forKey: .funding)
-        self.last4 = try container.decode(Nullable<String>.self, forKey: .last4)
+        self.brand = try container.decodeIfPresent(Nullable<String>.self, forKey: .brand) ?? .null
+        self.country = try container.decodeIfPresent(Nullable<String>.self, forKey: .country) ?? .null
+        self.expMonth = try container.decodeIfPresent(Nullable<Int>.self, forKey: .expMonth) ?? .null
+        self.expYear = try container.decodeIfPresent(Nullable<Int>.self, forKey: .expYear) ?? .null
+        self.funding = try container.decodeIfPresent(Nullable<String>.self, forKey: .funding) ?? .null
+        self.last4 = try container.decodeIfPresent(Nullable<String>.self, forKey: .last4) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -2288,7 +2128,7 @@ public struct PaymentsPrimitivesPaymentRecordsResourceProcessorDetailsResourceCu
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.paymentReference = try container.decode(Nullable<String>.self, forKey: .paymentReference)
+        self.paymentReference = try container.decodeIfPresent(Nullable<String>.self, forKey: .paymentReference) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -2337,8 +2177,8 @@ public struct PaymentsPrimitivesPaymentRecordsResourceShippingDetails: Sendable,
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.address = try container.decode(PaymentsPrimitivesPaymentRecordsResourceAddress.self, forKey: .address)
-        self.name = try container.decode(Nullable<String>.self, forKey: .name)
-        self.phone = try container.decode(Nullable<String>.self, forKey: .phone)
+        self.name = try container.decodeIfPresent(Nullable<String>.self, forKey: .name) ?? .null
+        self.phone = try container.decodeIfPresent(Nullable<String>.self, forKey: .phone) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {

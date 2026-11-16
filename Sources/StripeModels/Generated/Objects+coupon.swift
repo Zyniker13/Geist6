@@ -137,21 +137,21 @@ public struct Coupon: Sendable, Codable, Equatable, Hashable, StripeIdentified {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.amountOff = try container.decode(Nullable<Int>.self, forKey: .amountOff)
+        self.amountOff = try container.decodeIfPresent(Nullable<Int>.self, forKey: .amountOff) ?? .null
         self.appliesTo = try container.decodeIfPresent(CouponAppliesTo.self, forKey: .appliesTo)
         self.created = try container.decode(StripeTimestamp.self, forKey: .created)
-        self.currency = try container.decode(Nullable<String>.self, forKey: .currency)
+        self.currency = try container.decodeIfPresent(Nullable<String>.self, forKey: .currency) ?? .null
         self.currencyOptions = try container.decodeIfPresent([String: JSONValue].self, forKey: .currencyOptions)
         self.duration = try container.decode(CouponDuration.self, forKey: .duration)
-        self.durationInMonths = try container.decode(Nullable<Int>.self, forKey: .durationInMonths)
+        self.durationInMonths = try container.decodeIfPresent(Nullable<Int>.self, forKey: .durationInMonths) ?? .null
         self.id = try container.decode(String.self, forKey: .id)
         self.livemode = try container.decode(Bool.self, forKey: .livemode)
-        self.maxRedemptions = try container.decode(Nullable<Int>.self, forKey: .maxRedemptions)
-        self.metadata = try container.decode(Nullable<[String: String]>.self, forKey: .metadata)
-        self.name = try container.decode(Nullable<String>.self, forKey: .name)
+        self.maxRedemptions = try container.decodeIfPresent(Nullable<Int>.self, forKey: .maxRedemptions) ?? .null
+        self.metadata = try container.decodeIfPresent(Nullable<[String: String]>.self, forKey: .metadata) ?? .null
+        self.name = try container.decodeIfPresent(Nullable<String>.self, forKey: .name) ?? .null
         self.object = try container.decode(CouponObject.self, forKey: .object)
-        self.percentOff = try container.decode(Nullable<Decimal>.self, forKey: .percentOff)
-        self.redeemBy = try container.decode(Nullable<StripeTimestamp>.self, forKey: .redeemBy)
+        self.percentOff = try container.decodeIfPresent(Nullable<Decimal>.self, forKey: .percentOff) ?? .null
+        self.redeemBy = try container.decodeIfPresent(Nullable<StripeTimestamp>.self, forKey: .redeemBy) ?? .null
         self.timesRedeemed = try container.decode(Int.self, forKey: .timesRedeemed)
         self.valid = try container.decode(Bool.self, forKey: .valid)
         var captured: [String: JSONValue] = [:]

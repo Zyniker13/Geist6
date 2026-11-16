@@ -230,7 +230,7 @@ public struct MandateAcssDebit: Sendable, Codable, Equatable, Hashable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.defaultFor = try container.decodeIfPresent([CheckoutAcssDebitMandateOptionsDefaultForItem].self, forKey: .defaultFor)
-        self.intervalDescription = try container.decode(Nullable<String>.self, forKey: .intervalDescription)
+        self.intervalDescription = try container.decodeIfPresent(Nullable<String>.self, forKey: .intervalDescription) ?? .null
         self.paymentSchedule = try container.decode(CheckoutAcssDebitMandateOptionsPaymentSchedule.self, forKey: .paymentSchedule)
         self.transactionType = try container.decode(CheckoutAcssDebitMandateOptionsTransactionType.self, forKey: .transactionType)
         var captured: [String: JSONValue] = [:]
@@ -453,11 +453,11 @@ public struct MandateBacsDebit: Sendable, Codable, Equatable, Hashable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.displayName = try container.decode(Nullable<String>.self, forKey: .displayName)
+        self.displayName = try container.decodeIfPresent(Nullable<String>.self, forKey: .displayName) ?? .null
         self.networkStatus = try container.decode(MandateBacsDebitNetworkStatus.self, forKey: .networkStatus)
         self.reference = try container.decode(String.self, forKey: .reference)
-        self.revocationReason = try container.decode(Nullable<MandateBacsDebitRevocationReason>.self, forKey: .revocationReason)
-        self.serviceUserNumber = try container.decode(Nullable<String>.self, forKey: .serviceUserNumber)
+        self.revocationReason = try container.decodeIfPresent(Nullable<MandateBacsDebitRevocationReason>.self, forKey: .revocationReason) ?? .null
+        self.serviceUserNumber = try container.decodeIfPresent(Nullable<String>.self, forKey: .serviceUserNumber) ?? .null
         self.url = try container.decode(String.self, forKey: .url)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
@@ -539,7 +539,7 @@ public struct MandateBlik: Sendable, Codable, Equatable, Hashable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.expiresAt = try container.decode(Nullable<StripeTimestamp>.self, forKey: .expiresAt)
+        self.expiresAt = try container.decodeIfPresent(Nullable<StripeTimestamp>.self, forKey: .expiresAt) ?? .null
         self.type = try container.decode(MandateBlikType.self, forKey: .type)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
@@ -952,13 +952,13 @@ public struct MandateOptionsPayto: Sendable, Codable, Equatable, Hashable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.amount = try container.decode(Nullable<Int>.self, forKey: .amount)
-        self.amountType = try container.decode(Nullable<InvoiceMandateOptionsCardAmountType>.self, forKey: .amountType)
-        self.endDate = try container.decode(Nullable<String>.self, forKey: .endDate)
-        self.paymentSchedule = try container.decode(Nullable<MandateOptionsPaytoPaymentSchedule>.self, forKey: .paymentSchedule)
-        self.paymentsPerPeriod = try container.decode(Nullable<Int>.self, forKey: .paymentsPerPeriod)
-        self.purpose = try container.decode(Nullable<InvoiceMandateOptionsPaytoPurpose>.self, forKey: .purpose)
-        self.startDate = try container.decode(Nullable<String>.self, forKey: .startDate)
+        self.amount = try container.decodeIfPresent(Nullable<Int>.self, forKey: .amount) ?? .null
+        self.amountType = try container.decodeIfPresent(Nullable<InvoiceMandateOptionsCardAmountType>.self, forKey: .amountType) ?? .null
+        self.endDate = try container.decodeIfPresent(Nullable<String>.self, forKey: .endDate) ?? .null
+        self.paymentSchedule = try container.decodeIfPresent(Nullable<MandateOptionsPaytoPaymentSchedule>.self, forKey: .paymentSchedule) ?? .null
+        self.paymentsPerPeriod = try container.decodeIfPresent(Nullable<Int>.self, forKey: .paymentsPerPeriod) ?? .null
+        self.purpose = try container.decodeIfPresent(Nullable<InvoiceMandateOptionsPaytoPurpose>.self, forKey: .purpose) ?? .null
+        self.startDate = try container.decodeIfPresent(Nullable<String>.self, forKey: .startDate) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -1015,10 +1015,10 @@ public struct MandateOptionsUpi: Sendable, Codable, Equatable, Hashable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.amount = try container.decode(Nullable<Int>.self, forKey: .amount)
-        self.amountType = try container.decode(Nullable<InvoiceMandateOptionsCardAmountType>.self, forKey: .amountType)
-        self.description = try container.decode(Nullable<String>.self, forKey: .description)
-        self.endDate = try container.decode(Nullable<StripeTimestamp>.self, forKey: .endDate)
+        self.amount = try container.decodeIfPresent(Nullable<Int>.self, forKey: .amount) ?? .null
+        self.amountType = try container.decodeIfPresent(Nullable<InvoiceMandateOptionsCardAmountType>.self, forKey: .amountType) ?? .null
+        self.description = try container.decodeIfPresent(Nullable<String>.self, forKey: .description) ?? .null
+        self.endDate = try container.decodeIfPresent(Nullable<StripeTimestamp>.self, forKey: .endDate) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -1213,8 +1213,8 @@ public struct MandatePaypal: Sendable, Codable, Equatable, Hashable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.billingAgreementId = try container.decode(Nullable<String>.self, forKey: .billingAgreementId)
-        self.payerId = try container.decode(Nullable<String>.self, forKey: .payerId)
+        self.billingAgreementId = try container.decodeIfPresent(Nullable<String>.self, forKey: .billingAgreementId) ?? .null
+        self.payerId = try container.decodeIfPresent(Nullable<String>.self, forKey: .payerId) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -1275,13 +1275,13 @@ public struct MandatePayto: Sendable, Codable, Equatable, Hashable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.amount = try container.decode(Nullable<Int>.self, forKey: .amount)
+        self.amount = try container.decodeIfPresent(Nullable<Int>.self, forKey: .amount) ?? .null
         self.amountType = try container.decode(InvoiceMandateOptionsCardAmountType.self, forKey: .amountType)
-        self.endDate = try container.decode(Nullable<String>.self, forKey: .endDate)
+        self.endDate = try container.decodeIfPresent(Nullable<String>.self, forKey: .endDate) ?? .null
         self.paymentSchedule = try container.decode(MandateOptionsPaytoPaymentSchedule.self, forKey: .paymentSchedule)
-        self.paymentsPerPeriod = try container.decode(Nullable<Int>.self, forKey: .paymentsPerPeriod)
-        self.purpose = try container.decode(Nullable<InvoiceMandateOptionsPaytoPurpose>.self, forKey: .purpose)
-        self.startDate = try container.decode(Nullable<String>.self, forKey: .startDate)
+        self.paymentsPerPeriod = try container.decodeIfPresent(Nullable<Int>.self, forKey: .paymentsPerPeriod) ?? .null
+        self.purpose = try container.decodeIfPresent(Nullable<InvoiceMandateOptionsPaytoPurpose>.self, forKey: .purpose) ?? .null
+        self.startDate = try container.decodeIfPresent(Nullable<String>.self, forKey: .startDate) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -1614,10 +1614,10 @@ public struct MandateUpi: Sendable, Codable, Equatable, Hashable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.amount = try container.decode(Nullable<Int>.self, forKey: .amount)
-        self.amountType = try container.decode(Nullable<InvoiceMandateOptionsCardAmountType>.self, forKey: .amountType)
-        self.description = try container.decode(Nullable<String>.self, forKey: .description)
-        self.endDate = try container.decode(Nullable<StripeTimestamp>.self, forKey: .endDate)
+        self.amount = try container.decodeIfPresent(Nullable<Int>.self, forKey: .amount) ?? .null
+        self.amountType = try container.decodeIfPresent(Nullable<InvoiceMandateOptionsCardAmountType>.self, forKey: .amountType) ?? .null
+        self.description = try container.decodeIfPresent(Nullable<String>.self, forKey: .description) ?? .null
+        self.endDate = try container.decodeIfPresent(Nullable<StripeTimestamp>.self, forKey: .endDate) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {

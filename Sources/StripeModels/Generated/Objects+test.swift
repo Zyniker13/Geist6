@@ -87,7 +87,7 @@ public struct TestHelpersTestClock: Sendable, Codable, Equatable, Hashable, Stri
         self.frozenTime = try container.decode(StripeTimestamp.self, forKey: .frozenTime)
         self.id = try container.decode(String.self, forKey: .id)
         self.livemode = try container.decode(Bool.self, forKey: .livemode)
-        self.name = try container.decode(Nullable<String>.self, forKey: .name)
+        self.name = try container.decodeIfPresent(Nullable<String>.self, forKey: .name) ?? .null
         self.object = try container.decode(DeletedTestHelpersTestClockObject.self, forKey: .object)
         self.status = try container.decode(TestHelpersTestClockStatus.self, forKey: .status)
         self.statusDetails = try container.decode(BillingClocksResourceStatusDetailsStatusDetails.self, forKey: .statusDetails)

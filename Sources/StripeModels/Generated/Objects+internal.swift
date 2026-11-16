@@ -33,11 +33,11 @@ public struct InternalCard: Sendable, Codable, Equatable, Hashable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.brand = try container.decode(Nullable<String>.self, forKey: .brand)
-        self.country = try container.decode(Nullable<String>.self, forKey: .country)
-        self.expMonth = try container.decode(Nullable<Int>.self, forKey: .expMonth)
-        self.expYear = try container.decode(Nullable<Int>.self, forKey: .expYear)
-        self.last4 = try container.decode(Nullable<String>.self, forKey: .last4)
+        self.brand = try container.decodeIfPresent(Nullable<String>.self, forKey: .brand) ?? .null
+        self.country = try container.decodeIfPresent(Nullable<String>.self, forKey: .country) ?? .null
+        self.expMonth = try container.decodeIfPresent(Nullable<Int>.self, forKey: .expMonth) ?? .null
+        self.expYear = try container.decodeIfPresent(Nullable<Int>.self, forKey: .expYear) ?? .null
+        self.last4 = try container.decodeIfPresent(Nullable<String>.self, forKey: .last4) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {

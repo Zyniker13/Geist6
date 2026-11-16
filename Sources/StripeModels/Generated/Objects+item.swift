@@ -4,26 +4,6 @@
 //  Do not edit by hand: rerun `swift run stripe-gen`.
 //
 import Foundation
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum ItemAdjustableQuantity: Sendable, Codable, Equatable, Hashable {
-    case lineItemsAdjustableQuantity(LineItemsAdjustableQuantity)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(LineItemsAdjustableQuantity.self) { self = .lineItemsAdjustableQuantity(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .lineItemsAdjustableQuantity(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
 /// Lossless enum: values Stripe documents plus any value the API
 /// adds later, kept in `undocumented` instead of dropped.
 public enum ItemObject: Sendable, Equatable, Hashable, LosslessEnum {
@@ -55,32 +35,8 @@ public enum ItemObject: Sendable, Equatable, Hashable, LosslessEnum {
     }
 }
 
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum ItemPrice: Sendable, Codable, Equatable, Hashable {
-    case price(Price)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let raw = try? container.decode([String: JSONValue].self),
-           let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
-            if tag == "price" { self = .price(try container.decode(Price.self)); return }
-        }
-        if let value = try? container.decode(Price.self) { self = .price(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .price(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
 public struct Item: Sendable, Codable, Equatable, Hashable, StripeIdentified {
-    public var adjustableQuantity: Nullable<ItemAdjustableQuantity>
+    public var adjustableQuantity: Nullable<LineItemsAdjustableQuantity>
     public var amountDiscount: Int
     public var amountSubtotal: Int
     public var amountTax: Int
@@ -91,14 +47,14 @@ public struct Item: Sendable, Codable, Equatable, Hashable, StripeIdentified {
     public var id: String
     public var metadata: Nullable<[String: String]>
     public var object: ItemObject
-    public var price: Nullable<ItemPrice>
+    public var price: Nullable<Price>
     public var quantity: Nullable<Int>
     public var taxes: [LineItemsTaxAmount]?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(adjustableQuantity: Nullable<ItemAdjustableQuantity>, amountDiscount: Int, amountSubtotal: Int, amountTax: Int, amountTotal: Int, currency: String, description: Nullable<String>, discounts: [LineItemsDiscountAmount]? = nil, id: String, metadata: Nullable<[String: String]>, object: ItemObject, price: Nullable<ItemPrice>, quantity: Nullable<Int>, taxes: [LineItemsTaxAmount]? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(adjustableQuantity: Nullable<LineItemsAdjustableQuantity>, amountDiscount: Int, amountSubtotal: Int, amountTax: Int, amountTotal: Int, currency: String, description: Nullable<String>, discounts: [LineItemsDiscountAmount]? = nil, id: String, metadata: Nullable<[String: String]>, object: ItemObject, price: Nullable<Price>, quantity: Nullable<Int>, taxes: [LineItemsTaxAmount]? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.adjustableQuantity = adjustableQuantity
         self.amountDiscount = amountDiscount
         self.amountSubtotal = amountSubtotal
@@ -135,19 +91,19 @@ public struct Item: Sendable, Codable, Equatable, Hashable, StripeIdentified {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.adjustableQuantity = try container.decode(Nullable<ItemAdjustableQuantity>.self, forKey: .adjustableQuantity)
+        self.adjustableQuantity = try container.decodeIfPresent(Nullable<LineItemsAdjustableQuantity>.self, forKey: .adjustableQuantity) ?? .null
         self.amountDiscount = try container.decode(Int.self, forKey: .amountDiscount)
         self.amountSubtotal = try container.decode(Int.self, forKey: .amountSubtotal)
         self.amountTax = try container.decode(Int.self, forKey: .amountTax)
         self.amountTotal = try container.decode(Int.self, forKey: .amountTotal)
         self.currency = try container.decode(String.self, forKey: .currency)
-        self.description = try container.decode(Nullable<String>.self, forKey: .description)
+        self.description = try container.decodeIfPresent(Nullable<String>.self, forKey: .description) ?? .null
         self.discounts = try container.decodeIfPresent([LineItemsDiscountAmount].self, forKey: .discounts)
         self.id = try container.decode(String.self, forKey: .id)
-        self.metadata = try container.decode(Nullable<[String: String]>.self, forKey: .metadata)
+        self.metadata = try container.decodeIfPresent(Nullable<[String: String]>.self, forKey: .metadata) ?? .null
         self.object = try container.decode(ItemObject.self, forKey: .object)
-        self.price = try container.decode(Nullable<ItemPrice>.self, forKey: .price)
-        self.quantity = try container.decode(Nullable<Int>.self, forKey: .quantity)
+        self.price = try container.decodeIfPresent(Nullable<Price>.self, forKey: .price) ?? .null
+        self.quantity = try container.decodeIfPresent(Nullable<Int>.self, forKey: .quantity) ?? .null
         self.taxes = try container.decodeIfPresent([LineItemsTaxAmount].self, forKey: .taxes)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {

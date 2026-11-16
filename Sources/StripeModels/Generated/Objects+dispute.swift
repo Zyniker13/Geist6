@@ -250,13 +250,13 @@ public struct Dispute: Sendable, Codable, Equatable, Hashable, StripeIdentified 
         self.evidence = try container.decode(DisputeEvidence.self, forKey: .evidence)
         self.evidenceDetails = try container.decode(DisputeEvidenceDetails.self, forKey: .evidenceDetails)
         self.id = try container.decode(String.self, forKey: .id)
-        self.intendedSubmissionMethod = try container.decode(Nullable<DisputeIntendedSubmissionMethod>.self, forKey: .intendedSubmissionMethod)
+        self.intendedSubmissionMethod = try container.decodeIfPresent(Nullable<DisputeIntendedSubmissionMethod>.self, forKey: .intendedSubmissionMethod) ?? .null
         self.isChargeRefundable = try container.decode(Bool.self, forKey: .isChargeRefundable)
         self.livemode = try container.decode(Bool.self, forKey: .livemode)
         self.metadata = try container.decode([String: String].self, forKey: .metadata)
         self.networkReasonCode = try container.decodeIfPresent(Nullable<String>.self, forKey: .networkReasonCode)
         self.object = try container.decode(DisputeObject.self, forKey: .object)
-        self.paymentIntent = try container.decode(Nullable<Expandable<PaymentIntent>>.self, forKey: .paymentIntent)
+        self.paymentIntent = try container.decodeIfPresent(Nullable<Expandable<PaymentIntent>>.self, forKey: .paymentIntent) ?? .null
         self.paymentMethodDetails = try container.decodeIfPresent(DisputePaymentMethodDetails.self, forKey: .paymentMethodDetails)
         self.reason = try container.decode(String.self, forKey: .reason)
         self.status = try container.decode(DisputeStatus.self, forKey: .status)
@@ -782,34 +782,14 @@ public struct DisputeEnhancedEvidenceMastercardCompliance: Sendable, Codable, Eq
     }
 }
 
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum DisputeEnhancedEvidenceVisaCompellingEvidence3DisputedTransaction: Sendable, Codable, Equatable, Hashable {
-    case disputeVisaCompellingEvidence3DisputedTransaction(DisputeVisaCompellingEvidence3DisputedTransaction)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(DisputeVisaCompellingEvidence3DisputedTransaction.self) { self = .disputeVisaCompellingEvidence3DisputedTransaction(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .disputeVisaCompellingEvidence3DisputedTransaction(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
 public struct DisputeEnhancedEvidenceVisaCompellingEvidence3: Sendable, Codable, Equatable, Hashable {
-    public var disputedTransaction: Nullable<DisputeEnhancedEvidenceVisaCompellingEvidence3DisputedTransaction>
+    public var disputedTransaction: Nullable<DisputeVisaCompellingEvidence3DisputedTransaction>
     public var priorUndisputedTransactions: [DisputeVisaCompellingEvidence3PriorUndisputedTransaction]
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(disputedTransaction: Nullable<DisputeEnhancedEvidenceVisaCompellingEvidence3DisputedTransaction>, priorUndisputedTransactions: [DisputeVisaCompellingEvidence3PriorUndisputedTransaction], unknownFields: [String: JSONValue]? = nil) {
+    public init(disputedTransaction: Nullable<DisputeVisaCompellingEvidence3DisputedTransaction>, priorUndisputedTransactions: [DisputeVisaCompellingEvidence3PriorUndisputedTransaction], unknownFields: [String: JSONValue]? = nil) {
         self.disputedTransaction = disputedTransaction
         self.priorUndisputedTransactions = priorUndisputedTransactions
         self.unknownFields = unknownFields
@@ -822,7 +802,7 @@ public struct DisputeEnhancedEvidenceVisaCompellingEvidence3: Sendable, Codable,
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.disputedTransaction = try container.decode(Nullable<DisputeEnhancedEvidenceVisaCompellingEvidence3DisputedTransaction>.self, forKey: .disputedTransaction)
+        self.disputedTransaction = try container.decodeIfPresent(Nullable<DisputeVisaCompellingEvidence3DisputedTransaction>.self, forKey: .disputedTransaction) ?? .null
         self.priorUndisputedTransactions = try container.decode([DisputeVisaCompellingEvidence3PriorUndisputedTransaction].self, forKey: .priorUndisputedTransactions)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
@@ -891,29 +871,9 @@ public struct DisputeEnhancedEvidenceVisaCompliance: Sendable, Codable, Equatabl
     }
 }
 
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum DisputeEvidenceAppeal: Sendable, Codable, Equatable, Hashable {
-    case disputeAppeal(DisputeAppeal)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(DisputeAppeal.self) { self = .disputeAppeal(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .disputeAppeal(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
 public struct DisputeEvidence: Sendable, Codable, Equatable, Hashable {
     public var accessActivityLog: Nullable<String>
-    public var appeal: Nullable<DisputeEvidenceAppeal>?
+    public var appeal: Nullable<DisputeAppeal>?
     public var billingAddress: Nullable<String>
     public var cancellationPolicy: Nullable<Expandable<File>>
     public var cancellationPolicyDisclosure: Nullable<String>
@@ -945,7 +905,7 @@ public struct DisputeEvidence: Sendable, Codable, Equatable, Hashable {
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(accessActivityLog: Nullable<String>, appeal: Nullable<DisputeEvidenceAppeal>? = nil, billingAddress: Nullable<String>, cancellationPolicy: Nullable<Expandable<File>>, cancellationPolicyDisclosure: Nullable<String>, cancellationRebuttal: Nullable<String>, customerCommunication: Nullable<Expandable<File>>, customerEmailAddress: Nullable<String>, customerName: Nullable<String>, customerPurchaseIp: Nullable<String>, customerSignature: Nullable<Expandable<File>>, duplicateChargeDocumentation: Nullable<Expandable<File>>, duplicateChargeExplanation: Nullable<String>, duplicateChargeId: Nullable<String>, enhancedEvidence: DisputeEnhancedEvidence, productDescription: Nullable<String>, receipt: Nullable<Expandable<File>>, refundPolicy: Nullable<Expandable<File>>, refundPolicyDisclosure: Nullable<String>, refundRefusalExplanation: Nullable<String>, serviceDate: Nullable<String>, serviceDocumentation: Nullable<Expandable<File>>, shippingAddress: Nullable<String>, shippingCarrier: Nullable<String>, shippingDate: Nullable<String>, shippingDocumentation: Nullable<Expandable<File>>, shippingTrackingNumber: Nullable<String>, uncategorizedFile: Nullable<Expandable<File>>, uncategorizedText: Nullable<String>, unknownFields: [String: JSONValue]? = nil) {
+    public init(accessActivityLog: Nullable<String>, appeal: Nullable<DisputeAppeal>? = nil, billingAddress: Nullable<String>, cancellationPolicy: Nullable<Expandable<File>>, cancellationPolicyDisclosure: Nullable<String>, cancellationRebuttal: Nullable<String>, customerCommunication: Nullable<Expandable<File>>, customerEmailAddress: Nullable<String>, customerName: Nullable<String>, customerPurchaseIp: Nullable<String>, customerSignature: Nullable<Expandable<File>>, duplicateChargeDocumentation: Nullable<Expandable<File>>, duplicateChargeExplanation: Nullable<String>, duplicateChargeId: Nullable<String>, enhancedEvidence: DisputeEnhancedEvidence, productDescription: Nullable<String>, receipt: Nullable<Expandable<File>>, refundPolicy: Nullable<Expandable<File>>, refundPolicyDisclosure: Nullable<String>, refundRefusalExplanation: Nullable<String>, serviceDate: Nullable<String>, serviceDocumentation: Nullable<Expandable<File>>, shippingAddress: Nullable<String>, shippingCarrier: Nullable<String>, shippingDate: Nullable<String>, shippingDocumentation: Nullable<Expandable<File>>, shippingTrackingNumber: Nullable<String>, uncategorizedFile: Nullable<Expandable<File>>, uncategorizedText: Nullable<String>, unknownFields: [String: JSONValue]? = nil) {
         self.accessActivityLog = accessActivityLog
         self.appeal = appeal
         self.billingAddress = billingAddress
@@ -1012,35 +972,35 @@ public struct DisputeEvidence: Sendable, Codable, Equatable, Hashable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.accessActivityLog = try container.decode(Nullable<String>.self, forKey: .accessActivityLog)
-        self.appeal = try container.decodeIfPresent(Nullable<DisputeEvidenceAppeal>.self, forKey: .appeal)
-        self.billingAddress = try container.decode(Nullable<String>.self, forKey: .billingAddress)
-        self.cancellationPolicy = try container.decode(Nullable<Expandable<File>>.self, forKey: .cancellationPolicy)
-        self.cancellationPolicyDisclosure = try container.decode(Nullable<String>.self, forKey: .cancellationPolicyDisclosure)
-        self.cancellationRebuttal = try container.decode(Nullable<String>.self, forKey: .cancellationRebuttal)
-        self.customerCommunication = try container.decode(Nullable<Expandable<File>>.self, forKey: .customerCommunication)
-        self.customerEmailAddress = try container.decode(Nullable<String>.self, forKey: .customerEmailAddress)
-        self.customerName = try container.decode(Nullable<String>.self, forKey: .customerName)
-        self.customerPurchaseIp = try container.decode(Nullable<String>.self, forKey: .customerPurchaseIp)
-        self.customerSignature = try container.decode(Nullable<Expandable<File>>.self, forKey: .customerSignature)
-        self.duplicateChargeDocumentation = try container.decode(Nullable<Expandable<File>>.self, forKey: .duplicateChargeDocumentation)
-        self.duplicateChargeExplanation = try container.decode(Nullable<String>.self, forKey: .duplicateChargeExplanation)
-        self.duplicateChargeId = try container.decode(Nullable<String>.self, forKey: .duplicateChargeId)
+        self.accessActivityLog = try container.decodeIfPresent(Nullable<String>.self, forKey: .accessActivityLog) ?? .null
+        self.appeal = try container.decodeIfPresent(Nullable<DisputeAppeal>.self, forKey: .appeal)
+        self.billingAddress = try container.decodeIfPresent(Nullable<String>.self, forKey: .billingAddress) ?? .null
+        self.cancellationPolicy = try container.decodeIfPresent(Nullable<Expandable<File>>.self, forKey: .cancellationPolicy) ?? .null
+        self.cancellationPolicyDisclosure = try container.decodeIfPresent(Nullable<String>.self, forKey: .cancellationPolicyDisclosure) ?? .null
+        self.cancellationRebuttal = try container.decodeIfPresent(Nullable<String>.self, forKey: .cancellationRebuttal) ?? .null
+        self.customerCommunication = try container.decodeIfPresent(Nullable<Expandable<File>>.self, forKey: .customerCommunication) ?? .null
+        self.customerEmailAddress = try container.decodeIfPresent(Nullable<String>.self, forKey: .customerEmailAddress) ?? .null
+        self.customerName = try container.decodeIfPresent(Nullable<String>.self, forKey: .customerName) ?? .null
+        self.customerPurchaseIp = try container.decodeIfPresent(Nullable<String>.self, forKey: .customerPurchaseIp) ?? .null
+        self.customerSignature = try container.decodeIfPresent(Nullable<Expandable<File>>.self, forKey: .customerSignature) ?? .null
+        self.duplicateChargeDocumentation = try container.decodeIfPresent(Nullable<Expandable<File>>.self, forKey: .duplicateChargeDocumentation) ?? .null
+        self.duplicateChargeExplanation = try container.decodeIfPresent(Nullable<String>.self, forKey: .duplicateChargeExplanation) ?? .null
+        self.duplicateChargeId = try container.decodeIfPresent(Nullable<String>.self, forKey: .duplicateChargeId) ?? .null
         self.enhancedEvidence = try container.decode(DisputeEnhancedEvidence.self, forKey: .enhancedEvidence)
-        self.productDescription = try container.decode(Nullable<String>.self, forKey: .productDescription)
-        self.receipt = try container.decode(Nullable<Expandable<File>>.self, forKey: .receipt)
-        self.refundPolicy = try container.decode(Nullable<Expandable<File>>.self, forKey: .refundPolicy)
-        self.refundPolicyDisclosure = try container.decode(Nullable<String>.self, forKey: .refundPolicyDisclosure)
-        self.refundRefusalExplanation = try container.decode(Nullable<String>.self, forKey: .refundRefusalExplanation)
-        self.serviceDate = try container.decode(Nullable<String>.self, forKey: .serviceDate)
-        self.serviceDocumentation = try container.decode(Nullable<Expandable<File>>.self, forKey: .serviceDocumentation)
-        self.shippingAddress = try container.decode(Nullable<String>.self, forKey: .shippingAddress)
-        self.shippingCarrier = try container.decode(Nullable<String>.self, forKey: .shippingCarrier)
-        self.shippingDate = try container.decode(Nullable<String>.self, forKey: .shippingDate)
-        self.shippingDocumentation = try container.decode(Nullable<Expandable<File>>.self, forKey: .shippingDocumentation)
-        self.shippingTrackingNumber = try container.decode(Nullable<String>.self, forKey: .shippingTrackingNumber)
-        self.uncategorizedFile = try container.decode(Nullable<Expandable<File>>.self, forKey: .uncategorizedFile)
-        self.uncategorizedText = try container.decode(Nullable<String>.self, forKey: .uncategorizedText)
+        self.productDescription = try container.decodeIfPresent(Nullable<String>.self, forKey: .productDescription) ?? .null
+        self.receipt = try container.decodeIfPresent(Nullable<Expandable<File>>.self, forKey: .receipt) ?? .null
+        self.refundPolicy = try container.decodeIfPresent(Nullable<Expandable<File>>.self, forKey: .refundPolicy) ?? .null
+        self.refundPolicyDisclosure = try container.decodeIfPresent(Nullable<String>.self, forKey: .refundPolicyDisclosure) ?? .null
+        self.refundRefusalExplanation = try container.decodeIfPresent(Nullable<String>.self, forKey: .refundRefusalExplanation) ?? .null
+        self.serviceDate = try container.decodeIfPresent(Nullable<String>.self, forKey: .serviceDate) ?? .null
+        self.serviceDocumentation = try container.decodeIfPresent(Nullable<Expandable<File>>.self, forKey: .serviceDocumentation) ?? .null
+        self.shippingAddress = try container.decodeIfPresent(Nullable<String>.self, forKey: .shippingAddress) ?? .null
+        self.shippingCarrier = try container.decodeIfPresent(Nullable<String>.self, forKey: .shippingCarrier) ?? .null
+        self.shippingDate = try container.decodeIfPresent(Nullable<String>.self, forKey: .shippingDate) ?? .null
+        self.shippingDocumentation = try container.decodeIfPresent(Nullable<Expandable<File>>.self, forKey: .shippingDocumentation) ?? .null
+        self.shippingTrackingNumber = try container.decodeIfPresent(Nullable<String>.self, forKey: .shippingTrackingNumber) ?? .null
+        self.uncategorizedFile = try container.decodeIfPresent(Nullable<Expandable<File>>.self, forKey: .uncategorizedFile) ?? .null
+        self.uncategorizedText = try container.decodeIfPresent(Nullable<String>.self, forKey: .uncategorizedText) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -1162,7 +1122,7 @@ public struct DisputeEvidenceDetails: Sendable, Codable, Equatable, Hashable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.dueBy = try container.decode(Nullable<StripeTimestamp>.self, forKey: .dueBy)
+        self.dueBy = try container.decodeIfPresent(Nullable<StripeTimestamp>.self, forKey: .dueBy) ?? .null
         self.enhancedEligibility = try container.decode(DisputeEnhancedEligibility.self, forKey: .enhancedEligibility)
         self.hasEvidence = try container.decode(Bool.self, forKey: .hasEvidence)
         self.pastDue = try container.decode(Bool.self, forKey: .pastDue)
@@ -1350,7 +1310,7 @@ public struct DisputePaymentMethodDetailsAmazonPay: Sendable, Codable, Equatable
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.disputeType = try container.decode(Nullable<DisputePaymentMethodDetailsAmazonPayDisputeType>.self, forKey: .disputeType)
+        self.disputeType = try container.decodeIfPresent(Nullable<DisputePaymentMethodDetailsAmazonPayDisputeType>.self, forKey: .disputeType) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -1447,7 +1407,7 @@ public struct DisputePaymentMethodDetailsCard: Sendable, Codable, Equatable, Has
         self.brand = try container.decode(String.self, forKey: .brand)
         self.caseType = try container.decode(DisputePaymentMethodDetailsCardCaseType.self, forKey: .caseType)
         self.network = try container.decode(String.self, forKey: .network)
-        self.networkReasonCode = try container.decode(Nullable<String>.self, forKey: .networkReasonCode)
+        self.networkReasonCode = try container.decodeIfPresent(Nullable<String>.self, forKey: .networkReasonCode) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -1496,7 +1456,7 @@ public struct DisputePaymentMethodDetailsKlarna: Sendable, Codable, Equatable, H
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.chargebackLossReasonCode = try container.decodeIfPresent(String.self, forKey: .chargebackLossReasonCode)
-        self.reasonCode = try container.decode(Nullable<String>.self, forKey: .reasonCode)
+        self.reasonCode = try container.decodeIfPresent(Nullable<String>.self, forKey: .reasonCode) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -1542,8 +1502,8 @@ public struct DisputePaymentMethodDetailsPaypal: Sendable, Codable, Equatable, H
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.caseId = try container.decode(Nullable<String>.self, forKey: .caseId)
-        self.reasonCode = try container.decode(Nullable<String>.self, forKey: .reasonCode)
+        self.caseId = try container.decodeIfPresent(Nullable<String>.self, forKey: .caseId) ?? .null
+        self.reasonCode = try container.decodeIfPresent(Nullable<String>.self, forKey: .reasonCode) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -1601,12 +1561,12 @@ public struct DisputeTransactionShippingAddress: Sendable, Codable, Equatable, H
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.city = try container.decode(Nullable<String>.self, forKey: .city)
-        self.country = try container.decode(Nullable<String>.self, forKey: .country)
-        self.line1 = try container.decode(Nullable<String>.self, forKey: .line1)
-        self.line2 = try container.decode(Nullable<String>.self, forKey: .line2)
-        self.postalCode = try container.decode(Nullable<String>.self, forKey: .postalCode)
-        self.state = try container.decode(Nullable<String>.self, forKey: .state)
+        self.city = try container.decodeIfPresent(Nullable<String>.self, forKey: .city) ?? .null
+        self.country = try container.decodeIfPresent(Nullable<String>.self, forKey: .country) ?? .null
+        self.line1 = try container.decodeIfPresent(Nullable<String>.self, forKey: .line1) ?? .null
+        self.line2 = try container.decodeIfPresent(Nullable<String>.self, forKey: .line2) ?? .null
+        self.postalCode = try container.decodeIfPresent(Nullable<String>.self, forKey: .postalCode) ?? .null
+        self.state = try container.decodeIfPresent(Nullable<String>.self, forKey: .state) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -1670,26 +1630,6 @@ public enum DisputeVisaCompellingEvidence3DisputedTransactionMerchandiseOrServic
     }
 }
 
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum DisputeVisaCompellingEvidence3DisputedTransactionShippingAddress: Sendable, Codable, Equatable, Hashable {
-    case disputeTransactionShippingAddress(DisputeTransactionShippingAddress)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(DisputeTransactionShippingAddress.self) { self = .disputeTransactionShippingAddress(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .disputeTransactionShippingAddress(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
 public struct DisputeVisaCompellingEvidence3DisputedTransaction: Sendable, Codable, Equatable, Hashable {
     public var customerAccountId: Nullable<String>
     public var customerDeviceFingerprint: Nullable<String>
@@ -1698,12 +1638,12 @@ public struct DisputeVisaCompellingEvidence3DisputedTransaction: Sendable, Codab
     public var customerPurchaseIp: Nullable<String>
     public var merchandiseOrServices: Nullable<DisputeVisaCompellingEvidence3DisputedTransactionMerchandiseOrServices>
     public var productDescription: Nullable<String>
-    public var shippingAddress: Nullable<DisputeVisaCompellingEvidence3DisputedTransactionShippingAddress>
+    public var shippingAddress: Nullable<DisputeTransactionShippingAddress>
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(customerAccountId: Nullable<String>, customerDeviceFingerprint: Nullable<String>, customerDeviceId: Nullable<String>, customerEmailAddress: Nullable<String>, customerPurchaseIp: Nullable<String>, merchandiseOrServices: Nullable<DisputeVisaCompellingEvidence3DisputedTransactionMerchandiseOrServices>, productDescription: Nullable<String>, shippingAddress: Nullable<DisputeVisaCompellingEvidence3DisputedTransactionShippingAddress>, unknownFields: [String: JSONValue]? = nil) {
+    public init(customerAccountId: Nullable<String>, customerDeviceFingerprint: Nullable<String>, customerDeviceId: Nullable<String>, customerEmailAddress: Nullable<String>, customerPurchaseIp: Nullable<String>, merchandiseOrServices: Nullable<DisputeVisaCompellingEvidence3DisputedTransactionMerchandiseOrServices>, productDescription: Nullable<String>, shippingAddress: Nullable<DisputeTransactionShippingAddress>, unknownFields: [String: JSONValue]? = nil) {
         self.customerAccountId = customerAccountId
         self.customerDeviceFingerprint = customerDeviceFingerprint
         self.customerDeviceId = customerDeviceId
@@ -1728,14 +1668,14 @@ public struct DisputeVisaCompellingEvidence3DisputedTransaction: Sendable, Codab
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.customerAccountId = try container.decode(Nullable<String>.self, forKey: .customerAccountId)
-        self.customerDeviceFingerprint = try container.decode(Nullable<String>.self, forKey: .customerDeviceFingerprint)
-        self.customerDeviceId = try container.decode(Nullable<String>.self, forKey: .customerDeviceId)
-        self.customerEmailAddress = try container.decode(Nullable<String>.self, forKey: .customerEmailAddress)
-        self.customerPurchaseIp = try container.decode(Nullable<String>.self, forKey: .customerPurchaseIp)
-        self.merchandiseOrServices = try container.decode(Nullable<DisputeVisaCompellingEvidence3DisputedTransactionMerchandiseOrServices>.self, forKey: .merchandiseOrServices)
-        self.productDescription = try container.decode(Nullable<String>.self, forKey: .productDescription)
-        self.shippingAddress = try container.decode(Nullable<DisputeVisaCompellingEvidence3DisputedTransactionShippingAddress>.self, forKey: .shippingAddress)
+        self.customerAccountId = try container.decodeIfPresent(Nullable<String>.self, forKey: .customerAccountId) ?? .null
+        self.customerDeviceFingerprint = try container.decodeIfPresent(Nullable<String>.self, forKey: .customerDeviceFingerprint) ?? .null
+        self.customerDeviceId = try container.decodeIfPresent(Nullable<String>.self, forKey: .customerDeviceId) ?? .null
+        self.customerEmailAddress = try container.decodeIfPresent(Nullable<String>.self, forKey: .customerEmailAddress) ?? .null
+        self.customerPurchaseIp = try container.decodeIfPresent(Nullable<String>.self, forKey: .customerPurchaseIp) ?? .null
+        self.merchandiseOrServices = try container.decodeIfPresent(Nullable<DisputeVisaCompellingEvidence3DisputedTransactionMerchandiseOrServices>.self, forKey: .merchandiseOrServices) ?? .null
+        self.productDescription = try container.decodeIfPresent(Nullable<String>.self, forKey: .productDescription) ?? .null
+        self.shippingAddress = try container.decodeIfPresent(Nullable<DisputeTransactionShippingAddress>.self, forKey: .shippingAddress) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -1767,26 +1707,6 @@ public struct DisputeVisaCompellingEvidence3DisputedTransaction: Sendable, Codab
     }
 }
 
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum DisputeVisaCompellingEvidence3PriorUndisputedTransactionShippingAddress: Sendable, Codable, Equatable, Hashable {
-    case disputeTransactionShippingAddress(DisputeTransactionShippingAddress)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(DisputeTransactionShippingAddress.self) { self = .disputeTransactionShippingAddress(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .disputeTransactionShippingAddress(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
 public struct DisputeVisaCompellingEvidence3PriorUndisputedTransaction: Sendable, Codable, Equatable, Hashable {
     public var charge: String
     public var customerAccountId: Nullable<String>
@@ -1795,12 +1715,12 @@ public struct DisputeVisaCompellingEvidence3PriorUndisputedTransaction: Sendable
     public var customerEmailAddress: Nullable<String>
     public var customerPurchaseIp: Nullable<String>
     public var productDescription: Nullable<String>
-    public var shippingAddress: Nullable<DisputeVisaCompellingEvidence3PriorUndisputedTransactionShippingAddress>
+    public var shippingAddress: Nullable<DisputeTransactionShippingAddress>
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(charge: String, customerAccountId: Nullable<String>, customerDeviceFingerprint: Nullable<String>, customerDeviceId: Nullable<String>, customerEmailAddress: Nullable<String>, customerPurchaseIp: Nullable<String>, productDescription: Nullable<String>, shippingAddress: Nullable<DisputeVisaCompellingEvidence3PriorUndisputedTransactionShippingAddress>, unknownFields: [String: JSONValue]? = nil) {
+    public init(charge: String, customerAccountId: Nullable<String>, customerDeviceFingerprint: Nullable<String>, customerDeviceId: Nullable<String>, customerEmailAddress: Nullable<String>, customerPurchaseIp: Nullable<String>, productDescription: Nullable<String>, shippingAddress: Nullable<DisputeTransactionShippingAddress>, unknownFields: [String: JSONValue]? = nil) {
         self.charge = charge
         self.customerAccountId = customerAccountId
         self.customerDeviceFingerprint = customerDeviceFingerprint
@@ -1826,13 +1746,13 @@ public struct DisputeVisaCompellingEvidence3PriorUndisputedTransaction: Sendable
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.charge = try container.decode(String.self, forKey: .charge)
-        self.customerAccountId = try container.decode(Nullable<String>.self, forKey: .customerAccountId)
-        self.customerDeviceFingerprint = try container.decode(Nullable<String>.self, forKey: .customerDeviceFingerprint)
-        self.customerDeviceId = try container.decode(Nullable<String>.self, forKey: .customerDeviceId)
-        self.customerEmailAddress = try container.decode(Nullable<String>.self, forKey: .customerEmailAddress)
-        self.customerPurchaseIp = try container.decode(Nullable<String>.self, forKey: .customerPurchaseIp)
-        self.productDescription = try container.decode(Nullable<String>.self, forKey: .productDescription)
-        self.shippingAddress = try container.decode(Nullable<DisputeVisaCompellingEvidence3PriorUndisputedTransactionShippingAddress>.self, forKey: .shippingAddress)
+        self.customerAccountId = try container.decodeIfPresent(Nullable<String>.self, forKey: .customerAccountId) ?? .null
+        self.customerDeviceFingerprint = try container.decodeIfPresent(Nullable<String>.self, forKey: .customerDeviceFingerprint) ?? .null
+        self.customerDeviceId = try container.decodeIfPresent(Nullable<String>.self, forKey: .customerDeviceId) ?? .null
+        self.customerEmailAddress = try container.decodeIfPresent(Nullable<String>.self, forKey: .customerEmailAddress) ?? .null
+        self.customerPurchaseIp = try container.decodeIfPresent(Nullable<String>.self, forKey: .customerPurchaseIp) ?? .null
+        self.productDescription = try container.decodeIfPresent(Nullable<String>.self, forKey: .productDescription) ?? .null
+        self.shippingAddress = try container.decodeIfPresent(Nullable<DisputeTransactionShippingAddress>.self, forKey: .shippingAddress) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {

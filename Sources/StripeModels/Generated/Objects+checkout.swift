@@ -4,46 +4,6 @@
 //  Do not edit by hand: rerun `swift run stripe-gen`.
 //
 import Foundation
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum CheckoutSessionAdaptivePricing: Sendable, Codable, Equatable, Hashable {
-    case paymentPagesCheckoutSessionAdaptivePricing(PaymentPagesCheckoutSessionAdaptivePricing)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(PaymentPagesCheckoutSessionAdaptivePricing.self) { self = .paymentPagesCheckoutSessionAdaptivePricing(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .paymentPagesCheckoutSessionAdaptivePricing(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum CheckoutSessionAfterExpiration: Sendable, Codable, Equatable, Hashable {
-    case paymentPagesCheckoutSessionAfterExpiration(PaymentPagesCheckoutSessionAfterExpiration)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(PaymentPagesCheckoutSessionAfterExpiration.self) { self = .paymentPagesCheckoutSessionAfterExpiration(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .paymentPagesCheckoutSessionAfterExpiration(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
 /// Lossless enum: values Stripe documents plus any value the API
 /// adds later, kept in `undocumented` instead of dropped.
 public enum CheckoutSessionBillingAddressCollection: Sendable, Equatable, Hashable, LosslessEnum {
@@ -75,86 +35,6 @@ public enum CheckoutSessionBillingAddressCollection: Sendable, Equatable, Hashab
     public func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
         try container.encode(rawValue)
-    }
-}
-
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum CheckoutSessionCollectedInformation: Sendable, Codable, Equatable, Hashable {
-    case paymentPagesCheckoutSessionCollectedInformation(PaymentPagesCheckoutSessionCollectedInformation)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(PaymentPagesCheckoutSessionCollectedInformation.self) { self = .paymentPagesCheckoutSessionCollectedInformation(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .paymentPagesCheckoutSessionCollectedInformation(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum CheckoutSessionConsent: Sendable, Codable, Equatable, Hashable {
-    case paymentPagesCheckoutSessionConsent(PaymentPagesCheckoutSessionConsent)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(PaymentPagesCheckoutSessionConsent.self) { self = .paymentPagesCheckoutSessionConsent(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .paymentPagesCheckoutSessionConsent(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum CheckoutSessionConsentCollection: Sendable, Codable, Equatable, Hashable {
-    case paymentPagesCheckoutSessionConsentCollection(PaymentPagesCheckoutSessionConsentCollection)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(PaymentPagesCheckoutSessionConsentCollection.self) { self = .paymentPagesCheckoutSessionConsentCollection(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .paymentPagesCheckoutSessionConsentCollection(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum CheckoutSessionCurrencyConversion: Sendable, Codable, Equatable, Hashable {
-    case paymentPagesCheckoutSessionCurrencyConversion(PaymentPagesCheckoutSessionCurrencyConversion)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(PaymentPagesCheckoutSessionCurrencyConversion.self) { self = .paymentPagesCheckoutSessionCurrencyConversion(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .paymentPagesCheckoutSessionCurrencyConversion(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
     }
 }
 
@@ -220,46 +100,6 @@ public enum CheckoutSessionCustomerCreation: Sendable, Equatable, Hashable, Loss
     public func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
         try container.encode(rawValue)
-    }
-}
-
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum CheckoutSessionCustomerDetails: Sendable, Codable, Equatable, Hashable {
-    case paymentPagesCheckoutSessionCustomerDetails(PaymentPagesCheckoutSessionCustomerDetails)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(PaymentPagesCheckoutSessionCustomerDetails.self) { self = .paymentPagesCheckoutSessionCustomerDetails(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .paymentPagesCheckoutSessionCustomerDetails(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum CheckoutSessionInvoiceCreation: Sendable, Codable, Equatable, Hashable {
-    case paymentPagesCheckoutSessionInvoiceCreation(PaymentPagesCheckoutSessionInvoiceCreation)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(PaymentPagesCheckoutSessionInvoiceCreation.self) { self = .paymentPagesCheckoutSessionInvoiceCreation(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .paymentPagesCheckoutSessionInvoiceCreation(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
     }
 }
 
@@ -474,26 +314,6 @@ public enum CheckoutSessionLocale: Sendable, Equatable, Hashable, LosslessEnum {
     }
 }
 
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum CheckoutSessionManagedPayments: Sendable, Codable, Equatable, Hashable {
-    case paymentPagesCheckoutSessionManagedPayments(PaymentPagesCheckoutSessionManagedPayments)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(PaymentPagesCheckoutSessionManagedPayments.self) { self = .paymentPagesCheckoutSessionManagedPayments(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .paymentPagesCheckoutSessionManagedPayments(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
 /// Lossless enum: values Stripe documents plus any value the API
 /// adds later, kept in `undocumented` instead of dropped.
 public enum CheckoutSessionMode: Sendable, Equatable, Hashable, LosslessEnum {
@@ -596,46 +416,6 @@ public enum CheckoutSessionOriginContext: Sendable, Equatable, Hashable, Lossles
     }
 }
 
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum CheckoutSessionPaymentMethodConfigurationDetails: Sendable, Codable, Equatable, Hashable {
-    case paymentMethodConfigBizPaymentMethodConfigurationDetails(PaymentMethodConfigBizPaymentMethodConfigurationDetails)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(PaymentMethodConfigBizPaymentMethodConfigurationDetails.self) { self = .paymentMethodConfigBizPaymentMethodConfigurationDetails(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .paymentMethodConfigBizPaymentMethodConfigurationDetails(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum CheckoutSessionPaymentMethodOptions: Sendable, Codable, Equatable, Hashable {
-    indirect case checkoutSessionPaymentMethodOptions(CheckoutSessionPaymentMethodOptions)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(CheckoutSessionPaymentMethodOptions.self) { self = .checkoutSessionPaymentMethodOptions(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .checkoutSessionPaymentMethodOptions(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
 /// Lossless enum: values Stripe documents plus any value the API
 /// adds later, kept in `undocumented` instead of dropped.
 public enum CheckoutSessionPaymentStatus: Sendable, Equatable, Hashable, LosslessEnum {
@@ -673,26 +453,6 @@ public enum CheckoutSessionPaymentStatus: Sendable, Equatable, Hashable, Lossles
     }
 }
 
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum CheckoutSessionPermissions: Sendable, Codable, Equatable, Hashable {
-    case paymentPagesCheckoutSessionPermissions(PaymentPagesCheckoutSessionPermissions)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(PaymentPagesCheckoutSessionPermissions.self) { self = .paymentPagesCheckoutSessionPermissions(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .paymentPagesCheckoutSessionPermissions(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
 /// Lossless enum: values Stripe documents plus any value the API
 /// adds later, kept in `undocumented` instead of dropped.
 public enum CheckoutSessionRedirectOnCompletion: Sendable, Equatable, Hashable, LosslessEnum {
@@ -727,66 +487,6 @@ public enum CheckoutSessionRedirectOnCompletion: Sendable, Equatable, Hashable, 
     public func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
         try container.encode(rawValue)
-    }
-}
-
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum CheckoutSessionSavedPaymentMethodOptions: Sendable, Codable, Equatable, Hashable {
-    case paymentPagesCheckoutSessionSavedPaymentMethodOptions(PaymentPagesCheckoutSessionSavedPaymentMethodOptions)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(PaymentPagesCheckoutSessionSavedPaymentMethodOptions.self) { self = .paymentPagesCheckoutSessionSavedPaymentMethodOptions(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .paymentPagesCheckoutSessionSavedPaymentMethodOptions(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum CheckoutSessionShippingAddressCollection: Sendable, Codable, Equatable, Hashable {
-    case paymentPagesCheckoutSessionShippingAddressCollection(PaymentPagesCheckoutSessionShippingAddressCollection)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(PaymentPagesCheckoutSessionShippingAddressCollection.self) { self = .paymentPagesCheckoutSessionShippingAddressCollection(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .paymentPagesCheckoutSessionShippingAddressCollection(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum CheckoutSessionShippingCost: Sendable, Codable, Equatable, Hashable {
-    case paymentPagesCheckoutSessionShippingCost(PaymentPagesCheckoutSessionShippingCost)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(PaymentPagesCheckoutSessionShippingCost.self) { self = .paymentPagesCheckoutSessionShippingCost(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .paymentPagesCheckoutSessionShippingCost(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
     }
 }
 
@@ -870,26 +570,6 @@ public enum CheckoutSessionSubmitType: Sendable, Equatable, Hashable, LosslessEn
     }
 }
 
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum CheckoutSessionTotalDetails: Sendable, Codable, Equatable, Hashable {
-    case paymentPagesCheckoutSessionTotalDetails(PaymentPagesCheckoutSessionTotalDetails)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(PaymentPagesCheckoutSessionTotalDetails.self) { self = .paymentPagesCheckoutSessionTotalDetails(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .paymentPagesCheckoutSessionTotalDetails(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
 /// Lossless enum: values Stripe documents plus any value the API
 /// adds later, kept in `undocumented` instead of dropped.
 public enum CheckoutSessionUiMode: Sendable, Equatable, Hashable, LosslessEnum {
@@ -930,29 +610,9 @@ public enum CheckoutSessionUiMode: Sendable, Equatable, Hashable, LosslessEnum {
     }
 }
 
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum CheckoutSessionWalletOptions: Sendable, Codable, Equatable, Hashable {
-    indirect case checkoutSessionWalletOptions(CheckoutSessionWalletOptions)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(CheckoutSessionWalletOptions.self) { self = .checkoutSessionWalletOptions(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .checkoutSessionWalletOptions(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
 public struct CheckoutSession: Sendable, Codable, Equatable, Hashable, StripeIdentified {
-    public var adaptivePricing: Nullable<CheckoutSessionAdaptivePricing>
-    public var afterExpiration: Nullable<CheckoutSessionAfterExpiration>
+    public var adaptivePricing: Nullable<PaymentPagesCheckoutSessionAdaptivePricing>
+    public var afterExpiration: Nullable<PaymentPagesCheckoutSessionAfterExpiration>
     public var allowPromotionCodes: Nullable<Bool>
     public var allowedPaymentMethodTypes: Nullable<[String]>
     public var amountSubtotal: Nullable<Int>
@@ -963,18 +623,18 @@ public struct CheckoutSession: Sendable, Codable, Equatable, Hashable, StripeIde
     public var cancelUrl: Nullable<String>
     public var clientReferenceId: Nullable<String>
     public var clientSecret: Nullable<String>
-    public var collectedInformation: Nullable<CheckoutSessionCollectedInformation>
-    public var consent: Nullable<CheckoutSessionConsent>
-    public var consentCollection: Nullable<CheckoutSessionConsentCollection>
+    public var collectedInformation: Nullable<PaymentPagesCheckoutSessionCollectedInformation>
+    public var consent: Nullable<PaymentPagesCheckoutSessionConsent>
+    public var consentCollection: Nullable<PaymentPagesCheckoutSessionConsentCollection>
     public var created: StripeTimestamp
     public var currency: Nullable<String>
-    public var currencyConversion: Nullable<CheckoutSessionCurrencyConversion>
+    public var currencyConversion: Nullable<PaymentPagesCheckoutSessionCurrencyConversion>
     public var customFields: [PaymentPagesCheckoutSessionCustomFields]
     public var customText: PaymentPagesCheckoutSessionCustomText
     public var customer: Nullable<CheckoutSessionCustomer>
     public var customerAccount: Nullable<String>
     public var customerCreation: Nullable<CheckoutSessionCustomerCreation>
-    public var customerDetails: Nullable<CheckoutSessionCustomerDetails>
+    public var customerDetails: Nullable<PaymentPagesCheckoutSessionCustomerDetails>
     public var customerEmail: Nullable<String>
     public var discounts: Nullable<[PaymentPagesCheckoutSessionDiscount]>
     public var excludedPaymentMethodTypes: [String]?
@@ -982,11 +642,11 @@ public struct CheckoutSession: Sendable, Codable, Equatable, Hashable, StripeIde
     public var id: String
     public var integrationIdentifier: Nullable<String>
     public var invoice: Nullable<Expandable<Invoice>>
-    public var invoiceCreation: Nullable<CheckoutSessionInvoiceCreation>
+    public var invoiceCreation: Nullable<PaymentPagesCheckoutSessionInvoiceCreation>
     public var lineItems: CheckoutSessionLineItems?
     public var livemode: Bool
     public var locale: Nullable<CheckoutSessionLocale>
-    public var managedPayments: Nullable<CheckoutSessionManagedPayments>
+    public var managedPayments: Nullable<PaymentPagesCheckoutSessionManagedPayments>
     public var metadata: Nullable<[String: String]>
     public var mode: CheckoutSessionMode
     public var nameCollection: PaymentPagesCheckoutSessionNameCollection?
@@ -996,27 +656,27 @@ public struct CheckoutSession: Sendable, Codable, Equatable, Hashable, StripeIde
     public var paymentIntent: Nullable<Expandable<PaymentIntent>>
     public var paymentLink: Nullable<Expandable<PaymentLink>>
     public var paymentMethodCollection: Nullable<CheckoutSessionCustomerCreation>
-    public var paymentMethodConfigurationDetails: Nullable<CheckoutSessionPaymentMethodConfigurationDetails>
+    public var paymentMethodConfigurationDetails: Nullable<PaymentMethodConfigBizPaymentMethodConfigurationDetails>
     public var paymentMethodOptions: Nullable<CheckoutSessionPaymentMethodOptions>
     public var paymentMethodTypes: [String]
     public var paymentStatus: CheckoutSessionPaymentStatus
-    public var permissions: Nullable<CheckoutSessionPermissions>
+    public var permissions: Nullable<PaymentPagesCheckoutSessionPermissions>
     public var phoneNumberCollection: PaymentPagesCheckoutSessionPhoneNumberCollection?
     public var presentmentDetails: PaymentFlowsPaymentIntentPresentmentDetails?
     public var recoveredFrom: Nullable<String>
     public var redirectOnCompletion: CheckoutSessionRedirectOnCompletion?
     public var returnUrl: String?
-    public var savedPaymentMethodOptions: Nullable<CheckoutSessionSavedPaymentMethodOptions>
+    public var savedPaymentMethodOptions: Nullable<PaymentPagesCheckoutSessionSavedPaymentMethodOptions>
     public var setupIntent: Nullable<Expandable<SetupIntent>>
-    public var shippingAddressCollection: Nullable<CheckoutSessionShippingAddressCollection>
-    public var shippingCost: Nullable<CheckoutSessionShippingCost>
+    public var shippingAddressCollection: Nullable<PaymentPagesCheckoutSessionShippingAddressCollection>
+    public var shippingCost: Nullable<PaymentPagesCheckoutSessionShippingCost>
     public var shippingOptions: [PaymentPagesCheckoutSessionShippingOption]
     public var status: Nullable<CheckoutSessionStatus>
     public var submitType: Nullable<CheckoutSessionSubmitType>
     public var subscription: Nullable<Expandable<Subscription>>
     public var successUrl: Nullable<String>
     public var taxIdCollection: PaymentPagesCheckoutSessionTaxIdCollection?
-    public var totalDetails: Nullable<CheckoutSessionTotalDetails>
+    public var totalDetails: Nullable<PaymentPagesCheckoutSessionTotalDetails>
     public var uiMode: Nullable<CheckoutSessionUiMode>
     public var url: Nullable<String>
     public var walletOptions: Nullable<CheckoutSessionWalletOptions>
@@ -1024,7 +684,7 @@ public struct CheckoutSession: Sendable, Codable, Equatable, Hashable, StripeIde
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(adaptivePricing: Nullable<CheckoutSessionAdaptivePricing>, afterExpiration: Nullable<CheckoutSessionAfterExpiration>, allowPromotionCodes: Nullable<Bool>, allowedPaymentMethodTypes: Nullable<[String]>, amountSubtotal: Nullable<Int>, amountTotal: Nullable<Int>, automaticTax: PaymentPagesCheckoutSessionAutomaticTax, billingAddressCollection: Nullable<CheckoutSessionBillingAddressCollection>, brandingSettings: PaymentPagesCheckoutSessionBrandingSettings? = nil, cancelUrl: Nullable<String>, clientReferenceId: Nullable<String>, clientSecret: Nullable<String>, collectedInformation: Nullable<CheckoutSessionCollectedInformation>, consent: Nullable<CheckoutSessionConsent>, consentCollection: Nullable<CheckoutSessionConsentCollection>, created: StripeTimestamp, currency: Nullable<String>, currencyConversion: Nullable<CheckoutSessionCurrencyConversion>, customFields: [PaymentPagesCheckoutSessionCustomFields], customText: PaymentPagesCheckoutSessionCustomText, customer: Nullable<CheckoutSessionCustomer>, customerAccount: Nullable<String>, customerCreation: Nullable<CheckoutSessionCustomerCreation>, customerDetails: Nullable<CheckoutSessionCustomerDetails>, customerEmail: Nullable<String>, discounts: Nullable<[PaymentPagesCheckoutSessionDiscount]>, excludedPaymentMethodTypes: [String]? = nil, expiresAt: StripeTimestamp, id: String, integrationIdentifier: Nullable<String>, invoice: Nullable<Expandable<Invoice>>, invoiceCreation: Nullable<CheckoutSessionInvoiceCreation>, lineItems: CheckoutSessionLineItems? = nil, livemode: Bool, locale: Nullable<CheckoutSessionLocale>, managedPayments: Nullable<CheckoutSessionManagedPayments>, metadata: Nullable<[String: String]>, mode: CheckoutSessionMode, nameCollection: PaymentPagesCheckoutSessionNameCollection? = nil, object: CheckoutSessionObject, optionalItems: Nullable<[PaymentPagesCheckoutSessionOptionalItem]>? = nil, originContext: Nullable<CheckoutSessionOriginContext>, paymentIntent: Nullable<Expandable<PaymentIntent>>, paymentLink: Nullable<Expandable<PaymentLink>>, paymentMethodCollection: Nullable<CheckoutSessionCustomerCreation>, paymentMethodConfigurationDetails: Nullable<CheckoutSessionPaymentMethodConfigurationDetails>, paymentMethodOptions: Nullable<CheckoutSessionPaymentMethodOptions>, paymentMethodTypes: [String], paymentStatus: CheckoutSessionPaymentStatus, permissions: Nullable<CheckoutSessionPermissions>, phoneNumberCollection: PaymentPagesCheckoutSessionPhoneNumberCollection? = nil, presentmentDetails: PaymentFlowsPaymentIntentPresentmentDetails? = nil, recoveredFrom: Nullable<String>, redirectOnCompletion: CheckoutSessionRedirectOnCompletion? = nil, returnUrl: String? = nil, savedPaymentMethodOptions: Nullable<CheckoutSessionSavedPaymentMethodOptions>, setupIntent: Nullable<Expandable<SetupIntent>>, shippingAddressCollection: Nullable<CheckoutSessionShippingAddressCollection>, shippingCost: Nullable<CheckoutSessionShippingCost>, shippingOptions: [PaymentPagesCheckoutSessionShippingOption], status: Nullable<CheckoutSessionStatus>, submitType: Nullable<CheckoutSessionSubmitType>, subscription: Nullable<Expandable<Subscription>>, successUrl: Nullable<String>, taxIdCollection: PaymentPagesCheckoutSessionTaxIdCollection? = nil, totalDetails: Nullable<CheckoutSessionTotalDetails>, uiMode: Nullable<CheckoutSessionUiMode>, url: Nullable<String>, walletOptions: Nullable<CheckoutSessionWalletOptions>, unknownFields: [String: JSONValue]? = nil) {
+    public init(adaptivePricing: Nullable<PaymentPagesCheckoutSessionAdaptivePricing>, afterExpiration: Nullable<PaymentPagesCheckoutSessionAfterExpiration>, allowPromotionCodes: Nullable<Bool>, allowedPaymentMethodTypes: Nullable<[String]>, amountSubtotal: Nullable<Int>, amountTotal: Nullable<Int>, automaticTax: PaymentPagesCheckoutSessionAutomaticTax, billingAddressCollection: Nullable<CheckoutSessionBillingAddressCollection>, brandingSettings: PaymentPagesCheckoutSessionBrandingSettings? = nil, cancelUrl: Nullable<String>, clientReferenceId: Nullable<String>, clientSecret: Nullable<String>, collectedInformation: Nullable<PaymentPagesCheckoutSessionCollectedInformation>, consent: Nullable<PaymentPagesCheckoutSessionConsent>, consentCollection: Nullable<PaymentPagesCheckoutSessionConsentCollection>, created: StripeTimestamp, currency: Nullable<String>, currencyConversion: Nullable<PaymentPagesCheckoutSessionCurrencyConversion>, customFields: [PaymentPagesCheckoutSessionCustomFields], customText: PaymentPagesCheckoutSessionCustomText, customer: Nullable<CheckoutSessionCustomer>, customerAccount: Nullable<String>, customerCreation: Nullable<CheckoutSessionCustomerCreation>, customerDetails: Nullable<PaymentPagesCheckoutSessionCustomerDetails>, customerEmail: Nullable<String>, discounts: Nullable<[PaymentPagesCheckoutSessionDiscount]>, excludedPaymentMethodTypes: [String]? = nil, expiresAt: StripeTimestamp, id: String, integrationIdentifier: Nullable<String>, invoice: Nullable<Expandable<Invoice>>, invoiceCreation: Nullable<PaymentPagesCheckoutSessionInvoiceCreation>, lineItems: CheckoutSessionLineItems? = nil, livemode: Bool, locale: Nullable<CheckoutSessionLocale>, managedPayments: Nullable<PaymentPagesCheckoutSessionManagedPayments>, metadata: Nullable<[String: String]>, mode: CheckoutSessionMode, nameCollection: PaymentPagesCheckoutSessionNameCollection? = nil, object: CheckoutSessionObject, optionalItems: Nullable<[PaymentPagesCheckoutSessionOptionalItem]>? = nil, originContext: Nullable<CheckoutSessionOriginContext>, paymentIntent: Nullable<Expandable<PaymentIntent>>, paymentLink: Nullable<Expandable<PaymentLink>>, paymentMethodCollection: Nullable<CheckoutSessionCustomerCreation>, paymentMethodConfigurationDetails: Nullable<PaymentMethodConfigBizPaymentMethodConfigurationDetails>, paymentMethodOptions: Nullable<CheckoutSessionPaymentMethodOptions>, paymentMethodTypes: [String], paymentStatus: CheckoutSessionPaymentStatus, permissions: Nullable<PaymentPagesCheckoutSessionPermissions>, phoneNumberCollection: PaymentPagesCheckoutSessionPhoneNumberCollection? = nil, presentmentDetails: PaymentFlowsPaymentIntentPresentmentDetails? = nil, recoveredFrom: Nullable<String>, redirectOnCompletion: CheckoutSessionRedirectOnCompletion? = nil, returnUrl: String? = nil, savedPaymentMethodOptions: Nullable<PaymentPagesCheckoutSessionSavedPaymentMethodOptions>, setupIntent: Nullable<Expandable<SetupIntent>>, shippingAddressCollection: Nullable<PaymentPagesCheckoutSessionShippingAddressCollection>, shippingCost: Nullable<PaymentPagesCheckoutSessionShippingCost>, shippingOptions: [PaymentPagesCheckoutSessionShippingOption], status: Nullable<CheckoutSessionStatus>, submitType: Nullable<CheckoutSessionSubmitType>, subscription: Nullable<Expandable<Subscription>>, successUrl: Nullable<String>, taxIdCollection: PaymentPagesCheckoutSessionTaxIdCollection? = nil, totalDetails: Nullable<PaymentPagesCheckoutSessionTotalDetails>, uiMode: Nullable<CheckoutSessionUiMode>, url: Nullable<String>, walletOptions: Nullable<CheckoutSessionWalletOptions>, unknownFields: [String: JSONValue]? = nil) {
         self.adaptivePricing = adaptivePricing
         self.afterExpiration = afterExpiration
         self.allowPromotionCodes = allowPromotionCodes
@@ -1171,75 +831,75 @@ public struct CheckoutSession: Sendable, Codable, Equatable, Hashable, StripeIde
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.adaptivePricing = try container.decode(Nullable<CheckoutSessionAdaptivePricing>.self, forKey: .adaptivePricing)
-        self.afterExpiration = try container.decode(Nullable<CheckoutSessionAfterExpiration>.self, forKey: .afterExpiration)
-        self.allowPromotionCodes = try container.decode(Nullable<Bool>.self, forKey: .allowPromotionCodes)
-        self.allowedPaymentMethodTypes = try container.decode(Nullable<[String]>.self, forKey: .allowedPaymentMethodTypes)
-        self.amountSubtotal = try container.decode(Nullable<Int>.self, forKey: .amountSubtotal)
-        self.amountTotal = try container.decode(Nullable<Int>.self, forKey: .amountTotal)
+        self.adaptivePricing = try container.decodeIfPresent(Nullable<PaymentPagesCheckoutSessionAdaptivePricing>.self, forKey: .adaptivePricing) ?? .null
+        self.afterExpiration = try container.decodeIfPresent(Nullable<PaymentPagesCheckoutSessionAfterExpiration>.self, forKey: .afterExpiration) ?? .null
+        self.allowPromotionCodes = try container.decodeIfPresent(Nullable<Bool>.self, forKey: .allowPromotionCodes) ?? .null
+        self.allowedPaymentMethodTypes = try container.decodeIfPresent(Nullable<[String]>.self, forKey: .allowedPaymentMethodTypes) ?? .null
+        self.amountSubtotal = try container.decodeIfPresent(Nullable<Int>.self, forKey: .amountSubtotal) ?? .null
+        self.amountTotal = try container.decodeIfPresent(Nullable<Int>.self, forKey: .amountTotal) ?? .null
         self.automaticTax = try container.decode(PaymentPagesCheckoutSessionAutomaticTax.self, forKey: .automaticTax)
-        self.billingAddressCollection = try container.decode(Nullable<CheckoutSessionBillingAddressCollection>.self, forKey: .billingAddressCollection)
+        self.billingAddressCollection = try container.decodeIfPresent(Nullable<CheckoutSessionBillingAddressCollection>.self, forKey: .billingAddressCollection) ?? .null
         self.brandingSettings = try container.decodeIfPresent(PaymentPagesCheckoutSessionBrandingSettings.self, forKey: .brandingSettings)
-        self.cancelUrl = try container.decode(Nullable<String>.self, forKey: .cancelUrl)
-        self.clientReferenceId = try container.decode(Nullable<String>.self, forKey: .clientReferenceId)
-        self.clientSecret = try container.decode(Nullable<String>.self, forKey: .clientSecret)
-        self.collectedInformation = try container.decode(Nullable<CheckoutSessionCollectedInformation>.self, forKey: .collectedInformation)
-        self.consent = try container.decode(Nullable<CheckoutSessionConsent>.self, forKey: .consent)
-        self.consentCollection = try container.decode(Nullable<CheckoutSessionConsentCollection>.self, forKey: .consentCollection)
+        self.cancelUrl = try container.decodeIfPresent(Nullable<String>.self, forKey: .cancelUrl) ?? .null
+        self.clientReferenceId = try container.decodeIfPresent(Nullable<String>.self, forKey: .clientReferenceId) ?? .null
+        self.clientSecret = try container.decodeIfPresent(Nullable<String>.self, forKey: .clientSecret) ?? .null
+        self.collectedInformation = try container.decodeIfPresent(Nullable<PaymentPagesCheckoutSessionCollectedInformation>.self, forKey: .collectedInformation) ?? .null
+        self.consent = try container.decodeIfPresent(Nullable<PaymentPagesCheckoutSessionConsent>.self, forKey: .consent) ?? .null
+        self.consentCollection = try container.decodeIfPresent(Nullable<PaymentPagesCheckoutSessionConsentCollection>.self, forKey: .consentCollection) ?? .null
         self.created = try container.decode(StripeTimestamp.self, forKey: .created)
-        self.currency = try container.decode(Nullable<String>.self, forKey: .currency)
-        self.currencyConversion = try container.decode(Nullable<CheckoutSessionCurrencyConversion>.self, forKey: .currencyConversion)
+        self.currency = try container.decodeIfPresent(Nullable<String>.self, forKey: .currency) ?? .null
+        self.currencyConversion = try container.decodeIfPresent(Nullable<PaymentPagesCheckoutSessionCurrencyConversion>.self, forKey: .currencyConversion) ?? .null
         self.customFields = try container.decode([PaymentPagesCheckoutSessionCustomFields].self, forKey: .customFields)
         self.customText = try container.decode(PaymentPagesCheckoutSessionCustomText.self, forKey: .customText)
-        self.customer = try container.decode(Nullable<CheckoutSessionCustomer>.self, forKey: .customer)
-        self.customerAccount = try container.decode(Nullable<String>.self, forKey: .customerAccount)
-        self.customerCreation = try container.decode(Nullable<CheckoutSessionCustomerCreation>.self, forKey: .customerCreation)
-        self.customerDetails = try container.decode(Nullable<CheckoutSessionCustomerDetails>.self, forKey: .customerDetails)
-        self.customerEmail = try container.decode(Nullable<String>.self, forKey: .customerEmail)
-        self.discounts = try container.decode(Nullable<[PaymentPagesCheckoutSessionDiscount]>.self, forKey: .discounts)
+        self.customer = try container.decodeIfPresent(Nullable<CheckoutSessionCustomer>.self, forKey: .customer) ?? .null
+        self.customerAccount = try container.decodeIfPresent(Nullable<String>.self, forKey: .customerAccount) ?? .null
+        self.customerCreation = try container.decodeIfPresent(Nullable<CheckoutSessionCustomerCreation>.self, forKey: .customerCreation) ?? .null
+        self.customerDetails = try container.decodeIfPresent(Nullable<PaymentPagesCheckoutSessionCustomerDetails>.self, forKey: .customerDetails) ?? .null
+        self.customerEmail = try container.decodeIfPresent(Nullable<String>.self, forKey: .customerEmail) ?? .null
+        self.discounts = try container.decodeIfPresent(Nullable<[PaymentPagesCheckoutSessionDiscount]>.self, forKey: .discounts) ?? .null
         self.excludedPaymentMethodTypes = try container.decodeIfPresent([String].self, forKey: .excludedPaymentMethodTypes)
         self.expiresAt = try container.decode(StripeTimestamp.self, forKey: .expiresAt)
         self.id = try container.decode(String.self, forKey: .id)
-        self.integrationIdentifier = try container.decode(Nullable<String>.self, forKey: .integrationIdentifier)
-        self.invoice = try container.decode(Nullable<Expandable<Invoice>>.self, forKey: .invoice)
-        self.invoiceCreation = try container.decode(Nullable<CheckoutSessionInvoiceCreation>.self, forKey: .invoiceCreation)
+        self.integrationIdentifier = try container.decodeIfPresent(Nullable<String>.self, forKey: .integrationIdentifier) ?? .null
+        self.invoice = try container.decodeIfPresent(Nullable<Expandable<Invoice>>.self, forKey: .invoice) ?? .null
+        self.invoiceCreation = try container.decodeIfPresent(Nullable<PaymentPagesCheckoutSessionInvoiceCreation>.self, forKey: .invoiceCreation) ?? .null
         self.lineItems = try container.decodeIfPresent(CheckoutSessionLineItems.self, forKey: .lineItems)
         self.livemode = try container.decode(Bool.self, forKey: .livemode)
-        self.locale = try container.decode(Nullable<CheckoutSessionLocale>.self, forKey: .locale)
-        self.managedPayments = try container.decode(Nullable<CheckoutSessionManagedPayments>.self, forKey: .managedPayments)
-        self.metadata = try container.decode(Nullable<[String: String]>.self, forKey: .metadata)
+        self.locale = try container.decodeIfPresent(Nullable<CheckoutSessionLocale>.self, forKey: .locale) ?? .null
+        self.managedPayments = try container.decodeIfPresent(Nullable<PaymentPagesCheckoutSessionManagedPayments>.self, forKey: .managedPayments) ?? .null
+        self.metadata = try container.decodeIfPresent(Nullable<[String: String]>.self, forKey: .metadata) ?? .null
         self.mode = try container.decode(CheckoutSessionMode.self, forKey: .mode)
         self.nameCollection = try container.decodeIfPresent(PaymentPagesCheckoutSessionNameCollection.self, forKey: .nameCollection)
         self.object = try container.decode(CheckoutSessionObject.self, forKey: .object)
         self.optionalItems = try container.decodeIfPresent(Nullable<[PaymentPagesCheckoutSessionOptionalItem]>.self, forKey: .optionalItems)
-        self.originContext = try container.decode(Nullable<CheckoutSessionOriginContext>.self, forKey: .originContext)
-        self.paymentIntent = try container.decode(Nullable<Expandable<PaymentIntent>>.self, forKey: .paymentIntent)
-        self.paymentLink = try container.decode(Nullable<Expandable<PaymentLink>>.self, forKey: .paymentLink)
-        self.paymentMethodCollection = try container.decode(Nullable<CheckoutSessionCustomerCreation>.self, forKey: .paymentMethodCollection)
-        self.paymentMethodConfigurationDetails = try container.decode(Nullable<CheckoutSessionPaymentMethodConfigurationDetails>.self, forKey: .paymentMethodConfigurationDetails)
-        self.paymentMethodOptions = try container.decode(Nullable<CheckoutSessionPaymentMethodOptions>.self, forKey: .paymentMethodOptions)
+        self.originContext = try container.decodeIfPresent(Nullable<CheckoutSessionOriginContext>.self, forKey: .originContext) ?? .null
+        self.paymentIntent = try container.decodeIfPresent(Nullable<Expandable<PaymentIntent>>.self, forKey: .paymentIntent) ?? .null
+        self.paymentLink = try container.decodeIfPresent(Nullable<Expandable<PaymentLink>>.self, forKey: .paymentLink) ?? .null
+        self.paymentMethodCollection = try container.decodeIfPresent(Nullable<CheckoutSessionCustomerCreation>.self, forKey: .paymentMethodCollection) ?? .null
+        self.paymentMethodConfigurationDetails = try container.decodeIfPresent(Nullable<PaymentMethodConfigBizPaymentMethodConfigurationDetails>.self, forKey: .paymentMethodConfigurationDetails) ?? .null
+        self.paymentMethodOptions = try container.decodeIfPresent(Nullable<CheckoutSessionPaymentMethodOptions>.self, forKey: .paymentMethodOptions) ?? .null
         self.paymentMethodTypes = try container.decode([String].self, forKey: .paymentMethodTypes)
         self.paymentStatus = try container.decode(CheckoutSessionPaymentStatus.self, forKey: .paymentStatus)
-        self.permissions = try container.decode(Nullable<CheckoutSessionPermissions>.self, forKey: .permissions)
+        self.permissions = try container.decodeIfPresent(Nullable<PaymentPagesCheckoutSessionPermissions>.self, forKey: .permissions) ?? .null
         self.phoneNumberCollection = try container.decodeIfPresent(PaymentPagesCheckoutSessionPhoneNumberCollection.self, forKey: .phoneNumberCollection)
         self.presentmentDetails = try container.decodeIfPresent(PaymentFlowsPaymentIntentPresentmentDetails.self, forKey: .presentmentDetails)
-        self.recoveredFrom = try container.decode(Nullable<String>.self, forKey: .recoveredFrom)
+        self.recoveredFrom = try container.decodeIfPresent(Nullable<String>.self, forKey: .recoveredFrom) ?? .null
         self.redirectOnCompletion = try container.decodeIfPresent(CheckoutSessionRedirectOnCompletion.self, forKey: .redirectOnCompletion)
         self.returnUrl = try container.decodeIfPresent(String.self, forKey: .returnUrl)
-        self.savedPaymentMethodOptions = try container.decode(Nullable<CheckoutSessionSavedPaymentMethodOptions>.self, forKey: .savedPaymentMethodOptions)
-        self.setupIntent = try container.decode(Nullable<Expandable<SetupIntent>>.self, forKey: .setupIntent)
-        self.shippingAddressCollection = try container.decode(Nullable<CheckoutSessionShippingAddressCollection>.self, forKey: .shippingAddressCollection)
-        self.shippingCost = try container.decode(Nullable<CheckoutSessionShippingCost>.self, forKey: .shippingCost)
+        self.savedPaymentMethodOptions = try container.decodeIfPresent(Nullable<PaymentPagesCheckoutSessionSavedPaymentMethodOptions>.self, forKey: .savedPaymentMethodOptions) ?? .null
+        self.setupIntent = try container.decodeIfPresent(Nullable<Expandable<SetupIntent>>.self, forKey: .setupIntent) ?? .null
+        self.shippingAddressCollection = try container.decodeIfPresent(Nullable<PaymentPagesCheckoutSessionShippingAddressCollection>.self, forKey: .shippingAddressCollection) ?? .null
+        self.shippingCost = try container.decodeIfPresent(Nullable<PaymentPagesCheckoutSessionShippingCost>.self, forKey: .shippingCost) ?? .null
         self.shippingOptions = try container.decode([PaymentPagesCheckoutSessionShippingOption].self, forKey: .shippingOptions)
-        self.status = try container.decode(Nullable<CheckoutSessionStatus>.self, forKey: .status)
-        self.submitType = try container.decode(Nullable<CheckoutSessionSubmitType>.self, forKey: .submitType)
-        self.subscription = try container.decode(Nullable<Expandable<Subscription>>.self, forKey: .subscription)
-        self.successUrl = try container.decode(Nullable<String>.self, forKey: .successUrl)
+        self.status = try container.decodeIfPresent(Nullable<CheckoutSessionStatus>.self, forKey: .status) ?? .null
+        self.submitType = try container.decodeIfPresent(Nullable<CheckoutSessionSubmitType>.self, forKey: .submitType) ?? .null
+        self.subscription = try container.decodeIfPresent(Nullable<Expandable<Subscription>>.self, forKey: .subscription) ?? .null
+        self.successUrl = try container.decodeIfPresent(Nullable<String>.self, forKey: .successUrl) ?? .null
         self.taxIdCollection = try container.decodeIfPresent(PaymentPagesCheckoutSessionTaxIdCollection.self, forKey: .taxIdCollection)
-        self.totalDetails = try container.decode(Nullable<CheckoutSessionTotalDetails>.self, forKey: .totalDetails)
-        self.uiMode = try container.decode(Nullable<CheckoutSessionUiMode>.self, forKey: .uiMode)
-        self.url = try container.decode(Nullable<String>.self, forKey: .url)
-        self.walletOptions = try container.decode(Nullable<CheckoutSessionWalletOptions>.self, forKey: .walletOptions)
+        self.totalDetails = try container.decodeIfPresent(Nullable<PaymentPagesCheckoutSessionTotalDetails>.self, forKey: .totalDetails) ?? .null
+        self.uiMode = try container.decodeIfPresent(Nullable<CheckoutSessionUiMode>.self, forKey: .uiMode) ?? .null
+        self.url = try container.decodeIfPresent(Nullable<String>.self, forKey: .url) ?? .null
+        self.walletOptions = try container.decodeIfPresent(Nullable<CheckoutSessionWalletOptions>.self, forKey: .walletOptions) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -1636,9 +1296,9 @@ public struct CheckoutAcssDebitMandateOptions: Sendable, Codable, Equatable, Has
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.customMandateUrl = try container.decodeIfPresent(String.self, forKey: .customMandateUrl)
         self.defaultFor = try container.decodeIfPresent([CheckoutAcssDebitMandateOptionsDefaultForItem].self, forKey: .defaultFor)
-        self.intervalDescription = try container.decode(Nullable<String>.self, forKey: .intervalDescription)
-        self.paymentSchedule = try container.decode(Nullable<CheckoutAcssDebitMandateOptionsPaymentSchedule>.self, forKey: .paymentSchedule)
-        self.transactionType = try container.decode(Nullable<CheckoutAcssDebitMandateOptionsTransactionType>.self, forKey: .transactionType)
+        self.intervalDescription = try container.decodeIfPresent(Nullable<String>.self, forKey: .intervalDescription) ?? .null
+        self.paymentSchedule = try container.decodeIfPresent(Nullable<CheckoutAcssDebitMandateOptionsPaymentSchedule>.self, forKey: .paymentSchedule) ?? .null
+        self.transactionType = try container.decodeIfPresent(Nullable<CheckoutAcssDebitMandateOptionsTransactionType>.self, forKey: .transactionType) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -2757,7 +2417,7 @@ public struct CheckoutCustomerBalanceBankTransferPaymentMethodOptions: Sendable,
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.euBankTransfer = try container.decodeIfPresent(PaymentMethodOptionsCustomerBalanceEuBankAccount.self, forKey: .euBankTransfer)
         self.requestedAddressTypes = try container.decodeIfPresent([CheckoutCustomerBalanceBankTransferPaymentMethodOptionsRequestedAddressTypesItem].self, forKey: .requestedAddressTypes)
-        self.type = try container.decode(Nullable<CheckoutCustomerBalanceBankTransferPaymentMethodOptionsType>.self, forKey: .type)
+        self.type = try container.decodeIfPresent(Nullable<CheckoutCustomerBalanceBankTransferPaymentMethodOptionsType>.self, forKey: .type) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -2839,7 +2499,7 @@ public struct CheckoutCustomerBalancePaymentMethodOptions: Sendable, Codable, Eq
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.bankTransfer = try container.decodeIfPresent(CheckoutCustomerBalanceBankTransferPaymentMethodOptions.self, forKey: .bankTransfer)
-        self.fundingType = try container.decode(Nullable<CheckoutCustomerBalancePaymentMethodOptionsFundingType>.self, forKey: .fundingType)
+        self.fundingType = try container.decodeIfPresent(Nullable<CheckoutCustomerBalancePaymentMethodOptionsFundingType>.self, forKey: .fundingType) ?? .null
         self.setupFutureUsage = try container.decodeIfPresent(CheckoutAffirmPaymentMethodOptionsSetupFutureUsage.self, forKey: .setupFutureUsage)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
@@ -3014,7 +2674,7 @@ public struct CheckoutFinancialConnectionsPaymentMethodOptions: Sendable, Codabl
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.filters = try container.decodeIfPresent(CheckoutFinancialConnectionsPaymentMethodOptionsFilters.self, forKey: .filters)
         self.permissions = try container.decodeIfPresent([CheckoutFinancialConnectionsPaymentMethodOptionsPermissionsItem].self, forKey: .permissions)
-        self.prefetch = try container.decode(Nullable<[CheckoutFinancialConnectionsPaymentMethodOptionsPrefetchItem]>.self, forKey: .prefetch)
+        self.prefetch = try container.decodeIfPresent(Nullable<[CheckoutFinancialConnectionsPaymentMethodOptionsPrefetchItem]>.self, forKey: .prefetch) ?? .null
         self.returnUrl = try container.decodeIfPresent(String.self, forKey: .returnUrl)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
@@ -3401,7 +3061,7 @@ public struct CheckoutKonbiniPaymentMethodOptions: Sendable, Codable, Equatable,
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.expiresAfterDays = try container.decode(Nullable<Int>.self, forKey: .expiresAfterDays)
+        self.expiresAfterDays = try container.decodeIfPresent(Nullable<Int>.self, forKey: .expiresAfterDays) ?? .null
         self.setupFutureUsage = try container.decodeIfPresent(CheckoutAffirmPaymentMethodOptionsSetupFutureUsage.self, forKey: .setupFutureUsage)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
@@ -4023,8 +3683,8 @@ public struct CheckoutPaypalPaymentMethodOptions: Sendable, Codable, Equatable, 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.captureMethod = try container.decodeIfPresent(CheckoutAffirmPaymentMethodOptionsCaptureMethod.self, forKey: .captureMethod)
-        self.preferredLocale = try container.decode(Nullable<String>.self, forKey: .preferredLocale)
-        self.reference = try container.decode(Nullable<String>.self, forKey: .reference)
+        self.preferredLocale = try container.decodeIfPresent(Nullable<String>.self, forKey: .preferredLocale) ?? .null
+        self.reference = try container.decodeIfPresent(Nullable<String>.self, forKey: .reference) ?? .null
         self.setupFutureUsage = try container.decodeIfPresent(CheckoutAmazonPayPaymentMethodOptionsSetupFutureUsage.self, forKey: .setupFutureUsage)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
@@ -4161,7 +3821,7 @@ public struct CheckoutPixPaymentMethodOptions: Sendable, Codable, Equatable, Has
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.amountIncludesIof = try container.decodeIfPresent(CheckoutPixPaymentMethodOptionsAmountIncludesIof.self, forKey: .amountIncludesIof)
-        self.expiresAfterSeconds = try container.decode(Nullable<Int>.self, forKey: .expiresAfterSeconds)
+        self.expiresAfterSeconds = try container.decodeIfPresent(Nullable<Int>.self, forKey: .expiresAfterSeconds) ?? .null
         self.mandateOptions = try container.decodeIfPresent(PaymentMethodOptionsMandateOptionsPix.self, forKey: .mandateOptions)
         self.setupFutureUsage = try container.decodeIfPresent(CheckoutAmazonPayPaymentMethodOptionsSetupFutureUsage.self, forKey: .setupFutureUsage)
         var captured: [String: JSONValue] = [:]
@@ -4463,6 +4123,320 @@ public struct CheckoutSequraPaymentMethodOptions: Sendable, Codable, Equatable, 
     }
 }
 
+public struct CheckoutSessionPaymentMethodOptions: Sendable, Codable, Equatable, Hashable {
+    public var acssDebit: CheckoutAcssDebitPaymentMethodOptions?
+    public var affirm: CheckoutAffirmPaymentMethodOptions?
+    public var afterpayClearpay: CheckoutAfterpayClearpayPaymentMethodOptions?
+    public var alipay: CheckoutAlipayPaymentMethodOptions?
+    public var alma: CheckoutAlmaPaymentMethodOptions?
+    public var amazonPay: CheckoutAmazonPayPaymentMethodOptions?
+    public var auBecsDebit: CheckoutAuBecsDebitPaymentMethodOptions?
+    public var bacsDebit: CheckoutBacsDebitPaymentMethodOptions?
+    public var bancontact: CheckoutBancontactPaymentMethodOptions?
+    public var billie: CheckoutBilliePaymentMethodOptions?
+    public var boleto: CheckoutBoletoPaymentMethodOptions?
+    public var card: CheckoutCardPaymentMethodOptions?
+    public var cashapp: CheckoutCashappPaymentMethodOptions?
+    public var customerBalance: CheckoutCustomerBalancePaymentMethodOptions?
+    public var eps: CheckoutEpsPaymentMethodOptions?
+    public var fpx: CheckoutFpxPaymentMethodOptions?
+    public var giropay: CheckoutGiropayPaymentMethodOptions?
+    public var grabpay: CheckoutGrabPayPaymentMethodOptions?
+    public var ideal: CheckoutIdealPaymentMethodOptions?
+    public var kakaoPay: CheckoutKakaoPayPaymentMethodOptions?
+    public var klarna: CheckoutKlarnaPaymentMethodOptions?
+    public var konbini: CheckoutKonbiniPaymentMethodOptions?
+    public var krCard: CheckoutKrCardPaymentMethodOptions?
+    public var link: CheckoutLinkPaymentMethodOptions?
+    public var mobilepay: CheckoutMobilepayPaymentMethodOptions?
+    public var multibanco: CheckoutMultibancoPaymentMethodOptions?
+    public var naverPay: CheckoutNaverPayPaymentMethodOptions?
+    public var oxxo: CheckoutOxxoPaymentMethodOptions?
+    public var p24: CheckoutP24PaymentMethodOptions?
+    public var payco: CheckoutPaycoPaymentMethodOptions?
+    public var paynow: CheckoutPaynowPaymentMethodOptions?
+    public var paypal: CheckoutPaypalPaymentMethodOptions?
+    public var payto: CheckoutPaytoPaymentMethodOptions?
+    public var pix: CheckoutPixPaymentMethodOptions?
+    public var revolutPay: CheckoutRevolutPayPaymentMethodOptions?
+    public var samsungPay: CheckoutSamsungPayPaymentMethodOptions?
+    public var satispay: CheckoutSatispayPaymentMethodOptions?
+    public var scalapay: CheckoutScalapayPaymentMethodOptions?
+    public var sepaDebit: CheckoutSepaDebitPaymentMethodOptions?
+    public var sequra: CheckoutSequraPaymentMethodOptions?
+    public var sofort: CheckoutSofortPaymentMethodOptions?
+    public var sunbit: CheckoutSunbitPaymentMethodOptions?
+    public var swish: CheckoutSwishPaymentMethodOptions?
+    public var twint: CheckoutTwintPaymentMethodOptions?
+    public var upi: CheckoutUpiPaymentMethodOptions?
+    public var usBankAccount: CheckoutUsBankAccountPaymentMethodOptions?
+    public var wechatPay: CheckoutWechatPayPaymentMethodOptions?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(acssDebit: CheckoutAcssDebitPaymentMethodOptions? = nil, affirm: CheckoutAffirmPaymentMethodOptions? = nil, afterpayClearpay: CheckoutAfterpayClearpayPaymentMethodOptions? = nil, alipay: CheckoutAlipayPaymentMethodOptions? = nil, alma: CheckoutAlmaPaymentMethodOptions? = nil, amazonPay: CheckoutAmazonPayPaymentMethodOptions? = nil, auBecsDebit: CheckoutAuBecsDebitPaymentMethodOptions? = nil, bacsDebit: CheckoutBacsDebitPaymentMethodOptions? = nil, bancontact: CheckoutBancontactPaymentMethodOptions? = nil, billie: CheckoutBilliePaymentMethodOptions? = nil, boleto: CheckoutBoletoPaymentMethodOptions? = nil, card: CheckoutCardPaymentMethodOptions? = nil, cashapp: CheckoutCashappPaymentMethodOptions? = nil, customerBalance: CheckoutCustomerBalancePaymentMethodOptions? = nil, eps: CheckoutEpsPaymentMethodOptions? = nil, fpx: CheckoutFpxPaymentMethodOptions? = nil, giropay: CheckoutGiropayPaymentMethodOptions? = nil, grabpay: CheckoutGrabPayPaymentMethodOptions? = nil, ideal: CheckoutIdealPaymentMethodOptions? = nil, kakaoPay: CheckoutKakaoPayPaymentMethodOptions? = nil, klarna: CheckoutKlarnaPaymentMethodOptions? = nil, konbini: CheckoutKonbiniPaymentMethodOptions? = nil, krCard: CheckoutKrCardPaymentMethodOptions? = nil, link: CheckoutLinkPaymentMethodOptions? = nil, mobilepay: CheckoutMobilepayPaymentMethodOptions? = nil, multibanco: CheckoutMultibancoPaymentMethodOptions? = nil, naverPay: CheckoutNaverPayPaymentMethodOptions? = nil, oxxo: CheckoutOxxoPaymentMethodOptions? = nil, p24: CheckoutP24PaymentMethodOptions? = nil, payco: CheckoutPaycoPaymentMethodOptions? = nil, paynow: CheckoutPaynowPaymentMethodOptions? = nil, paypal: CheckoutPaypalPaymentMethodOptions? = nil, payto: CheckoutPaytoPaymentMethodOptions? = nil, pix: CheckoutPixPaymentMethodOptions? = nil, revolutPay: CheckoutRevolutPayPaymentMethodOptions? = nil, samsungPay: CheckoutSamsungPayPaymentMethodOptions? = nil, satispay: CheckoutSatispayPaymentMethodOptions? = nil, scalapay: CheckoutScalapayPaymentMethodOptions? = nil, sepaDebit: CheckoutSepaDebitPaymentMethodOptions? = nil, sequra: CheckoutSequraPaymentMethodOptions? = nil, sofort: CheckoutSofortPaymentMethodOptions? = nil, sunbit: CheckoutSunbitPaymentMethodOptions? = nil, swish: CheckoutSwishPaymentMethodOptions? = nil, twint: CheckoutTwintPaymentMethodOptions? = nil, upi: CheckoutUpiPaymentMethodOptions? = nil, usBankAccount: CheckoutUsBankAccountPaymentMethodOptions? = nil, wechatPay: CheckoutWechatPayPaymentMethodOptions? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.acssDebit = acssDebit
+        self.affirm = affirm
+        self.afterpayClearpay = afterpayClearpay
+        self.alipay = alipay
+        self.alma = alma
+        self.amazonPay = amazonPay
+        self.auBecsDebit = auBecsDebit
+        self.bacsDebit = bacsDebit
+        self.bancontact = bancontact
+        self.billie = billie
+        self.boleto = boleto
+        self.card = card
+        self.cashapp = cashapp
+        self.customerBalance = customerBalance
+        self.eps = eps
+        self.fpx = fpx
+        self.giropay = giropay
+        self.grabpay = grabpay
+        self.ideal = ideal
+        self.kakaoPay = kakaoPay
+        self.klarna = klarna
+        self.konbini = konbini
+        self.krCard = krCard
+        self.link = link
+        self.mobilepay = mobilepay
+        self.multibanco = multibanco
+        self.naverPay = naverPay
+        self.oxxo = oxxo
+        self.p24 = p24
+        self.payco = payco
+        self.paynow = paynow
+        self.paypal = paypal
+        self.payto = payto
+        self.pix = pix
+        self.revolutPay = revolutPay
+        self.samsungPay = samsungPay
+        self.satispay = satispay
+        self.scalapay = scalapay
+        self.sepaDebit = sepaDebit
+        self.sequra = sequra
+        self.sofort = sofort
+        self.sunbit = sunbit
+        self.swish = swish
+        self.twint = twint
+        self.upi = upi
+        self.usBankAccount = usBankAccount
+        self.wechatPay = wechatPay
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case acssDebit = "acss_debit"
+        case affirm
+        case afterpayClearpay = "afterpay_clearpay"
+        case alipay
+        case alma
+        case amazonPay = "amazon_pay"
+        case auBecsDebit = "au_becs_debit"
+        case bacsDebit = "bacs_debit"
+        case bancontact
+        case billie
+        case boleto
+        case card
+        case cashapp
+        case customerBalance = "customer_balance"
+        case eps
+        case fpx
+        case giropay
+        case grabpay
+        case ideal
+        case kakaoPay = "kakao_pay"
+        case klarna
+        case konbini
+        case krCard = "kr_card"
+        case link
+        case mobilepay
+        case multibanco
+        case naverPay = "naver_pay"
+        case oxxo
+        case p24
+        case payco
+        case paynow
+        case paypal
+        case payto
+        case pix
+        case revolutPay = "revolut_pay"
+        case samsungPay = "samsung_pay"
+        case satispay
+        case scalapay
+        case sepaDebit = "sepa_debit"
+        case sequra
+        case sofort
+        case sunbit
+        case swish
+        case twint
+        case upi
+        case usBankAccount = "us_bank_account"
+        case wechatPay = "wechat_pay"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.acssDebit = try container.decodeIfPresent(CheckoutAcssDebitPaymentMethodOptions.self, forKey: .acssDebit)
+        self.affirm = try container.decodeIfPresent(CheckoutAffirmPaymentMethodOptions.self, forKey: .affirm)
+        self.afterpayClearpay = try container.decodeIfPresent(CheckoutAfterpayClearpayPaymentMethodOptions.self, forKey: .afterpayClearpay)
+        self.alipay = try container.decodeIfPresent(CheckoutAlipayPaymentMethodOptions.self, forKey: .alipay)
+        self.alma = try container.decodeIfPresent(CheckoutAlmaPaymentMethodOptions.self, forKey: .alma)
+        self.amazonPay = try container.decodeIfPresent(CheckoutAmazonPayPaymentMethodOptions.self, forKey: .amazonPay)
+        self.auBecsDebit = try container.decodeIfPresent(CheckoutAuBecsDebitPaymentMethodOptions.self, forKey: .auBecsDebit)
+        self.bacsDebit = try container.decodeIfPresent(CheckoutBacsDebitPaymentMethodOptions.self, forKey: .bacsDebit)
+        self.bancontact = try container.decodeIfPresent(CheckoutBancontactPaymentMethodOptions.self, forKey: .bancontact)
+        self.billie = try container.decodeIfPresent(CheckoutBilliePaymentMethodOptions.self, forKey: .billie)
+        self.boleto = try container.decodeIfPresent(CheckoutBoletoPaymentMethodOptions.self, forKey: .boleto)
+        self.card = try container.decodeIfPresent(CheckoutCardPaymentMethodOptions.self, forKey: .card)
+        self.cashapp = try container.decodeIfPresent(CheckoutCashappPaymentMethodOptions.self, forKey: .cashapp)
+        self.customerBalance = try container.decodeIfPresent(CheckoutCustomerBalancePaymentMethodOptions.self, forKey: .customerBalance)
+        self.eps = try container.decodeIfPresent(CheckoutEpsPaymentMethodOptions.self, forKey: .eps)
+        self.fpx = try container.decodeIfPresent(CheckoutFpxPaymentMethodOptions.self, forKey: .fpx)
+        self.giropay = try container.decodeIfPresent(CheckoutGiropayPaymentMethodOptions.self, forKey: .giropay)
+        self.grabpay = try container.decodeIfPresent(CheckoutGrabPayPaymentMethodOptions.self, forKey: .grabpay)
+        self.ideal = try container.decodeIfPresent(CheckoutIdealPaymentMethodOptions.self, forKey: .ideal)
+        self.kakaoPay = try container.decodeIfPresent(CheckoutKakaoPayPaymentMethodOptions.self, forKey: .kakaoPay)
+        self.klarna = try container.decodeIfPresent(CheckoutKlarnaPaymentMethodOptions.self, forKey: .klarna)
+        self.konbini = try container.decodeIfPresent(CheckoutKonbiniPaymentMethodOptions.self, forKey: .konbini)
+        self.krCard = try container.decodeIfPresent(CheckoutKrCardPaymentMethodOptions.self, forKey: .krCard)
+        self.link = try container.decodeIfPresent(CheckoutLinkPaymentMethodOptions.self, forKey: .link)
+        self.mobilepay = try container.decodeIfPresent(CheckoutMobilepayPaymentMethodOptions.self, forKey: .mobilepay)
+        self.multibanco = try container.decodeIfPresent(CheckoutMultibancoPaymentMethodOptions.self, forKey: .multibanco)
+        self.naverPay = try container.decodeIfPresent(CheckoutNaverPayPaymentMethodOptions.self, forKey: .naverPay)
+        self.oxxo = try container.decodeIfPresent(CheckoutOxxoPaymentMethodOptions.self, forKey: .oxxo)
+        self.p24 = try container.decodeIfPresent(CheckoutP24PaymentMethodOptions.self, forKey: .p24)
+        self.payco = try container.decodeIfPresent(CheckoutPaycoPaymentMethodOptions.self, forKey: .payco)
+        self.paynow = try container.decodeIfPresent(CheckoutPaynowPaymentMethodOptions.self, forKey: .paynow)
+        self.paypal = try container.decodeIfPresent(CheckoutPaypalPaymentMethodOptions.self, forKey: .paypal)
+        self.payto = try container.decodeIfPresent(CheckoutPaytoPaymentMethodOptions.self, forKey: .payto)
+        self.pix = try container.decodeIfPresent(CheckoutPixPaymentMethodOptions.self, forKey: .pix)
+        self.revolutPay = try container.decodeIfPresent(CheckoutRevolutPayPaymentMethodOptions.self, forKey: .revolutPay)
+        self.samsungPay = try container.decodeIfPresent(CheckoutSamsungPayPaymentMethodOptions.self, forKey: .samsungPay)
+        self.satispay = try container.decodeIfPresent(CheckoutSatispayPaymentMethodOptions.self, forKey: .satispay)
+        self.scalapay = try container.decodeIfPresent(CheckoutScalapayPaymentMethodOptions.self, forKey: .scalapay)
+        self.sepaDebit = try container.decodeIfPresent(CheckoutSepaDebitPaymentMethodOptions.self, forKey: .sepaDebit)
+        self.sequra = try container.decodeIfPresent(CheckoutSequraPaymentMethodOptions.self, forKey: .sequra)
+        self.sofort = try container.decodeIfPresent(CheckoutSofortPaymentMethodOptions.self, forKey: .sofort)
+        self.sunbit = try container.decodeIfPresent(CheckoutSunbitPaymentMethodOptions.self, forKey: .sunbit)
+        self.swish = try container.decodeIfPresent(CheckoutSwishPaymentMethodOptions.self, forKey: .swish)
+        self.twint = try container.decodeIfPresent(CheckoutTwintPaymentMethodOptions.self, forKey: .twint)
+        self.upi = try container.decodeIfPresent(CheckoutUpiPaymentMethodOptions.self, forKey: .upi)
+        self.usBankAccount = try container.decodeIfPresent(CheckoutUsBankAccountPaymentMethodOptions.self, forKey: .usBankAccount)
+        self.wechatPay = try container.decodeIfPresent(CheckoutWechatPayPaymentMethodOptions.self, forKey: .wechatPay)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .acssDebit, .affirm, .afterpayClearpay, .alipay, .alma, .amazonPay, .auBecsDebit, .bacsDebit, .bancontact, .billie, .boleto, .card, .cashapp, .customerBalance, .eps, .fpx, .giropay, .grabpay, .ideal, .kakaoPay, .klarna, .konbini, .krCard, .link, .mobilepay, .multibanco, .naverPay, .oxxo, .p24, .payco, .paynow, .paypal, .payto, .pix, .revolutPay, .samsungPay, .satispay, .scalapay, .sepaDebit, .sequra, .sofort, .sunbit, .swish, .twint, .upi, .usBankAccount, .wechatPay: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.acssDebit, forKey: .acssDebit)
+        try container.encodeIfPresent(self.affirm, forKey: .affirm)
+        try container.encodeIfPresent(self.afterpayClearpay, forKey: .afterpayClearpay)
+        try container.encodeIfPresent(self.alipay, forKey: .alipay)
+        try container.encodeIfPresent(self.alma, forKey: .alma)
+        try container.encodeIfPresent(self.amazonPay, forKey: .amazonPay)
+        try container.encodeIfPresent(self.auBecsDebit, forKey: .auBecsDebit)
+        try container.encodeIfPresent(self.bacsDebit, forKey: .bacsDebit)
+        try container.encodeIfPresent(self.bancontact, forKey: .bancontact)
+        try container.encodeIfPresent(self.billie, forKey: .billie)
+        try container.encodeIfPresent(self.boleto, forKey: .boleto)
+        try container.encodeIfPresent(self.card, forKey: .card)
+        try container.encodeIfPresent(self.cashapp, forKey: .cashapp)
+        try container.encodeIfPresent(self.customerBalance, forKey: .customerBalance)
+        try container.encodeIfPresent(self.eps, forKey: .eps)
+        try container.encodeIfPresent(self.fpx, forKey: .fpx)
+        try container.encodeIfPresent(self.giropay, forKey: .giropay)
+        try container.encodeIfPresent(self.grabpay, forKey: .grabpay)
+        try container.encodeIfPresent(self.ideal, forKey: .ideal)
+        try container.encodeIfPresent(self.kakaoPay, forKey: .kakaoPay)
+        try container.encodeIfPresent(self.klarna, forKey: .klarna)
+        try container.encodeIfPresent(self.konbini, forKey: .konbini)
+        try container.encodeIfPresent(self.krCard, forKey: .krCard)
+        try container.encodeIfPresent(self.link, forKey: .link)
+        try container.encodeIfPresent(self.mobilepay, forKey: .mobilepay)
+        try container.encodeIfPresent(self.multibanco, forKey: .multibanco)
+        try container.encodeIfPresent(self.naverPay, forKey: .naverPay)
+        try container.encodeIfPresent(self.oxxo, forKey: .oxxo)
+        try container.encodeIfPresent(self.p24, forKey: .p24)
+        try container.encodeIfPresent(self.payco, forKey: .payco)
+        try container.encodeIfPresent(self.paynow, forKey: .paynow)
+        try container.encodeIfPresent(self.paypal, forKey: .paypal)
+        try container.encodeIfPresent(self.payto, forKey: .payto)
+        try container.encodeIfPresent(self.pix, forKey: .pix)
+        try container.encodeIfPresent(self.revolutPay, forKey: .revolutPay)
+        try container.encodeIfPresent(self.samsungPay, forKey: .samsungPay)
+        try container.encodeIfPresent(self.satispay, forKey: .satispay)
+        try container.encodeIfPresent(self.scalapay, forKey: .scalapay)
+        try container.encodeIfPresent(self.sepaDebit, forKey: .sepaDebit)
+        try container.encodeIfPresent(self.sequra, forKey: .sequra)
+        try container.encodeIfPresent(self.sofort, forKey: .sofort)
+        try container.encodeIfPresent(self.sunbit, forKey: .sunbit)
+        try container.encodeIfPresent(self.swish, forKey: .swish)
+        try container.encodeIfPresent(self.twint, forKey: .twint)
+        try container.encodeIfPresent(self.upi, forKey: .upi)
+        try container.encodeIfPresent(self.usBankAccount, forKey: .usBankAccount)
+        try container.encodeIfPresent(self.wechatPay, forKey: .wechatPay)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionWalletOptions: Sendable, Codable, Equatable, Hashable {
+    public var link: CheckoutLinkWalletOptions?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(link: CheckoutLinkWalletOptions? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.link = link
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case link
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.link = try container.decodeIfPresent(CheckoutLinkWalletOptions.self, forKey: .link)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .link: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.link, forKey: .link)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
 public struct CheckoutSofortPaymentMethodOptions: Sendable, Codable, Equatable, Hashable {
     public var setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage?
     /// Fields present in the payload that the pinned spec does not
@@ -4569,7 +4543,7 @@ public struct CheckoutSwishPaymentMethodOptions: Sendable, Codable, Equatable, H
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.reference = try container.decode(Nullable<String>.self, forKey: .reference)
+        self.reference = try container.decodeIfPresent(Nullable<String>.self, forKey: .reference) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -4834,8 +4808,8 @@ public struct CheckoutWechatPayPaymentMethodOptions: Sendable, Codable, Equatabl
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.appId = try container.decode(Nullable<String>.self, forKey: .appId)
-        self.client = try container.decode(Nullable<CheckoutWechatPayPaymentMethodOptionsClient>.self, forKey: .client)
+        self.appId = try container.decodeIfPresent(Nullable<String>.self, forKey: .appId) ?? .null
+        self.client = try container.decodeIfPresent(Nullable<CheckoutWechatPayPaymentMethodOptionsClient>.self, forKey: .client) ?? .null
         self.setupFutureUsage = try container.decodeIfPresent(CheckoutAffirmPaymentMethodOptionsSetupFutureUsage.self, forKey: .setupFutureUsage)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {

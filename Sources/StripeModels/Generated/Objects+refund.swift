@@ -233,30 +233,30 @@ public struct Refund: Sendable, Codable, Equatable, Hashable, StripeIdentified {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.amount = try container.decode(Int.self, forKey: .amount)
-        self.balanceTransaction = try container.decode(Nullable<Expandable<BalanceTransaction>>.self, forKey: .balanceTransaction)
-        self.charge = try container.decode(Nullable<Expandable<Charge>>.self, forKey: .charge)
+        self.balanceTransaction = try container.decodeIfPresent(Nullable<Expandable<BalanceTransaction>>.self, forKey: .balanceTransaction) ?? .null
+        self.charge = try container.decodeIfPresent(Nullable<Expandable<Charge>>.self, forKey: .charge) ?? .null
         self.created = try container.decode(StripeTimestamp.self, forKey: .created)
         self.currency = try container.decode(String.self, forKey: .currency)
-        self.customer = try container.decode(Nullable<RefundCustomer>.self, forKey: .customer)
-        self.customerAccount = try container.decode(Nullable<String>.self, forKey: .customerAccount)
+        self.customer = try container.decodeIfPresent(Nullable<RefundCustomer>.self, forKey: .customer) ?? .null
+        self.customerAccount = try container.decodeIfPresent(Nullable<String>.self, forKey: .customerAccount) ?? .null
         self.description = try container.decodeIfPresent(String.self, forKey: .description)
         self.destinationDetails = try container.decodeIfPresent(RefundDestinationDetails.self, forKey: .destinationDetails)
         self.failureBalanceTransaction = try container.decodeIfPresent(Expandable<BalanceTransaction>.self, forKey: .failureBalanceTransaction)
         self.failureReason = try container.decodeIfPresent(String.self, forKey: .failureReason)
         self.id = try container.decode(String.self, forKey: .id)
         self.instructionsEmail = try container.decodeIfPresent(String.self, forKey: .instructionsEmail)
-        self.metadata = try container.decode(Nullable<[String: String]>.self, forKey: .metadata)
+        self.metadata = try container.decodeIfPresent(Nullable<[String: String]>.self, forKey: .metadata) ?? .null
         self.nextAction = try container.decodeIfPresent(RefundNextAction.self, forKey: .nextAction)
         self.object = try container.decode(RefundObject.self, forKey: .object)
-        self.paymentIntent = try container.decode(Nullable<Expandable<PaymentIntent>>.self, forKey: .paymentIntent)
-        self.paymentMethod = try container.decode(Nullable<Expandable<PaymentMethod>>.self, forKey: .paymentMethod)
+        self.paymentIntent = try container.decodeIfPresent(Nullable<Expandable<PaymentIntent>>.self, forKey: .paymentIntent) ?? .null
+        self.paymentMethod = try container.decodeIfPresent(Nullable<Expandable<PaymentMethod>>.self, forKey: .paymentMethod) ?? .null
         self.pendingReason = try container.decodeIfPresent(RefundPendingReason.self, forKey: .pendingReason)
         self.presentmentDetails = try container.decodeIfPresent(PaymentFlowsPaymentIntentPresentmentDetails.self, forKey: .presentmentDetails)
-        self.reason = try container.decode(Nullable<RefundReason>.self, forKey: .reason)
-        self.receiptNumber = try container.decode(Nullable<String>.self, forKey: .receiptNumber)
-        self.sourceTransferReversal = try container.decode(Nullable<Expandable<TransferReversal>>.self, forKey: .sourceTransferReversal)
-        self.status = try container.decode(Nullable<String>.self, forKey: .status)
-        self.transferReversal = try container.decode(Nullable<Expandable<TransferReversal>>.self, forKey: .transferReversal)
+        self.reason = try container.decodeIfPresent(Nullable<RefundReason>.self, forKey: .reason) ?? .null
+        self.receiptNumber = try container.decodeIfPresent(Nullable<String>.self, forKey: .receiptNumber) ?? .null
+        self.sourceTransferReversal = try container.decodeIfPresent(Nullable<Expandable<TransferReversal>>.self, forKey: .sourceTransferReversal) ?? .null
+        self.status = try container.decodeIfPresent(Nullable<String>.self, forKey: .status) ?? .null
+        self.transferReversal = try container.decodeIfPresent(Nullable<Expandable<TransferReversal>>.self, forKey: .transferReversal) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -673,8 +673,8 @@ public struct RefundDestinationDetailsAfterpayClearpay: Sendable, Codable, Equat
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.reference = try container.decode(Nullable<String>.self, forKey: .reference)
-        self.referenceStatus = try container.decode(Nullable<String>.self, forKey: .referenceStatus)
+        self.reference = try container.decodeIfPresent(Nullable<String>.self, forKey: .reference) ?? .null
+        self.referenceStatus = try container.decodeIfPresent(Nullable<String>.self, forKey: .referenceStatus) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -723,9 +723,9 @@ public struct RefundDestinationDetailsBlik: Sendable, Codable, Equatable, Hashab
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.networkDeclineCode = try container.decode(Nullable<String>.self, forKey: .networkDeclineCode)
-        self.reference = try container.decode(Nullable<String>.self, forKey: .reference)
-        self.referenceStatus = try container.decode(Nullable<String>.self, forKey: .referenceStatus)
+        self.networkDeclineCode = try container.decodeIfPresent(Nullable<String>.self, forKey: .networkDeclineCode) ?? .null
+        self.reference = try container.decodeIfPresent(Nullable<String>.self, forKey: .reference) ?? .null
+        self.referenceStatus = try container.decodeIfPresent(Nullable<String>.self, forKey: .referenceStatus) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -772,8 +772,8 @@ public struct RefundDestinationDetailsBrBankTransfer: Sendable, Codable, Equatab
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.reference = try container.decode(Nullable<String>.self, forKey: .reference)
-        self.referenceStatus = try container.decode(Nullable<String>.self, forKey: .referenceStatus)
+        self.reference = try container.decodeIfPresent(Nullable<String>.self, forKey: .reference) ?? .null
+        self.referenceStatus = try container.decodeIfPresent(Nullable<String>.self, forKey: .referenceStatus) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -910,7 +910,7 @@ public struct RefundDestinationDetailsCrypto: Sendable, Codable, Equatable, Hash
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.reference = try container.decode(Nullable<String>.self, forKey: .reference)
+        self.reference = try container.decodeIfPresent(Nullable<String>.self, forKey: .reference) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -955,8 +955,8 @@ public struct RefundDestinationDetailsEuBankTransfer: Sendable, Codable, Equatab
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.reference = try container.decode(Nullable<String>.self, forKey: .reference)
-        self.referenceStatus = try container.decode(Nullable<String>.self, forKey: .referenceStatus)
+        self.reference = try container.decodeIfPresent(Nullable<String>.self, forKey: .reference) ?? .null
+        self.referenceStatus = try container.decodeIfPresent(Nullable<String>.self, forKey: .referenceStatus) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -1002,8 +1002,8 @@ public struct RefundDestinationDetailsGbBankTransfer: Sendable, Codable, Equatab
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.reference = try container.decode(Nullable<String>.self, forKey: .reference)
-        self.referenceStatus = try container.decode(Nullable<String>.self, forKey: .referenceStatus)
+        self.reference = try container.decodeIfPresent(Nullable<String>.self, forKey: .reference) ?? .null
+        self.referenceStatus = try container.decodeIfPresent(Nullable<String>.self, forKey: .referenceStatus) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -1049,8 +1049,8 @@ public struct RefundDestinationDetailsJpBankTransfer: Sendable, Codable, Equatab
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.reference = try container.decode(Nullable<String>.self, forKey: .reference)
-        self.referenceStatus = try container.decode(Nullable<String>.self, forKey: .referenceStatus)
+        self.reference = try container.decodeIfPresent(Nullable<String>.self, forKey: .reference) ?? .null
+        self.referenceStatus = try container.decodeIfPresent(Nullable<String>.self, forKey: .referenceStatus) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -1096,8 +1096,8 @@ public struct RefundDestinationDetailsKlarna: Sendable, Codable, Equatable, Hash
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.reference = try container.decode(Nullable<String>.self, forKey: .reference)
-        self.referenceStatus = try container.decode(Nullable<String>.self, forKey: .referenceStatus)
+        self.reference = try container.decodeIfPresent(Nullable<String>.self, forKey: .reference) ?? .null
+        self.referenceStatus = try container.decodeIfPresent(Nullable<String>.self, forKey: .referenceStatus) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -1143,8 +1143,8 @@ public struct RefundDestinationDetailsMbWay: Sendable, Codable, Equatable, Hasha
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.reference = try container.decode(Nullable<String>.self, forKey: .reference)
-        self.referenceStatus = try container.decode(Nullable<String>.self, forKey: .referenceStatus)
+        self.reference = try container.decodeIfPresent(Nullable<String>.self, forKey: .reference) ?? .null
+        self.referenceStatus = try container.decodeIfPresent(Nullable<String>.self, forKey: .referenceStatus) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -1190,8 +1190,8 @@ public struct RefundDestinationDetailsMultibanco: Sendable, Codable, Equatable, 
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.reference = try container.decode(Nullable<String>.self, forKey: .reference)
-        self.referenceStatus = try container.decode(Nullable<String>.self, forKey: .referenceStatus)
+        self.reference = try container.decodeIfPresent(Nullable<String>.self, forKey: .reference) ?? .null
+        self.referenceStatus = try container.decodeIfPresent(Nullable<String>.self, forKey: .referenceStatus) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -1237,8 +1237,8 @@ public struct RefundDestinationDetailsMxBankTransfer: Sendable, Codable, Equatab
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.reference = try container.decode(Nullable<String>.self, forKey: .reference)
-        self.referenceStatus = try container.decode(Nullable<String>.self, forKey: .referenceStatus)
+        self.reference = try container.decodeIfPresent(Nullable<String>.self, forKey: .reference) ?? .null
+        self.referenceStatus = try container.decodeIfPresent(Nullable<String>.self, forKey: .referenceStatus) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -1284,8 +1284,8 @@ public struct RefundDestinationDetailsP24: Sendable, Codable, Equatable, Hashabl
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.reference = try container.decode(Nullable<String>.self, forKey: .reference)
-        self.referenceStatus = try container.decode(Nullable<String>.self, forKey: .referenceStatus)
+        self.reference = try container.decodeIfPresent(Nullable<String>.self, forKey: .reference) ?? .null
+        self.referenceStatus = try container.decodeIfPresent(Nullable<String>.self, forKey: .referenceStatus) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -1334,9 +1334,9 @@ public struct RefundDestinationDetailsPaypal: Sendable, Codable, Equatable, Hash
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.networkDeclineCode = try container.decode(Nullable<String>.self, forKey: .networkDeclineCode)
-        self.reference = try container.decode(Nullable<String>.self, forKey: .reference)
-        self.referenceStatus = try container.decode(Nullable<String>.self, forKey: .referenceStatus)
+        self.networkDeclineCode = try container.decodeIfPresent(Nullable<String>.self, forKey: .networkDeclineCode) ?? .null
+        self.reference = try container.decodeIfPresent(Nullable<String>.self, forKey: .reference) ?? .null
+        self.referenceStatus = try container.decodeIfPresent(Nullable<String>.self, forKey: .referenceStatus) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -1386,9 +1386,9 @@ public struct RefundDestinationDetailsSwish: Sendable, Codable, Equatable, Hasha
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.networkDeclineCode = try container.decode(Nullable<String>.self, forKey: .networkDeclineCode)
-        self.reference = try container.decode(Nullable<String>.self, forKey: .reference)
-        self.referenceStatus = try container.decode(Nullable<String>.self, forKey: .referenceStatus)
+        self.networkDeclineCode = try container.decodeIfPresent(Nullable<String>.self, forKey: .networkDeclineCode) ?? .null
+        self.reference = try container.decodeIfPresent(Nullable<String>.self, forKey: .reference) ?? .null
+        self.referenceStatus = try container.decodeIfPresent(Nullable<String>.self, forKey: .referenceStatus) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -1435,8 +1435,8 @@ public struct RefundDestinationDetailsThBankTransfer: Sendable, Codable, Equatab
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.reference = try container.decode(Nullable<String>.self, forKey: .reference)
-        self.referenceStatus = try container.decode(Nullable<String>.self, forKey: .referenceStatus)
+        self.reference = try container.decodeIfPresent(Nullable<String>.self, forKey: .reference) ?? .null
+        self.referenceStatus = try container.decodeIfPresent(Nullable<String>.self, forKey: .referenceStatus) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -1482,8 +1482,8 @@ public struct RefundDestinationDetailsUsBankTransfer: Sendable, Codable, Equatab
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.reference = try container.decode(Nullable<String>.self, forKey: .reference)
-        self.referenceStatus = try container.decode(Nullable<String>.self, forKey: .referenceStatus)
+        self.reference = try container.decodeIfPresent(Nullable<String>.self, forKey: .reference) ?? .null
+        self.referenceStatus = try container.decodeIfPresent(Nullable<String>.self, forKey: .referenceStatus) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {

@@ -170,6 +170,18 @@ final class TypeEmitter {
       }
     }
 
+    // A single-branch anyOf/oneOf is not polymorphic: Stripe uses it as a
+    // nullable/reference wrapper (for example charge.fraud_details is
+    // `anyOf: [$ref charge_fraud_details]`). Mapping it to a union enum
+    // named after the branch made the union reference itself, and its
+    // synthesized Codable recursed until the stack overflowed at decode
+    // time. Classify the branch directly instead.
+    if let anyOf = (schema["oneOf"] ?? schema["anyOf"]) as? [[String: Any]],
+      anyOf.count == 1, let only = anyOf.first
+    {
+      return swiftType(for: only, fallbackName: fallbackName, bucket: bucket)
+    }
+
     let classified = ParsedSchema.classify(schema)
     switch classified {
     case .object, .allOf, .emptyObject:
@@ -409,6 +421,14 @@ final class TypeEmitter {
         if entry.typeExpr.hasSuffix("?") {
           lines.append(
             "        self.\(entry.swift) = try container.decodeIfPresent(\(base).self, forKey: .\(entry.swift))"
+          )
+        } else if base.hasPrefix("Nullable<"), base.hasSuffix(">") {
+          // required+nullable: Stripe routinely omits these keys even
+          // though the spec marks them required (legacy fields, optional
+          // sub-resources). Treat absence the same as explicit null
+          // instead of throwing keyNotFound at decode time.
+          lines.append(
+            "        self.\(entry.swift) = try container.decodeIfPresent(\(base).self, forKey: .\(entry.swift)) ?? .null"
           )
         } else {
           lines.append(

@@ -88,19 +88,19 @@ public struct Discount: Sendable, Codable, Equatable, Hashable, StripeIdentified
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.checkoutSession = try container.decode(Nullable<String>.self, forKey: .checkoutSession)
-        self.customer = try container.decode(Nullable<DiscountCustomer>.self, forKey: .customer)
-        self.customerAccount = try container.decode(Nullable<String>.self, forKey: .customerAccount)
-        self.end = try container.decode(Nullable<StripeTimestamp>.self, forKey: .end)
+        self.checkoutSession = try container.decodeIfPresent(Nullable<String>.self, forKey: .checkoutSession) ?? .null
+        self.customer = try container.decodeIfPresent(Nullable<DiscountCustomer>.self, forKey: .customer) ?? .null
+        self.customerAccount = try container.decodeIfPresent(Nullable<String>.self, forKey: .customerAccount) ?? .null
+        self.end = try container.decodeIfPresent(Nullable<StripeTimestamp>.self, forKey: .end) ?? .null
         self.id = try container.decode(String.self, forKey: .id)
-        self.invoice = try container.decode(Nullable<String>.self, forKey: .invoice)
-        self.invoiceItem = try container.decode(Nullable<String>.self, forKey: .invoiceItem)
+        self.invoice = try container.decodeIfPresent(Nullable<String>.self, forKey: .invoice) ?? .null
+        self.invoiceItem = try container.decodeIfPresent(Nullable<String>.self, forKey: .invoiceItem) ?? .null
         self.object = try container.decode(DeletedDiscountObject.self, forKey: .object)
-        self.promotionCode = try container.decode(Nullable<Expandable<PromotionCode>>.self, forKey: .promotionCode)
+        self.promotionCode = try container.decodeIfPresent(Nullable<Expandable<PromotionCode>>.self, forKey: .promotionCode) ?? .null
         self.source = try container.decode(DiscountSource.self, forKey: .source)
         self.start = try container.decode(StripeTimestamp.self, forKey: .start)
-        self.subscription = try container.decode(Nullable<String>.self, forKey: .subscription)
-        self.subscriptionItem = try container.decode(Nullable<String>.self, forKey: .subscriptionItem)
+        self.subscription = try container.decodeIfPresent(Nullable<String>.self, forKey: .subscription) ?? .null
+        self.subscriptionItem = try container.decodeIfPresent(Nullable<String>.self, forKey: .subscriptionItem) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -157,7 +157,7 @@ public struct DiscountSource: Sendable, Codable, Equatable, Hashable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.coupon = try container.decode(Nullable<Expandable<Coupon>>.self, forKey: .coupon)
+        self.coupon = try container.decodeIfPresent(Nullable<Expandable<Coupon>>.self, forKey: .coupon) ?? .null
         self.type = try container.decode(CouponObject.self, forKey: .type)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {

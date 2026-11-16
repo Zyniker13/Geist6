@@ -36,66 +36,6 @@ public enum SubscriptionApplication: Sendable, Codable, Equatable, Hashable {
 }
 
 /// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum SubscriptionBillingCycleAnchorConfig: Sendable, Codable, Equatable, Hashable {
-    case subscriptionsResourceBillingCycleAnchorConfig(SubscriptionsResourceBillingCycleAnchorConfig)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(SubscriptionsResourceBillingCycleAnchorConfig.self) { self = .subscriptionsResourceBillingCycleAnchorConfig(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .subscriptionsResourceBillingCycleAnchorConfig(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum SubscriptionBillingThresholds: Sendable, Codable, Equatable, Hashable {
-    indirect case subscriptionBillingThresholds(SubscriptionBillingThresholds)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(SubscriptionBillingThresholds.self) { self = .subscriptionBillingThresholds(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .subscriptionBillingThresholds(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum SubscriptionCancellationDetails: Sendable, Codable, Equatable, Hashable {
-    case cancellationDetails(CancellationDetails)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(CancellationDetails.self) { self = .cancellationDetails(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .cancellationDetails(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
 public enum SubscriptionCustomer: Sendable, Codable, Equatable, Hashable {
     case string(String)
     case customer(Customer)
@@ -183,26 +123,6 @@ public struct SubscriptionItems: Sendable, Codable, Equatable, Hashable {
     }
 }
 
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum SubscriptionManagedPayments: Sendable, Codable, Equatable, Hashable {
-    case smorResourceManagedPayments(SmorResourceManagedPayments)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(SmorResourceManagedPayments.self) { self = .smorResourceManagedPayments(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .smorResourceManagedPayments(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
 /// Lossless enum: values Stripe documents plus any value the API
 /// adds later, kept in `undocumented` instead of dropped.
 public enum SubscriptionObject: Sendable, Equatable, Hashable, LosslessEnum {
@@ -231,86 +151,6 @@ public enum SubscriptionObject: Sendable, Equatable, Hashable, LosslessEnum {
     public func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
         try container.encode(rawValue)
-    }
-}
-
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum SubscriptionPauseCollection: Sendable, Codable, Equatable, Hashable {
-    case subscriptionsResourcePauseCollection(SubscriptionsResourcePauseCollection)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(SubscriptionsResourcePauseCollection.self) { self = .subscriptionsResourcePauseCollection(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .subscriptionsResourcePauseCollection(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum SubscriptionPaymentSettings: Sendable, Codable, Equatable, Hashable {
-    case subscriptionsResourcePaymentSettings(SubscriptionsResourcePaymentSettings)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(SubscriptionsResourcePaymentSettings.self) { self = .subscriptionsResourcePaymentSettings(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .subscriptionsResourcePaymentSettings(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum SubscriptionPendingInvoiceItemInterval: Sendable, Codable, Equatable, Hashable {
-    indirect case subscriptionPendingInvoiceItemInterval(SubscriptionPendingInvoiceItemInterval)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(SubscriptionPendingInvoiceItemInterval.self) { self = .subscriptionPendingInvoiceItemInterval(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .subscriptionPendingInvoiceItemInterval(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum SubscriptionPendingUpdate: Sendable, Codable, Equatable, Hashable {
-    case subscriptionsResourcePendingUpdate(SubscriptionsResourcePendingUpdate)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(SubscriptionsResourcePendingUpdate.self) { self = .subscriptionsResourcePendingUpdate(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .subscriptionsResourcePendingUpdate(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
     }
 }
 
@@ -366,59 +206,19 @@ public enum SubscriptionStatus: Sendable, Equatable, Hashable, LosslessEnum {
     }
 }
 
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum SubscriptionTransferData: Sendable, Codable, Equatable, Hashable {
-    indirect case subscriptionTransferData(SubscriptionTransferData)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(SubscriptionTransferData.self) { self = .subscriptionTransferData(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .subscriptionTransferData(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum SubscriptionTrialSettings: Sendable, Codable, Equatable, Hashable {
-    case subscriptionsResourceTrialSettingsTrialSettings(SubscriptionsResourceTrialSettingsTrialSettings)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(SubscriptionsResourceTrialSettingsTrialSettings.self) { self = .subscriptionsResourceTrialSettingsTrialSettings(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .subscriptionsResourceTrialSettingsTrialSettings(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
 public struct Subscription: Sendable, Codable, Equatable, Hashable, StripeIdentified {
     public var application: Nullable<SubscriptionApplication>
     public var applicationFeePercent: Nullable<Decimal>
     public var automaticTax: SubscriptionAutomaticTax
     public var billingCycleAnchor: StripeTimestamp
-    public var billingCycleAnchorConfig: Nullable<SubscriptionBillingCycleAnchorConfig>
+    public var billingCycleAnchorConfig: Nullable<SubscriptionsResourceBillingCycleAnchorConfig>
     public var billingMode: SubscriptionsResourceBillingMode
     public var billingSchedules: [SubscriptionsResourceBillingSchedules]
     public var billingThresholds: Nullable<SubscriptionBillingThresholds>
     public var cancelAt: Nullable<StripeTimestamp>
     public var cancelAtPeriodEnd: Bool
     public var canceledAt: Nullable<StripeTimestamp>
-    public var cancellationDetails: Nullable<SubscriptionCancellationDetails>
+    public var cancellationDetails: Nullable<CancellationDetails>
     public var collectionMethod: InvoiceCollectionMethod
     public var created: StripeTimestamp
     public var currency: String
@@ -436,16 +236,16 @@ public struct Subscription: Sendable, Codable, Equatable, Hashable, StripeIdenti
     public var items: SubscriptionItems
     public var latestInvoice: Nullable<Expandable<Invoice>>
     public var livemode: Bool
-    public var managedPayments: Nullable<SubscriptionManagedPayments>
+    public var managedPayments: Nullable<SmorResourceManagedPayments>
     public var metadata: [String: String]
     public var nextPendingInvoiceItemInvoice: Nullable<StripeTimestamp>
     public var object: SubscriptionObject
     public var onBehalfOf: Nullable<Expandable<Account>>
-    public var pauseCollection: Nullable<SubscriptionPauseCollection>
-    public var paymentSettings: Nullable<SubscriptionPaymentSettings>
+    public var pauseCollection: Nullable<SubscriptionsResourcePauseCollection>
+    public var paymentSettings: Nullable<SubscriptionsResourcePaymentSettings>
     public var pendingInvoiceItemInterval: Nullable<SubscriptionPendingInvoiceItemInterval>
     public var pendingSetupIntent: Nullable<Expandable<SetupIntent>>
-    public var pendingUpdate: Nullable<SubscriptionPendingUpdate>
+    public var pendingUpdate: Nullable<SubscriptionsResourcePendingUpdate>
     public var presentmentDetails: SubscriptionsResourceSubscriptionPresentmentDetails?
     public var schedule: Nullable<Expandable<SubscriptionSchedule>>
     public var startDate: StripeTimestamp
@@ -454,13 +254,13 @@ public struct Subscription: Sendable, Codable, Equatable, Hashable, StripeIdenti
     public var testClock: Nullable<Expandable<TestHelpersTestClock>>
     public var transferData: Nullable<SubscriptionTransferData>
     public var trialEnd: Nullable<StripeTimestamp>
-    public var trialSettings: Nullable<SubscriptionTrialSettings>
+    public var trialSettings: Nullable<SubscriptionsResourceTrialSettingsTrialSettings>
     public var trialStart: Nullable<StripeTimestamp>
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(application: Nullable<SubscriptionApplication>, applicationFeePercent: Nullable<Decimal>, automaticTax: SubscriptionAutomaticTax, billingCycleAnchor: StripeTimestamp, billingCycleAnchorConfig: Nullable<SubscriptionBillingCycleAnchorConfig>, billingMode: SubscriptionsResourceBillingMode, billingSchedules: [SubscriptionsResourceBillingSchedules], billingThresholds: Nullable<SubscriptionBillingThresholds>, cancelAt: Nullable<StripeTimestamp>, cancelAtPeriodEnd: Bool, canceledAt: Nullable<StripeTimestamp>, cancellationDetails: Nullable<SubscriptionCancellationDetails>, collectionMethod: InvoiceCollectionMethod, created: StripeTimestamp, currency: String, customer: SubscriptionCustomer, customerAccount: Nullable<String>, daysUntilDue: Nullable<Int>, defaultPaymentMethod: Nullable<Expandable<PaymentMethod>>, defaultSource: Nullable<Expandable<PaymentSource>>, defaultTaxRates: Nullable<[TaxRate]>? = nil, description: Nullable<String>, discounts: [Expandable<Discount>], endedAt: Nullable<StripeTimestamp>, id: String, invoiceSettings: SubscriptionsResourceSubscriptionInvoiceSettings, items: SubscriptionItems, latestInvoice: Nullable<Expandable<Invoice>>, livemode: Bool, managedPayments: Nullable<SubscriptionManagedPayments>, metadata: [String: String], nextPendingInvoiceItemInvoice: Nullable<StripeTimestamp>, object: SubscriptionObject, onBehalfOf: Nullable<Expandable<Account>>, pauseCollection: Nullable<SubscriptionPauseCollection>, paymentSettings: Nullable<SubscriptionPaymentSettings>, pendingInvoiceItemInterval: Nullable<SubscriptionPendingInvoiceItemInterval>, pendingSetupIntent: Nullable<Expandable<SetupIntent>>, pendingUpdate: Nullable<SubscriptionPendingUpdate>, presentmentDetails: SubscriptionsResourceSubscriptionPresentmentDetails? = nil, schedule: Nullable<Expandable<SubscriptionSchedule>>, startDate: StripeTimestamp, status: SubscriptionStatus, statusDetails: SubscriptionsResourceStatusDetailsPublic? = nil, testClock: Nullable<Expandable<TestHelpersTestClock>>, transferData: Nullable<SubscriptionTransferData>, trialEnd: Nullable<StripeTimestamp>, trialSettings: Nullable<SubscriptionTrialSettings>, trialStart: Nullable<StripeTimestamp>, unknownFields: [String: JSONValue]? = nil) {
+    public init(application: Nullable<SubscriptionApplication>, applicationFeePercent: Nullable<Decimal>, automaticTax: SubscriptionAutomaticTax, billingCycleAnchor: StripeTimestamp, billingCycleAnchorConfig: Nullable<SubscriptionsResourceBillingCycleAnchorConfig>, billingMode: SubscriptionsResourceBillingMode, billingSchedules: [SubscriptionsResourceBillingSchedules], billingThresholds: Nullable<SubscriptionBillingThresholds>, cancelAt: Nullable<StripeTimestamp>, cancelAtPeriodEnd: Bool, canceledAt: Nullable<StripeTimestamp>, cancellationDetails: Nullable<CancellationDetails>, collectionMethod: InvoiceCollectionMethod, created: StripeTimestamp, currency: String, customer: SubscriptionCustomer, customerAccount: Nullable<String>, daysUntilDue: Nullable<Int>, defaultPaymentMethod: Nullable<Expandable<PaymentMethod>>, defaultSource: Nullable<Expandable<PaymentSource>>, defaultTaxRates: Nullable<[TaxRate]>? = nil, description: Nullable<String>, discounts: [Expandable<Discount>], endedAt: Nullable<StripeTimestamp>, id: String, invoiceSettings: SubscriptionsResourceSubscriptionInvoiceSettings, items: SubscriptionItems, latestInvoice: Nullable<Expandable<Invoice>>, livemode: Bool, managedPayments: Nullable<SmorResourceManagedPayments>, metadata: [String: String], nextPendingInvoiceItemInvoice: Nullable<StripeTimestamp>, object: SubscriptionObject, onBehalfOf: Nullable<Expandable<Account>>, pauseCollection: Nullable<SubscriptionsResourcePauseCollection>, paymentSettings: Nullable<SubscriptionsResourcePaymentSettings>, pendingInvoiceItemInterval: Nullable<SubscriptionPendingInvoiceItemInterval>, pendingSetupIntent: Nullable<Expandable<SetupIntent>>, pendingUpdate: Nullable<SubscriptionsResourcePendingUpdate>, presentmentDetails: SubscriptionsResourceSubscriptionPresentmentDetails? = nil, schedule: Nullable<Expandable<SubscriptionSchedule>>, startDate: StripeTimestamp, status: SubscriptionStatus, statusDetails: SubscriptionsResourceStatusDetailsPublic? = nil, testClock: Nullable<Expandable<TestHelpersTestClock>>, transferData: Nullable<SubscriptionTransferData>, trialEnd: Nullable<StripeTimestamp>, trialSettings: Nullable<SubscriptionsResourceTrialSettingsTrialSettings>, trialStart: Nullable<StripeTimestamp>, unknownFields: [String: JSONValue]? = nil) {
         self.application = application
         self.applicationFeePercent = applicationFeePercent
         self.automaticTax = automaticTax
@@ -567,55 +367,55 @@ public struct Subscription: Sendable, Codable, Equatable, Hashable, StripeIdenti
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.application = try container.decode(Nullable<SubscriptionApplication>.self, forKey: .application)
-        self.applicationFeePercent = try container.decode(Nullable<Decimal>.self, forKey: .applicationFeePercent)
+        self.application = try container.decodeIfPresent(Nullable<SubscriptionApplication>.self, forKey: .application) ?? .null
+        self.applicationFeePercent = try container.decodeIfPresent(Nullable<Decimal>.self, forKey: .applicationFeePercent) ?? .null
         self.automaticTax = try container.decode(SubscriptionAutomaticTax.self, forKey: .automaticTax)
         self.billingCycleAnchor = try container.decode(StripeTimestamp.self, forKey: .billingCycleAnchor)
-        self.billingCycleAnchorConfig = try container.decode(Nullable<SubscriptionBillingCycleAnchorConfig>.self, forKey: .billingCycleAnchorConfig)
+        self.billingCycleAnchorConfig = try container.decodeIfPresent(Nullable<SubscriptionsResourceBillingCycleAnchorConfig>.self, forKey: .billingCycleAnchorConfig) ?? .null
         self.billingMode = try container.decode(SubscriptionsResourceBillingMode.self, forKey: .billingMode)
         self.billingSchedules = try container.decode([SubscriptionsResourceBillingSchedules].self, forKey: .billingSchedules)
-        self.billingThresholds = try container.decode(Nullable<SubscriptionBillingThresholds>.self, forKey: .billingThresholds)
-        self.cancelAt = try container.decode(Nullable<StripeTimestamp>.self, forKey: .cancelAt)
+        self.billingThresholds = try container.decodeIfPresent(Nullable<SubscriptionBillingThresholds>.self, forKey: .billingThresholds) ?? .null
+        self.cancelAt = try container.decodeIfPresent(Nullable<StripeTimestamp>.self, forKey: .cancelAt) ?? .null
         self.cancelAtPeriodEnd = try container.decode(Bool.self, forKey: .cancelAtPeriodEnd)
-        self.canceledAt = try container.decode(Nullable<StripeTimestamp>.self, forKey: .canceledAt)
-        self.cancellationDetails = try container.decode(Nullable<SubscriptionCancellationDetails>.self, forKey: .cancellationDetails)
+        self.canceledAt = try container.decodeIfPresent(Nullable<StripeTimestamp>.self, forKey: .canceledAt) ?? .null
+        self.cancellationDetails = try container.decodeIfPresent(Nullable<CancellationDetails>.self, forKey: .cancellationDetails) ?? .null
         self.collectionMethod = try container.decode(InvoiceCollectionMethod.self, forKey: .collectionMethod)
         self.created = try container.decode(StripeTimestamp.self, forKey: .created)
         self.currency = try container.decode(String.self, forKey: .currency)
         self.customer = try container.decode(SubscriptionCustomer.self, forKey: .customer)
-        self.customerAccount = try container.decode(Nullable<String>.self, forKey: .customerAccount)
-        self.daysUntilDue = try container.decode(Nullable<Int>.self, forKey: .daysUntilDue)
-        self.defaultPaymentMethod = try container.decode(Nullable<Expandable<PaymentMethod>>.self, forKey: .defaultPaymentMethod)
-        self.defaultSource = try container.decode(Nullable<Expandable<PaymentSource>>.self, forKey: .defaultSource)
+        self.customerAccount = try container.decodeIfPresent(Nullable<String>.self, forKey: .customerAccount) ?? .null
+        self.daysUntilDue = try container.decodeIfPresent(Nullable<Int>.self, forKey: .daysUntilDue) ?? .null
+        self.defaultPaymentMethod = try container.decodeIfPresent(Nullable<Expandable<PaymentMethod>>.self, forKey: .defaultPaymentMethod) ?? .null
+        self.defaultSource = try container.decodeIfPresent(Nullable<Expandable<PaymentSource>>.self, forKey: .defaultSource) ?? .null
         self.defaultTaxRates = try container.decodeIfPresent(Nullable<[TaxRate]>.self, forKey: .defaultTaxRates)
-        self.description = try container.decode(Nullable<String>.self, forKey: .description)
+        self.description = try container.decodeIfPresent(Nullable<String>.self, forKey: .description) ?? .null
         self.discounts = try container.decode([Expandable<Discount>].self, forKey: .discounts)
-        self.endedAt = try container.decode(Nullable<StripeTimestamp>.self, forKey: .endedAt)
+        self.endedAt = try container.decodeIfPresent(Nullable<StripeTimestamp>.self, forKey: .endedAt) ?? .null
         self.id = try container.decode(String.self, forKey: .id)
         self.invoiceSettings = try container.decode(SubscriptionsResourceSubscriptionInvoiceSettings.self, forKey: .invoiceSettings)
         self.items = try container.decode(SubscriptionItems.self, forKey: .items)
-        self.latestInvoice = try container.decode(Nullable<Expandable<Invoice>>.self, forKey: .latestInvoice)
+        self.latestInvoice = try container.decodeIfPresent(Nullable<Expandable<Invoice>>.self, forKey: .latestInvoice) ?? .null
         self.livemode = try container.decode(Bool.self, forKey: .livemode)
-        self.managedPayments = try container.decode(Nullable<SubscriptionManagedPayments>.self, forKey: .managedPayments)
+        self.managedPayments = try container.decodeIfPresent(Nullable<SmorResourceManagedPayments>.self, forKey: .managedPayments) ?? .null
         self.metadata = try container.decode([String: String].self, forKey: .metadata)
-        self.nextPendingInvoiceItemInvoice = try container.decode(Nullable<StripeTimestamp>.self, forKey: .nextPendingInvoiceItemInvoice)
+        self.nextPendingInvoiceItemInvoice = try container.decodeIfPresent(Nullable<StripeTimestamp>.self, forKey: .nextPendingInvoiceItemInvoice) ?? .null
         self.object = try container.decode(SubscriptionObject.self, forKey: .object)
-        self.onBehalfOf = try container.decode(Nullable<Expandable<Account>>.self, forKey: .onBehalfOf)
-        self.pauseCollection = try container.decode(Nullable<SubscriptionPauseCollection>.self, forKey: .pauseCollection)
-        self.paymentSettings = try container.decode(Nullable<SubscriptionPaymentSettings>.self, forKey: .paymentSettings)
-        self.pendingInvoiceItemInterval = try container.decode(Nullable<SubscriptionPendingInvoiceItemInterval>.self, forKey: .pendingInvoiceItemInterval)
-        self.pendingSetupIntent = try container.decode(Nullable<Expandable<SetupIntent>>.self, forKey: .pendingSetupIntent)
-        self.pendingUpdate = try container.decode(Nullable<SubscriptionPendingUpdate>.self, forKey: .pendingUpdate)
+        self.onBehalfOf = try container.decodeIfPresent(Nullable<Expandable<Account>>.self, forKey: .onBehalfOf) ?? .null
+        self.pauseCollection = try container.decodeIfPresent(Nullable<SubscriptionsResourcePauseCollection>.self, forKey: .pauseCollection) ?? .null
+        self.paymentSettings = try container.decodeIfPresent(Nullable<SubscriptionsResourcePaymentSettings>.self, forKey: .paymentSettings) ?? .null
+        self.pendingInvoiceItemInterval = try container.decodeIfPresent(Nullable<SubscriptionPendingInvoiceItemInterval>.self, forKey: .pendingInvoiceItemInterval) ?? .null
+        self.pendingSetupIntent = try container.decodeIfPresent(Nullable<Expandable<SetupIntent>>.self, forKey: .pendingSetupIntent) ?? .null
+        self.pendingUpdate = try container.decodeIfPresent(Nullable<SubscriptionsResourcePendingUpdate>.self, forKey: .pendingUpdate) ?? .null
         self.presentmentDetails = try container.decodeIfPresent(SubscriptionsResourceSubscriptionPresentmentDetails.self, forKey: .presentmentDetails)
-        self.schedule = try container.decode(Nullable<Expandable<SubscriptionSchedule>>.self, forKey: .schedule)
+        self.schedule = try container.decodeIfPresent(Nullable<Expandable<SubscriptionSchedule>>.self, forKey: .schedule) ?? .null
         self.startDate = try container.decode(StripeTimestamp.self, forKey: .startDate)
         self.status = try container.decode(SubscriptionStatus.self, forKey: .status)
         self.statusDetails = try container.decodeIfPresent(SubscriptionsResourceStatusDetailsPublic.self, forKey: .statusDetails)
-        self.testClock = try container.decode(Nullable<Expandable<TestHelpersTestClock>>.self, forKey: .testClock)
-        self.transferData = try container.decode(Nullable<SubscriptionTransferData>.self, forKey: .transferData)
-        self.trialEnd = try container.decode(Nullable<StripeTimestamp>.self, forKey: .trialEnd)
-        self.trialSettings = try container.decode(Nullable<SubscriptionTrialSettings>.self, forKey: .trialSettings)
-        self.trialStart = try container.decode(Nullable<StripeTimestamp>.self, forKey: .trialStart)
+        self.testClock = try container.decodeIfPresent(Nullable<Expandable<TestHelpersTestClock>>.self, forKey: .testClock) ?? .null
+        self.transferData = try container.decodeIfPresent(Nullable<SubscriptionTransferData>.self, forKey: .transferData) ?? .null
+        self.trialEnd = try container.decodeIfPresent(Nullable<StripeTimestamp>.self, forKey: .trialEnd) ?? .null
+        self.trialSettings = try container.decodeIfPresent(Nullable<SubscriptionsResourceTrialSettingsTrialSettings>.self, forKey: .trialSettings) ?? .null
+        self.trialStart = try container.decodeIfPresent(Nullable<StripeTimestamp>.self, forKey: .trialStart) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -688,35 +488,15 @@ public struct Subscription: Sendable, Codable, Equatable, Hashable, StripeIdenti
     }
 }
 
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum SubscriptionAutomaticTaxLiability: Sendable, Codable, Equatable, Hashable {
-    case connectAccountReference(ConnectAccountReference)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(ConnectAccountReference.self) { self = .connectAccountReference(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .connectAccountReference(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
 public struct SubscriptionAutomaticTax: Sendable, Codable, Equatable, Hashable {
     public var disabledReason: Nullable<SchedulesPhaseAutomaticTaxDisabledReason>
     public var enabled: Bool
-    public var liability: Nullable<SubscriptionAutomaticTaxLiability>
+    public var liability: Nullable<ConnectAccountReference>
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(disabledReason: Nullable<SchedulesPhaseAutomaticTaxDisabledReason>, enabled: Bool, liability: Nullable<SubscriptionAutomaticTaxLiability>, unknownFields: [String: JSONValue]? = nil) {
+    public init(disabledReason: Nullable<SchedulesPhaseAutomaticTaxDisabledReason>, enabled: Bool, liability: Nullable<ConnectAccountReference>, unknownFields: [String: JSONValue]? = nil) {
         self.disabledReason = disabledReason
         self.enabled = enabled
         self.liability = liability
@@ -731,9 +511,9 @@ public struct SubscriptionAutomaticTax: Sendable, Codable, Equatable, Hashable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.disabledReason = try container.decode(Nullable<SchedulesPhaseAutomaticTaxDisabledReason>.self, forKey: .disabledReason)
+        self.disabledReason = try container.decodeIfPresent(Nullable<SchedulesPhaseAutomaticTaxDisabledReason>.self, forKey: .disabledReason) ?? .null
         self.enabled = try container.decode(Bool.self, forKey: .enabled)
-        self.liability = try container.decode(Nullable<SubscriptionAutomaticTaxLiability>.self, forKey: .liability)
+        self.liability = try container.decodeIfPresent(Nullable<ConnectAccountReference>.self, forKey: .liability) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -760,42 +540,49 @@ public struct SubscriptionAutomaticTax: Sendable, Codable, Equatable, Hashable {
     }
 }
 
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum SubscriptionItemBillingThresholds: Sendable, Codable, Equatable, Hashable {
-    indirect case subscriptionItemBillingThresholds(SubscriptionItemBillingThresholds)
-    case other(JSONValue)
+public struct SubscriptionBillingThresholds: Sendable, Codable, Equatable, Hashable {
+    public var amountGte: Nullable<Int>
+    public var resetBillingCycleAnchor: Nullable<Bool>
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
 
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(SubscriptionItemBillingThresholds.self) { self = .subscriptionItemBillingThresholds(value); return }
-        self = .other(try container.decode(JSONValue.self))
+    public init(amountGte: Nullable<Int>, resetBillingCycleAnchor: Nullable<Bool>, unknownFields: [String: JSONValue]? = nil) {
+        self.amountGte = amountGte
+        self.resetBillingCycleAnchor = resetBillingCycleAnchor
+        self.unknownFields = unknownFields
     }
 
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .subscriptionItemBillingThresholds(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
+    private enum CodingKeys: String, CodingKey {
+        case amountGte = "amount_gte"
+        case resetBillingCycleAnchor = "reset_billing_cycle_anchor"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.amountGte = try container.decodeIfPresent(Nullable<Int>.self, forKey: .amountGte) ?? .null
+        self.resetBillingCycleAnchor = try container.decodeIfPresent(Nullable<Bool>.self, forKey: .resetBillingCycleAnchor) ?? .null
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .amountGte, .resetBillingCycleAnchor: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
         }
-    }
-}
-
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum SubscriptionItemCurrentTrial: Sendable, Codable, Equatable, Hashable {
-    case subscriptionsTrialsResourceCurrentTrial(SubscriptionsTrialsResourceCurrentTrial)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(SubscriptionsTrialsResourceCurrentTrial.self) { self = .subscriptionsTrialsResourceCurrentTrial(value); return }
-        self = .other(try container.decode(JSONValue.self))
+        self.unknownFields = captured.isEmpty ? nil : captured
     }
 
     public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .subscriptionsTrialsResourceCurrentTrial(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.amountGte, forKey: .amountGte)
+        try container.encodeIfPresent(self.resetBillingCycleAnchor, forKey: .resetBillingCycleAnchor)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
         }
     }
 }
@@ -806,7 +593,7 @@ public struct SubscriptionItem: Sendable, Codable, Equatable, Hashable, StripeId
     public var created: Int
     public var currentPeriodEnd: StripeTimestamp
     public var currentPeriodStart: StripeTimestamp
-    public var currentTrial: Nullable<SubscriptionItemCurrentTrial>
+    public var currentTrial: Nullable<SubscriptionsTrialsResourceCurrentTrial>
     public var discounts: [Expandable<Discount>]
     public var id: String
     public var metadata: [String: String]
@@ -820,7 +607,7 @@ public struct SubscriptionItem: Sendable, Codable, Equatable, Hashable, StripeId
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(billedUntil: StripeTimestamp? = nil, billingThresholds: Nullable<SubscriptionItemBillingThresholds>, created: Int, currentPeriodEnd: StripeTimestamp, currentPeriodStart: StripeTimestamp, currentTrial: Nullable<SubscriptionItemCurrentTrial>, discounts: [Expandable<Discount>], id: String, metadata: [String: String], object: DeletedSubscriptionItemObject, plan: Plan, price: Price, quantity: Int? = nil, subscription: String, taxRates: Nullable<[TaxRate]>, unknownFields: [String: JSONValue]? = nil) {
+    public init(billedUntil: StripeTimestamp? = nil, billingThresholds: Nullable<SubscriptionItemBillingThresholds>, created: Int, currentPeriodEnd: StripeTimestamp, currentPeriodStart: StripeTimestamp, currentTrial: Nullable<SubscriptionsTrialsResourceCurrentTrial>, discounts: [Expandable<Discount>], id: String, metadata: [String: String], object: DeletedSubscriptionItemObject, plan: Plan, price: Price, quantity: Int? = nil, subscription: String, taxRates: Nullable<[TaxRate]>, unknownFields: [String: JSONValue]? = nil) {
         self.billedUntil = billedUntil
         self.billingThresholds = billingThresholds
         self.created = created
@@ -860,11 +647,11 @@ public struct SubscriptionItem: Sendable, Codable, Equatable, Hashable, StripeId
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.billedUntil = try container.decodeIfPresent(StripeTimestamp.self, forKey: .billedUntil)
-        self.billingThresholds = try container.decode(Nullable<SubscriptionItemBillingThresholds>.self, forKey: .billingThresholds)
+        self.billingThresholds = try container.decodeIfPresent(Nullable<SubscriptionItemBillingThresholds>.self, forKey: .billingThresholds) ?? .null
         self.created = try container.decode(Int.self, forKey: .created)
         self.currentPeriodEnd = try container.decode(StripeTimestamp.self, forKey: .currentPeriodEnd)
         self.currentPeriodStart = try container.decode(StripeTimestamp.self, forKey: .currentPeriodStart)
-        self.currentTrial = try container.decode(Nullable<SubscriptionItemCurrentTrial>.self, forKey: .currentTrial)
+        self.currentTrial = try container.decodeIfPresent(Nullable<SubscriptionsTrialsResourceCurrentTrial>.self, forKey: .currentTrial) ?? .null
         self.discounts = try container.decode([Expandable<Discount>].self, forKey: .discounts)
         self.id = try container.decode(String.self, forKey: .id)
         self.metadata = try container.decode([String: String].self, forKey: .metadata)
@@ -873,7 +660,7 @@ public struct SubscriptionItem: Sendable, Codable, Equatable, Hashable, StripeId
         self.price = try container.decode(Price.self, forKey: .price)
         self.quantity = try container.decodeIfPresent(Int.self, forKey: .quantity)
         self.subscription = try container.decode(String.self, forKey: .subscription)
-        self.taxRates = try container.decode(Nullable<[TaxRate]>.self, forKey: .taxRates)
+        self.taxRates = try container.decodeIfPresent(Nullable<[TaxRate]>.self, forKey: .taxRates) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -902,6 +689,48 @@ public struct SubscriptionItem: Sendable, Codable, Equatable, Hashable, StripeId
         try container.encodeIfPresent(self.quantity, forKey: .quantity)
         try container.encodeIfPresent(self.subscription, forKey: .subscription)
         try container.encodeIfPresent(self.taxRates, forKey: .taxRates)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct SubscriptionItemBillingThresholds: Sendable, Codable, Equatable, Hashable {
+    public var usageGte: Nullable<Int>
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(usageGte: Nullable<Int>, unknownFields: [String: JSONValue]? = nil) {
+        self.usageGte = usageGte
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case usageGte = "usage_gte"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.usageGte = try container.decodeIfPresent(Nullable<Int>.self, forKey: .usageGte) ?? .null
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .usageGte: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.usageGte, forKey: .usageGte)
         if let unknownFields = unknownFields {
             for (key, value) in unknownFields {
                 if let codingKey = CodingKeys(stringValue: key) {
@@ -984,10 +813,10 @@ public struct SubscriptionPaymentMethodOptionsBillieCompanyDetails: Sendable, Co
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.registeredAddress = try container.decodeIfPresent(SubscriptionPaymentMethodOptionsBillieCompanyDetailsRegisteredAddress.self, forKey: .registeredAddress)
-        self.registeredName = try container.decode(Nullable<String>.self, forKey: .registeredName)
-        self.registrationNumber = try container.decode(Nullable<String>.self, forKey: .registrationNumber)
+        self.registeredName = try container.decodeIfPresent(Nullable<String>.self, forKey: .registeredName) ?? .null
+        self.registrationNumber = try container.decodeIfPresent(Nullable<String>.self, forKey: .registrationNumber) ?? .null
         self.registrationType = try container.decodeIfPresent(InvoicePaymentMethodOptionsBillieCompanyDetailsRegistrationType.self, forKey: .registrationType)
-        self.vat = try container.decode(Nullable<String>.self, forKey: .vat)
+        self.vat = try container.decodeIfPresent(Nullable<String>.self, forKey: .vat) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -1048,12 +877,12 @@ public struct SubscriptionPaymentMethodOptionsBillieCompanyDetailsRegisteredAddr
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.city = try container.decode(Nullable<String>.self, forKey: .city)
-        self.country = try container.decode(Nullable<String>.self, forKey: .country)
-        self.line1 = try container.decode(Nullable<String>.self, forKey: .line1)
-        self.line2 = try container.decode(Nullable<String>.self, forKey: .line2)
-        self.postalCode = try container.decode(Nullable<String>.self, forKey: .postalCode)
-        self.state = try container.decode(Nullable<String>.self, forKey: .state)
+        self.city = try container.decodeIfPresent(Nullable<String>.self, forKey: .city) ?? .null
+        self.country = try container.decodeIfPresent(Nullable<String>.self, forKey: .country) ?? .null
+        self.line1 = try container.decodeIfPresent(Nullable<String>.self, forKey: .line1) ?? .null
+        self.line2 = try container.decodeIfPresent(Nullable<String>.self, forKey: .line2) ?? .null
+        self.postalCode = try container.decodeIfPresent(Nullable<String>.self, forKey: .postalCode) ?? .null
+        self.state = try container.decodeIfPresent(Nullable<String>.self, forKey: .state) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -1149,8 +978,8 @@ public struct SubscriptionPaymentMethodOptionsCard: Sendable, Codable, Equatable
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.mandateOptions = try container.decodeIfPresent(InvoiceMandateOptionsCard.self, forKey: .mandateOptions)
-        self.network = try container.decode(Nullable<PaymentIntentPaymentMethodOptionsCardNetwork>.self, forKey: .network)
-        self.requestThreeDSecure = try container.decode(Nullable<CheckoutCardPaymentMethodOptionsRequestThreeDSecure>.self, forKey: .requestThreeDSecure)
+        self.network = try container.decodeIfPresent(Nullable<PaymentIntentPaymentMethodOptionsCardNetwork>.self, forKey: .network) ?? .null
+        self.requestThreeDSecure = try container.decodeIfPresent(Nullable<CheckoutCardPaymentMethodOptionsRequestThreeDSecure>.self, forKey: .requestThreeDSecure) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -1194,7 +1023,7 @@ public struct SubscriptionPaymentMethodOptionsMandateOptionsBlik: Sendable, Coda
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.expiresAt = try container.decode(Nullable<StripeTimestamp>.self, forKey: .expiresAt)
+        self.expiresAt = try container.decodeIfPresent(Nullable<StripeTimestamp>.self, forKey: .expiresAt) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -1245,10 +1074,10 @@ public struct SubscriptionPaymentMethodOptionsMandateOptionsPix: Sendable, Codab
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.amount = try container.decode(Nullable<Int>.self, forKey: .amount)
-        self.amountIncludesIof = try container.decode(Nullable<CheckoutPixPaymentMethodOptionsAmountIncludesIof>.self, forKey: .amountIncludesIof)
-        self.endDate = try container.decode(Nullable<String>.self, forKey: .endDate)
-        self.paymentSchedule = try container.decode(Nullable<MandatePixPaymentSchedule>.self, forKey: .paymentSchedule)
+        self.amount = try container.decodeIfPresent(Nullable<Int>.self, forKey: .amount) ?? .null
+        self.amountIncludesIof = try container.decodeIfPresent(Nullable<CheckoutPixPaymentMethodOptionsAmountIncludesIof>.self, forKey: .amountIncludesIof) ?? .null
+        self.endDate = try container.decodeIfPresent(Nullable<String>.self, forKey: .endDate) ?? .null
+        self.paymentSchedule = try container.decodeIfPresent(Nullable<MandatePixPaymentSchedule>.self, forKey: .paymentSchedule) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -1359,6 +1188,53 @@ public struct SubscriptionPaymentMethodOptionsSepaDebit: Sendable, Codable, Equa
     }
 }
 
+public struct SubscriptionPendingInvoiceItemInterval: Sendable, Codable, Equatable, Hashable {
+    public var interval: PlanInterval
+    public var intervalCount: Int
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(interval: PlanInterval, intervalCount: Int, unknownFields: [String: JSONValue]? = nil) {
+        self.interval = interval
+        self.intervalCount = intervalCount
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case interval
+        case intervalCount = "interval_count"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.interval = try container.decode(PlanInterval.self, forKey: .interval)
+        self.intervalCount = try container.decode(Int.self, forKey: .intervalCount)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .interval, .intervalCount: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.interval, forKey: .interval)
+        try container.encodeIfPresent(self.intervalCount, forKey: .intervalCount)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
 /// Polymorphic union; unknown shapes are kept in `other` (lossless).
 public enum SubscriptionScheduleApplication: Sendable, Codable, Equatable, Hashable {
     case string(String)
@@ -1385,26 +1261,6 @@ public enum SubscriptionScheduleApplication: Sendable, Codable, Equatable, Hasha
         case .string(let value): try container.encode(value)
         case .application(let value): try container.encode(value)
         case .deletedApplication(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum SubscriptionScheduleCurrentPhase: Sendable, Codable, Equatable, Hashable {
-    indirect case subscriptionScheduleCurrentPhase(SubscriptionScheduleCurrentPhase)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(SubscriptionScheduleCurrentPhase.self) { self = .subscriptionScheduleCurrentPhase(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .subscriptionScheduleCurrentPhase(let value): try container.encode(value)
         case .other(let value): try container.encode(value)
         }
     }
@@ -1632,27 +1488,27 @@ public struct SubscriptionSchedule: Sendable, Codable, Equatable, Hashable, Stri
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.application = try container.decode(Nullable<SubscriptionScheduleApplication>.self, forKey: .application)
+        self.application = try container.decodeIfPresent(Nullable<SubscriptionScheduleApplication>.self, forKey: .application) ?? .null
         self.billingMode = try container.decode(SubscriptionsResourceBillingMode.self, forKey: .billingMode)
-        self.canceledAt = try container.decode(Nullable<StripeTimestamp>.self, forKey: .canceledAt)
-        self.completedAt = try container.decode(Nullable<StripeTimestamp>.self, forKey: .completedAt)
+        self.canceledAt = try container.decodeIfPresent(Nullable<StripeTimestamp>.self, forKey: .canceledAt) ?? .null
+        self.completedAt = try container.decodeIfPresent(Nullable<StripeTimestamp>.self, forKey: .completedAt) ?? .null
         self.created = try container.decode(StripeTimestamp.self, forKey: .created)
-        self.currentPhase = try container.decode(Nullable<SubscriptionScheduleCurrentPhase>.self, forKey: .currentPhase)
+        self.currentPhase = try container.decodeIfPresent(Nullable<SubscriptionScheduleCurrentPhase>.self, forKey: .currentPhase) ?? .null
         self.customer = try container.decode(SubscriptionScheduleCustomer.self, forKey: .customer)
-        self.customerAccount = try container.decode(Nullable<String>.self, forKey: .customerAccount)
+        self.customerAccount = try container.decodeIfPresent(Nullable<String>.self, forKey: .customerAccount) ?? .null
         self.defaultSettings = try container.decode(SubscriptionSchedulesResourceDefaultSettings.self, forKey: .defaultSettings)
         self.endBehavior = try container.decode(SubscriptionScheduleEndBehavior.self, forKey: .endBehavior)
         self.id = try container.decode(String.self, forKey: .id)
         self.livemode = try container.decode(Bool.self, forKey: .livemode)
-        self.metadata = try container.decode(Nullable<[String: String]>.self, forKey: .metadata)
+        self.metadata = try container.decodeIfPresent(Nullable<[String: String]>.self, forKey: .metadata) ?? .null
         self.object = try container.decode(SubscriptionScheduleObject.self, forKey: .object)
         self.pauseSchedules = try container.decode([SubscriptionSchedulesResourcePauseSchedule].self, forKey: .pauseSchedules)
         self.phases = try container.decode([SubscriptionSchedulePhaseConfiguration].self, forKey: .phases)
-        self.releasedAt = try container.decode(Nullable<StripeTimestamp>.self, forKey: .releasedAt)
-        self.releasedSubscription = try container.decode(Nullable<String>.self, forKey: .releasedSubscription)
+        self.releasedAt = try container.decodeIfPresent(Nullable<StripeTimestamp>.self, forKey: .releasedAt) ?? .null
+        self.releasedSubscription = try container.decodeIfPresent(Nullable<String>.self, forKey: .releasedSubscription) ?? .null
         self.status = try container.decode(SubscriptionScheduleStatus.self, forKey: .status)
-        self.subscription = try container.decode(Nullable<Expandable<Subscription>>.self, forKey: .subscription)
-        self.testClock = try container.decode(Nullable<Expandable<TestHelpersTestClock>>.self, forKey: .testClock)
+        self.subscription = try container.decodeIfPresent(Nullable<Expandable<Subscription>>.self, forKey: .subscription) ?? .null
+        self.testClock = try container.decodeIfPresent(Nullable<Expandable<TestHelpersTestClock>>.self, forKey: .testClock) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -2057,12 +1913,12 @@ public struct SubscriptionScheduleAddInvoiceItem: Sendable, Codable, Equatable, 
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.discountable = try container.decode(Nullable<Bool>.self, forKey: .discountable)
+        self.discountable = try container.decodeIfPresent(Nullable<Bool>.self, forKey: .discountable) ?? .null
         self.discounts = try container.decode([DiscountsResourceStackableDiscountWithDiscountEnd].self, forKey: .discounts)
-        self.metadata = try container.decode(Nullable<[String: String]>.self, forKey: .metadata)
+        self.metadata = try container.decodeIfPresent(Nullable<[String: String]>.self, forKey: .metadata) ?? .null
         self.period = try container.decode(SubscriptionScheduleAddInvoiceItemPeriod.self, forKey: .period)
         self.price = try container.decode(SubscriptionScheduleAddInvoiceItemPrice.self, forKey: .price)
-        self.quantity = try container.decode(Nullable<Int>.self, forKey: .quantity)
+        self.quantity = try container.decodeIfPresent(Nullable<Int>.self, forKey: .quantity) ?? .null
         self.taxRates = try container.decodeIfPresent(Nullable<[TaxRate]>.self, forKey: .taxRates)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
@@ -2142,26 +1998,6 @@ public struct SubscriptionScheduleAddInvoiceItemPeriod: Sendable, Codable, Equat
 }
 
 /// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum SubscriptionScheduleConfigurationItemBillingThresholds: Sendable, Codable, Equatable, Hashable {
-    case subscriptionItemBillingThresholds(SubscriptionItemBillingThresholds)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(SubscriptionItemBillingThresholds.self) { self = .subscriptionItemBillingThresholds(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .subscriptionItemBillingThresholds(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
 public enum SubscriptionScheduleConfigurationItemPlan: Sendable, Codable, Equatable, Hashable {
     case string(String)
     case plan(Plan)
@@ -2224,7 +2060,7 @@ public enum SubscriptionScheduleConfigurationItemPrice: Sendable, Codable, Equat
 }
 
 public struct SubscriptionScheduleConfigurationItem: Sendable, Codable, Equatable, Hashable {
-    public var billingThresholds: Nullable<SubscriptionScheduleConfigurationItemBillingThresholds>
+    public var billingThresholds: Nullable<SubscriptionItemBillingThresholds>
     public var discounts: [StackableDiscountWithDiscountSettings]
     public var metadata: Nullable<[String: String]>
     public var plan: SubscriptionScheduleConfigurationItemPlan
@@ -2235,7 +2071,7 @@ public struct SubscriptionScheduleConfigurationItem: Sendable, Codable, Equatabl
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(billingThresholds: Nullable<SubscriptionScheduleConfigurationItemBillingThresholds>, discounts: [StackableDiscountWithDiscountSettings], metadata: Nullable<[String: String]>, plan: SubscriptionScheduleConfigurationItemPlan, price: SubscriptionScheduleConfigurationItemPrice, quantity: Int? = nil, taxRates: Nullable<[TaxRate]>? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(billingThresholds: Nullable<SubscriptionItemBillingThresholds>, discounts: [StackableDiscountWithDiscountSettings], metadata: Nullable<[String: String]>, plan: SubscriptionScheduleConfigurationItemPlan, price: SubscriptionScheduleConfigurationItemPrice, quantity: Int? = nil, taxRates: Nullable<[TaxRate]>? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.billingThresholds = billingThresholds
         self.discounts = discounts
         self.metadata = metadata
@@ -2258,9 +2094,9 @@ public struct SubscriptionScheduleConfigurationItem: Sendable, Codable, Equatabl
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.billingThresholds = try container.decode(Nullable<SubscriptionScheduleConfigurationItemBillingThresholds>.self, forKey: .billingThresholds)
+        self.billingThresholds = try container.decodeIfPresent(Nullable<SubscriptionItemBillingThresholds>.self, forKey: .billingThresholds) ?? .null
         self.discounts = try container.decode([StackableDiscountWithDiscountSettings].self, forKey: .discounts)
-        self.metadata = try container.decode(Nullable<[String: String]>.self, forKey: .metadata)
+        self.metadata = try container.decodeIfPresent(Nullable<[String: String]>.self, forKey: .metadata) ?? .null
         self.plan = try container.decode(SubscriptionScheduleConfigurationItemPlan.self, forKey: .plan)
         self.price = try container.decode(SubscriptionScheduleConfigurationItemPrice.self, forKey: .price)
         self.quantity = try container.decodeIfPresent(Int.self, forKey: .quantity)
@@ -2285,6 +2121,53 @@ public struct SubscriptionScheduleConfigurationItem: Sendable, Codable, Equatabl
         try container.encodeIfPresent(self.price, forKey: .price)
         try container.encodeIfPresent(self.quantity, forKey: .quantity)
         try container.encodeIfPresent(self.taxRates, forKey: .taxRates)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct SubscriptionScheduleCurrentPhase: Sendable, Codable, Equatable, Hashable {
+    public var endDate: StripeTimestamp
+    public var startDate: StripeTimestamp
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(endDate: StripeTimestamp, startDate: StripeTimestamp, unknownFields: [String: JSONValue]? = nil) {
+        self.endDate = endDate
+        self.startDate = startDate
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case endDate = "end_date"
+        case startDate = "start_date"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.endDate = try container.decode(StripeTimestamp.self, forKey: .endDate)
+        self.startDate = try container.decode(StripeTimestamp.self, forKey: .startDate)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .endDate, .startDate: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.endDate, forKey: .endDate)
+        try container.encodeIfPresent(self.startDate, forKey: .startDate)
         if let unknownFields = unknownFields {
             for (key, value) in unknownFields {
                 if let codingKey = CodingKeys(stringValue: key) {
@@ -2329,72 +2212,12 @@ public enum SubscriptionSchedulePhaseConfigurationBillingCycleAnchor: Sendable, 
     }
 }
 
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum SubscriptionSchedulePhaseConfigurationBillingThresholds: Sendable, Codable, Equatable, Hashable {
-    case subscriptionBillingThresholds(SubscriptionBillingThresholds)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(SubscriptionBillingThresholds.self) { self = .subscriptionBillingThresholds(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .subscriptionBillingThresholds(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum SubscriptionSchedulePhaseConfigurationInvoiceSettings: Sendable, Codable, Equatable, Hashable {
-    case invoiceSettingSubscriptionSchedulePhaseSetting(InvoiceSettingSubscriptionSchedulePhaseSetting)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(InvoiceSettingSubscriptionSchedulePhaseSetting.self) { self = .invoiceSettingSubscriptionSchedulePhaseSetting(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .invoiceSettingSubscriptionSchedulePhaseSetting(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum SubscriptionSchedulePhaseConfigurationTransferData: Sendable, Codable, Equatable, Hashable {
-    case subscriptionTransferData(SubscriptionTransferData)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(SubscriptionTransferData.self) { self = .subscriptionTransferData(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .subscriptionTransferData(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
 public struct SubscriptionSchedulePhaseConfiguration: Sendable, Codable, Equatable, Hashable {
     public var addInvoiceItems: [SubscriptionScheduleAddInvoiceItem]
     public var applicationFeePercent: Nullable<Decimal>
     public var automaticTax: SchedulesPhaseAutomaticTax?
     public var billingCycleAnchor: Nullable<SubscriptionSchedulePhaseConfigurationBillingCycleAnchor>
-    public var billingThresholds: Nullable<SubscriptionSchedulePhaseConfigurationBillingThresholds>
+    public var billingThresholds: Nullable<SubscriptionBillingThresholds>
     public var collectionMethod: Nullable<InvoiceCollectionMethod>
     public var currency: String
     public var defaultPaymentMethod: Nullable<Expandable<PaymentMethod>>
@@ -2402,20 +2225,20 @@ public struct SubscriptionSchedulePhaseConfiguration: Sendable, Codable, Equatab
     public var description: Nullable<String>
     public var discounts: [StackableDiscountWithDiscountSettingsAndDiscountEnd]
     public var endDate: StripeTimestamp
-    public var invoiceSettings: Nullable<SubscriptionSchedulePhaseConfigurationInvoiceSettings>
+    public var invoiceSettings: Nullable<InvoiceSettingSubscriptionSchedulePhaseSetting>
     public var items: [SubscriptionScheduleConfigurationItem]
     public var metadata: Nullable<[String: String]>
     public var onBehalfOf: Nullable<Expandable<Account>>
     public var prorationBehavior: PortalSubscriptionCancelProrationBehavior
     public var startDate: StripeTimestamp
-    public var transferData: Nullable<SubscriptionSchedulePhaseConfigurationTransferData>
+    public var transferData: Nullable<SubscriptionTransferData>
     public var trial: Bool?
     public var trialEnd: Nullable<StripeTimestamp>
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(addInvoiceItems: [SubscriptionScheduleAddInvoiceItem], applicationFeePercent: Nullable<Decimal>, automaticTax: SchedulesPhaseAutomaticTax? = nil, billingCycleAnchor: Nullable<SubscriptionSchedulePhaseConfigurationBillingCycleAnchor>, billingThresholds: Nullable<SubscriptionSchedulePhaseConfigurationBillingThresholds>, collectionMethod: Nullable<InvoiceCollectionMethod>, currency: String, defaultPaymentMethod: Nullable<Expandable<PaymentMethod>>, defaultTaxRates: Nullable<[TaxRate]>? = nil, description: Nullable<String>, discounts: [StackableDiscountWithDiscountSettingsAndDiscountEnd], endDate: StripeTimestamp, invoiceSettings: Nullable<SubscriptionSchedulePhaseConfigurationInvoiceSettings>, items: [SubscriptionScheduleConfigurationItem], metadata: Nullable<[String: String]>, onBehalfOf: Nullable<Expandable<Account>>, prorationBehavior: PortalSubscriptionCancelProrationBehavior, startDate: StripeTimestamp, transferData: Nullable<SubscriptionSchedulePhaseConfigurationTransferData>, trial: Bool? = nil, trialEnd: Nullable<StripeTimestamp>, unknownFields: [String: JSONValue]? = nil) {
+    public init(addInvoiceItems: [SubscriptionScheduleAddInvoiceItem], applicationFeePercent: Nullable<Decimal>, automaticTax: SchedulesPhaseAutomaticTax? = nil, billingCycleAnchor: Nullable<SubscriptionSchedulePhaseConfigurationBillingCycleAnchor>, billingThresholds: Nullable<SubscriptionBillingThresholds>, collectionMethod: Nullable<InvoiceCollectionMethod>, currency: String, defaultPaymentMethod: Nullable<Expandable<PaymentMethod>>, defaultTaxRates: Nullable<[TaxRate]>? = nil, description: Nullable<String>, discounts: [StackableDiscountWithDiscountSettingsAndDiscountEnd], endDate: StripeTimestamp, invoiceSettings: Nullable<InvoiceSettingSubscriptionSchedulePhaseSetting>, items: [SubscriptionScheduleConfigurationItem], metadata: Nullable<[String: String]>, onBehalfOf: Nullable<Expandable<Account>>, prorationBehavior: PortalSubscriptionCancelProrationBehavior, startDate: StripeTimestamp, transferData: Nullable<SubscriptionTransferData>, trial: Bool? = nil, trialEnd: Nullable<StripeTimestamp>, unknownFields: [String: JSONValue]? = nil) {
         self.addInvoiceItems = addInvoiceItems
         self.applicationFeePercent = applicationFeePercent
         self.automaticTax = automaticTax
@@ -2467,26 +2290,26 @@ public struct SubscriptionSchedulePhaseConfiguration: Sendable, Codable, Equatab
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.addInvoiceItems = try container.decode([SubscriptionScheduleAddInvoiceItem].self, forKey: .addInvoiceItems)
-        self.applicationFeePercent = try container.decode(Nullable<Decimal>.self, forKey: .applicationFeePercent)
+        self.applicationFeePercent = try container.decodeIfPresent(Nullable<Decimal>.self, forKey: .applicationFeePercent) ?? .null
         self.automaticTax = try container.decodeIfPresent(SchedulesPhaseAutomaticTax.self, forKey: .automaticTax)
-        self.billingCycleAnchor = try container.decode(Nullable<SubscriptionSchedulePhaseConfigurationBillingCycleAnchor>.self, forKey: .billingCycleAnchor)
-        self.billingThresholds = try container.decode(Nullable<SubscriptionSchedulePhaseConfigurationBillingThresholds>.self, forKey: .billingThresholds)
-        self.collectionMethod = try container.decode(Nullable<InvoiceCollectionMethod>.self, forKey: .collectionMethod)
+        self.billingCycleAnchor = try container.decodeIfPresent(Nullable<SubscriptionSchedulePhaseConfigurationBillingCycleAnchor>.self, forKey: .billingCycleAnchor) ?? .null
+        self.billingThresholds = try container.decodeIfPresent(Nullable<SubscriptionBillingThresholds>.self, forKey: .billingThresholds) ?? .null
+        self.collectionMethod = try container.decodeIfPresent(Nullable<InvoiceCollectionMethod>.self, forKey: .collectionMethod) ?? .null
         self.currency = try container.decode(String.self, forKey: .currency)
-        self.defaultPaymentMethod = try container.decode(Nullable<Expandable<PaymentMethod>>.self, forKey: .defaultPaymentMethod)
+        self.defaultPaymentMethod = try container.decodeIfPresent(Nullable<Expandable<PaymentMethod>>.self, forKey: .defaultPaymentMethod) ?? .null
         self.defaultTaxRates = try container.decodeIfPresent(Nullable<[TaxRate]>.self, forKey: .defaultTaxRates)
-        self.description = try container.decode(Nullable<String>.self, forKey: .description)
+        self.description = try container.decodeIfPresent(Nullable<String>.self, forKey: .description) ?? .null
         self.discounts = try container.decode([StackableDiscountWithDiscountSettingsAndDiscountEnd].self, forKey: .discounts)
         self.endDate = try container.decode(StripeTimestamp.self, forKey: .endDate)
-        self.invoiceSettings = try container.decode(Nullable<SubscriptionSchedulePhaseConfigurationInvoiceSettings>.self, forKey: .invoiceSettings)
+        self.invoiceSettings = try container.decodeIfPresent(Nullable<InvoiceSettingSubscriptionSchedulePhaseSetting>.self, forKey: .invoiceSettings) ?? .null
         self.items = try container.decode([SubscriptionScheduleConfigurationItem].self, forKey: .items)
-        self.metadata = try container.decode(Nullable<[String: String]>.self, forKey: .metadata)
-        self.onBehalfOf = try container.decode(Nullable<Expandable<Account>>.self, forKey: .onBehalfOf)
+        self.metadata = try container.decodeIfPresent(Nullable<[String: String]>.self, forKey: .metadata) ?? .null
+        self.onBehalfOf = try container.decodeIfPresent(Nullable<Expandable<Account>>.self, forKey: .onBehalfOf) ?? .null
         self.prorationBehavior = try container.decode(PortalSubscriptionCancelProrationBehavior.self, forKey: .prorationBehavior)
         self.startDate = try container.decode(StripeTimestamp.self, forKey: .startDate)
-        self.transferData = try container.decode(Nullable<SubscriptionSchedulePhaseConfigurationTransferData>.self, forKey: .transferData)
+        self.transferData = try container.decodeIfPresent(Nullable<SubscriptionTransferData>.self, forKey: .transferData) ?? .null
         self.trial = try container.decodeIfPresent(Bool.self, forKey: .trial)
-        self.trialEnd = try container.decode(Nullable<StripeTimestamp>.self, forKey: .trialEnd)
+        self.trialEnd = try container.decodeIfPresent(Nullable<StripeTimestamp>.self, forKey: .trialEnd) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -2531,62 +2354,22 @@ public struct SubscriptionSchedulePhaseConfiguration: Sendable, Codable, Equatab
     }
 }
 
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum SubscriptionSchedulesResourceDefaultSettingsBillingThresholds: Sendable, Codable, Equatable, Hashable {
-    case subscriptionBillingThresholds(SubscriptionBillingThresholds)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(SubscriptionBillingThresholds.self) { self = .subscriptionBillingThresholds(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .subscriptionBillingThresholds(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum SubscriptionSchedulesResourceDefaultSettingsTransferData: Sendable, Codable, Equatable, Hashable {
-    case subscriptionTransferData(SubscriptionTransferData)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(SubscriptionTransferData.self) { self = .subscriptionTransferData(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .subscriptionTransferData(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
 public struct SubscriptionSchedulesResourceDefaultSettings: Sendable, Codable, Equatable, Hashable {
     public var applicationFeePercent: Nullable<Decimal>
     public var automaticTax: SubscriptionSchedulesResourceDefaultSettingsAutomaticTax?
     public var billingCycleAnchor: SubscriptionSchedulePhaseConfigurationBillingCycleAnchor
-    public var billingThresholds: Nullable<SubscriptionSchedulesResourceDefaultSettingsBillingThresholds>
+    public var billingThresholds: Nullable<SubscriptionBillingThresholds>
     public var collectionMethod: Nullable<InvoiceCollectionMethod>
     public var defaultPaymentMethod: Nullable<Expandable<PaymentMethod>>
     public var description: Nullable<String>
     public var invoiceSettings: InvoiceSettingSubscriptionScheduleSetting
     public var onBehalfOf: Nullable<Expandable<Account>>
-    public var transferData: Nullable<SubscriptionSchedulesResourceDefaultSettingsTransferData>
+    public var transferData: Nullable<SubscriptionTransferData>
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(applicationFeePercent: Nullable<Decimal>, automaticTax: SubscriptionSchedulesResourceDefaultSettingsAutomaticTax? = nil, billingCycleAnchor: SubscriptionSchedulePhaseConfigurationBillingCycleAnchor, billingThresholds: Nullable<SubscriptionSchedulesResourceDefaultSettingsBillingThresholds>, collectionMethod: Nullable<InvoiceCollectionMethod>, defaultPaymentMethod: Nullable<Expandable<PaymentMethod>>, description: Nullable<String>, invoiceSettings: InvoiceSettingSubscriptionScheduleSetting, onBehalfOf: Nullable<Expandable<Account>>, transferData: Nullable<SubscriptionSchedulesResourceDefaultSettingsTransferData>, unknownFields: [String: JSONValue]? = nil) {
+    public init(applicationFeePercent: Nullable<Decimal>, automaticTax: SubscriptionSchedulesResourceDefaultSettingsAutomaticTax? = nil, billingCycleAnchor: SubscriptionSchedulePhaseConfigurationBillingCycleAnchor, billingThresholds: Nullable<SubscriptionBillingThresholds>, collectionMethod: Nullable<InvoiceCollectionMethod>, defaultPaymentMethod: Nullable<Expandable<PaymentMethod>>, description: Nullable<String>, invoiceSettings: InvoiceSettingSubscriptionScheduleSetting, onBehalfOf: Nullable<Expandable<Account>>, transferData: Nullable<SubscriptionTransferData>, unknownFields: [String: JSONValue]? = nil) {
         self.applicationFeePercent = applicationFeePercent
         self.automaticTax = automaticTax
         self.billingCycleAnchor = billingCycleAnchor
@@ -2615,16 +2398,16 @@ public struct SubscriptionSchedulesResourceDefaultSettings: Sendable, Codable, E
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.applicationFeePercent = try container.decode(Nullable<Decimal>.self, forKey: .applicationFeePercent)
+        self.applicationFeePercent = try container.decodeIfPresent(Nullable<Decimal>.self, forKey: .applicationFeePercent) ?? .null
         self.automaticTax = try container.decodeIfPresent(SubscriptionSchedulesResourceDefaultSettingsAutomaticTax.self, forKey: .automaticTax)
         self.billingCycleAnchor = try container.decode(SubscriptionSchedulePhaseConfigurationBillingCycleAnchor.self, forKey: .billingCycleAnchor)
-        self.billingThresholds = try container.decode(Nullable<SubscriptionSchedulesResourceDefaultSettingsBillingThresholds>.self, forKey: .billingThresholds)
-        self.collectionMethod = try container.decode(Nullable<InvoiceCollectionMethod>.self, forKey: .collectionMethod)
-        self.defaultPaymentMethod = try container.decode(Nullable<Expandable<PaymentMethod>>.self, forKey: .defaultPaymentMethod)
-        self.description = try container.decode(Nullable<String>.self, forKey: .description)
+        self.billingThresholds = try container.decodeIfPresent(Nullable<SubscriptionBillingThresholds>.self, forKey: .billingThresholds) ?? .null
+        self.collectionMethod = try container.decodeIfPresent(Nullable<InvoiceCollectionMethod>.self, forKey: .collectionMethod) ?? .null
+        self.defaultPaymentMethod = try container.decodeIfPresent(Nullable<Expandable<PaymentMethod>>.self, forKey: .defaultPaymentMethod) ?? .null
+        self.description = try container.decodeIfPresent(Nullable<String>.self, forKey: .description) ?? .null
         self.invoiceSettings = try container.decode(InvoiceSettingSubscriptionScheduleSetting.self, forKey: .invoiceSettings)
-        self.onBehalfOf = try container.decode(Nullable<Expandable<Account>>.self, forKey: .onBehalfOf)
-        self.transferData = try container.decode(Nullable<SubscriptionSchedulesResourceDefaultSettingsTransferData>.self, forKey: .transferData)
+        self.onBehalfOf = try container.decodeIfPresent(Nullable<Expandable<Account>>.self, forKey: .onBehalfOf) ?? .null
+        self.transferData = try container.decodeIfPresent(Nullable<SubscriptionTransferData>.self, forKey: .transferData) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -2658,35 +2441,15 @@ public struct SubscriptionSchedulesResourceDefaultSettings: Sendable, Codable, E
     }
 }
 
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum SubscriptionSchedulesResourceDefaultSettingsAutomaticTaxLiability: Sendable, Codable, Equatable, Hashable {
-    case connectAccountReference(ConnectAccountReference)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(ConnectAccountReference.self) { self = .connectAccountReference(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .connectAccountReference(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
 public struct SubscriptionSchedulesResourceDefaultSettingsAutomaticTax: Sendable, Codable, Equatable, Hashable {
     public var disabledReason: Nullable<SchedulesPhaseAutomaticTaxDisabledReason>
     public var enabled: Bool
-    public var liability: Nullable<SubscriptionSchedulesResourceDefaultSettingsAutomaticTaxLiability>
+    public var liability: Nullable<ConnectAccountReference>
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(disabledReason: Nullable<SchedulesPhaseAutomaticTaxDisabledReason>, enabled: Bool, liability: Nullable<SubscriptionSchedulesResourceDefaultSettingsAutomaticTaxLiability>, unknownFields: [String: JSONValue]? = nil) {
+    public init(disabledReason: Nullable<SchedulesPhaseAutomaticTaxDisabledReason>, enabled: Bool, liability: Nullable<ConnectAccountReference>, unknownFields: [String: JSONValue]? = nil) {
         self.disabledReason = disabledReason
         self.enabled = enabled
         self.liability = liability
@@ -2701,9 +2464,9 @@ public struct SubscriptionSchedulesResourceDefaultSettingsAutomaticTax: Sendable
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.disabledReason = try container.decode(Nullable<SchedulesPhaseAutomaticTaxDisabledReason>.self, forKey: .disabledReason)
+        self.disabledReason = try container.decodeIfPresent(Nullable<SchedulesPhaseAutomaticTaxDisabledReason>.self, forKey: .disabledReason) ?? .null
         self.enabled = try container.decode(Bool.self, forKey: .enabled)
-        self.liability = try container.decode(Nullable<SubscriptionSchedulesResourceDefaultSettingsAutomaticTaxLiability>.self, forKey: .liability)
+        self.liability = try container.decodeIfPresent(Nullable<ConnectAccountReference>.self, forKey: .liability) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -2898,26 +2661,6 @@ public struct SubscriptionSchedulesResourceInvoiceItemPeriodResourcePeriodStart:
     }
 }
 
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum SubscriptionSchedulesResourcePauseScheduleResume: Sendable, Codable, Equatable, Hashable {
-    indirect case subscriptionSchedulesResourcePauseScheduleResume(SubscriptionSchedulesResourcePauseScheduleResume)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(SubscriptionSchedulesResourcePauseScheduleResume.self) { self = .subscriptionSchedulesResourcePauseScheduleResume(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .subscriptionSchedulesResourcePauseScheduleResume(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
 public struct SubscriptionSchedulesResourcePauseSchedule: Sendable, Codable, Equatable, Hashable {
     public var key: String
     public var pause: SubscriptionSchedulesResourcePauseSchedulePause
@@ -2943,7 +2686,7 @@ public struct SubscriptionSchedulesResourcePauseSchedule: Sendable, Codable, Equ
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.key = try container.decode(String.self, forKey: .key)
         self.pause = try container.decode(SubscriptionSchedulesResourcePauseSchedulePause.self, forKey: .pause)
-        self.resume = try container.decode(Nullable<SubscriptionSchedulesResourcePauseScheduleResume>.self, forKey: .resume)
+        self.resume = try container.decodeIfPresent(Nullable<SubscriptionSchedulesResourcePauseScheduleResume>.self, forKey: .resume) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -3093,30 +2836,6 @@ public struct SubscriptionSchedulesResourcePauseScheduleOutstandingUsageThrough:
     }
 }
 
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum SubscriptionSchedulesResourcePauseSchedulePauseSettings: Sendable, Codable, Equatable, Hashable {
-    indirect case subscriptionSchedulesResourcePauseSchedulePauseSettings(SubscriptionSchedulesResourcePauseSchedulePauseSettings)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let raw = try? container.decode([String: JSONValue].self),
-           let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
-            if tag == "subscription" { self = .subscriptionSchedulesResourcePauseSchedulePauseSettings(try container.decode(SubscriptionSchedulesResourcePauseSchedulePauseSettings.self)); return }
-        }
-        if let value = try? container.decode(SubscriptionSchedulesResourcePauseSchedulePauseSettings.self) { self = .subscriptionSchedulesResourcePauseSchedulePauseSettings(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .subscriptionSchedulesResourcePauseSchedulePauseSettings(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
 public struct SubscriptionSchedulesResourcePauseSchedulePause: Sendable, Codable, Equatable, Hashable {
     public var pauseAt: StripeTimestamp
     public var settings: Nullable<SubscriptionSchedulesResourcePauseSchedulePauseSettings>
@@ -3141,7 +2860,7 @@ public struct SubscriptionSchedulesResourcePauseSchedulePause: Sendable, Codable
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.pauseAt = try container.decode(StripeTimestamp.self, forKey: .pauseAt)
-        self.settings = try container.decode(Nullable<SubscriptionSchedulesResourcePauseSchedulePauseSettings>.self, forKey: .settings)
+        self.settings = try container.decodeIfPresent(Nullable<SubscriptionSchedulesResourcePauseSchedulePauseSettings>.self, forKey: .settings) ?? .null
         self.status = try container.decode(SubscriptionSchedulesResourcePauseSchedulePauseStatus.self, forKey: .status)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
@@ -3159,6 +2878,92 @@ public struct SubscriptionSchedulesResourcePauseSchedulePause: Sendable, Codable
         try container.encodeIfPresent(self.pauseAt, forKey: .pauseAt)
         try container.encodeIfPresent(self.settings, forKey: .settings)
         try container.encodeIfPresent(self.status, forKey: .status)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+/// Lossless enum: values Stripe documents plus any value the API
+/// adds later, kept in `undocumented` instead of dropped.
+public enum SubscriptionSchedulesResourcePauseSchedulePauseSettingsInvoicingBehavior: Sendable, Equatable, Hashable, LosslessEnum {
+    case invoice
+    case pendingInvoiceItem
+    case undocumented(String)
+
+    public init(rawValue raw: String) {
+        switch raw {
+        case "invoice": self = .invoice
+        case "pending_invoice_item": self = .pendingInvoiceItem
+        default: self = .undocumented(raw)
+        }
+    }
+
+    public var rawValue: String {
+        switch self {
+        case .invoice: return "invoice"
+        case .pendingInvoiceItem: return "pending_invoice_item"
+        case .undocumented(let value): return value
+        }
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        self.init(rawValue: try container.decode(String.self))
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(rawValue)
+    }
+}
+
+public struct SubscriptionSchedulesResourcePauseSchedulePauseSettings: Sendable, Codable, Equatable, Hashable {
+    public var billFor: SubscriptionSchedulesResourcePauseScheduleBillFor
+    public var invoicingBehavior: SubscriptionSchedulesResourcePauseSchedulePauseSettingsInvoicingBehavior
+    public var type: SubscriptionObject
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(billFor: SubscriptionSchedulesResourcePauseScheduleBillFor, invoicingBehavior: SubscriptionSchedulesResourcePauseSchedulePauseSettingsInvoicingBehavior, type: SubscriptionObject, unknownFields: [String: JSONValue]? = nil) {
+        self.billFor = billFor
+        self.invoicingBehavior = invoicingBehavior
+        self.type = type
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case billFor = "bill_for"
+        case invoicingBehavior = "invoicing_behavior"
+        case type
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.billFor = try container.decode(SubscriptionSchedulesResourcePauseScheduleBillFor.self, forKey: .billFor)
+        self.invoicingBehavior = try container.decode(SubscriptionSchedulesResourcePauseSchedulePauseSettingsInvoicingBehavior.self, forKey: .invoicingBehavior)
+        self.type = try container.decode(SubscriptionObject.self, forKey: .type)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .billFor, .invoicingBehavior, .type: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.billFor, forKey: .billFor)
+        try container.encodeIfPresent(self.invoicingBehavior, forKey: .invoicingBehavior)
+        try container.encodeIfPresent(self.type, forKey: .type)
         if let unknownFields = unknownFields {
             for (key, value) in unknownFields {
                 if let codingKey = CodingKeys(stringValue: key) {
@@ -3243,6 +3048,58 @@ public struct SubscriptionSchedulesResourcePauseSchedulePauseStatus: Sendable, C
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encodeIfPresent(self.error, forKey: .error)
         try container.encodeIfPresent(self.type, forKey: .type)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct SubscriptionSchedulesResourcePauseScheduleResume: Sendable, Codable, Equatable, Hashable {
+    public var resumeAt: StripeTimestamp
+    public var settings: SubscriptionSchedulesResourcePauseScheduleResumeSettings
+    public var status: SubscriptionSchedulesResourcePauseScheduleResumeStatus
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(resumeAt: StripeTimestamp, settings: SubscriptionSchedulesResourcePauseScheduleResumeSettings, status: SubscriptionSchedulesResourcePauseScheduleResumeStatus, unknownFields: [String: JSONValue]? = nil) {
+        self.resumeAt = resumeAt
+        self.settings = settings
+        self.status = status
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case resumeAt = "resume_at"
+        case settings
+        case status
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.resumeAt = try container.decode(StripeTimestamp.self, forKey: .resumeAt)
+        self.settings = try container.decode(SubscriptionSchedulesResourcePauseScheduleResumeSettings.self, forKey: .settings)
+        self.status = try container.decode(SubscriptionSchedulesResourcePauseScheduleResumeStatus.self, forKey: .status)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .resumeAt, .settings, .status: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.resumeAt, forKey: .resumeAt)
+        try container.encodeIfPresent(self.settings, forKey: .settings)
+        try container.encodeIfPresent(self.status, forKey: .status)
         if let unknownFields = unknownFields {
             for (key, value) in unknownFields {
                 if let codingKey = CodingKeys(stringValue: key) {
@@ -3579,6 +3436,53 @@ public struct SubscriptionSchedulesResourcePauseScheduleUnusedTimeFrom: Sendable
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encodeIfPresent(self.type, forKey: .type)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct SubscriptionTransferData: Sendable, Codable, Equatable, Hashable {
+    public var amountPercent: Nullable<Decimal>
+    public var destination: Expandable<Account>
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(amountPercent: Nullable<Decimal>, destination: Expandable<Account>, unknownFields: [String: JSONValue]? = nil) {
+        self.amountPercent = amountPercent
+        self.destination = destination
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case amountPercent = "amount_percent"
+        case destination
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.amountPercent = try container.decodeIfPresent(Nullable<Decimal>.self, forKey: .amountPercent) ?? .null
+        self.destination = try container.decode(Expandable<Account>.self, forKey: .destination)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .amountPercent, .destination: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.amountPercent, forKey: .amountPercent)
+        try container.encodeIfPresent(self.destination, forKey: .destination)
         if let unknownFields = unknownFields {
             for (key, value) in unknownFields {
                 if let codingKey = CodingKeys(stringValue: key) {
@@ -4149,12 +4053,12 @@ public struct SubscriptionCreateParamsBillingCycleAnchorConfig: Sendable, Codabl
 }
 
 public struct SubscriptionCreateParamsBillingModeFlexible: Sendable, Codable, Equatable, Hashable {
-    public var prorationDiscounts: InvoiceCreatePreviewParamsScheduleDetailsBillingModeFlexibleProrationDiscounts?
+    public var prorationDiscounts: SubscriptionsResourceBillingModeFlexibleProrationDiscounts?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(prorationDiscounts: InvoiceCreatePreviewParamsScheduleDetailsBillingModeFlexibleProrationDiscounts? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(prorationDiscounts: SubscriptionsResourceBillingModeFlexibleProrationDiscounts? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.prorationDiscounts = prorationDiscounts
         self.unknownFields = unknownFields
     }
@@ -4165,7 +4069,7 @@ public struct SubscriptionCreateParamsBillingModeFlexible: Sendable, Codable, Eq
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.prorationDiscounts = try container.decodeIfPresent(InvoiceCreatePreviewParamsScheduleDetailsBillingModeFlexibleProrationDiscounts.self, forKey: .prorationDiscounts)
+        self.prorationDiscounts = try container.decodeIfPresent(SubscriptionsResourceBillingModeFlexibleProrationDiscounts.self, forKey: .prorationDiscounts)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -6679,12 +6583,12 @@ public struct SubscriptionCancelParamsCancellationDetails: Sendable, Codable, Eq
 }
 
 public struct SubscriptionMigrateParamsBillingModeFlexible: Sendable, Codable, Equatable, Hashable {
-    public var prorationDiscounts: InvoiceCreatePreviewParamsScheduleDetailsBillingModeFlexibleProrationDiscounts?
+    public var prorationDiscounts: SubscriptionsResourceBillingModeFlexibleProrationDiscounts?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(prorationDiscounts: InvoiceCreatePreviewParamsScheduleDetailsBillingModeFlexibleProrationDiscounts? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(prorationDiscounts: SubscriptionsResourceBillingModeFlexibleProrationDiscounts? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.prorationDiscounts = prorationDiscounts
         self.unknownFields = unknownFields
     }
@@ -6695,7 +6599,7 @@ public struct SubscriptionMigrateParamsBillingModeFlexible: Sendable, Codable, E
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.prorationDiscounts = try container.decodeIfPresent(InvoiceCreatePreviewParamsScheduleDetailsBillingModeFlexibleProrationDiscounts.self, forKey: .prorationDiscounts)
+        self.prorationDiscounts = try container.decodeIfPresent(SubscriptionsResourceBillingModeFlexibleProrationDiscounts.self, forKey: .prorationDiscounts)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -10691,12 +10595,12 @@ public struct SubscriptionItemUpdateParamsPriceData: Sendable, Codable, Equatabl
 }
 
 public struct SubscriptionScheduleCreateParamsBillingModeFlexible: Sendable, Codable, Equatable, Hashable {
-    public var prorationDiscounts: InvoiceCreatePreviewParamsScheduleDetailsBillingModeFlexibleProrationDiscounts?
+    public var prorationDiscounts: SubscriptionsResourceBillingModeFlexibleProrationDiscounts?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(prorationDiscounts: InvoiceCreatePreviewParamsScheduleDetailsBillingModeFlexibleProrationDiscounts? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(prorationDiscounts: SubscriptionsResourceBillingModeFlexibleProrationDiscounts? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.prorationDiscounts = prorationDiscounts
         self.unknownFields = unknownFields
     }
@@ -10707,7 +10611,7 @@ public struct SubscriptionScheduleCreateParamsBillingModeFlexible: Sendable, Cod
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.prorationDiscounts = try container.decodeIfPresent(InvoiceCreatePreviewParamsScheduleDetailsBillingModeFlexibleProrationDiscounts.self, forKey: .prorationDiscounts)
+        self.prorationDiscounts = try container.decodeIfPresent(SubscriptionsResourceBillingModeFlexibleProrationDiscounts.self, forKey: .prorationDiscounts)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -11395,13 +11299,13 @@ public struct SubscriptionScheduleCreateParamsPauseSchedulesItemPauseSettingsBil
 
 public struct SubscriptionScheduleCreateParamsPauseSchedulesItemPauseSettings: Sendable, Codable, Equatable, Hashable {
     public var billFor: SubscriptionScheduleCreateParamsPauseSchedulesItemPauseSettingsBillFor?
-    public var invoicingBehavior: InvoiceCreatePreviewParamsScheduleDetailsPauseSchedulesItemPauseSettingsInvoicingBehavior?
+    public var invoicingBehavior: SubscriptionSchedulesResourcePauseSchedulePauseSettingsInvoicingBehavior?
     public var type: SubscriptionObject?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(billFor: SubscriptionScheduleCreateParamsPauseSchedulesItemPauseSettingsBillFor? = nil, invoicingBehavior: InvoiceCreatePreviewParamsScheduleDetailsPauseSchedulesItemPauseSettingsInvoicingBehavior? = nil, type: SubscriptionObject? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(billFor: SubscriptionScheduleCreateParamsPauseSchedulesItemPauseSettingsBillFor? = nil, invoicingBehavior: SubscriptionSchedulesResourcePauseSchedulePauseSettingsInvoicingBehavior? = nil, type: SubscriptionObject? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.billFor = billFor
         self.invoicingBehavior = invoicingBehavior
         self.type = type
@@ -11417,7 +11321,7 @@ public struct SubscriptionScheduleCreateParamsPauseSchedulesItemPauseSettings: S
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.billFor = try container.decodeIfPresent(SubscriptionScheduleCreateParamsPauseSchedulesItemPauseSettingsBillFor.self, forKey: .billFor)
-        self.invoicingBehavior = try container.decodeIfPresent(InvoiceCreatePreviewParamsScheduleDetailsPauseSchedulesItemPauseSettingsInvoicingBehavior.self, forKey: .invoicingBehavior)
+        self.invoicingBehavior = try container.decodeIfPresent(SubscriptionSchedulesResourcePauseSchedulePauseSettingsInvoicingBehavior.self, forKey: .invoicingBehavior)
         self.type = try container.decodeIfPresent(SubscriptionObject.self, forKey: .type)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
@@ -13908,13 +13812,13 @@ public struct SubscriptionScheduleUpdateParamsPauseSchedulesItemPauseSettingsBil
 
 public struct SubscriptionScheduleUpdateParamsPauseSchedulesItemPauseSettings: Sendable, Codable, Equatable, Hashable {
     public var billFor: SubscriptionScheduleUpdateParamsPauseSchedulesItemPauseSettingsBillFor?
-    public var invoicingBehavior: InvoiceCreatePreviewParamsScheduleDetailsPauseSchedulesItemPauseSettingsInvoicingBehavior?
+    public var invoicingBehavior: SubscriptionSchedulesResourcePauseSchedulePauseSettingsInvoicingBehavior?
     public var type: SubscriptionObject?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(billFor: SubscriptionScheduleUpdateParamsPauseSchedulesItemPauseSettingsBillFor? = nil, invoicingBehavior: InvoiceCreatePreviewParamsScheduleDetailsPauseSchedulesItemPauseSettingsInvoicingBehavior? = nil, type: SubscriptionObject? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(billFor: SubscriptionScheduleUpdateParamsPauseSchedulesItemPauseSettingsBillFor? = nil, invoicingBehavior: SubscriptionSchedulesResourcePauseSchedulePauseSettingsInvoicingBehavior? = nil, type: SubscriptionObject? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.billFor = billFor
         self.invoicingBehavior = invoicingBehavior
         self.type = type
@@ -13930,7 +13834,7 @@ public struct SubscriptionScheduleUpdateParamsPauseSchedulesItemPauseSettings: S
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.billFor = try container.decodeIfPresent(SubscriptionScheduleUpdateParamsPauseSchedulesItemPauseSettingsBillFor.self, forKey: .billFor)
-        self.invoicingBehavior = try container.decodeIfPresent(InvoiceCreatePreviewParamsScheduleDetailsPauseSchedulesItemPauseSettingsInvoicingBehavior.self, forKey: .invoicingBehavior)
+        self.invoicingBehavior = try container.decodeIfPresent(SubscriptionSchedulesResourcePauseSchedulePauseSettingsInvoicingBehavior.self, forKey: .invoicingBehavior)
         self.type = try container.decodeIfPresent(SubscriptionObject.self, forKey: .type)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
@@ -15783,11 +15687,11 @@ public struct SubscriptionMigrateParams: Sendable, Encodable, Hashable {
 
 public struct SubscriptionPauseParams: Sendable, Encodable, Hashable {
     public var billFor: SubscriptionPauseParamsBillFor?
-    public var invoicingBehavior: InvoiceCreatePreviewParamsScheduleDetailsPauseSchedulesItemPauseSettingsInvoicingBehavior?
+    public var invoicingBehavior: SubscriptionSchedulesResourcePauseSchedulePauseSettingsInvoicingBehavior?
     public var type: SubscriptionObject?
     public var subscription: String?
 
-    public init(billFor: SubscriptionPauseParamsBillFor? = nil, invoicingBehavior: InvoiceCreatePreviewParamsScheduleDetailsPauseSchedulesItemPauseSettingsInvoicingBehavior? = nil, type: SubscriptionObject? = nil, subscription: String? = nil) {
+    public init(billFor: SubscriptionPauseParamsBillFor? = nil, invoicingBehavior: SubscriptionSchedulesResourcePauseSchedulePauseSettingsInvoicingBehavior? = nil, type: SubscriptionObject? = nil, subscription: String? = nil) {
         self.billFor = billFor
         self.invoicingBehavior = invoicingBehavior
         self.type = type

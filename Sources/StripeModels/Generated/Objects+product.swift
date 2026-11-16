@@ -4,46 +4,6 @@
 //  Do not edit by hand: rerun `swift run stripe-gen`.
 //
 import Foundation
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum ProductPackageDimensions: Sendable, Codable, Equatable, Hashable {
-    case packageDimensions(PackageDimensions)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(PackageDimensions.self) { self = .packageDimensions(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .packageDimensions(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum ProductTaxDetails: Sendable, Codable, Equatable, Hashable {
-    case taxProductTaxDetailsResourceTaxDetails(TaxProductTaxDetailsResourceTaxDetails)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(TaxProductTaxDetailsResourceTaxDetails.self) { self = .taxProductTaxDetailsResourceTaxDetails(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .taxProductTaxDetailsResourceTaxDetails(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
 /// Lossless enum: values Stripe documents plus any value the API
 /// adds later, kept in `undocumented` instead of dropped.
 public enum ProductType: Sendable, Equatable, Hashable, LosslessEnum {
@@ -90,11 +50,11 @@ public struct Product: Sendable, Codable, Equatable, Hashable, StripeIdentified 
     public var metadata: [String: String]
     public var name: String
     public var object: DeletedProductObject
-    public var packageDimensions: Nullable<ProductPackageDimensions>
+    public var packageDimensions: Nullable<PackageDimensions>
     public var shippable: Nullable<Bool>
     public var statementDescriptor: Nullable<String>?
     public var taxCode: Nullable<Expandable<TaxCode>>?
-    public var taxDetails: Nullable<ProductTaxDetails>
+    public var taxDetails: Nullable<TaxProductTaxDetailsResourceTaxDetails>
     public var type: ProductType
     public var unitLabel: Nullable<String>?
     public var updated: StripeTimestamp
@@ -103,7 +63,7 @@ public struct Product: Sendable, Codable, Equatable, Hashable, StripeIdentified 
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(active: Bool, created: StripeTimestamp, defaultPrice: Nullable<Expandable<Price>>? = nil, description: Nullable<String>, id: String, images: [String], livemode: Bool, marketingFeatures: [ProductMarketingFeature], metadata: [String: String], name: String, object: DeletedProductObject, packageDimensions: Nullable<ProductPackageDimensions>, shippable: Nullable<Bool>, statementDescriptor: Nullable<String>? = nil, taxCode: Nullable<Expandable<TaxCode>>? = nil, taxDetails: Nullable<ProductTaxDetails>, type: ProductType, unitLabel: Nullable<String>? = nil, updated: StripeTimestamp, url: Nullable<String>, unknownFields: [String: JSONValue]? = nil) {
+    public init(active: Bool, created: StripeTimestamp, defaultPrice: Nullable<Expandable<Price>>? = nil, description: Nullable<String>, id: String, images: [String], livemode: Bool, marketingFeatures: [ProductMarketingFeature], metadata: [String: String], name: String, object: DeletedProductObject, packageDimensions: Nullable<PackageDimensions>, shippable: Nullable<Bool>, statementDescriptor: Nullable<String>? = nil, taxCode: Nullable<Expandable<TaxCode>>? = nil, taxDetails: Nullable<TaxProductTaxDetailsResourceTaxDetails>, type: ProductType, unitLabel: Nullable<String>? = nil, updated: StripeTimestamp, url: Nullable<String>, unknownFields: [String: JSONValue]? = nil) {
         self.active = active
         self.created = created
         self.defaultPrice = defaultPrice
@@ -155,7 +115,7 @@ public struct Product: Sendable, Codable, Equatable, Hashable, StripeIdentified 
         self.active = try container.decode(Bool.self, forKey: .active)
         self.created = try container.decode(StripeTimestamp.self, forKey: .created)
         self.defaultPrice = try container.decodeIfPresent(Nullable<Expandable<Price>>.self, forKey: .defaultPrice)
-        self.description = try container.decode(Nullable<String>.self, forKey: .description)
+        self.description = try container.decodeIfPresent(Nullable<String>.self, forKey: .description) ?? .null
         self.id = try container.decode(String.self, forKey: .id)
         self.images = try container.decode([String].self, forKey: .images)
         self.livemode = try container.decode(Bool.self, forKey: .livemode)
@@ -163,15 +123,15 @@ public struct Product: Sendable, Codable, Equatable, Hashable, StripeIdentified 
         self.metadata = try container.decode([String: String].self, forKey: .metadata)
         self.name = try container.decode(String.self, forKey: .name)
         self.object = try container.decode(DeletedProductObject.self, forKey: .object)
-        self.packageDimensions = try container.decode(Nullable<ProductPackageDimensions>.self, forKey: .packageDimensions)
-        self.shippable = try container.decode(Nullable<Bool>.self, forKey: .shippable)
+        self.packageDimensions = try container.decodeIfPresent(Nullable<PackageDimensions>.self, forKey: .packageDimensions) ?? .null
+        self.shippable = try container.decodeIfPresent(Nullable<Bool>.self, forKey: .shippable) ?? .null
         self.statementDescriptor = try container.decodeIfPresent(Nullable<String>.self, forKey: .statementDescriptor)
         self.taxCode = try container.decodeIfPresent(Nullable<Expandable<TaxCode>>.self, forKey: .taxCode)
-        self.taxDetails = try container.decode(Nullable<ProductTaxDetails>.self, forKey: .taxDetails)
+        self.taxDetails = try container.decodeIfPresent(Nullable<TaxProductTaxDetailsResourceTaxDetails>.self, forKey: .taxDetails) ?? .null
         self.type = try container.decode(ProductType.self, forKey: .type)
         self.unitLabel = try container.decodeIfPresent(Nullable<String>.self, forKey: .unitLabel)
         self.updated = try container.decode(StripeTimestamp.self, forKey: .updated)
-        self.url = try container.decode(Nullable<String>.self, forKey: .url)
+        self.url = try container.decodeIfPresent(Nullable<String>.self, forKey: .url) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -446,7 +406,7 @@ public struct ProductCatalogTrialOffer: Sendable, Codable, Equatable, Hashable, 
         self.endBehavior = try container.decode(ProductCatalogImplEndpointsTrialOfferResourceTrialOfferEndBehavior.self, forKey: .endBehavior)
         self.id = try container.decode(String.self, forKey: .id)
         self.livemode = try container.decode(Bool.self, forKey: .livemode)
-        self.nickname = try container.decode(Nullable<String>.self, forKey: .nickname)
+        self.nickname = try container.decodeIfPresent(Nullable<String>.self, forKey: .nickname) ?? .null
         self.object = try container.decode(ProductCatalogTrialOfferObject.self, forKey: .object)
         self.price = try container.decode(ProductCatalogTrialOfferPrice.self, forKey: .price)
         var captured: [String: JSONValue] = [:]

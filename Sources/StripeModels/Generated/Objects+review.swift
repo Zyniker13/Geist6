@@ -56,26 +56,6 @@ public enum ReviewClosedReason: Sendable, Equatable, Hashable, LosslessEnum {
     }
 }
 
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum ReviewIpAddressLocation: Sendable, Codable, Equatable, Hashable {
-    case radarReviewResourceLocation(RadarReviewResourceLocation)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(RadarReviewResourceLocation.self) { self = .radarReviewResourceLocation(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .radarReviewResourceLocation(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
 /// Lossless enum: values Stripe documents plus any value the API
 /// adds later, kept in `undocumented` instead of dropped.
 public enum ReviewObject: Sendable, Equatable, Hashable, LosslessEnum {
@@ -141,26 +121,6 @@ public enum ReviewOpenedReason: Sendable, Equatable, Hashable, LosslessEnum {
     }
 }
 
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum ReviewSession: Sendable, Codable, Equatable, Hashable {
-    case radarReviewResourceSession(RadarReviewResourceSession)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(RadarReviewResourceSession.self) { self = .radarReviewResourceSession(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .radarReviewResourceSession(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
 public struct Review: Sendable, Codable, Equatable, Hashable, StripeIdentified {
     public var billingZip: Nullable<String>
     public var charge: Nullable<Expandable<Charge>>
@@ -168,19 +128,19 @@ public struct Review: Sendable, Codable, Equatable, Hashable, StripeIdentified {
     public var created: StripeTimestamp
     public var id: String
     public var ipAddress: Nullable<String>
-    public var ipAddressLocation: Nullable<ReviewIpAddressLocation>
+    public var ipAddressLocation: Nullable<RadarReviewResourceLocation>
     public var livemode: Bool
     public var object: ReviewObject
     public var open: Bool
     public var openedReason: ReviewOpenedReason
     public var paymentIntent: Expandable<PaymentIntent>?
     public var reason: String
-    public var session: Nullable<ReviewSession>
+    public var session: Nullable<RadarReviewResourceSession>
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(billingZip: Nullable<String>, charge: Nullable<Expandable<Charge>>, closedReason: Nullable<ReviewClosedReason>, created: StripeTimestamp, id: String, ipAddress: Nullable<String>, ipAddressLocation: Nullable<ReviewIpAddressLocation>, livemode: Bool, object: ReviewObject, open: Bool, openedReason: ReviewOpenedReason, paymentIntent: Expandable<PaymentIntent>? = nil, reason: String, session: Nullable<ReviewSession>, unknownFields: [String: JSONValue]? = nil) {
+    public init(billingZip: Nullable<String>, charge: Nullable<Expandable<Charge>>, closedReason: Nullable<ReviewClosedReason>, created: StripeTimestamp, id: String, ipAddress: Nullable<String>, ipAddressLocation: Nullable<RadarReviewResourceLocation>, livemode: Bool, object: ReviewObject, open: Bool, openedReason: ReviewOpenedReason, paymentIntent: Expandable<PaymentIntent>? = nil, reason: String, session: Nullable<RadarReviewResourceSession>, unknownFields: [String: JSONValue]? = nil) {
         self.billingZip = billingZip
         self.charge = charge
         self.closedReason = closedReason
@@ -217,20 +177,20 @@ public struct Review: Sendable, Codable, Equatable, Hashable, StripeIdentified {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.billingZip = try container.decode(Nullable<String>.self, forKey: .billingZip)
-        self.charge = try container.decode(Nullable<Expandable<Charge>>.self, forKey: .charge)
-        self.closedReason = try container.decode(Nullable<ReviewClosedReason>.self, forKey: .closedReason)
+        self.billingZip = try container.decodeIfPresent(Nullable<String>.self, forKey: .billingZip) ?? .null
+        self.charge = try container.decodeIfPresent(Nullable<Expandable<Charge>>.self, forKey: .charge) ?? .null
+        self.closedReason = try container.decodeIfPresent(Nullable<ReviewClosedReason>.self, forKey: .closedReason) ?? .null
         self.created = try container.decode(StripeTimestamp.self, forKey: .created)
         self.id = try container.decode(String.self, forKey: .id)
-        self.ipAddress = try container.decode(Nullable<String>.self, forKey: .ipAddress)
-        self.ipAddressLocation = try container.decode(Nullable<ReviewIpAddressLocation>.self, forKey: .ipAddressLocation)
+        self.ipAddress = try container.decodeIfPresent(Nullable<String>.self, forKey: .ipAddress) ?? .null
+        self.ipAddressLocation = try container.decodeIfPresent(Nullable<RadarReviewResourceLocation>.self, forKey: .ipAddressLocation) ?? .null
         self.livemode = try container.decode(Bool.self, forKey: .livemode)
         self.object = try container.decode(ReviewObject.self, forKey: .object)
         self.open = try container.decode(Bool.self, forKey: .open)
         self.openedReason = try container.decode(ReviewOpenedReason.self, forKey: .openedReason)
         self.paymentIntent = try container.decodeIfPresent(Expandable<PaymentIntent>.self, forKey: .paymentIntent)
         self.reason = try container.decode(String.self, forKey: .reason)
-        self.session = try container.decode(Nullable<ReviewSession>.self, forKey: .session)
+        self.session = try container.decodeIfPresent(Nullable<RadarReviewResourceSession>.self, forKey: .session) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {

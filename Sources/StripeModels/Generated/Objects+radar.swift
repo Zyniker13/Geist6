@@ -227,26 +227,6 @@ public enum RadarPaymentEvaluationObject: Sendable, Equatable, Hashable, Lossles
     }
 }
 
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum RadarPaymentEvaluationOutcome: Sendable, Codable, Equatable, Hashable {
-    case insightsResourcesPaymentEvaluationOutcome(InsightsResourcesPaymentEvaluationOutcome)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(InsightsResourcesPaymentEvaluationOutcome.self) { self = .insightsResourcesPaymentEvaluationOutcome(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .insightsResourcesPaymentEvaluationOutcome(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
 /// Lossless enum: values Stripe documents plus any value the API
 /// adds later, kept in `undocumented` instead of dropped.
 public enum RadarPaymentEvaluationRecommendedAction: Sendable, Equatable, Hashable, LosslessEnum {
@@ -290,7 +270,7 @@ public struct RadarPaymentEvaluation: Sendable, Codable, Equatable, Hashable, St
     public var livemode: Bool
     public var metadata: Nullable<[String: String]>
     public var object: RadarPaymentEvaluationObject
-    public var outcome: Nullable<RadarPaymentEvaluationOutcome>?
+    public var outcome: Nullable<InsightsResourcesPaymentEvaluationOutcome>?
     public var paymentDetails: InsightsResourcesPaymentEvaluationPaymentDetails?
     public var recommendedAction: RadarPaymentEvaluationRecommendedAction
     public var signals: InsightsResourcesPaymentEvaluationSignals
@@ -298,7 +278,7 @@ public struct RadarPaymentEvaluation: Sendable, Codable, Equatable, Hashable, St
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(clientDeviceMetadataDetails: InsightsResourcesPaymentEvaluationClientDeviceMetadata? = nil, createdAt: StripeTimestamp, customerDetails: InsightsResourcesPaymentEvaluationCustomerDetails? = nil, events: [InsightsResourcesPaymentEvaluationEvent]? = nil, id: String, livemode: Bool, metadata: Nullable<[String: String]>, object: RadarPaymentEvaluationObject, outcome: Nullable<RadarPaymentEvaluationOutcome>? = nil, paymentDetails: InsightsResourcesPaymentEvaluationPaymentDetails? = nil, recommendedAction: RadarPaymentEvaluationRecommendedAction, signals: InsightsResourcesPaymentEvaluationSignals, unknownFields: [String: JSONValue]? = nil) {
+    public init(clientDeviceMetadataDetails: InsightsResourcesPaymentEvaluationClientDeviceMetadata? = nil, createdAt: StripeTimestamp, customerDetails: InsightsResourcesPaymentEvaluationCustomerDetails? = nil, events: [InsightsResourcesPaymentEvaluationEvent]? = nil, id: String, livemode: Bool, metadata: Nullable<[String: String]>, object: RadarPaymentEvaluationObject, outcome: Nullable<InsightsResourcesPaymentEvaluationOutcome>? = nil, paymentDetails: InsightsResourcesPaymentEvaluationPaymentDetails? = nil, recommendedAction: RadarPaymentEvaluationRecommendedAction, signals: InsightsResourcesPaymentEvaluationSignals, unknownFields: [String: JSONValue]? = nil) {
         self.clientDeviceMetadataDetails = clientDeviceMetadataDetails
         self.createdAt = createdAt
         self.customerDetails = customerDetails
@@ -337,9 +317,9 @@ public struct RadarPaymentEvaluation: Sendable, Codable, Equatable, Hashable, St
         self.events = try container.decodeIfPresent([InsightsResourcesPaymentEvaluationEvent].self, forKey: .events)
         self.id = try container.decode(String.self, forKey: .id)
         self.livemode = try container.decode(Bool.self, forKey: .livemode)
-        self.metadata = try container.decode(Nullable<[String: String]>.self, forKey: .metadata)
+        self.metadata = try container.decodeIfPresent(Nullable<[String: String]>.self, forKey: .metadata) ?? .null
         self.object = try container.decode(RadarPaymentEvaluationObject.self, forKey: .object)
-        self.outcome = try container.decodeIfPresent(Nullable<RadarPaymentEvaluationOutcome>.self, forKey: .outcome)
+        self.outcome = try container.decodeIfPresent(Nullable<InsightsResourcesPaymentEvaluationOutcome>.self, forKey: .outcome)
         self.paymentDetails = try container.decodeIfPresent(InsightsResourcesPaymentEvaluationPaymentDetails.self, forKey: .paymentDetails)
         self.recommendedAction = try container.decode(RadarPaymentEvaluationRecommendedAction.self, forKey: .recommendedAction)
         self.signals = try container.decode(InsightsResourcesPaymentEvaluationSignals.self, forKey: .signals)
@@ -781,11 +761,11 @@ public struct RadarReviewResourceLocation: Sendable, Codable, Equatable, Hashabl
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.city = try container.decode(Nullable<String>.self, forKey: .city)
-        self.country = try container.decode(Nullable<String>.self, forKey: .country)
-        self.latitude = try container.decode(Nullable<Decimal>.self, forKey: .latitude)
-        self.longitude = try container.decode(Nullable<Decimal>.self, forKey: .longitude)
-        self.region = try container.decode(Nullable<String>.self, forKey: .region)
+        self.city = try container.decodeIfPresent(Nullable<String>.self, forKey: .city) ?? .null
+        self.country = try container.decodeIfPresent(Nullable<String>.self, forKey: .country) ?? .null
+        self.latitude = try container.decodeIfPresent(Nullable<Decimal>.self, forKey: .latitude) ?? .null
+        self.longitude = try container.decodeIfPresent(Nullable<Decimal>.self, forKey: .longitude) ?? .null
+        self.region = try container.decodeIfPresent(Nullable<String>.self, forKey: .region) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -840,10 +820,10 @@ public struct RadarReviewResourceSession: Sendable, Codable, Equatable, Hashable
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.browser = try container.decode(Nullable<String>.self, forKey: .browser)
-        self.device = try container.decode(Nullable<String>.self, forKey: .device)
-        self.platform = try container.decode(Nullable<String>.self, forKey: .platform)
-        self.version = try container.decode(Nullable<String>.self, forKey: .version)
+        self.browser = try container.decodeIfPresent(Nullable<String>.self, forKey: .browser) ?? .null
+        self.device = try container.decodeIfPresent(Nullable<String>.self, forKey: .device) ?? .null
+        self.platform = try container.decodeIfPresent(Nullable<String>.self, forKey: .platform) ?? .null
+        self.version = try container.decodeIfPresent(Nullable<String>.self, forKey: .version) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {

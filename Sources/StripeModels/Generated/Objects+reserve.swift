@@ -222,8 +222,8 @@ public struct ReserveHold: Sendable, Codable, Equatable, Hashable, StripeIdentif
         self.reason = try container.decode(ReserveHoldReason.self, forKey: .reason)
         self.releaseDetails = try container.decodeIfPresent([ReservesReserveHoldsResourcesReleaseDetail].self, forKey: .releaseDetails)
         self.releaseSchedule = try container.decode(ReservesReserveHoldsResourcesReleaseSchedule.self, forKey: .releaseSchedule)
-        self.reservePlan = try container.decode(Nullable<Expandable<ReservePlan>>.self, forKey: .reservePlan)
-        self.sourceCharge = try container.decode(Nullable<Expandable<Charge>>.self, forKey: .sourceCharge)
+        self.reservePlan = try container.decodeIfPresent(Nullable<Expandable<ReservePlan>>.self, forKey: .reservePlan) ?? .null
+        self.sourceCharge = try container.decodeIfPresent(Nullable<Expandable<Charge>>.self, forKey: .sourceCharge) ?? .null
         self.sourceType = try container.decode(ReserveHoldSourceType.self, forKey: .sourceType)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
@@ -521,9 +521,9 @@ public struct ReservePlan: Sendable, Codable, Equatable, Hashable, StripeIdentif
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.created = try container.decode(StripeTimestamp.self, forKey: .created)
         self.createdBy = try container.decode(AccountUnificationAccountControllerRequirementCollection.self, forKey: .createdBy)
-        self.currency = try container.decode(Nullable<String>.self, forKey: .currency)
+        self.currency = try container.decodeIfPresent(Nullable<String>.self, forKey: .currency) ?? .null
         self.destination = try container.decode(ReserveHoldDestination.self, forKey: .destination)
-        self.disabledAt = try container.decode(Nullable<StripeTimestamp>.self, forKey: .disabledAt)
+        self.disabledAt = try container.decodeIfPresent(Nullable<StripeTimestamp>.self, forKey: .disabledAt) ?? .null
         self.fixedRelease = try container.decodeIfPresent(ReservesReservePlansResourcesFixedRelease.self, forKey: .fixedRelease)
         self.id = try container.decode(String.self, forKey: .id)
         self.livemode = try container.decode(Bool.self, forKey: .livemode)
@@ -912,8 +912,8 @@ public struct ReserveRelease: Sendable, Codable, Equatable, Hashable, StripeIden
         self.object = try container.decode(ReserveReleaseObject.self, forKey: .object)
         self.reason = try container.decode(ReserveReleaseReason.self, forKey: .reason)
         self.releasedAt = try container.decode(StripeTimestamp.self, forKey: .releasedAt)
-        self.reserveHold = try container.decode(Nullable<Expandable<ReserveHold>>.self, forKey: .reserveHold)
-        self.reservePlan = try container.decode(Nullable<Expandable<ReservePlan>>.self, forKey: .reservePlan)
+        self.reserveHold = try container.decodeIfPresent(Nullable<Expandable<ReserveHold>>.self, forKey: .reserveHold) ?? .null
+        self.reservePlan = try container.decodeIfPresent(Nullable<Expandable<ReservePlan>>.self, forKey: .reservePlan) ?? .null
         self.sourceTransaction = try container.decodeIfPresent(ReservesReserveReleasesResourcesSourceTransaction.self, forKey: .sourceTransaction)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
@@ -1056,7 +1056,7 @@ public struct ReserveTransaction: Sendable, Codable, Equatable, Hashable, Stripe
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.amount = try container.decode(Int.self, forKey: .amount)
         self.currency = try container.decode(String.self, forKey: .currency)
-        self.description = try container.decode(Nullable<String>.self, forKey: .description)
+        self.description = try container.decodeIfPresent(Nullable<String>.self, forKey: .description) ?? .null
         self.id = try container.decode(String.self, forKey: .id)
         self.object = try container.decode(ReserveTransactionObject.self, forKey: .object)
         var captured: [String: JSONValue] = [:]

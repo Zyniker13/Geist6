@@ -352,7 +352,7 @@ public struct ThreeDSecureAuthentication: Sendable, Codable, Equatable, Hashable
         self.id = try container.decode(String.self, forKey: .id)
         self.livemode = try container.decode(Bool.self, forKey: .livemode)
         self.messageCategory = try container.decode(ThreeDSecureAuthenticationMessageCategory.self, forKey: .messageCategory)
-        self.metadata = try container.decode(Nullable<[String: String]>.self, forKey: .metadata)
+        self.metadata = try container.decodeIfPresent(Nullable<[String: String]>.self, forKey: .metadata) ?? .null
         self.object = try container.decode(ThreeDSecureAuthenticationObject.self, forKey: .object)
         self.outcome = try container.decodeIfPresent(ThreeDSecureAuthenticationOutcome.self, forKey: .outcome)
         self.outcomeDetails = try container.decodeIfPresent(ThreeDSecureStandaloneResourceOutcomeDetails.self, forKey: .outcomeDetails)
@@ -773,12 +773,12 @@ public struct ThreeDSecureDetails: Sendable, Codable, Equatable, Hashable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.authenticationFlow = try container.decode(Nullable<PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceThreeDSecureAuthenticationFlow>.self, forKey: .authenticationFlow)
-        self.electronicCommerceIndicator = try container.decode(Nullable<ThreeDSecureDetailsElectronicCommerceIndicator>.self, forKey: .electronicCommerceIndicator)
-        self.result = try container.decode(Nullable<PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceThreeDSecureResult>.self, forKey: .result)
-        self.resultReason = try container.decode(Nullable<PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceThreeDSecureResultReason>.self, forKey: .resultReason)
-        self.transactionId = try container.decode(Nullable<String>.self, forKey: .transactionId)
-        self.version = try container.decode(Nullable<PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceThreeDSecureVersion>.self, forKey: .version)
+        self.authenticationFlow = try container.decodeIfPresent(Nullable<PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceThreeDSecureAuthenticationFlow>.self, forKey: .authenticationFlow) ?? .null
+        self.electronicCommerceIndicator = try container.decodeIfPresent(Nullable<ThreeDSecureDetailsElectronicCommerceIndicator>.self, forKey: .electronicCommerceIndicator) ?? .null
+        self.result = try container.decodeIfPresent(Nullable<PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceThreeDSecureResult>.self, forKey: .result) ?? .null
+        self.resultReason = try container.decodeIfPresent(Nullable<PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceThreeDSecureResultReason>.self, forKey: .resultReason) ?? .null
+        self.transactionId = try container.decodeIfPresent(Nullable<String>.self, forKey: .transactionId) ?? .null
+        self.version = try container.decodeIfPresent(Nullable<PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceThreeDSecureVersion>.self, forKey: .version) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -846,14 +846,14 @@ public struct ThreeDSecureDetailsCharge: Sendable, Codable, Equatable, Hashable 
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.authenticationFlow = try container.decode(Nullable<PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceThreeDSecureAuthenticationFlow>.self, forKey: .authenticationFlow)
-        self.electronicCommerceIndicator = try container.decode(Nullable<ThreeDSecureDetailsElectronicCommerceIndicator>.self, forKey: .electronicCommerceIndicator)
-        self.exemptionIndicator = try container.decode(Nullable<PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceThreeDSecureExemptionIndicator>.self, forKey: .exemptionIndicator)
+        self.authenticationFlow = try container.decodeIfPresent(Nullable<PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceThreeDSecureAuthenticationFlow>.self, forKey: .authenticationFlow) ?? .null
+        self.electronicCommerceIndicator = try container.decodeIfPresent(Nullable<ThreeDSecureDetailsElectronicCommerceIndicator>.self, forKey: .electronicCommerceIndicator) ?? .null
+        self.exemptionIndicator = try container.decodeIfPresent(Nullable<PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceThreeDSecureExemptionIndicator>.self, forKey: .exemptionIndicator) ?? .null
         self.exemptionIndicatorApplied = try container.decodeIfPresent(Bool.self, forKey: .exemptionIndicatorApplied)
-        self.result = try container.decode(Nullable<PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceThreeDSecureResult>.self, forKey: .result)
-        self.resultReason = try container.decode(Nullable<PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceThreeDSecureResultReason>.self, forKey: .resultReason)
-        self.transactionId = try container.decode(Nullable<String>.self, forKey: .transactionId)
-        self.version = try container.decode(Nullable<PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceThreeDSecureVersion>.self, forKey: .version)
+        self.result = try container.decodeIfPresent(Nullable<PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceThreeDSecureResult>.self, forKey: .result) ?? .null
+        self.resultReason = try container.decodeIfPresent(Nullable<PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceThreeDSecureResultReason>.self, forKey: .resultReason) ?? .null
+        self.transactionId = try container.decodeIfPresent(Nullable<String>.self, forKey: .transactionId) ?? .null
+        self.version = try container.decodeIfPresent(Nullable<PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceThreeDSecureVersion>.self, forKey: .version) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -1063,8 +1063,8 @@ public struct ThreeDSecureStandaloneResourceCartesBancaires: Sendable, Codable, 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.avalgo = try container.decode(String.self, forKey: .avalgo)
-        self.cbExemption = try container.decode(Nullable<String>.self, forKey: .cbExemption)
-        self.cbScore = try container.decode(Nullable<String>.self, forKey: .cbScore)
+        self.cbExemption = try container.decodeIfPresent(Nullable<String>.self, forKey: .cbExemption) ?? .null
+        self.cbScore = try container.decodeIfPresent(Nullable<String>.self, forKey: .cbScore) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {

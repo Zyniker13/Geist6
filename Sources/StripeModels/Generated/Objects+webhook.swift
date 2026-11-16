@@ -54,10 +54,10 @@ public struct WebhookEndpoint: Sendable, Codable, Equatable, Hashable, StripeIde
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.apiVersion = try container.decode(Nullable<String>.self, forKey: .apiVersion)
-        self.application = try container.decode(Nullable<String>.self, forKey: .application)
+        self.apiVersion = try container.decodeIfPresent(Nullable<String>.self, forKey: .apiVersion) ?? .null
+        self.application = try container.decodeIfPresent(Nullable<String>.self, forKey: .application) ?? .null
         self.created = try container.decode(StripeTimestamp.self, forKey: .created)
-        self.description = try container.decode(Nullable<String>.self, forKey: .description)
+        self.description = try container.decodeIfPresent(Nullable<String>.self, forKey: .description) ?? .null
         self.enabledEvents = try container.decode([String].self, forKey: .enabledEvents)
         self.id = try container.decode(String.self, forKey: .id)
         self.livemode = try container.decode(Bool.self, forKey: .livemode)

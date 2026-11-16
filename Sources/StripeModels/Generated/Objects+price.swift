@@ -5,26 +5,6 @@
 //
 import Foundation
 /// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum PriceCustomUnitAmount: Sendable, Codable, Equatable, Hashable {
-    case customUnitAmount(CustomUnitAmount)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(CustomUnitAmount.self) { self = .customUnitAmount(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .customUnitAmount(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
 public enum PriceProduct: Sendable, Codable, Equatable, Hashable {
     case string(String)
     case product(Product)
@@ -50,46 +30,6 @@ public enum PriceProduct: Sendable, Codable, Equatable, Hashable {
         case .string(let value): try container.encode(value)
         case .product(let value): try container.encode(value)
         case .deletedProduct(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum PriceRecurring: Sendable, Codable, Equatable, Hashable {
-    case recurring(Recurring)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(Recurring.self) { self = .recurring(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .recurring(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum PriceTransformQuantity: Sendable, Codable, Equatable, Hashable {
-    case transformQuantity(TransformQuantity)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(TransformQuantity.self) { self = .transformQuantity(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .transformQuantity(let value): try container.encode(value)
         case .other(let value): try container.encode(value)
         }
     }
@@ -135,7 +75,7 @@ public struct Price: Sendable, Codable, Equatable, Hashable, StripeIdentified {
     public var created: StripeTimestamp
     public var currency: String
     public var currencyOptions: [String: JSONValue]?
-    public var customUnitAmount: Nullable<PriceCustomUnitAmount>
+    public var customUnitAmount: Nullable<CustomUnitAmount>
     public var id: String
     public var livemode: Bool
     public var lookupKey: Nullable<String>
@@ -143,11 +83,11 @@ public struct Price: Sendable, Codable, Equatable, Hashable, StripeIdentified {
     public var nickname: Nullable<String>
     public var object: DeletedPriceObject
     public var product: PriceProduct
-    public var recurring: Nullable<PriceRecurring>
+    public var recurring: Nullable<Recurring>
     public var taxBehavior: Nullable<CurrencyOptionTaxBehavior>
     public var tiers: [PriceTier]?
     public var tiersMode: Nullable<PlanTiersMode>
-    public var transformQuantity: Nullable<PriceTransformQuantity>
+    public var transformQuantity: Nullable<TransformQuantity>
     public var type: PriceType
     public var unitAmount: Nullable<Int>
     public var unitAmountDecimal: Nullable<String>
@@ -155,7 +95,7 @@ public struct Price: Sendable, Codable, Equatable, Hashable, StripeIdentified {
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(active: Bool, billingScheme: PlanBillingScheme, created: StripeTimestamp, currency: String, currencyOptions: [String: JSONValue]? = nil, customUnitAmount: Nullable<PriceCustomUnitAmount>, id: String, livemode: Bool, lookupKey: Nullable<String>, metadata: [String: String], nickname: Nullable<String>, object: DeletedPriceObject, product: PriceProduct, recurring: Nullable<PriceRecurring>, taxBehavior: Nullable<CurrencyOptionTaxBehavior>, tiers: [PriceTier]? = nil, tiersMode: Nullable<PlanTiersMode>, transformQuantity: Nullable<PriceTransformQuantity>, type: PriceType, unitAmount: Nullable<Int>, unitAmountDecimal: Nullable<String>, unknownFields: [String: JSONValue]? = nil) {
+    public init(active: Bool, billingScheme: PlanBillingScheme, created: StripeTimestamp, currency: String, currencyOptions: [String: JSONValue]? = nil, customUnitAmount: Nullable<CustomUnitAmount>, id: String, livemode: Bool, lookupKey: Nullable<String>, metadata: [String: String], nickname: Nullable<String>, object: DeletedPriceObject, product: PriceProduct, recurring: Nullable<Recurring>, taxBehavior: Nullable<CurrencyOptionTaxBehavior>, tiers: [PriceTier]? = nil, tiersMode: Nullable<PlanTiersMode>, transformQuantity: Nullable<TransformQuantity>, type: PriceType, unitAmount: Nullable<Int>, unitAmountDecimal: Nullable<String>, unknownFields: [String: JSONValue]? = nil) {
         self.active = active
         self.billingScheme = billingScheme
         self.created = created
@@ -211,22 +151,22 @@ public struct Price: Sendable, Codable, Equatable, Hashable, StripeIdentified {
         self.created = try container.decode(StripeTimestamp.self, forKey: .created)
         self.currency = try container.decode(String.self, forKey: .currency)
         self.currencyOptions = try container.decodeIfPresent([String: JSONValue].self, forKey: .currencyOptions)
-        self.customUnitAmount = try container.decode(Nullable<PriceCustomUnitAmount>.self, forKey: .customUnitAmount)
+        self.customUnitAmount = try container.decodeIfPresent(Nullable<CustomUnitAmount>.self, forKey: .customUnitAmount) ?? .null
         self.id = try container.decode(String.self, forKey: .id)
         self.livemode = try container.decode(Bool.self, forKey: .livemode)
-        self.lookupKey = try container.decode(Nullable<String>.self, forKey: .lookupKey)
+        self.lookupKey = try container.decodeIfPresent(Nullable<String>.self, forKey: .lookupKey) ?? .null
         self.metadata = try container.decode([String: String].self, forKey: .metadata)
-        self.nickname = try container.decode(Nullable<String>.self, forKey: .nickname)
+        self.nickname = try container.decodeIfPresent(Nullable<String>.self, forKey: .nickname) ?? .null
         self.object = try container.decode(DeletedPriceObject.self, forKey: .object)
         self.product = try container.decode(PriceProduct.self, forKey: .product)
-        self.recurring = try container.decode(Nullable<PriceRecurring>.self, forKey: .recurring)
-        self.taxBehavior = try container.decode(Nullable<CurrencyOptionTaxBehavior>.self, forKey: .taxBehavior)
+        self.recurring = try container.decodeIfPresent(Nullable<Recurring>.self, forKey: .recurring) ?? .null
+        self.taxBehavior = try container.decodeIfPresent(Nullable<CurrencyOptionTaxBehavior>.self, forKey: .taxBehavior) ?? .null
         self.tiers = try container.decodeIfPresent([PriceTier].self, forKey: .tiers)
-        self.tiersMode = try container.decode(Nullable<PlanTiersMode>.self, forKey: .tiersMode)
-        self.transformQuantity = try container.decode(Nullable<PriceTransformQuantity>.self, forKey: .transformQuantity)
+        self.tiersMode = try container.decodeIfPresent(Nullable<PlanTiersMode>.self, forKey: .tiersMode) ?? .null
+        self.transformQuantity = try container.decodeIfPresent(Nullable<TransformQuantity>.self, forKey: .transformQuantity) ?? .null
         self.type = try container.decode(PriceType.self, forKey: .type)
-        self.unitAmount = try container.decode(Nullable<Int>.self, forKey: .unitAmount)
-        self.unitAmountDecimal = try container.decode(Nullable<String>.self, forKey: .unitAmountDecimal)
+        self.unitAmount = try container.decodeIfPresent(Nullable<Int>.self, forKey: .unitAmount) ?? .null
+        self.unitAmountDecimal = try container.decodeIfPresent(Nullable<String>.self, forKey: .unitAmountDecimal) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -426,11 +366,11 @@ public struct PriceTier: Sendable, Codable, Equatable, Hashable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.flatAmount = try container.decode(Nullable<Int>.self, forKey: .flatAmount)
-        self.flatAmountDecimal = try container.decode(Nullable<String>.self, forKey: .flatAmountDecimal)
-        self.unitAmount = try container.decode(Nullable<Int>.self, forKey: .unitAmount)
-        self.unitAmountDecimal = try container.decode(Nullable<String>.self, forKey: .unitAmountDecimal)
-        self.upTo = try container.decode(Nullable<Int>.self, forKey: .upTo)
+        self.flatAmount = try container.decodeIfPresent(Nullable<Int>.self, forKey: .flatAmount) ?? .null
+        self.flatAmountDecimal = try container.decodeIfPresent(Nullable<String>.self, forKey: .flatAmountDecimal) ?? .null
+        self.unitAmount = try container.decodeIfPresent(Nullable<Int>.self, forKey: .unitAmount) ?? .null
+        self.unitAmountDecimal = try container.decodeIfPresent(Nullable<String>.self, forKey: .unitAmountDecimal) ?? .null
+        self.upTo = try container.decodeIfPresent(Nullable<Int>.self, forKey: .upTo) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {

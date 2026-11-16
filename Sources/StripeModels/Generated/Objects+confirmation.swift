@@ -4,26 +4,6 @@
 //  Do not edit by hand: rerun `swift run stripe-gen`.
 //
 import Foundation
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum ConfirmationTokenMandateData: Sendable, Codable, Equatable, Hashable {
-    case confirmationTokensResourceMandateData(ConfirmationTokensResourceMandateData)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(ConfirmationTokensResourceMandateData.self) { self = .confirmationTokensResourceMandateData(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .confirmationTokensResourceMandateData(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
 /// Lossless enum: values Stripe documents plus any value the API
 /// adds later, kept in `undocumented` instead of dropped.
 public enum ConfirmationTokenObject: Sendable, Equatable, Hashable, LosslessEnum {
@@ -52,46 +32,6 @@ public enum ConfirmationTokenObject: Sendable, Equatable, Hashable, LosslessEnum
     public func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
         try container.encode(rawValue)
-    }
-}
-
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum ConfirmationTokenPaymentMethodOptions: Sendable, Codable, Equatable, Hashable {
-    case confirmationTokensResourcePaymentMethodOptions(ConfirmationTokensResourcePaymentMethodOptions)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(ConfirmationTokensResourcePaymentMethodOptions.self) { self = .confirmationTokensResourcePaymentMethodOptions(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .confirmationTokensResourcePaymentMethodOptions(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum ConfirmationTokenPaymentMethodPreview: Sendable, Codable, Equatable, Hashable {
-    case confirmationTokensResourcePaymentMethodPreview(ConfirmationTokensResourcePaymentMethodPreview)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(ConfirmationTokensResourcePaymentMethodPreview.self) { self = .confirmationTokensResourcePaymentMethodPreview(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .confirmationTokensResourcePaymentMethodPreview(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
     }
 }
 
@@ -129,47 +69,27 @@ public enum ConfirmationTokenSetupFutureUsage: Sendable, Equatable, Hashable, Lo
     }
 }
 
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum ConfirmationTokenShipping: Sendable, Codable, Equatable, Hashable {
-    case confirmationTokensResourceShipping(ConfirmationTokensResourceShipping)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(ConfirmationTokensResourceShipping.self) { self = .confirmationTokensResourceShipping(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .confirmationTokensResourceShipping(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
 public struct ConfirmationToken: Sendable, Codable, Equatable, Hashable, StripeIdentified {
     public var created: StripeTimestamp
     public var expiresAt: Nullable<StripeTimestamp>
     public var id: String
     public var livemode: Bool
-    public var mandateData: Nullable<ConfirmationTokenMandateData>?
+    public var mandateData: Nullable<ConfirmationTokensResourceMandateData>?
     public var metadata: Nullable<[String: String]>
     public var object: ConfirmationTokenObject
     public var paymentIntent: Nullable<String>
-    public var paymentMethodOptions: Nullable<ConfirmationTokenPaymentMethodOptions>
-    public var paymentMethodPreview: Nullable<ConfirmationTokenPaymentMethodPreview>
+    public var paymentMethodOptions: Nullable<ConfirmationTokensResourcePaymentMethodOptions>
+    public var paymentMethodPreview: Nullable<ConfirmationTokensResourcePaymentMethodPreview>
     public var returnUrl: Nullable<String>
     public var setupFutureUsage: Nullable<ConfirmationTokenSetupFutureUsage>
     public var setupIntent: Nullable<String>
-    public var shipping: Nullable<ConfirmationTokenShipping>
+    public var shipping: Nullable<ConfirmationTokensResourceShipping>
     public var useStripeSdk: Bool
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(created: StripeTimestamp, expiresAt: Nullable<StripeTimestamp>, id: String, livemode: Bool, mandateData: Nullable<ConfirmationTokenMandateData>? = nil, metadata: Nullable<[String: String]>, object: ConfirmationTokenObject, paymentIntent: Nullable<String>, paymentMethodOptions: Nullable<ConfirmationTokenPaymentMethodOptions>, paymentMethodPreview: Nullable<ConfirmationTokenPaymentMethodPreview>, returnUrl: Nullable<String>, setupFutureUsage: Nullable<ConfirmationTokenSetupFutureUsage>, setupIntent: Nullable<String>, shipping: Nullable<ConfirmationTokenShipping>, useStripeSdk: Bool, unknownFields: [String: JSONValue]? = nil) {
+    public init(created: StripeTimestamp, expiresAt: Nullable<StripeTimestamp>, id: String, livemode: Bool, mandateData: Nullable<ConfirmationTokensResourceMandateData>? = nil, metadata: Nullable<[String: String]>, object: ConfirmationTokenObject, paymentIntent: Nullable<String>, paymentMethodOptions: Nullable<ConfirmationTokensResourcePaymentMethodOptions>, paymentMethodPreview: Nullable<ConfirmationTokensResourcePaymentMethodPreview>, returnUrl: Nullable<String>, setupFutureUsage: Nullable<ConfirmationTokenSetupFutureUsage>, setupIntent: Nullable<String>, shipping: Nullable<ConfirmationTokensResourceShipping>, useStripeSdk: Bool, unknownFields: [String: JSONValue]? = nil) {
         self.created = created
         self.expiresAt = expiresAt
         self.id = id
@@ -209,19 +129,19 @@ public struct ConfirmationToken: Sendable, Codable, Equatable, Hashable, StripeI
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.created = try container.decode(StripeTimestamp.self, forKey: .created)
-        self.expiresAt = try container.decode(Nullable<StripeTimestamp>.self, forKey: .expiresAt)
+        self.expiresAt = try container.decodeIfPresent(Nullable<StripeTimestamp>.self, forKey: .expiresAt) ?? .null
         self.id = try container.decode(String.self, forKey: .id)
         self.livemode = try container.decode(Bool.self, forKey: .livemode)
-        self.mandateData = try container.decodeIfPresent(Nullable<ConfirmationTokenMandateData>.self, forKey: .mandateData)
-        self.metadata = try container.decode(Nullable<[String: String]>.self, forKey: .metadata)
+        self.mandateData = try container.decodeIfPresent(Nullable<ConfirmationTokensResourceMandateData>.self, forKey: .mandateData)
+        self.metadata = try container.decodeIfPresent(Nullable<[String: String]>.self, forKey: .metadata) ?? .null
         self.object = try container.decode(ConfirmationTokenObject.self, forKey: .object)
-        self.paymentIntent = try container.decode(Nullable<String>.self, forKey: .paymentIntent)
-        self.paymentMethodOptions = try container.decode(Nullable<ConfirmationTokenPaymentMethodOptions>.self, forKey: .paymentMethodOptions)
-        self.paymentMethodPreview = try container.decode(Nullable<ConfirmationTokenPaymentMethodPreview>.self, forKey: .paymentMethodPreview)
-        self.returnUrl = try container.decode(Nullable<String>.self, forKey: .returnUrl)
-        self.setupFutureUsage = try container.decode(Nullable<ConfirmationTokenSetupFutureUsage>.self, forKey: .setupFutureUsage)
-        self.setupIntent = try container.decode(Nullable<String>.self, forKey: .setupIntent)
-        self.shipping = try container.decode(Nullable<ConfirmationTokenShipping>.self, forKey: .shipping)
+        self.paymentIntent = try container.decodeIfPresent(Nullable<String>.self, forKey: .paymentIntent) ?? .null
+        self.paymentMethodOptions = try container.decodeIfPresent(Nullable<ConfirmationTokensResourcePaymentMethodOptions>.self, forKey: .paymentMethodOptions) ?? .null
+        self.paymentMethodPreview = try container.decodeIfPresent(Nullable<ConfirmationTokensResourcePaymentMethodPreview>.self, forKey: .paymentMethodPreview) ?? .null
+        self.returnUrl = try container.decodeIfPresent(Nullable<String>.self, forKey: .returnUrl) ?? .null
+        self.setupFutureUsage = try container.decodeIfPresent(Nullable<ConfirmationTokenSetupFutureUsage>.self, forKey: .setupFutureUsage) ?? .null
+        self.setupIntent = try container.decodeIfPresent(Nullable<String>.self, forKey: .setupIntent) ?? .null
+        self.shipping = try container.decodeIfPresent(Nullable<ConfirmationTokensResourceShipping>.self, forKey: .shipping) ?? .null
         self.useStripeSdk = try container.decode(Bool.self, forKey: .useStripeSdk)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
@@ -303,34 +223,14 @@ public struct ConfirmationTokensResourceMandateData: Sendable, Codable, Equatabl
     }
 }
 
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum ConfirmationTokensResourceMandateDataResourceCustomerAcceptanceOnline: Sendable, Codable, Equatable, Hashable {
-    case confirmationTokensResourceMandateDataResourceCustomerAcceptanceResourceOnline(ConfirmationTokensResourceMandateDataResourceCustomerAcceptanceResourceOnline)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(ConfirmationTokensResourceMandateDataResourceCustomerAcceptanceResourceOnline.self) { self = .confirmationTokensResourceMandateDataResourceCustomerAcceptanceResourceOnline(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .confirmationTokensResourceMandateDataResourceCustomerAcceptanceResourceOnline(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
 public struct ConfirmationTokensResourceMandateDataResourceCustomerAcceptance: Sendable, Codable, Equatable, Hashable {
-    public var online: Nullable<ConfirmationTokensResourceMandateDataResourceCustomerAcceptanceOnline>
+    public var online: Nullable<ConfirmationTokensResourceMandateDataResourceCustomerAcceptanceResourceOnline>
     public var type: String
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(online: Nullable<ConfirmationTokensResourceMandateDataResourceCustomerAcceptanceOnline>, type: String, unknownFields: [String: JSONValue]? = nil) {
+    public init(online: Nullable<ConfirmationTokensResourceMandateDataResourceCustomerAcceptanceResourceOnline>, type: String, unknownFields: [String: JSONValue]? = nil) {
         self.online = online
         self.type = type
         self.unknownFields = unknownFields
@@ -343,7 +243,7 @@ public struct ConfirmationTokensResourceMandateDataResourceCustomerAcceptance: S
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.online = try container.decode(Nullable<ConfirmationTokensResourceMandateDataResourceCustomerAcceptanceOnline>.self, forKey: .online)
+        self.online = try container.decodeIfPresent(Nullable<ConfirmationTokensResourceMandateDataResourceCustomerAcceptanceResourceOnline>.self, forKey: .online) ?? .null
         self.type = try container.decode(String.self, forKey: .type)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
@@ -390,8 +290,8 @@ public struct ConfirmationTokensResourceMandateDataResourceCustomerAcceptanceRes
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.ipAddress = try container.decode(Nullable<String>.self, forKey: .ipAddress)
-        self.userAgent = try container.decode(Nullable<String>.self, forKey: .userAgent)
+        self.ipAddress = try container.decodeIfPresent(Nullable<String>.self, forKey: .ipAddress) ?? .null
+        self.userAgent = try container.decodeIfPresent(Nullable<String>.self, forKey: .userAgent) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -417,33 +317,13 @@ public struct ConfirmationTokensResourceMandateDataResourceCustomerAcceptanceRes
     }
 }
 
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum ConfirmationTokensResourcePaymentMethodOptionsCard: Sendable, Codable, Equatable, Hashable {
-    case confirmationTokensResourcePaymentMethodOptionsResourceCard(ConfirmationTokensResourcePaymentMethodOptionsResourceCard)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(ConfirmationTokensResourcePaymentMethodOptionsResourceCard.self) { self = .confirmationTokensResourcePaymentMethodOptionsResourceCard(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .confirmationTokensResourcePaymentMethodOptionsResourceCard(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
 public struct ConfirmationTokensResourcePaymentMethodOptions: Sendable, Codable, Equatable, Hashable {
-    public var card: Nullable<ConfirmationTokensResourcePaymentMethodOptionsCard>
+    public var card: Nullable<ConfirmationTokensResourcePaymentMethodOptionsResourceCard>
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(card: Nullable<ConfirmationTokensResourcePaymentMethodOptionsCard>, unknownFields: [String: JSONValue]? = nil) {
+    public init(card: Nullable<ConfirmationTokensResourcePaymentMethodOptionsResourceCard>, unknownFields: [String: JSONValue]? = nil) {
         self.card = card
         self.unknownFields = unknownFields
     }
@@ -454,7 +334,7 @@ public struct ConfirmationTokensResourcePaymentMethodOptions: Sendable, Codable,
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.card = try container.decode(Nullable<ConfirmationTokensResourcePaymentMethodOptionsCard>.self, forKey: .card)
+        self.card = try container.decodeIfPresent(Nullable<ConfirmationTokensResourcePaymentMethodOptionsResourceCard>.self, forKey: .card) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -499,7 +379,7 @@ public struct ConfirmationTokensResourcePaymentMethodOptionsResourceCard: Sendab
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.cvcToken = try container.decode(Nullable<String>.self, forKey: .cvcToken)
+        self.cvcToken = try container.decodeIfPresent(Nullable<String>.self, forKey: .cvcToken) ?? .null
         self.installments = try container.decodeIfPresent(ConfirmationTokensResourcePaymentMethodOptionsResourceCardResourceInstallment.self, forKey: .installments)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
@@ -995,8 +875,8 @@ public struct ConfirmationTokensResourcePaymentMethodPreview: Sendable, Codable,
         self.cardPresent = try container.decodeIfPresent(PaymentMethodCardPresent.self, forKey: .cardPresent)
         self.cashapp = try container.decodeIfPresent(PaymentMethodCashapp.self, forKey: .cashapp)
         self.crypto = try container.decodeIfPresent(PaymentMethodCrypto.self, forKey: .crypto)
-        self.customer = try container.decode(Nullable<Expandable<Customer>>.self, forKey: .customer)
-        self.customerAccount = try container.decode(Nullable<String>.self, forKey: .customerAccount)
+        self.customer = try container.decodeIfPresent(Nullable<Expandable<Customer>>.self, forKey: .customer) ?? .null
+        self.customerAccount = try container.decodeIfPresent(Nullable<String>.self, forKey: .customerAccount) ?? .null
         self.customerBalance = try container.decodeIfPresent(PaymentMethodCustomerBalance.self, forKey: .customerBalance)
         self.eps = try container.decodeIfPresent(PaymentMethodEps.self, forKey: .eps)
         self.fpx = try container.decodeIfPresent(PaymentMethodFpx.self, forKey: .fpx)
@@ -1150,7 +1030,7 @@ public struct ConfirmationTokensResourceShipping: Sendable, Codable, Equatable, 
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.address = try container.decode(Address.self, forKey: .address)
         self.name = try container.decode(String.self, forKey: .name)
-        self.phone = try container.decode(Nullable<String>.self, forKey: .phone)
+        self.phone = try container.decodeIfPresent(Nullable<String>.self, forKey: .phone) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {

@@ -210,26 +210,6 @@ public enum CreditNoteReason: Sendable, Equatable, Hashable, LosslessEnum {
     }
 }
 
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum CreditNoteShippingCost: Sendable, Codable, Equatable, Hashable {
-    case invoicesResourceShippingCost(InvoicesResourceShippingCost)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(InvoicesResourceShippingCost.self) { self = .invoicesResourceShippingCost(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .invoicesResourceShippingCost(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
 /// Lossless enum: values Stripe documents plus any value the API
 /// adds later, kept in `undocumented` instead of dropped.
 public enum CreditNoteStatus: Sendable, Equatable, Hashable, LosslessEnum {
@@ -327,7 +307,7 @@ public struct CreditNote: Sendable, Codable, Equatable, Hashable, StripeIdentifi
     public var pretaxCreditAmounts: [CreditNotesPretaxCreditAmount]
     public var reason: Nullable<CreditNoteReason>
     public var refunds: [CreditNoteRefund]
-    public var shippingCost: Nullable<CreditNoteShippingCost>
+    public var shippingCost: Nullable<InvoicesResourceShippingCost>
     public var status: CreditNoteStatus
     public var subtotal: Int
     public var subtotalExcludingTax: Nullable<Int>
@@ -340,7 +320,7 @@ public struct CreditNote: Sendable, Codable, Equatable, Hashable, StripeIdentifi
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(amount: Int, amountShipping: Int, created: StripeTimestamp, currency: String, customer: CreditNoteCustomer, customerAccount: Nullable<String>, customerBalanceTransaction: Nullable<Expandable<CustomerBalanceTransaction>>, discountAmount: Int, discountAmounts: [DiscountsResourceDiscountAmount], effectiveAt: Nullable<StripeTimestamp>, id: String, invoice: Expandable<Invoice>, lines: CreditNoteLines, livemode: Bool, memo: Nullable<String>, metadata: Nullable<[String: String]>, number: String, object: CreditNoteObject, outOfBandAmount: Nullable<Int>, pdf: String, postPaymentAmount: Int, prePaymentAmount: Int, pretaxCreditAmounts: [CreditNotesPretaxCreditAmount], reason: Nullable<CreditNoteReason>, refunds: [CreditNoteRefund], shippingCost: Nullable<CreditNoteShippingCost>, status: CreditNoteStatus, subtotal: Int, subtotalExcludingTax: Nullable<Int>, total: Int, totalExcludingTax: Nullable<Int>, totalTaxes: Nullable<[BillingBillResourceInvoicingTaxesTax]>, type: CreditNoteType, voidedAt: Nullable<StripeTimestamp>, unknownFields: [String: JSONValue]? = nil) {
+    public init(amount: Int, amountShipping: Int, created: StripeTimestamp, currency: String, customer: CreditNoteCustomer, customerAccount: Nullable<String>, customerBalanceTransaction: Nullable<Expandable<CustomerBalanceTransaction>>, discountAmount: Int, discountAmounts: [DiscountsResourceDiscountAmount], effectiveAt: Nullable<StripeTimestamp>, id: String, invoice: Expandable<Invoice>, lines: CreditNoteLines, livemode: Bool, memo: Nullable<String>, metadata: Nullable<[String: String]>, number: String, object: CreditNoteObject, outOfBandAmount: Nullable<Int>, pdf: String, postPaymentAmount: Int, prePaymentAmount: Int, pretaxCreditAmounts: [CreditNotesPretaxCreditAmount], reason: Nullable<CreditNoteReason>, refunds: [CreditNoteRefund], shippingCost: Nullable<InvoicesResourceShippingCost>, status: CreditNoteStatus, subtotal: Int, subtotalExcludingTax: Nullable<Int>, total: Int, totalExcludingTax: Nullable<Int>, totalTaxes: Nullable<[BillingBillResourceInvoicingTaxesTax]>, type: CreditNoteType, voidedAt: Nullable<StripeTimestamp>, unknownFields: [String: JSONValue]? = nil) {
         self.amount = amount
         self.amountShipping = amountShipping
         self.created = created
@@ -422,35 +402,35 @@ public struct CreditNote: Sendable, Codable, Equatable, Hashable, StripeIdentifi
         self.created = try container.decode(StripeTimestamp.self, forKey: .created)
         self.currency = try container.decode(String.self, forKey: .currency)
         self.customer = try container.decode(CreditNoteCustomer.self, forKey: .customer)
-        self.customerAccount = try container.decode(Nullable<String>.self, forKey: .customerAccount)
-        self.customerBalanceTransaction = try container.decode(Nullable<Expandable<CustomerBalanceTransaction>>.self, forKey: .customerBalanceTransaction)
+        self.customerAccount = try container.decodeIfPresent(Nullable<String>.self, forKey: .customerAccount) ?? .null
+        self.customerBalanceTransaction = try container.decodeIfPresent(Nullable<Expandable<CustomerBalanceTransaction>>.self, forKey: .customerBalanceTransaction) ?? .null
         self.discountAmount = try container.decode(Int.self, forKey: .discountAmount)
         self.discountAmounts = try container.decode([DiscountsResourceDiscountAmount].self, forKey: .discountAmounts)
-        self.effectiveAt = try container.decode(Nullable<StripeTimestamp>.self, forKey: .effectiveAt)
+        self.effectiveAt = try container.decodeIfPresent(Nullable<StripeTimestamp>.self, forKey: .effectiveAt) ?? .null
         self.id = try container.decode(String.self, forKey: .id)
         self.invoice = try container.decode(Expandable<Invoice>.self, forKey: .invoice)
         self.lines = try container.decode(CreditNoteLines.self, forKey: .lines)
         self.livemode = try container.decode(Bool.self, forKey: .livemode)
-        self.memo = try container.decode(Nullable<String>.self, forKey: .memo)
-        self.metadata = try container.decode(Nullable<[String: String]>.self, forKey: .metadata)
+        self.memo = try container.decodeIfPresent(Nullable<String>.self, forKey: .memo) ?? .null
+        self.metadata = try container.decodeIfPresent(Nullable<[String: String]>.self, forKey: .metadata) ?? .null
         self.number = try container.decode(String.self, forKey: .number)
         self.object = try container.decode(CreditNoteObject.self, forKey: .object)
-        self.outOfBandAmount = try container.decode(Nullable<Int>.self, forKey: .outOfBandAmount)
+        self.outOfBandAmount = try container.decodeIfPresent(Nullable<Int>.self, forKey: .outOfBandAmount) ?? .null
         self.pdf = try container.decode(String.self, forKey: .pdf)
         self.postPaymentAmount = try container.decode(Int.self, forKey: .postPaymentAmount)
         self.prePaymentAmount = try container.decode(Int.self, forKey: .prePaymentAmount)
         self.pretaxCreditAmounts = try container.decode([CreditNotesPretaxCreditAmount].self, forKey: .pretaxCreditAmounts)
-        self.reason = try container.decode(Nullable<CreditNoteReason>.self, forKey: .reason)
+        self.reason = try container.decodeIfPresent(Nullable<CreditNoteReason>.self, forKey: .reason) ?? .null
         self.refunds = try container.decode([CreditNoteRefund].self, forKey: .refunds)
-        self.shippingCost = try container.decode(Nullable<CreditNoteShippingCost>.self, forKey: .shippingCost)
+        self.shippingCost = try container.decodeIfPresent(Nullable<InvoicesResourceShippingCost>.self, forKey: .shippingCost) ?? .null
         self.status = try container.decode(CreditNoteStatus.self, forKey: .status)
         self.subtotal = try container.decode(Int.self, forKey: .subtotal)
-        self.subtotalExcludingTax = try container.decode(Nullable<Int>.self, forKey: .subtotalExcludingTax)
+        self.subtotalExcludingTax = try container.decodeIfPresent(Nullable<Int>.self, forKey: .subtotalExcludingTax) ?? .null
         self.total = try container.decode(Int.self, forKey: .total)
-        self.totalExcludingTax = try container.decode(Nullable<Int>.self, forKey: .totalExcludingTax)
-        self.totalTaxes = try container.decode(Nullable<[BillingBillResourceInvoicingTaxesTax]>.self, forKey: .totalTaxes)
+        self.totalExcludingTax = try container.decodeIfPresent(Nullable<Int>.self, forKey: .totalExcludingTax) ?? .null
+        self.totalTaxes = try container.decodeIfPresent(Nullable<[BillingBillResourceInvoicingTaxesTax]>.self, forKey: .totalTaxes) ?? .null
         self.type = try container.decode(CreditNoteType.self, forKey: .type)
-        self.voidedAt = try container.decode(Nullable<StripeTimestamp>.self, forKey: .voidedAt)
+        self.voidedAt = try container.decodeIfPresent(Nullable<StripeTimestamp>.self, forKey: .voidedAt) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -762,21 +742,21 @@ public struct CreditNoteLineItem: Sendable, Codable, Equatable, Hashable, Stripe
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.amount = try container.decode(Int.self, forKey: .amount)
-        self.description = try container.decode(Nullable<String>.self, forKey: .description)
+        self.description = try container.decodeIfPresent(Nullable<String>.self, forKey: .description) ?? .null
         self.discountAmount = try container.decode(Int.self, forKey: .discountAmount)
         self.discountAmounts = try container.decode([DiscountsResourceDiscountAmount].self, forKey: .discountAmounts)
         self.id = try container.decode(String.self, forKey: .id)
         self.invoiceLineItem = try container.decodeIfPresent(String.self, forKey: .invoiceLineItem)
         self.livemode = try container.decode(Bool.self, forKey: .livemode)
-        self.metadata = try container.decode(Nullable<[String: String]>.self, forKey: .metadata)
+        self.metadata = try container.decodeIfPresent(Nullable<[String: String]>.self, forKey: .metadata) ?? .null
         self.object = try container.decode(CreditNoteLineItemObject.self, forKey: .object)
         self.pretaxCreditAmounts = try container.decode([CreditNotesPretaxCreditAmount].self, forKey: .pretaxCreditAmounts)
-        self.quantity = try container.decode(Nullable<Int>.self, forKey: .quantity)
+        self.quantity = try container.decodeIfPresent(Nullable<Int>.self, forKey: .quantity) ?? .null
         self.taxRates = try container.decode([TaxRate].self, forKey: .taxRates)
-        self.taxes = try container.decode(Nullable<[BillingBillResourceInvoicingTaxesTax]>.self, forKey: .taxes)
+        self.taxes = try container.decodeIfPresent(Nullable<[BillingBillResourceInvoicingTaxesTax]>.self, forKey: .taxes) ?? .null
         self.type = try container.decode(CreditNoteLineItemType.self, forKey: .type)
-        self.unitAmount = try container.decode(Nullable<Int>.self, forKey: .unitAmount)
-        self.unitAmountDecimal = try container.decode(Nullable<String>.self, forKey: .unitAmountDecimal)
+        self.unitAmount = try container.decodeIfPresent(Nullable<Int>.self, forKey: .unitAmount) ?? .null
+        self.unitAmountDecimal = try container.decodeIfPresent(Nullable<String>.self, forKey: .unitAmountDecimal) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -812,26 +792,6 @@ public struct CreditNoteLineItem: Sendable, Codable, Equatable, Hashable, Stripe
                     try? container.encode(value, forKey: codingKey)
                 }
             }
-        }
-    }
-}
-
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum CreditNoteRefundPaymentRecordRefund: Sendable, Codable, Equatable, Hashable {
-    case creditNotesPaymentRecordRefund(CreditNotesPaymentRecordRefund)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(CreditNotesPaymentRecordRefund.self) { self = .creditNotesPaymentRecordRefund(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .creditNotesPaymentRecordRefund(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
         }
     }
 }
@@ -872,14 +832,14 @@ public enum CreditNoteRefundType: Sendable, Equatable, Hashable, LosslessEnum {
 
 public struct CreditNoteRefund: Sendable, Codable, Equatable, Hashable {
     public var amountRefunded: Int
-    public var paymentRecordRefund: Nullable<CreditNoteRefundPaymentRecordRefund>
+    public var paymentRecordRefund: Nullable<CreditNotesPaymentRecordRefund>
     public var refund: Expandable<Refund>
     public var type: Nullable<CreditNoteRefundType>
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(amountRefunded: Int, paymentRecordRefund: Nullable<CreditNoteRefundPaymentRecordRefund>, refund: Expandable<Refund>, type: Nullable<CreditNoteRefundType>, unknownFields: [String: JSONValue]? = nil) {
+    public init(amountRefunded: Int, paymentRecordRefund: Nullable<CreditNotesPaymentRecordRefund>, refund: Expandable<Refund>, type: Nullable<CreditNoteRefundType>, unknownFields: [String: JSONValue]? = nil) {
         self.amountRefunded = amountRefunded
         self.paymentRecordRefund = paymentRecordRefund
         self.refund = refund
@@ -897,9 +857,9 @@ public struct CreditNoteRefund: Sendable, Codable, Equatable, Hashable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.amountRefunded = try container.decode(Int.self, forKey: .amountRefunded)
-        self.paymentRecordRefund = try container.decode(Nullable<CreditNoteRefundPaymentRecordRefund>.self, forKey: .paymentRecordRefund)
+        self.paymentRecordRefund = try container.decodeIfPresent(Nullable<CreditNotesPaymentRecordRefund>.self, forKey: .paymentRecordRefund) ?? .null
         self.refund = try container.decode(Expandable<Refund>.self, forKey: .refund)
-        self.type = try container.decode(Nullable<CreditNoteRefundType>.self, forKey: .type)
+        self.type = try container.decodeIfPresent(Nullable<CreditNoteRefundType>.self, forKey: .type) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {

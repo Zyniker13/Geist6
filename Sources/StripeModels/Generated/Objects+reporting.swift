@@ -35,30 +35,6 @@ public enum ReportingReportRunObject: Sendable, Equatable, Hashable, LosslessEnu
     }
 }
 
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum ReportingReportRunResult: Sendable, Codable, Equatable, Hashable {
-    case file(File)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let raw = try? container.decode([String: JSONValue].self),
-           let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
-            if tag == "file" { self = .file(try container.decode(File.self)); return }
-        }
-        if let value = try? container.decode(File.self) { self = .file(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .file(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
 public struct ReportingReportRun: Sendable, Codable, Equatable, Hashable, StripeIdentified {
     public var created: StripeTimestamp
     public var error: Nullable<String>
@@ -67,14 +43,14 @@ public struct ReportingReportRun: Sendable, Codable, Equatable, Hashable, Stripe
     public var object: ReportingReportRunObject
     public var parameters: FinancialReportingFinanceReportRunRunParameters
     public var reportType: String
-    public var result: Nullable<ReportingReportRunResult>
+    public var result: Nullable<File>
     public var status: String
     public var succeededAt: Nullable<StripeTimestamp>
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(created: StripeTimestamp, error: Nullable<String>, id: String, livemode: Bool, object: ReportingReportRunObject, parameters: FinancialReportingFinanceReportRunRunParameters, reportType: String, result: Nullable<ReportingReportRunResult>, status: String, succeededAt: Nullable<StripeTimestamp>, unknownFields: [String: JSONValue]? = nil) {
+    public init(created: StripeTimestamp, error: Nullable<String>, id: String, livemode: Bool, object: ReportingReportRunObject, parameters: FinancialReportingFinanceReportRunRunParameters, reportType: String, result: Nullable<File>, status: String, succeededAt: Nullable<StripeTimestamp>, unknownFields: [String: JSONValue]? = nil) {
         self.created = created
         self.error = error
         self.id = id
@@ -104,15 +80,15 @@ public struct ReportingReportRun: Sendable, Codable, Equatable, Hashable, Stripe
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.created = try container.decode(StripeTimestamp.self, forKey: .created)
-        self.error = try container.decode(Nullable<String>.self, forKey: .error)
+        self.error = try container.decodeIfPresent(Nullable<String>.self, forKey: .error) ?? .null
         self.id = try container.decode(String.self, forKey: .id)
         self.livemode = try container.decode(Bool.self, forKey: .livemode)
         self.object = try container.decode(ReportingReportRunObject.self, forKey: .object)
         self.parameters = try container.decode(FinancialReportingFinanceReportRunRunParameters.self, forKey: .parameters)
         self.reportType = try container.decode(String.self, forKey: .reportType)
-        self.result = try container.decode(Nullable<ReportingReportRunResult>.self, forKey: .result)
+        self.result = try container.decodeIfPresent(Nullable<File>.self, forKey: .result) ?? .null
         self.status = try container.decode(String.self, forKey: .status)
-        self.succeededAt = try container.decode(Nullable<StripeTimestamp>.self, forKey: .succeededAt)
+        self.succeededAt = try container.decodeIfPresent(Nullable<StripeTimestamp>.self, forKey: .succeededAt) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -304,7 +280,7 @@ public struct ReportingReportType: Sendable, Codable, Equatable, Hashable, Strip
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.dataAvailableEnd = try container.decode(StripeTimestamp.self, forKey: .dataAvailableEnd)
         self.dataAvailableStart = try container.decode(StripeTimestamp.self, forKey: .dataAvailableStart)
-        self.defaultColumns = try container.decode(Nullable<[String]>.self, forKey: .defaultColumns)
+        self.defaultColumns = try container.decodeIfPresent(Nullable<[String]>.self, forKey: .defaultColumns) ?? .null
         self.id = try container.decode(String.self, forKey: .id)
         self.livemode = try container.decode(Bool.self, forKey: .livemode)
         self.name = try container.decode(String.self, forKey: .name)

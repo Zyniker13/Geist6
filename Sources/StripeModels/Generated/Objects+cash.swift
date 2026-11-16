@@ -67,9 +67,9 @@ public struct CashBalance: Sendable, Codable, Equatable, Hashable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.available = try container.decode(Nullable<[String: JSONValue]>.self, forKey: .available)
+        self.available = try container.decodeIfPresent(Nullable<[String: JSONValue]>.self, forKey: .available) ?? .null
         self.customer = try container.decode(String.self, forKey: .customer)
-        self.customerAccount = try container.decode(Nullable<String>.self, forKey: .customerAccount)
+        self.customerAccount = try container.decodeIfPresent(Nullable<String>.self, forKey: .customerAccount) ?? .null
         self.livemode = try container.decode(Bool.self, forKey: .livemode)
         self.object = try container.decode(CashBalanceObject.self, forKey: .object)
         self.settings = try container.decode(CustomerBalanceCustomerBalanceSettings.self, forKey: .settings)

@@ -25,7 +25,7 @@ public struct Networks: Sendable, Codable, Equatable, Hashable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.available = try container.decode([String].self, forKey: .available)
-        self.preferred = try container.decode(Nullable<String>.self, forKey: .preferred)
+        self.preferred = try container.decodeIfPresent(Nullable<String>.self, forKey: .preferred) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {

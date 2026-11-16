@@ -743,14 +743,14 @@ public struct FundingInstructionsBankTransferZenginRecord: Sendable, Codable, Eq
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.accountHolderAddress = try container.decode(Address.self, forKey: .accountHolderAddress)
-        self.accountHolderName = try container.decode(Nullable<String>.self, forKey: .accountHolderName)
-        self.accountNumber = try container.decode(Nullable<String>.self, forKey: .accountNumber)
-        self.accountType = try container.decode(Nullable<String>.self, forKey: .accountType)
+        self.accountHolderName = try container.decodeIfPresent(Nullable<String>.self, forKey: .accountHolderName) ?? .null
+        self.accountNumber = try container.decodeIfPresent(Nullable<String>.self, forKey: .accountNumber) ?? .null
+        self.accountType = try container.decodeIfPresent(Nullable<String>.self, forKey: .accountType) ?? .null
         self.bankAddress = try container.decode(Address.self, forKey: .bankAddress)
-        self.bankCode = try container.decode(Nullable<String>.self, forKey: .bankCode)
-        self.bankName = try container.decode(Nullable<String>.self, forKey: .bankName)
-        self.branchCode = try container.decode(Nullable<String>.self, forKey: .branchCode)
-        self.branchName = try container.decode(Nullable<String>.self, forKey: .branchName)
+        self.bankCode = try container.decodeIfPresent(Nullable<String>.self, forKey: .bankCode) ?? .null
+        self.bankName = try container.decodeIfPresent(Nullable<String>.self, forKey: .bankName) ?? .null
+        self.branchCode = try container.decodeIfPresent(Nullable<String>.self, forKey: .branchCode) ?? .null
+        self.branchName = try container.decodeIfPresent(Nullable<String>.self, forKey: .branchName) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {

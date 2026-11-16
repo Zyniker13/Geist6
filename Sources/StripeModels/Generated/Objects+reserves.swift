@@ -71,8 +71,8 @@ public struct ReservesReserveHoldsResourcesReleaseSchedule: Sendable, Codable, E
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.releaseAfter = try container.decode(Nullable<StripeTimestamp>.self, forKey: .releaseAfter)
-        self.scheduledRelease = try container.decode(Nullable<StripeTimestamp>.self, forKey: .scheduledRelease)
+        self.releaseAfter = try container.decodeIfPresent(Nullable<StripeTimestamp>.self, forKey: .releaseAfter) ?? .null
+        self.scheduledRelease = try container.decodeIfPresent(Nullable<StripeTimestamp>.self, forKey: .scheduledRelease) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -202,7 +202,7 @@ public struct ReservesReservePlansResourcesRollingRelease: Sendable, Codable, Eq
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.daysAfterCharge = try container.decode(Int.self, forKey: .daysAfterCharge)
-        self.expiresOn = try container.decode(Nullable<Int>.self, forKey: .expiresOn)
+        self.expiresOn = try container.decodeIfPresent(Nullable<Int>.self, forKey: .expiresOn) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {

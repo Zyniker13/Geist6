@@ -78,66 +78,6 @@ public enum ForwardingRequestReplacementsItem: Sendable, Equatable, Hashable, Lo
     }
 }
 
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum ForwardingRequestRequestContext: Sendable, Codable, Equatable, Hashable {
-    case forwardedRequestContext(ForwardedRequestContext)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(ForwardedRequestContext.self) { self = .forwardedRequestContext(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .forwardedRequestContext(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum ForwardingRequestRequestDetails: Sendable, Codable, Equatable, Hashable {
-    case forwardedRequestDetails(ForwardedRequestDetails)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(ForwardedRequestDetails.self) { self = .forwardedRequestDetails(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .forwardedRequestDetails(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum ForwardingRequestResponseDetails: Sendable, Codable, Equatable, Hashable {
-    case forwardedResponseDetails(ForwardedResponseDetails)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(ForwardedResponseDetails.self) { self = .forwardedResponseDetails(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .forwardedResponseDetails(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
 public struct ForwardingRequest: Sendable, Codable, Equatable, Hashable, StripeIdentified {
     public var created: StripeTimestamp
     public var id: String
@@ -146,15 +86,15 @@ public struct ForwardingRequest: Sendable, Codable, Equatable, Hashable, StripeI
     public var object: ForwardingRequestObject
     public var paymentMethod: String
     public var replacements: [ForwardingRequestReplacementsItem]
-    public var requestContext: Nullable<ForwardingRequestRequestContext>
-    public var requestDetails: Nullable<ForwardingRequestRequestDetails>
-    public var responseDetails: Nullable<ForwardingRequestResponseDetails>
+    public var requestContext: Nullable<ForwardedRequestContext>
+    public var requestDetails: Nullable<ForwardedRequestDetails>
+    public var responseDetails: Nullable<ForwardedResponseDetails>
     public var url: Nullable<String>
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(created: StripeTimestamp, id: String, livemode: Bool, metadata: Nullable<[String: String]>? = nil, object: ForwardingRequestObject, paymentMethod: String, replacements: [ForwardingRequestReplacementsItem], requestContext: Nullable<ForwardingRequestRequestContext>, requestDetails: Nullable<ForwardingRequestRequestDetails>, responseDetails: Nullable<ForwardingRequestResponseDetails>, url: Nullable<String>, unknownFields: [String: JSONValue]? = nil) {
+    public init(created: StripeTimestamp, id: String, livemode: Bool, metadata: Nullable<[String: String]>? = nil, object: ForwardingRequestObject, paymentMethod: String, replacements: [ForwardingRequestReplacementsItem], requestContext: Nullable<ForwardedRequestContext>, requestDetails: Nullable<ForwardedRequestDetails>, responseDetails: Nullable<ForwardedResponseDetails>, url: Nullable<String>, unknownFields: [String: JSONValue]? = nil) {
         self.created = created
         self.id = id
         self.livemode = livemode
@@ -192,10 +132,10 @@ public struct ForwardingRequest: Sendable, Codable, Equatable, Hashable, StripeI
         self.object = try container.decode(ForwardingRequestObject.self, forKey: .object)
         self.paymentMethod = try container.decode(String.self, forKey: .paymentMethod)
         self.replacements = try container.decode([ForwardingRequestReplacementsItem].self, forKey: .replacements)
-        self.requestContext = try container.decode(Nullable<ForwardingRequestRequestContext>.self, forKey: .requestContext)
-        self.requestDetails = try container.decode(Nullable<ForwardingRequestRequestDetails>.self, forKey: .requestDetails)
-        self.responseDetails = try container.decode(Nullable<ForwardingRequestResponseDetails>.self, forKey: .responseDetails)
-        self.url = try container.decode(Nullable<String>.self, forKey: .url)
+        self.requestContext = try container.decodeIfPresent(Nullable<ForwardedRequestContext>.self, forKey: .requestContext) ?? .null
+        self.requestDetails = try container.decodeIfPresent(Nullable<ForwardedRequestDetails>.self, forKey: .requestDetails) ?? .null
+        self.responseDetails = try container.decodeIfPresent(Nullable<ForwardedResponseDetails>.self, forKey: .responseDetails) ?? .null
+        self.url = try container.decodeIfPresent(Nullable<String>.self, forKey: .url) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {

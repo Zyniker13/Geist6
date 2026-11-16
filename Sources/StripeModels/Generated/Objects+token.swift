@@ -78,7 +78,7 @@ public struct Token: Sendable, Codable, Equatable, Hashable, StripeIdentified {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.bankAccount = try container.decodeIfPresent(BankAccount.self, forKey: .bankAccount)
         self.card = try container.decodeIfPresent(Card.self, forKey: .card)
-        self.clientIp = try container.decode(Nullable<String>.self, forKey: .clientIp)
+        self.clientIp = try container.decodeIfPresent(Nullable<String>.self, forKey: .clientIp) ?? .null
         self.created = try container.decode(StripeTimestamp.self, forKey: .created)
         self.id = try container.decode(String.self, forKey: .id)
         self.livemode = try container.decode(Bool.self, forKey: .livemode)
@@ -134,7 +134,7 @@ public struct TokenCardNetworks: Sendable, Codable, Equatable, Hashable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.preferred = try container.decode(Nullable<String>.self, forKey: .preferred)
+        self.preferred = try container.decodeIfPresent(Nullable<String>.self, forKey: .preferred) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {

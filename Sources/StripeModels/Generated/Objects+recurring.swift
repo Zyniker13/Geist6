@@ -35,8 +35,8 @@ public struct Recurring: Sendable, Codable, Equatable, Hashable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.interval = try container.decode(PlanInterval.self, forKey: .interval)
         self.intervalCount = try container.decode(Int.self, forKey: .intervalCount)
-        self.meter = try container.decode(Nullable<String>.self, forKey: .meter)
-        self.trialPeriodDays = try container.decode(Nullable<Int>.self, forKey: .trialPeriodDays)
+        self.meter = try container.decodeIfPresent(Nullable<String>.self, forKey: .meter) ?? .null
+        self.trialPeriodDays = try container.decodeIfPresent(Nullable<Int>.self, forKey: .trialPeriodDays) ?? .null
         self.usageType = try container.decode(PlanUsageType.self, forKey: .usageType)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {

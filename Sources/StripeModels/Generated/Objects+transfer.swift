@@ -159,11 +159,11 @@ public struct Transfer: Sendable, Codable, Equatable, Hashable, StripeIdentified
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.amount = try container.decode(Int.self, forKey: .amount)
         self.amountReversed = try container.decode(Int.self, forKey: .amountReversed)
-        self.balanceTransaction = try container.decode(Nullable<Expandable<BalanceTransaction>>.self, forKey: .balanceTransaction)
+        self.balanceTransaction = try container.decodeIfPresent(Nullable<Expandable<BalanceTransaction>>.self, forKey: .balanceTransaction) ?? .null
         self.created = try container.decode(StripeTimestamp.self, forKey: .created)
         self.currency = try container.decode(String.self, forKey: .currency)
-        self.description = try container.decode(Nullable<String>.self, forKey: .description)
-        self.destination = try container.decode(Nullable<Expandable<Account>>.self, forKey: .destination)
+        self.description = try container.decodeIfPresent(Nullable<String>.self, forKey: .description) ?? .null
+        self.destination = try container.decodeIfPresent(Nullable<Expandable<Account>>.self, forKey: .destination) ?? .null
         self.destinationPayment = try container.decodeIfPresent(Expandable<Charge>.self, forKey: .destinationPayment)
         self.id = try container.decode(String.self, forKey: .id)
         self.livemode = try container.decode(Bool.self, forKey: .livemode)
@@ -171,9 +171,9 @@ public struct Transfer: Sendable, Codable, Equatable, Hashable, StripeIdentified
         self.object = try container.decode(TransferObject.self, forKey: .object)
         self.reversals = try container.decode(TransferReversals.self, forKey: .reversals)
         self.reversed = try container.decode(Bool.self, forKey: .reversed)
-        self.sourceTransaction = try container.decode(Nullable<Expandable<Charge>>.self, forKey: .sourceTransaction)
+        self.sourceTransaction = try container.decodeIfPresent(Nullable<Expandable<Charge>>.self, forKey: .sourceTransaction) ?? .null
         self.sourceType = try container.decodeIfPresent(String.self, forKey: .sourceType)
-        self.transferGroup = try container.decode(Nullable<String>.self, forKey: .transferGroup)
+        self.transferGroup = try container.decodeIfPresent(Nullable<String>.self, forKey: .transferGroup) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -478,14 +478,14 @@ public struct TransferReversal: Sendable, Codable, Equatable, Hashable, StripeId
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.amount = try container.decode(Int.self, forKey: .amount)
-        self.balanceTransaction = try container.decode(Nullable<Expandable<BalanceTransaction>>.self, forKey: .balanceTransaction)
+        self.balanceTransaction = try container.decodeIfPresent(Nullable<Expandable<BalanceTransaction>>.self, forKey: .balanceTransaction) ?? .null
         self.created = try container.decode(StripeTimestamp.self, forKey: .created)
         self.currency = try container.decode(String.self, forKey: .currency)
-        self.destinationPaymentRefund = try container.decode(Nullable<Expandable<Refund>>.self, forKey: .destinationPaymentRefund)
+        self.destinationPaymentRefund = try container.decodeIfPresent(Nullable<Expandable<Refund>>.self, forKey: .destinationPaymentRefund) ?? .null
         self.id = try container.decode(String.self, forKey: .id)
-        self.metadata = try container.decode(Nullable<[String: String]>.self, forKey: .metadata)
+        self.metadata = try container.decodeIfPresent(Nullable<[String: String]>.self, forKey: .metadata) ?? .null
         self.object = try container.decode(TransferReversalObject.self, forKey: .object)
-        self.sourceRefund = try container.decode(Nullable<Expandable<Refund>>.self, forKey: .sourceRefund)
+        self.sourceRefund = try container.decodeIfPresent(Nullable<Expandable<Refund>>.self, forKey: .sourceRefund) ?? .null
         self.transfer = try container.decode(Expandable<Transfer>.self, forKey: .transfer)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {

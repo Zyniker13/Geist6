@@ -35,26 +35,6 @@ public enum EventObject: Sendable, Equatable, Hashable, LosslessEnum {
     }
 }
 
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum EventRequest: Sendable, Codable, Equatable, Hashable {
-    case notificationEventRequest(NotificationEventRequest)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(NotificationEventRequest.self) { self = .notificationEventRequest(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .notificationEventRequest(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
 /// Lossless enum: values Stripe documents plus any value the API
 /// adds later, kept in `undocumented` instead of dropped.
 public enum EventType: Sendable, Equatable, Hashable, LosslessEnum {
@@ -918,13 +898,13 @@ public struct Event: Sendable, Codable, Equatable, Hashable, StripeIdentified {
     public var livemode: Bool
     public var object: EventObject
     public var pendingWebhooks: Int
-    public var request: Nullable<EventRequest>
+    public var request: Nullable<NotificationEventRequest>
     public var type: EventType
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(account: String? = nil, apiVersion: Nullable<String>, context: String? = nil, created: StripeTimestamp, data: NotificationEventData, id: String, livemode: Bool, object: EventObject, pendingWebhooks: Int, request: Nullable<EventRequest>, type: EventType, unknownFields: [String: JSONValue]? = nil) {
+    public init(account: String? = nil, apiVersion: Nullable<String>, context: String? = nil, created: StripeTimestamp, data: NotificationEventData, id: String, livemode: Bool, object: EventObject, pendingWebhooks: Int, request: Nullable<NotificationEventRequest>, type: EventType, unknownFields: [String: JSONValue]? = nil) {
         self.account = account
         self.apiVersion = apiVersion
         self.context = context
@@ -956,7 +936,7 @@ public struct Event: Sendable, Codable, Equatable, Hashable, StripeIdentified {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.account = try container.decodeIfPresent(String.self, forKey: .account)
-        self.apiVersion = try container.decode(Nullable<String>.self, forKey: .apiVersion)
+        self.apiVersion = try container.decodeIfPresent(Nullable<String>.self, forKey: .apiVersion) ?? .null
         self.context = try container.decodeIfPresent(String.self, forKey: .context)
         self.created = try container.decode(StripeTimestamp.self, forKey: .created)
         self.data = try container.decode(NotificationEventData.self, forKey: .data)
@@ -964,7 +944,7 @@ public struct Event: Sendable, Codable, Equatable, Hashable, StripeIdentified {
         self.livemode = try container.decode(Bool.self, forKey: .livemode)
         self.object = try container.decode(EventObject.self, forKey: .object)
         self.pendingWebhooks = try container.decode(Int.self, forKey: .pendingWebhooks)
-        self.request = try container.decode(Nullable<EventRequest>.self, forKey: .request)
+        self.request = try container.decodeIfPresent(Nullable<NotificationEventRequest>.self, forKey: .request) ?? .null
         self.type = try container.decode(EventType.self, forKey: .type)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {

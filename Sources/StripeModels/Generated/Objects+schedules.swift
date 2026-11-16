@@ -35,35 +35,15 @@ public enum SchedulesPhaseAutomaticTaxDisabledReason: Sendable, Equatable, Hasha
     }
 }
 
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum SchedulesPhaseAutomaticTaxLiability: Sendable, Codable, Equatable, Hashable {
-    case connectAccountReference(ConnectAccountReference)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(ConnectAccountReference.self) { self = .connectAccountReference(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .connectAccountReference(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
 public struct SchedulesPhaseAutomaticTax: Sendable, Codable, Equatable, Hashable {
     public var disabledReason: Nullable<SchedulesPhaseAutomaticTaxDisabledReason>
     public var enabled: Bool
-    public var liability: Nullable<SchedulesPhaseAutomaticTaxLiability>
+    public var liability: Nullable<ConnectAccountReference>
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(disabledReason: Nullable<SchedulesPhaseAutomaticTaxDisabledReason>, enabled: Bool, liability: Nullable<SchedulesPhaseAutomaticTaxLiability>, unknownFields: [String: JSONValue]? = nil) {
+    public init(disabledReason: Nullable<SchedulesPhaseAutomaticTaxDisabledReason>, enabled: Bool, liability: Nullable<ConnectAccountReference>, unknownFields: [String: JSONValue]? = nil) {
         self.disabledReason = disabledReason
         self.enabled = enabled
         self.liability = liability
@@ -78,9 +58,9 @@ public struct SchedulesPhaseAutomaticTax: Sendable, Codable, Equatable, Hashable
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.disabledReason = try container.decode(Nullable<SchedulesPhaseAutomaticTaxDisabledReason>.self, forKey: .disabledReason)
+        self.disabledReason = try container.decodeIfPresent(Nullable<SchedulesPhaseAutomaticTaxDisabledReason>.self, forKey: .disabledReason) ?? .null
         self.enabled = try container.decode(Bool.self, forKey: .enabled)
-        self.liability = try container.decode(Nullable<SchedulesPhaseAutomaticTaxLiability>.self, forKey: .liability)
+        self.liability = try container.decodeIfPresent(Nullable<ConnectAccountReference>.self, forKey: .liability) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {

@@ -67,26 +67,6 @@ public enum QuoteCustomer: Sendable, Codable, Equatable, Hashable {
 }
 
 /// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum QuoteFromQuote: Sendable, Codable, Equatable, Hashable {
-    case quotesResourceFromQuote(QuotesResourceFromQuote)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(QuotesResourceFromQuote.self) { self = .quotesResourceFromQuote(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .quotesResourceFromQuote(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
 public enum QuoteInvoice: Sendable, Codable, Equatable, Hashable {
     case string(String)
     case invoice(Invoice)
@@ -245,26 +225,6 @@ public enum QuoteStatus: Sendable, Equatable, Hashable, LosslessEnum {
     }
 }
 
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum QuoteTransferData: Sendable, Codable, Equatable, Hashable {
-    case quotesResourceTransferData(QuotesResourceTransferData)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(QuotesResourceTransferData.self) { self = .quotesResourceTransferData(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .quotesResourceTransferData(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
 public struct Quote: Sendable, Codable, Equatable, Hashable, StripeIdentified {
     public var amountSubtotal: Int
     public var amountTotal: Int
@@ -283,7 +243,7 @@ public struct Quote: Sendable, Codable, Equatable, Hashable, StripeIdentified {
     public var discounts: [Expandable<Discount>]
     public var expiresAt: StripeTimestamp
     public var footer: Nullable<String>
-    public var fromQuote: Nullable<QuoteFromQuote>
+    public var fromQuote: Nullable<QuotesResourceFromQuote>
     public var header: Nullable<String>
     public var id: String
     public var invoice: Nullable<QuoteInvoice>
@@ -301,12 +261,12 @@ public struct Quote: Sendable, Codable, Equatable, Hashable, StripeIdentified {
     public var subscriptionSchedule: Nullable<Expandable<SubscriptionSchedule>>
     public var testClock: Nullable<Expandable<TestHelpersTestClock>>
     public var totalDetails: QuotesResourceTotalDetails
-    public var transferData: Nullable<QuoteTransferData>
+    public var transferData: Nullable<QuotesResourceTransferData>
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(amountSubtotal: Int, amountTotal: Int, application: Nullable<QuoteApplication>, applicationFeeAmount: Nullable<Int>, applicationFeePercent: Nullable<Decimal>, automaticTax: QuotesResourceAutomaticTax, collectionMethod: InvoiceCollectionMethod, computed: QuotesResourceComputed, created: StripeTimestamp, currency: Nullable<String>, customer: Nullable<QuoteCustomer>, customerAccount: Nullable<String>, defaultTaxRates: [Expandable<TaxRate>]? = nil, description: Nullable<String>, discounts: [Expandable<Discount>], expiresAt: StripeTimestamp, footer: Nullable<String>, fromQuote: Nullable<QuoteFromQuote>, header: Nullable<String>, id: String, invoice: Nullable<QuoteInvoice>, invoiceSettings: InvoiceSettingQuoteSetting, lineItems: QuoteLineItems? = nil, livemode: Bool, metadata: [String: String], number: Nullable<String>, object: QuoteObject, onBehalfOf: Nullable<Expandable<Account>>, status: QuoteStatus, statusTransitions: QuotesResourceStatusTransitions, subscription: Nullable<Expandable<Subscription>>, subscriptionData: QuotesResourceSubscriptionDataSubscriptionData, subscriptionSchedule: Nullable<Expandable<SubscriptionSchedule>>, testClock: Nullable<Expandable<TestHelpersTestClock>>, totalDetails: QuotesResourceTotalDetails, transferData: Nullable<QuoteTransferData>, unknownFields: [String: JSONValue]? = nil) {
+    public init(amountSubtotal: Int, amountTotal: Int, application: Nullable<QuoteApplication>, applicationFeeAmount: Nullable<Int>, applicationFeePercent: Nullable<Decimal>, automaticTax: QuotesResourceAutomaticTax, collectionMethod: InvoiceCollectionMethod, computed: QuotesResourceComputed, created: StripeTimestamp, currency: Nullable<String>, customer: Nullable<QuoteCustomer>, customerAccount: Nullable<String>, defaultTaxRates: [Expandable<TaxRate>]? = nil, description: Nullable<String>, discounts: [Expandable<Discount>], expiresAt: StripeTimestamp, footer: Nullable<String>, fromQuote: Nullable<QuotesResourceFromQuote>, header: Nullable<String>, id: String, invoice: Nullable<QuoteInvoice>, invoiceSettings: InvoiceSettingQuoteSetting, lineItems: QuoteLineItems? = nil, livemode: Bool, metadata: [String: String], number: Nullable<String>, object: QuoteObject, onBehalfOf: Nullable<Expandable<Account>>, status: QuoteStatus, statusTransitions: QuotesResourceStatusTransitions, subscription: Nullable<Expandable<Subscription>>, subscriptionData: QuotesResourceSubscriptionDataSubscriptionData, subscriptionSchedule: Nullable<Expandable<SubscriptionSchedule>>, testClock: Nullable<Expandable<TestHelpersTestClock>>, totalDetails: QuotesResourceTotalDetails, transferData: Nullable<QuotesResourceTransferData>, unknownFields: [String: JSONValue]? = nil) {
         self.amountSubtotal = amountSubtotal
         self.amountTotal = amountTotal
         self.application = application
@@ -389,40 +349,40 @@ public struct Quote: Sendable, Codable, Equatable, Hashable, StripeIdentified {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.amountSubtotal = try container.decode(Int.self, forKey: .amountSubtotal)
         self.amountTotal = try container.decode(Int.self, forKey: .amountTotal)
-        self.application = try container.decode(Nullable<QuoteApplication>.self, forKey: .application)
-        self.applicationFeeAmount = try container.decode(Nullable<Int>.self, forKey: .applicationFeeAmount)
-        self.applicationFeePercent = try container.decode(Nullable<Decimal>.self, forKey: .applicationFeePercent)
+        self.application = try container.decodeIfPresent(Nullable<QuoteApplication>.self, forKey: .application) ?? .null
+        self.applicationFeeAmount = try container.decodeIfPresent(Nullable<Int>.self, forKey: .applicationFeeAmount) ?? .null
+        self.applicationFeePercent = try container.decodeIfPresent(Nullable<Decimal>.self, forKey: .applicationFeePercent) ?? .null
         self.automaticTax = try container.decode(QuotesResourceAutomaticTax.self, forKey: .automaticTax)
         self.collectionMethod = try container.decode(InvoiceCollectionMethod.self, forKey: .collectionMethod)
         self.computed = try container.decode(QuotesResourceComputed.self, forKey: .computed)
         self.created = try container.decode(StripeTimestamp.self, forKey: .created)
-        self.currency = try container.decode(Nullable<String>.self, forKey: .currency)
-        self.customer = try container.decode(Nullable<QuoteCustomer>.self, forKey: .customer)
-        self.customerAccount = try container.decode(Nullable<String>.self, forKey: .customerAccount)
+        self.currency = try container.decodeIfPresent(Nullable<String>.self, forKey: .currency) ?? .null
+        self.customer = try container.decodeIfPresent(Nullable<QuoteCustomer>.self, forKey: .customer) ?? .null
+        self.customerAccount = try container.decodeIfPresent(Nullable<String>.self, forKey: .customerAccount) ?? .null
         self.defaultTaxRates = try container.decodeIfPresent([Expandable<TaxRate>].self, forKey: .defaultTaxRates)
-        self.description = try container.decode(Nullable<String>.self, forKey: .description)
+        self.description = try container.decodeIfPresent(Nullable<String>.self, forKey: .description) ?? .null
         self.discounts = try container.decode([Expandable<Discount>].self, forKey: .discounts)
         self.expiresAt = try container.decode(StripeTimestamp.self, forKey: .expiresAt)
-        self.footer = try container.decode(Nullable<String>.self, forKey: .footer)
-        self.fromQuote = try container.decode(Nullable<QuoteFromQuote>.self, forKey: .fromQuote)
-        self.header = try container.decode(Nullable<String>.self, forKey: .header)
+        self.footer = try container.decodeIfPresent(Nullable<String>.self, forKey: .footer) ?? .null
+        self.fromQuote = try container.decodeIfPresent(Nullable<QuotesResourceFromQuote>.self, forKey: .fromQuote) ?? .null
+        self.header = try container.decodeIfPresent(Nullable<String>.self, forKey: .header) ?? .null
         self.id = try container.decode(String.self, forKey: .id)
-        self.invoice = try container.decode(Nullable<QuoteInvoice>.self, forKey: .invoice)
+        self.invoice = try container.decodeIfPresent(Nullable<QuoteInvoice>.self, forKey: .invoice) ?? .null
         self.invoiceSettings = try container.decode(InvoiceSettingQuoteSetting.self, forKey: .invoiceSettings)
         self.lineItems = try container.decodeIfPresent(QuoteLineItems.self, forKey: .lineItems)
         self.livemode = try container.decode(Bool.self, forKey: .livemode)
         self.metadata = try container.decode([String: String].self, forKey: .metadata)
-        self.number = try container.decode(Nullable<String>.self, forKey: .number)
+        self.number = try container.decodeIfPresent(Nullable<String>.self, forKey: .number) ?? .null
         self.object = try container.decode(QuoteObject.self, forKey: .object)
-        self.onBehalfOf = try container.decode(Nullable<Expandable<Account>>.self, forKey: .onBehalfOf)
+        self.onBehalfOf = try container.decodeIfPresent(Nullable<Expandable<Account>>.self, forKey: .onBehalfOf) ?? .null
         self.status = try container.decode(QuoteStatus.self, forKey: .status)
         self.statusTransitions = try container.decode(QuotesResourceStatusTransitions.self, forKey: .statusTransitions)
-        self.subscription = try container.decode(Nullable<Expandable<Subscription>>.self, forKey: .subscription)
+        self.subscription = try container.decodeIfPresent(Nullable<Expandable<Subscription>>.self, forKey: .subscription) ?? .null
         self.subscriptionData = try container.decode(QuotesResourceSubscriptionDataSubscriptionData.self, forKey: .subscriptionData)
-        self.subscriptionSchedule = try container.decode(Nullable<Expandable<SubscriptionSchedule>>.self, forKey: .subscriptionSchedule)
-        self.testClock = try container.decode(Nullable<Expandable<TestHelpersTestClock>>.self, forKey: .testClock)
+        self.subscriptionSchedule = try container.decodeIfPresent(Nullable<Expandable<SubscriptionSchedule>>.self, forKey: .subscriptionSchedule) ?? .null
+        self.testClock = try container.decodeIfPresent(Nullable<Expandable<TestHelpersTestClock>>.self, forKey: .testClock) ?? .null
         self.totalDetails = try container.decode(QuotesResourceTotalDetails.self, forKey: .totalDetails)
-        self.transferData = try container.decode(Nullable<QuoteTransferData>.self, forKey: .transferData)
+        self.transferData = try container.decodeIfPresent(Nullable<QuotesResourceTransferData>.self, forKey: .transferData) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -1228,12 +1188,12 @@ public struct QuoteCreateParamsLineItemsItem: Sendable, Codable, Equatable, Hash
 }
 
 public struct QuoteCreateParamsSubscriptionDataBillingModeFlexible: Sendable, Codable, Equatable, Hashable {
-    public var prorationDiscounts: InvoiceCreatePreviewParamsScheduleDetailsBillingModeFlexibleProrationDiscounts?
+    public var prorationDiscounts: SubscriptionsResourceBillingModeFlexibleProrationDiscounts?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(prorationDiscounts: InvoiceCreatePreviewParamsScheduleDetailsBillingModeFlexibleProrationDiscounts? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(prorationDiscounts: SubscriptionsResourceBillingModeFlexibleProrationDiscounts? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.prorationDiscounts = prorationDiscounts
         self.unknownFields = unknownFields
     }
@@ -1244,7 +1204,7 @@ public struct QuoteCreateParamsSubscriptionDataBillingModeFlexible: Sendable, Co
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.prorationDiscounts = try container.decodeIfPresent(InvoiceCreatePreviewParamsScheduleDetailsBillingModeFlexibleProrationDiscounts.self, forKey: .prorationDiscounts)
+        self.prorationDiscounts = try container.decodeIfPresent(SubscriptionsResourceBillingModeFlexibleProrationDiscounts.self, forKey: .prorationDiscounts)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {

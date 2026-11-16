@@ -24,8 +24,8 @@ public struct SepaDebitGeneratedFrom: Sendable, Codable, Equatable, Hashable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.charge = try container.decode(Nullable<Expandable<Charge>>.self, forKey: .charge)
-        self.setupAttempt = try container.decode(Nullable<Expandable<SetupAttempt>>.self, forKey: .setupAttempt)
+        self.charge = try container.decodeIfPresent(Nullable<Expandable<Charge>>.self, forKey: .charge) ?? .null
+        self.setupAttempt = try container.decodeIfPresent(Nullable<Expandable<SetupAttempt>>.self, forKey: .setupAttempt) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {

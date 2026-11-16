@@ -189,12 +189,12 @@ public struct AppsInstall: Sendable, Codable, Equatable, Hashable, StripeIdentif
         self.account = try container.decode(String.self, forKey: .account)
         self.app = try container.decode(String.self, forKey: .app)
         self.approvalRequired = try container.decode(Bool.self, forKey: .approvalRequired)
-        self.authCode = try container.decode(Nullable<String>.self, forKey: .authCode)
+        self.authCode = try container.decodeIfPresent(Nullable<String>.self, forKey: .authCode) ?? .null
         self.channel = try container.decode(AppsInstallChannel.self, forKey: .channel)
         self.contentSecurityPolicyGranted = try container.decode(AppServiceResourceInstallContentSecurityPolicy.self, forKey: .contentSecurityPolicyGranted)
         self.contentSecurityPolicyPending = try container.decode(AppServiceResourceInstallContentSecurityPolicy.self, forKey: .contentSecurityPolicyPending)
         self.created = try container.decode(StripeTimestamp.self, forKey: .created)
-        self.createdBy = try container.decode(Nullable<String>.self, forKey: .createdBy)
+        self.createdBy = try container.decodeIfPresent(Nullable<String>.self, forKey: .createdBy) ?? .null
         self.endpointsGranted = try container.decode([String].self, forKey: .endpointsGranted)
         self.endpointsPending = try container.decode([String].self, forKey: .endpointsPending)
         self.id = try container.decode(String.self, forKey: .id)
@@ -443,7 +443,7 @@ public struct AppsSecret: Sendable, Codable, Equatable, Hashable, StripeIdentifi
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.created = try container.decode(StripeTimestamp.self, forKey: .created)
         self.deleted = try container.decodeIfPresent(Bool.self, forKey: .deleted)
-        self.expiresAt = try container.decode(Nullable<StripeTimestamp>.self, forKey: .expiresAt)
+        self.expiresAt = try container.decodeIfPresent(Nullable<StripeTimestamp>.self, forKey: .expiresAt) ?? .null
         self.id = try container.decode(String.self, forKey: .id)
         self.livemode = try container.decode(Bool.self, forKey: .livemode)
         self.name = try container.decode(String.self, forKey: .name)

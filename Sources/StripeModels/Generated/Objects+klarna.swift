@@ -21,7 +21,7 @@ public struct KlarnaAddress: Sendable, Codable, Equatable, Hashable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.country = try container.decode(Nullable<String>.self, forKey: .country)
+        self.country = try container.decodeIfPresent(Nullable<String>.self, forKey: .country) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -46,33 +46,13 @@ public struct KlarnaAddress: Sendable, Codable, Equatable, Hashable {
     }
 }
 
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum KlarnaPayerDetailsAddress: Sendable, Codable, Equatable, Hashable {
-    case klarnaAddress(KlarnaAddress)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(KlarnaAddress.self) { self = .klarnaAddress(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .klarnaAddress(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
 public struct KlarnaPayerDetails: Sendable, Codable, Equatable, Hashable {
-    public var address: Nullable<KlarnaPayerDetailsAddress>
+    public var address: Nullable<KlarnaAddress>
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(address: Nullable<KlarnaPayerDetailsAddress>, unknownFields: [String: JSONValue]? = nil) {
+    public init(address: Nullable<KlarnaAddress>, unknownFields: [String: JSONValue]? = nil) {
         self.address = address
         self.unknownFields = unknownFields
     }
@@ -83,7 +63,7 @@ public struct KlarnaPayerDetails: Sendable, Codable, Equatable, Hashable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.address = try container.decode(Nullable<KlarnaPayerDetailsAddress>.self, forKey: .address)
+        self.address = try container.decodeIfPresent(Nullable<KlarnaAddress>.self, forKey: .address) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {

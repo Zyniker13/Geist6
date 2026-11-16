@@ -27,9 +27,9 @@ public struct GelatoDataDocumentReportDateOfBirth: Sendable, Codable, Equatable,
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.day = try container.decode(Nullable<Int>.self, forKey: .day)
-        self.month = try container.decode(Nullable<Int>.self, forKey: .month)
-        self.year = try container.decode(Nullable<Int>.self, forKey: .year)
+        self.day = try container.decodeIfPresent(Nullable<Int>.self, forKey: .day) ?? .null
+        self.month = try container.decodeIfPresent(Nullable<Int>.self, forKey: .month) ?? .null
+        self.year = try container.decodeIfPresent(Nullable<Int>.self, forKey: .year) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -79,9 +79,9 @@ public struct GelatoDataDocumentReportExpirationDate: Sendable, Codable, Equatab
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.day = try container.decode(Nullable<Int>.self, forKey: .day)
-        self.month = try container.decode(Nullable<Int>.self, forKey: .month)
-        self.year = try container.decode(Nullable<Int>.self, forKey: .year)
+        self.day = try container.decodeIfPresent(Nullable<Int>.self, forKey: .day) ?? .null
+        self.month = try container.decodeIfPresent(Nullable<Int>.self, forKey: .month) ?? .null
+        self.year = try container.decodeIfPresent(Nullable<Int>.self, forKey: .year) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -131,9 +131,9 @@ public struct GelatoDataDocumentReportIssuedDate: Sendable, Codable, Equatable, 
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.day = try container.decode(Nullable<Int>.self, forKey: .day)
-        self.month = try container.decode(Nullable<Int>.self, forKey: .month)
-        self.year = try container.decode(Nullable<Int>.self, forKey: .year)
+        self.day = try container.decodeIfPresent(Nullable<Int>.self, forKey: .day) ?? .null
+        self.month = try container.decodeIfPresent(Nullable<Int>.self, forKey: .month) ?? .null
+        self.year = try container.decodeIfPresent(Nullable<Int>.self, forKey: .year) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -183,9 +183,9 @@ public struct GelatoDataIdNumberReportDate: Sendable, Codable, Equatable, Hashab
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.day = try container.decode(Nullable<Int>.self, forKey: .day)
-        self.month = try container.decode(Nullable<Int>.self, forKey: .month)
-        self.year = try container.decode(Nullable<Int>.self, forKey: .year)
+        self.day = try container.decodeIfPresent(Nullable<Int>.self, forKey: .day) ?? .null
+        self.month = try container.decodeIfPresent(Nullable<Int>.self, forKey: .month) ?? .null
+        self.year = try container.decodeIfPresent(Nullable<Int>.self, forKey: .year) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -235,9 +235,9 @@ public struct GelatoDataVerifiedOutputsDate: Sendable, Codable, Equatable, Hasha
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.day = try container.decode(Nullable<Int>.self, forKey: .day)
-        self.month = try container.decode(Nullable<Int>.self, forKey: .month)
-        self.year = try container.decode(Nullable<Int>.self, forKey: .year)
+        self.day = try container.decodeIfPresent(Nullable<Int>.self, forKey: .day) ?? .null
+        self.month = try container.decodeIfPresent(Nullable<Int>.self, forKey: .month) ?? .null
+        self.year = try container.decodeIfPresent(Nullable<Int>.self, forKey: .year) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -260,106 +260,6 @@ public struct GelatoDataVerifiedOutputsDate: Sendable, Codable, Equatable, Hasha
                     try? container.encode(value, forKey: codingKey)
                 }
             }
-        }
-    }
-}
-
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum GelatoDocumentReportAddress: Sendable, Codable, Equatable, Hashable {
-    case address(Address)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(Address.self) { self = .address(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .address(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum GelatoDocumentReportDob: Sendable, Codable, Equatable, Hashable {
-    case gelatoDataDocumentReportDateOfBirth(GelatoDataDocumentReportDateOfBirth)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(GelatoDataDocumentReportDateOfBirth.self) { self = .gelatoDataDocumentReportDateOfBirth(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .gelatoDataDocumentReportDateOfBirth(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum GelatoDocumentReportError: Sendable, Codable, Equatable, Hashable {
-    indirect case gelatoDocumentReportError(GelatoDocumentReportError)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(GelatoDocumentReportError.self) { self = .gelatoDocumentReportError(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .gelatoDocumentReportError(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum GelatoDocumentReportExpirationDate: Sendable, Codable, Equatable, Hashable {
-    case gelatoDataDocumentReportExpirationDate(GelatoDataDocumentReportExpirationDate)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(GelatoDataDocumentReportExpirationDate.self) { self = .gelatoDataDocumentReportExpirationDate(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .gelatoDataDocumentReportExpirationDate(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum GelatoDocumentReportIssuedDate: Sendable, Codable, Equatable, Hashable {
-    case gelatoDataDocumentReportIssuedDate(GelatoDataDocumentReportIssuedDate)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(GelatoDataDocumentReportIssuedDate.self) { self = .gelatoDataDocumentReportIssuedDate(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .gelatoDataDocumentReportIssuedDate(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
         }
     }
 }
@@ -476,13 +376,13 @@ public enum GelatoDocumentReportType: Sendable, Equatable, Hashable, LosslessEnu
 }
 
 public struct GelatoDocumentReport: Sendable, Codable, Equatable, Hashable {
-    public var address: Nullable<GelatoDocumentReportAddress>
-    public var dob: Nullable<GelatoDocumentReportDob>?
+    public var address: Nullable<Address>
+    public var dob: Nullable<GelatoDataDocumentReportDateOfBirth>?
     public var error: Nullable<GelatoDocumentReportError>
-    public var expirationDate: Nullable<GelatoDocumentReportExpirationDate>?
+    public var expirationDate: Nullable<GelatoDataDocumentReportExpirationDate>?
     public var files: Nullable<[String]>
     public var firstName: Nullable<String>
-    public var issuedDate: Nullable<GelatoDocumentReportIssuedDate>
+    public var issuedDate: Nullable<GelatoDataDocumentReportIssuedDate>
     public var issuingCountry: Nullable<String>
     public var lastName: Nullable<String>
     public var number: Nullable<String>?
@@ -495,7 +395,7 @@ public struct GelatoDocumentReport: Sendable, Codable, Equatable, Hashable {
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(address: Nullable<GelatoDocumentReportAddress>, dob: Nullable<GelatoDocumentReportDob>? = nil, error: Nullable<GelatoDocumentReportError>, expirationDate: Nullable<GelatoDocumentReportExpirationDate>? = nil, files: Nullable<[String]>, firstName: Nullable<String>, issuedDate: Nullable<GelatoDocumentReportIssuedDate>, issuingCountry: Nullable<String>, lastName: Nullable<String>, number: Nullable<String>? = nil, sex: Nullable<GelatoDocumentReportSex>? = nil, status: GelatoDocumentReportStatus, type: Nullable<GelatoDocumentReportType>, unparsedPlaceOfBirth: Nullable<String>? = nil, unparsedSex: Nullable<String>? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(address: Nullable<Address>, dob: Nullable<GelatoDataDocumentReportDateOfBirth>? = nil, error: Nullable<GelatoDocumentReportError>, expirationDate: Nullable<GelatoDataDocumentReportExpirationDate>? = nil, files: Nullable<[String]>, firstName: Nullable<String>, issuedDate: Nullable<GelatoDataDocumentReportIssuedDate>, issuingCountry: Nullable<String>, lastName: Nullable<String>, number: Nullable<String>? = nil, sex: Nullable<GelatoDocumentReportSex>? = nil, status: GelatoDocumentReportStatus, type: Nullable<GelatoDocumentReportType>, unparsedPlaceOfBirth: Nullable<String>? = nil, unparsedSex: Nullable<String>? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.address = address
         self.dob = dob
         self.error = error
@@ -534,19 +434,19 @@ public struct GelatoDocumentReport: Sendable, Codable, Equatable, Hashable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.address = try container.decode(Nullable<GelatoDocumentReportAddress>.self, forKey: .address)
-        self.dob = try container.decodeIfPresent(Nullable<GelatoDocumentReportDob>.self, forKey: .dob)
-        self.error = try container.decode(Nullable<GelatoDocumentReportError>.self, forKey: .error)
-        self.expirationDate = try container.decodeIfPresent(Nullable<GelatoDocumentReportExpirationDate>.self, forKey: .expirationDate)
-        self.files = try container.decode(Nullable<[String]>.self, forKey: .files)
-        self.firstName = try container.decode(Nullable<String>.self, forKey: .firstName)
-        self.issuedDate = try container.decode(Nullable<GelatoDocumentReportIssuedDate>.self, forKey: .issuedDate)
-        self.issuingCountry = try container.decode(Nullable<String>.self, forKey: .issuingCountry)
-        self.lastName = try container.decode(Nullable<String>.self, forKey: .lastName)
+        self.address = try container.decodeIfPresent(Nullable<Address>.self, forKey: .address) ?? .null
+        self.dob = try container.decodeIfPresent(Nullable<GelatoDataDocumentReportDateOfBirth>.self, forKey: .dob)
+        self.error = try container.decodeIfPresent(Nullable<GelatoDocumentReportError>.self, forKey: .error) ?? .null
+        self.expirationDate = try container.decodeIfPresent(Nullable<GelatoDataDocumentReportExpirationDate>.self, forKey: .expirationDate)
+        self.files = try container.decodeIfPresent(Nullable<[String]>.self, forKey: .files) ?? .null
+        self.firstName = try container.decodeIfPresent(Nullable<String>.self, forKey: .firstName) ?? .null
+        self.issuedDate = try container.decodeIfPresent(Nullable<GelatoDataDocumentReportIssuedDate>.self, forKey: .issuedDate) ?? .null
+        self.issuingCountry = try container.decodeIfPresent(Nullable<String>.self, forKey: .issuingCountry) ?? .null
+        self.lastName = try container.decodeIfPresent(Nullable<String>.self, forKey: .lastName) ?? .null
         self.number = try container.decodeIfPresent(Nullable<String>.self, forKey: .number)
         self.sex = try container.decodeIfPresent(Nullable<GelatoDocumentReportSex>.self, forKey: .sex)
         self.status = try container.decode(GelatoDocumentReportStatus.self, forKey: .status)
-        self.type = try container.decode(Nullable<GelatoDocumentReportType>.self, forKey: .type)
+        self.type = try container.decodeIfPresent(Nullable<GelatoDocumentReportType>.self, forKey: .type) ?? .null
         self.unparsedPlaceOfBirth = try container.decodeIfPresent(Nullable<String>.self, forKey: .unparsedPlaceOfBirth)
         self.unparsedSex = try container.decodeIfPresent(Nullable<String>.self, forKey: .unparsedSex)
         var captured: [String: JSONValue] = [:]
@@ -587,22 +487,86 @@ public struct GelatoDocumentReport: Sendable, Codable, Equatable, Hashable {
     }
 }
 
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum GelatoEmailReportError: Sendable, Codable, Equatable, Hashable {
-    indirect case gelatoEmailReportError(GelatoEmailReportError)
-    case other(JSONValue)
+/// Lossless enum: values Stripe documents plus any value the API
+/// adds later, kept in `undocumented` instead of dropped.
+public enum GelatoDocumentReportErrorCode: Sendable, Equatable, Hashable, LosslessEnum {
+    case documentExpired
+    case documentTypeNotSupported
+    case documentUnverifiedOther
+    case undocumented(String)
+
+    public init(rawValue raw: String) {
+        switch raw {
+        case "document_expired": self = .documentExpired
+        case "document_type_not_supported": self = .documentTypeNotSupported
+        case "document_unverified_other": self = .documentUnverifiedOther
+        default: self = .undocumented(raw)
+        }
+    }
+
+    public var rawValue: String {
+        switch self {
+        case .documentExpired: return "document_expired"
+        case .documentTypeNotSupported: return "document_type_not_supported"
+        case .documentUnverifiedOther: return "document_unverified_other"
+        case .undocumented(let value): return value
+        }
+    }
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(GelatoEmailReportError.self) { self = .gelatoEmailReportError(value); return }
-        self = .other(try container.decode(JSONValue.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
-        switch self {
-        case .gelatoEmailReportError(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
+        try container.encode(rawValue)
+    }
+}
+
+public struct GelatoDocumentReportError: Sendable, Codable, Equatable, Hashable {
+    public var code: Nullable<GelatoDocumentReportErrorCode>
+    public var reason: Nullable<String>
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(code: Nullable<GelatoDocumentReportErrorCode>, reason: Nullable<String>, unknownFields: [String: JSONValue]? = nil) {
+        self.code = code
+        self.reason = reason
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case code
+        case reason
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.code = try container.decodeIfPresent(Nullable<GelatoDocumentReportErrorCode>.self, forKey: .code) ?? .null
+        self.reason = try container.decodeIfPresent(Nullable<String>.self, forKey: .reason) ?? .null
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .code, .reason: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.code, forKey: .code)
+        try container.encodeIfPresent(self.reason, forKey: .reason)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
         }
     }
 }
@@ -630,8 +594,8 @@ public struct GelatoEmailReport: Sendable, Codable, Equatable, Hashable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.email = try container.decode(Nullable<String>.self, forKey: .email)
-        self.error = try container.decode(Nullable<GelatoEmailReportError>.self, forKey: .error)
+        self.email = try container.decodeIfPresent(Nullable<String>.self, forKey: .email) ?? .null
+        self.error = try container.decodeIfPresent(Nullable<GelatoEmailReportError>.self, forKey: .error) ?? .null
         self.status = try container.decode(GelatoDocumentReportStatus.self, forKey: .status)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
@@ -659,42 +623,83 @@ public struct GelatoEmailReport: Sendable, Codable, Equatable, Hashable {
     }
 }
 
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum GelatoIdNumberReportDob: Sendable, Codable, Equatable, Hashable {
-    case gelatoDataIdNumberReportDate(GelatoDataIdNumberReportDate)
-    case other(JSONValue)
+/// Lossless enum: values Stripe documents plus any value the API
+/// adds later, kept in `undocumented` instead of dropped.
+public enum GelatoEmailReportErrorCode: Sendable, Equatable, Hashable, LosslessEnum {
+    case emailUnverifiedOther
+    case emailVerificationDeclined
+    case undocumented(String)
+
+    public init(rawValue raw: String) {
+        switch raw {
+        case "email_unverified_other": self = .emailUnverifiedOther
+        case "email_verification_declined": self = .emailVerificationDeclined
+        default: self = .undocumented(raw)
+        }
+    }
+
+    public var rawValue: String {
+        switch self {
+        case .emailUnverifiedOther: return "email_unverified_other"
+        case .emailVerificationDeclined: return "email_verification_declined"
+        case .undocumented(let value): return value
+        }
+    }
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(GelatoDataIdNumberReportDate.self) { self = .gelatoDataIdNumberReportDate(value); return }
-        self = .other(try container.decode(JSONValue.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
-        switch self {
-        case .gelatoDataIdNumberReportDate(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
+        try container.encode(rawValue)
     }
 }
 
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum GelatoIdNumberReportError: Sendable, Codable, Equatable, Hashable {
-    indirect case gelatoIdNumberReportError(GelatoIdNumberReportError)
-    case other(JSONValue)
+public struct GelatoEmailReportError: Sendable, Codable, Equatable, Hashable {
+    public var code: Nullable<GelatoEmailReportErrorCode>
+    public var reason: Nullable<String>
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(code: Nullable<GelatoEmailReportErrorCode>, reason: Nullable<String>, unknownFields: [String: JSONValue]? = nil) {
+        self.code = code
+        self.reason = reason
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case code
+        case reason
+    }
 
     public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(GelatoIdNumberReportError.self) { self = .gelatoIdNumberReportError(value); return }
-        self = .other(try container.decode(JSONValue.self))
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.code = try container.decodeIfPresent(Nullable<GelatoEmailReportErrorCode>.self, forKey: .code) ?? .null
+        self.reason = try container.decodeIfPresent(Nullable<String>.self, forKey: .reason) ?? .null
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .code, .reason: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
     }
 
     public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .gelatoIdNumberReportError(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.code, forKey: .code)
+        try container.encodeIfPresent(self.reason, forKey: .reason)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
         }
     }
 }
@@ -737,7 +742,7 @@ public enum GelatoIdNumberReportIdNumberType: Sendable, Equatable, Hashable, Los
 }
 
 public struct GelatoIdNumberReport: Sendable, Codable, Equatable, Hashable {
-    public var dob: Nullable<GelatoIdNumberReportDob>?
+    public var dob: Nullable<GelatoDataIdNumberReportDate>?
     public var error: Nullable<GelatoIdNumberReportError>
     public var firstName: Nullable<String>
     public var idNumber: Nullable<String>?
@@ -748,7 +753,7 @@ public struct GelatoIdNumberReport: Sendable, Codable, Equatable, Hashable {
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(dob: Nullable<GelatoIdNumberReportDob>? = nil, error: Nullable<GelatoIdNumberReportError>, firstName: Nullable<String>, idNumber: Nullable<String>? = nil, idNumberType: Nullable<GelatoIdNumberReportIdNumberType>, lastName: Nullable<String>, status: GelatoDocumentReportStatus, unknownFields: [String: JSONValue]? = nil) {
+    public init(dob: Nullable<GelatoDataIdNumberReportDate>? = nil, error: Nullable<GelatoIdNumberReportError>, firstName: Nullable<String>, idNumber: Nullable<String>? = nil, idNumberType: Nullable<GelatoIdNumberReportIdNumberType>, lastName: Nullable<String>, status: GelatoDocumentReportStatus, unknownFields: [String: JSONValue]? = nil) {
         self.dob = dob
         self.error = error
         self.firstName = firstName
@@ -771,12 +776,12 @@ public struct GelatoIdNumberReport: Sendable, Codable, Equatable, Hashable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.dob = try container.decodeIfPresent(Nullable<GelatoIdNumberReportDob>.self, forKey: .dob)
-        self.error = try container.decode(Nullable<GelatoIdNumberReportError>.self, forKey: .error)
-        self.firstName = try container.decode(Nullable<String>.self, forKey: .firstName)
+        self.dob = try container.decodeIfPresent(Nullable<GelatoDataIdNumberReportDate>.self, forKey: .dob)
+        self.error = try container.decodeIfPresent(Nullable<GelatoIdNumberReportError>.self, forKey: .error) ?? .null
+        self.firstName = try container.decodeIfPresent(Nullable<String>.self, forKey: .firstName) ?? .null
         self.idNumber = try container.decodeIfPresent(Nullable<String>.self, forKey: .idNumber)
-        self.idNumberType = try container.decode(Nullable<GelatoIdNumberReportIdNumberType>.self, forKey: .idNumberType)
-        self.lastName = try container.decode(Nullable<String>.self, forKey: .lastName)
+        self.idNumberType = try container.decodeIfPresent(Nullable<GelatoIdNumberReportIdNumberType>.self, forKey: .idNumberType) ?? .null
+        self.lastName = try container.decodeIfPresent(Nullable<String>.self, forKey: .lastName) ?? .null
         self.status = try container.decode(GelatoDocumentReportStatus.self, forKey: .status)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
@@ -808,22 +813,86 @@ public struct GelatoIdNumberReport: Sendable, Codable, Equatable, Hashable {
     }
 }
 
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum GelatoPhoneReportError: Sendable, Codable, Equatable, Hashable {
-    indirect case gelatoPhoneReportError(GelatoPhoneReportError)
-    case other(JSONValue)
+/// Lossless enum: values Stripe documents plus any value the API
+/// adds later, kept in `undocumented` instead of dropped.
+public enum GelatoIdNumberReportErrorCode: Sendable, Equatable, Hashable, LosslessEnum {
+    case idNumberInsufficientDocumentData
+    case idNumberMismatch
+    case idNumberUnverifiedOther
+    case undocumented(String)
+
+    public init(rawValue raw: String) {
+        switch raw {
+        case "id_number_insufficient_document_data": self = .idNumberInsufficientDocumentData
+        case "id_number_mismatch": self = .idNumberMismatch
+        case "id_number_unverified_other": self = .idNumberUnverifiedOther
+        default: self = .undocumented(raw)
+        }
+    }
+
+    public var rawValue: String {
+        switch self {
+        case .idNumberInsufficientDocumentData: return "id_number_insufficient_document_data"
+        case .idNumberMismatch: return "id_number_mismatch"
+        case .idNumberUnverifiedOther: return "id_number_unverified_other"
+        case .undocumented(let value): return value
+        }
+    }
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(GelatoPhoneReportError.self) { self = .gelatoPhoneReportError(value); return }
-        self = .other(try container.decode(JSONValue.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
-        switch self {
-        case .gelatoPhoneReportError(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
+        try container.encode(rawValue)
+    }
+}
+
+public struct GelatoIdNumberReportError: Sendable, Codable, Equatable, Hashable {
+    public var code: Nullable<GelatoIdNumberReportErrorCode>
+    public var reason: Nullable<String>
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(code: Nullable<GelatoIdNumberReportErrorCode>, reason: Nullable<String>, unknownFields: [String: JSONValue]? = nil) {
+        self.code = code
+        self.reason = reason
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case code
+        case reason
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.code = try container.decodeIfPresent(Nullable<GelatoIdNumberReportErrorCode>.self, forKey: .code) ?? .null
+        self.reason = try container.decodeIfPresent(Nullable<String>.self, forKey: .reason) ?? .null
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .code, .reason: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.code, forKey: .code)
+        try container.encodeIfPresent(self.reason, forKey: .reason)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
         }
     }
 }
@@ -851,8 +920,8 @@ public struct GelatoPhoneReport: Sendable, Codable, Equatable, Hashable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.error = try container.decode(Nullable<GelatoPhoneReportError>.self, forKey: .error)
-        self.phone = try container.decode(Nullable<String>.self, forKey: .phone)
+        self.error = try container.decodeIfPresent(Nullable<GelatoPhoneReportError>.self, forKey: .error) ?? .null
+        self.phone = try container.decodeIfPresent(Nullable<String>.self, forKey: .phone) ?? .null
         self.status = try container.decode(GelatoDocumentReportStatus.self, forKey: .status)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
@@ -870,6 +939,87 @@ public struct GelatoPhoneReport: Sendable, Codable, Equatable, Hashable {
         try container.encodeIfPresent(self.error, forKey: .error)
         try container.encodeIfPresent(self.phone, forKey: .phone)
         try container.encodeIfPresent(self.status, forKey: .status)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+/// Lossless enum: values Stripe documents plus any value the API
+/// adds later, kept in `undocumented` instead of dropped.
+public enum GelatoPhoneReportErrorCode: Sendable, Equatable, Hashable, LosslessEnum {
+    case phoneUnverifiedOther
+    case phoneVerificationDeclined
+    case undocumented(String)
+
+    public init(rawValue raw: String) {
+        switch raw {
+        case "phone_unverified_other": self = .phoneUnverifiedOther
+        case "phone_verification_declined": self = .phoneVerificationDeclined
+        default: self = .undocumented(raw)
+        }
+    }
+
+    public var rawValue: String {
+        switch self {
+        case .phoneUnverifiedOther: return "phone_unverified_other"
+        case .phoneVerificationDeclined: return "phone_verification_declined"
+        case .undocumented(let value): return value
+        }
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        self.init(rawValue: try container.decode(String.self))
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(rawValue)
+    }
+}
+
+public struct GelatoPhoneReportError: Sendable, Codable, Equatable, Hashable {
+    public var code: Nullable<GelatoPhoneReportErrorCode>
+    public var reason: Nullable<String>
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(code: Nullable<GelatoPhoneReportErrorCode>, reason: Nullable<String>, unknownFields: [String: JSONValue]? = nil) {
+        self.code = code
+        self.reason = reason
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case code
+        case reason
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.code = try container.decodeIfPresent(Nullable<GelatoPhoneReportErrorCode>.self, forKey: .code) ?? .null
+        self.reason = try container.decodeIfPresent(Nullable<String>.self, forKey: .reason) ?? .null
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .code, .reason: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.code, forKey: .code)
+        try container.encodeIfPresent(self.reason, forKey: .reason)
         if let unknownFields = unknownFields {
             for (key, value) in unknownFields {
                 if let codingKey = CodingKeys(stringValue: key) {
@@ -1067,26 +1217,6 @@ public struct GelatoReportIdNumberOptions: Sendable, Codable, Equatable, Hashabl
     }
 }
 
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum GelatoSelfieReportError: Sendable, Codable, Equatable, Hashable {
-    indirect case gelatoSelfieReportError(GelatoSelfieReportError)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(GelatoSelfieReportError.self) { self = .gelatoSelfieReportError(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .gelatoSelfieReportError(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
 public struct GelatoSelfieReport: Sendable, Codable, Equatable, Hashable {
     public var document: Nullable<String>
     public var error: Nullable<GelatoSelfieReportError>
@@ -1113,9 +1243,9 @@ public struct GelatoSelfieReport: Sendable, Codable, Equatable, Hashable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.document = try container.decode(Nullable<String>.self, forKey: .document)
-        self.error = try container.decode(Nullable<GelatoSelfieReportError>.self, forKey: .error)
-        self.selfie = try container.decode(Nullable<String>.self, forKey: .selfie)
+        self.document = try container.decodeIfPresent(Nullable<String>.self, forKey: .document) ?? .null
+        self.error = try container.decodeIfPresent(Nullable<GelatoSelfieReportError>.self, forKey: .error) ?? .null
+        self.selfie = try container.decodeIfPresent(Nullable<String>.self, forKey: .selfie) ?? .null
         self.status = try container.decode(GelatoDocumentReportStatus.self, forKey: .status)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
@@ -1134,6 +1264,93 @@ public struct GelatoSelfieReport: Sendable, Codable, Equatable, Hashable {
         try container.encodeIfPresent(self.error, forKey: .error)
         try container.encodeIfPresent(self.selfie, forKey: .selfie)
         try container.encodeIfPresent(self.status, forKey: .status)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+/// Lossless enum: values Stripe documents plus any value the API
+/// adds later, kept in `undocumented` instead of dropped.
+public enum GelatoSelfieReportErrorCode: Sendable, Equatable, Hashable, LosslessEnum {
+    case selfieDocumentMissingPhoto
+    case selfieFaceMismatch
+    case selfieManipulated
+    case selfieUnverifiedOther
+    case undocumented(String)
+
+    public init(rawValue raw: String) {
+        switch raw {
+        case "selfie_document_missing_photo": self = .selfieDocumentMissingPhoto
+        case "selfie_face_mismatch": self = .selfieFaceMismatch
+        case "selfie_manipulated": self = .selfieManipulated
+        case "selfie_unverified_other": self = .selfieUnverifiedOther
+        default: self = .undocumented(raw)
+        }
+    }
+
+    public var rawValue: String {
+        switch self {
+        case .selfieDocumentMissingPhoto: return "selfie_document_missing_photo"
+        case .selfieFaceMismatch: return "selfie_face_mismatch"
+        case .selfieManipulated: return "selfie_manipulated"
+        case .selfieUnverifiedOther: return "selfie_unverified_other"
+        case .undocumented(let value): return value
+        }
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        self.init(rawValue: try container.decode(String.self))
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(rawValue)
+    }
+}
+
+public struct GelatoSelfieReportError: Sendable, Codable, Equatable, Hashable {
+    public var code: Nullable<GelatoSelfieReportErrorCode>
+    public var reason: Nullable<String>
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(code: Nullable<GelatoSelfieReportErrorCode>, reason: Nullable<String>, unknownFields: [String: JSONValue]? = nil) {
+        self.code = code
+        self.reason = reason
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case code
+        case reason
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.code = try container.decodeIfPresent(Nullable<GelatoSelfieReportErrorCode>.self, forKey: .code) ?? .null
+        self.reason = try container.decodeIfPresent(Nullable<String>.self, forKey: .reason) ?? .null
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .code, .reason: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.code, forKey: .code)
+        try container.encodeIfPresent(self.reason, forKey: .reason)
         if let unknownFields = unknownFields {
             for (key, value) in unknownFields {
                 if let codingKey = CodingKeys(stringValue: key) {
@@ -1384,8 +1601,8 @@ public struct GelatoSessionLastError: Sendable, Codable, Equatable, Hashable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.code = try container.decode(Nullable<GelatoSessionLastErrorCode>.self, forKey: .code)
-        self.reason = try container.decode(Nullable<String>.self, forKey: .reason)
+        self.code = try container.decodeIfPresent(Nullable<GelatoSessionLastErrorCode>.self, forKey: .code) ?? .null
+        self.reason = try container.decodeIfPresent(Nullable<String>.self, forKey: .reason) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -1643,49 +1860,9 @@ public struct GelatoVerificationSessionOptions: Sendable, Codable, Equatable, Ha
     }
 }
 
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum GelatoVerifiedOutputsAddress: Sendable, Codable, Equatable, Hashable {
-    case address(Address)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(Address.self) { self = .address(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .address(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum GelatoVerifiedOutputsDob: Sendable, Codable, Equatable, Hashable {
-    case gelatoDataVerifiedOutputsDate(GelatoDataVerifiedOutputsDate)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(GelatoDataVerifiedOutputsDate.self) { self = .gelatoDataVerifiedOutputsDate(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .gelatoDataVerifiedOutputsDate(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
 public struct GelatoVerifiedOutputs: Sendable, Codable, Equatable, Hashable {
-    public var address: Nullable<GelatoVerifiedOutputsAddress>
-    public var dob: Nullable<GelatoVerifiedOutputsDob>?
+    public var address: Nullable<Address>
+    public var dob: Nullable<GelatoDataVerifiedOutputsDate>?
     public var email: Nullable<String>
     public var firstName: Nullable<String>
     public var idNumber: Nullable<String>?
@@ -1699,7 +1876,7 @@ public struct GelatoVerifiedOutputs: Sendable, Codable, Equatable, Hashable {
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(address: Nullable<GelatoVerifiedOutputsAddress>, dob: Nullable<GelatoVerifiedOutputsDob>? = nil, email: Nullable<String>, firstName: Nullable<String>, idNumber: Nullable<String>? = nil, idNumberType: Nullable<GelatoIdNumberReportIdNumberType>, lastName: Nullable<String>, phone: Nullable<String>, sex: Nullable<GelatoDocumentReportSex>? = nil, unparsedPlaceOfBirth: Nullable<String>? = nil, unparsedSex: Nullable<String>? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(address: Nullable<Address>, dob: Nullable<GelatoDataVerifiedOutputsDate>? = nil, email: Nullable<String>, firstName: Nullable<String>, idNumber: Nullable<String>? = nil, idNumberType: Nullable<GelatoIdNumberReportIdNumberType>, lastName: Nullable<String>, phone: Nullable<String>, sex: Nullable<GelatoDocumentReportSex>? = nil, unparsedPlaceOfBirth: Nullable<String>? = nil, unparsedSex: Nullable<String>? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.address = address
         self.dob = dob
         self.email = email
@@ -1730,14 +1907,14 @@ public struct GelatoVerifiedOutputs: Sendable, Codable, Equatable, Hashable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.address = try container.decode(Nullable<GelatoVerifiedOutputsAddress>.self, forKey: .address)
-        self.dob = try container.decodeIfPresent(Nullable<GelatoVerifiedOutputsDob>.self, forKey: .dob)
-        self.email = try container.decode(Nullable<String>.self, forKey: .email)
-        self.firstName = try container.decode(Nullable<String>.self, forKey: .firstName)
+        self.address = try container.decodeIfPresent(Nullable<Address>.self, forKey: .address) ?? .null
+        self.dob = try container.decodeIfPresent(Nullable<GelatoDataVerifiedOutputsDate>.self, forKey: .dob)
+        self.email = try container.decodeIfPresent(Nullable<String>.self, forKey: .email) ?? .null
+        self.firstName = try container.decodeIfPresent(Nullable<String>.self, forKey: .firstName) ?? .null
         self.idNumber = try container.decodeIfPresent(Nullable<String>.self, forKey: .idNumber)
-        self.idNumberType = try container.decode(Nullable<GelatoIdNumberReportIdNumberType>.self, forKey: .idNumberType)
-        self.lastName = try container.decode(Nullable<String>.self, forKey: .lastName)
-        self.phone = try container.decode(Nullable<String>.self, forKey: .phone)
+        self.idNumberType = try container.decodeIfPresent(Nullable<GelatoIdNumberReportIdNumberType>.self, forKey: .idNumberType) ?? .null
+        self.lastName = try container.decodeIfPresent(Nullable<String>.self, forKey: .lastName) ?? .null
+        self.phone = try container.decodeIfPresent(Nullable<String>.self, forKey: .phone) ?? .null
         self.sex = try container.decodeIfPresent(Nullable<GelatoDocumentReportSex>.self, forKey: .sex)
         self.unparsedPlaceOfBirth = try container.decodeIfPresent(Nullable<String>.self, forKey: .unparsedPlaceOfBirth)
         self.unparsedSex = try container.decodeIfPresent(Nullable<String>.self, forKey: .unparsedSex)

@@ -4,26 +4,6 @@
 //  Do not edit by hand: rerun `swift run stripe-gen`.
 //
 import Foundation
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum CurrencyOptionCustomUnitAmount: Sendable, Codable, Equatable, Hashable {
-    case customUnitAmount(CustomUnitAmount)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(CustomUnitAmount.self) { self = .customUnitAmount(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .customUnitAmount(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
 /// Lossless enum: values Stripe documents plus any value the API
 /// adds later, kept in `undocumented` instead of dropped.
 public enum CurrencyOptionTaxBehavior: Sendable, Equatable, Hashable, LosslessEnum {
@@ -62,7 +42,7 @@ public enum CurrencyOptionTaxBehavior: Sendable, Equatable, Hashable, LosslessEn
 }
 
 public struct CurrencyOption: Sendable, Codable, Equatable, Hashable {
-    public var customUnitAmount: Nullable<CurrencyOptionCustomUnitAmount>
+    public var customUnitAmount: Nullable<CustomUnitAmount>
     public var taxBehavior: Nullable<CurrencyOptionTaxBehavior>
     public var tiers: [PriceTier]?
     public var unitAmount: Nullable<Int>
@@ -71,7 +51,7 @@ public struct CurrencyOption: Sendable, Codable, Equatable, Hashable {
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(customUnitAmount: Nullable<CurrencyOptionCustomUnitAmount>, taxBehavior: Nullable<CurrencyOptionTaxBehavior>, tiers: [PriceTier]? = nil, unitAmount: Nullable<Int>, unitAmountDecimal: Nullable<String>, unknownFields: [String: JSONValue]? = nil) {
+    public init(customUnitAmount: Nullable<CustomUnitAmount>, taxBehavior: Nullable<CurrencyOptionTaxBehavior>, tiers: [PriceTier]? = nil, unitAmount: Nullable<Int>, unitAmountDecimal: Nullable<String>, unknownFields: [String: JSONValue]? = nil) {
         self.customUnitAmount = customUnitAmount
         self.taxBehavior = taxBehavior
         self.tiers = tiers
@@ -90,11 +70,11 @@ public struct CurrencyOption: Sendable, Codable, Equatable, Hashable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.customUnitAmount = try container.decode(Nullable<CurrencyOptionCustomUnitAmount>.self, forKey: .customUnitAmount)
-        self.taxBehavior = try container.decode(Nullable<CurrencyOptionTaxBehavior>.self, forKey: .taxBehavior)
+        self.customUnitAmount = try container.decodeIfPresent(Nullable<CustomUnitAmount>.self, forKey: .customUnitAmount) ?? .null
+        self.taxBehavior = try container.decodeIfPresent(Nullable<CurrencyOptionTaxBehavior>.self, forKey: .taxBehavior) ?? .null
         self.tiers = try container.decodeIfPresent([PriceTier].self, forKey: .tiers)
-        self.unitAmount = try container.decode(Nullable<Int>.self, forKey: .unitAmount)
-        self.unitAmountDecimal = try container.decode(Nullable<String>.self, forKey: .unitAmountDecimal)
+        self.unitAmount = try container.decodeIfPresent(Nullable<Int>.self, forKey: .unitAmount) ?? .null
+        self.unitAmountDecimal = try container.decodeIfPresent(Nullable<String>.self, forKey: .unitAmountDecimal) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {

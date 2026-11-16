@@ -27,9 +27,9 @@ public struct StackableDiscountWithDiscountSettings: Sendable, Codable, Equatabl
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.coupon = try container.decode(Nullable<Expandable<Coupon>>.self, forKey: .coupon)
-        self.discount = try container.decode(Nullable<Expandable<Discount>>.self, forKey: .discount)
-        self.promotionCode = try container.decode(Nullable<Expandable<PromotionCode>>.self, forKey: .promotionCode)
+        self.coupon = try container.decodeIfPresent(Nullable<Expandable<Coupon>>.self, forKey: .coupon) ?? .null
+        self.discount = try container.decodeIfPresent(Nullable<Expandable<Discount>>.self, forKey: .discount) ?? .null
+        self.promotionCode = try container.decodeIfPresent(Nullable<Expandable<PromotionCode>>.self, forKey: .promotionCode) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -79,9 +79,9 @@ public struct StackableDiscountWithDiscountSettingsAndDiscountEnd: Sendable, Cod
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.coupon = try container.decode(Nullable<Expandable<Coupon>>.self, forKey: .coupon)
-        self.discount = try container.decode(Nullable<Expandable<Discount>>.self, forKey: .discount)
-        self.promotionCode = try container.decode(Nullable<Expandable<PromotionCode>>.self, forKey: .promotionCode)
+        self.coupon = try container.decodeIfPresent(Nullable<Expandable<Coupon>>.self, forKey: .coupon) ?? .null
+        self.discount = try container.decodeIfPresent(Nullable<Expandable<Discount>>.self, forKey: .discount) ?? .null
+        self.promotionCode = try container.decodeIfPresent(Nullable<Expandable<PromotionCode>>.self, forKey: .promotionCode) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {

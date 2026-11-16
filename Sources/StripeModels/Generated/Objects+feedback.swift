@@ -21,7 +21,7 @@ public struct FeedbackOptionsStatusTransitions: Sendable, Codable, Equatable, Ha
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.deactivatedAt = try container.decode(Nullable<StripeTimestamp>.self, forKey: .deactivatedAt)
+        self.deactivatedAt = try container.decodeIfPresent(Nullable<StripeTimestamp>.self, forKey: .deactivatedAt) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {

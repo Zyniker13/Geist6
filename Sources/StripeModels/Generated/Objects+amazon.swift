@@ -56,7 +56,7 @@ public struct AmazonPayUnderlyingPaymentMethodFundingDetails: Sendable, Codable,
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.card = try container.decodeIfPresent(PaymentMethodDetailsPassthroughCard.self, forKey: .card)
-        self.type = try container.decode(Nullable<AmazonPayUnderlyingPaymentMethodFundingDetailsType>.self, forKey: .type)
+        self.type = try container.decodeIfPresent(Nullable<AmazonPayUnderlyingPaymentMethodFundingDetailsType>.self, forKey: .type) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {

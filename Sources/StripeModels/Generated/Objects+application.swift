@@ -59,7 +59,7 @@ public struct Application: Sendable, Codable, Equatable, Hashable, StripeIdentif
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.id = try container.decode(String.self, forKey: .id)
-        self.name = try container.decode(Nullable<String>.self, forKey: .name)
+        self.name = try container.decodeIfPresent(Nullable<String>.self, forKey: .name) ?? .null
         self.object = try container.decode(ApplicationObject.self, forKey: .object)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
@@ -83,26 +83,6 @@ public struct Application: Sendable, Codable, Equatable, Hashable, StripeIdentif
                     try? container.encode(value, forKey: codingKey)
                 }
             }
-        }
-    }
-}
-
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum ApplicationFeeFeeSource: Sendable, Codable, Equatable, Hashable {
-    case platformEarningFeeSource(PlatformEarningFeeSource)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(PlatformEarningFeeSource.self) { self = .platformEarningFeeSource(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .platformEarningFeeSource(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
         }
     }
 }
@@ -204,7 +184,7 @@ public struct ApplicationFee: Sendable, Codable, Equatable, Hashable, StripeIden
     public var charge: Expandable<Charge>
     public var created: StripeTimestamp
     public var currency: String
-    public var feeSource: Nullable<ApplicationFeeFeeSource>
+    public var feeSource: Nullable<PlatformEarningFeeSource>
     public var id: String
     public var livemode: Bool
     public var object: ApplicationFeeObject
@@ -215,7 +195,7 @@ public struct ApplicationFee: Sendable, Codable, Equatable, Hashable, StripeIden
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(account: Expandable<Account>, amount: Int, amountRefunded: Int, application: Expandable<Application>, balanceTransaction: Nullable<Expandable<BalanceTransaction>>, charge: Expandable<Charge>, created: StripeTimestamp, currency: String, feeSource: Nullable<ApplicationFeeFeeSource>, id: String, livemode: Bool, object: ApplicationFeeObject, originatingTransaction: Nullable<Expandable<Charge>>, refunded: Bool, refunds: ApplicationFeeRefunds, unknownFields: [String: JSONValue]? = nil) {
+    public init(account: Expandable<Account>, amount: Int, amountRefunded: Int, application: Expandable<Application>, balanceTransaction: Nullable<Expandable<BalanceTransaction>>, charge: Expandable<Charge>, created: StripeTimestamp, currency: String, feeSource: Nullable<PlatformEarningFeeSource>, id: String, livemode: Bool, object: ApplicationFeeObject, originatingTransaction: Nullable<Expandable<Charge>>, refunded: Bool, refunds: ApplicationFeeRefunds, unknownFields: [String: JSONValue]? = nil) {
         self.account = account
         self.amount = amount
         self.amountRefunded = amountRefunded
@@ -258,15 +238,15 @@ public struct ApplicationFee: Sendable, Codable, Equatable, Hashable, StripeIden
         self.amount = try container.decode(Int.self, forKey: .amount)
         self.amountRefunded = try container.decode(Int.self, forKey: .amountRefunded)
         self.application = try container.decode(Expandable<Application>.self, forKey: .application)
-        self.balanceTransaction = try container.decode(Nullable<Expandable<BalanceTransaction>>.self, forKey: .balanceTransaction)
+        self.balanceTransaction = try container.decodeIfPresent(Nullable<Expandable<BalanceTransaction>>.self, forKey: .balanceTransaction) ?? .null
         self.charge = try container.decode(Expandable<Charge>.self, forKey: .charge)
         self.created = try container.decode(StripeTimestamp.self, forKey: .created)
         self.currency = try container.decode(String.self, forKey: .currency)
-        self.feeSource = try container.decode(Nullable<ApplicationFeeFeeSource>.self, forKey: .feeSource)
+        self.feeSource = try container.decodeIfPresent(Nullable<PlatformEarningFeeSource>.self, forKey: .feeSource) ?? .null
         self.id = try container.decode(String.self, forKey: .id)
         self.livemode = try container.decode(Bool.self, forKey: .livemode)
         self.object = try container.decode(ApplicationFeeObject.self, forKey: .object)
-        self.originatingTransaction = try container.decode(Nullable<Expandable<Charge>>.self, forKey: .originatingTransaction)
+        self.originatingTransaction = try container.decodeIfPresent(Nullable<Expandable<Charge>>.self, forKey: .originatingTransaction) ?? .null
         self.refunded = try container.decode(Bool.self, forKey: .refunded)
         self.refunds = try container.decode(ApplicationFeeRefunds.self, forKey: .refunds)
         var captured: [String: JSONValue] = [:]

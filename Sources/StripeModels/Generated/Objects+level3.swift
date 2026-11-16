@@ -103,12 +103,12 @@ public struct Level3LineItems: Sendable, Codable, Equatable, Hashable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.discountAmount = try container.decode(Nullable<Int>.self, forKey: .discountAmount)
+        self.discountAmount = try container.decodeIfPresent(Nullable<Int>.self, forKey: .discountAmount) ?? .null
         self.productCode = try container.decode(String.self, forKey: .productCode)
         self.productDescription = try container.decode(String.self, forKey: .productDescription)
-        self.quantity = try container.decode(Nullable<Int>.self, forKey: .quantity)
-        self.taxAmount = try container.decode(Nullable<Int>.self, forKey: .taxAmount)
-        self.unitCost = try container.decode(Nullable<Int>.self, forKey: .unitCost)
+        self.quantity = try container.decodeIfPresent(Nullable<Int>.self, forKey: .quantity) ?? .null
+        self.taxAmount = try container.decodeIfPresent(Nullable<Int>.self, forKey: .taxAmount) ?? .null
+        self.unitCost = try container.decodeIfPresent(Nullable<Int>.self, forKey: .unitCost) ?? .null
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {

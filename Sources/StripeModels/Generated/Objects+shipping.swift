@@ -66,26 +66,6 @@ public struct Shipping: Sendable, Codable, Equatable, Hashable {
     }
 }
 
-/// Polymorphic union; unknown shapes are kept in `other` (lossless).
-public enum ShippingRateDeliveryEstimate: Sendable, Codable, Equatable, Hashable {
-    indirect case shippingRateDeliveryEstimate(ShippingRateDeliveryEstimate)
-    case other(JSONValue)
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(ShippingRateDeliveryEstimate.self) { self = .shippingRateDeliveryEstimate(value); return }
-        self = .other(try container.decode(JSONValue.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case .shippingRateDeliveryEstimate(let value): try container.encode(value)
-        case .other(let value): try container.encode(value)
-        }
-    }
-}
-
 /// Lossless enum: values Stripe documents plus any value the API
 /// adds later, kept in `undocumented` instead of dropped.
 public enum ShippingRateObject: Sendable, Equatable, Hashable, LosslessEnum {
@@ -200,15 +180,15 @@ public struct ShippingRate: Sendable, Codable, Equatable, Hashable, StripeIdenti
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.active = try container.decode(Bool.self, forKey: .active)
         self.created = try container.decode(StripeTimestamp.self, forKey: .created)
-        self.deliveryEstimate = try container.decode(Nullable<ShippingRateDeliveryEstimate>.self, forKey: .deliveryEstimate)
-        self.displayName = try container.decode(Nullable<String>.self, forKey: .displayName)
+        self.deliveryEstimate = try container.decodeIfPresent(Nullable<ShippingRateDeliveryEstimate>.self, forKey: .deliveryEstimate) ?? .null
+        self.displayName = try container.decodeIfPresent(Nullable<String>.self, forKey: .displayName) ?? .null
         self.fixedAmount = try container.decodeIfPresent(ShippingRateFixedAmount.self, forKey: .fixedAmount)
         self.id = try container.decode(String.self, forKey: .id)
         self.livemode = try container.decode(Bool.self, forKey: .livemode)
         self.metadata = try container.decode([String: String].self, forKey: .metadata)
         self.object = try container.decode(ShippingRateObject.self, forKey: .object)
-        self.taxBehavior = try container.decode(Nullable<CurrencyOptionTaxBehavior>.self, forKey: .taxBehavior)
-        self.taxCode = try container.decode(Nullable<Expandable<TaxCode>>.self, forKey: .taxCode)
+        self.taxBehavior = try container.decodeIfPresent(Nullable<CurrencyOptionTaxBehavior>.self, forKey: .taxBehavior) ?? .null
+        self.taxCode = try container.decodeIfPresent(Nullable<Expandable<TaxCode>>.self, forKey: .taxCode) ?? .null
         self.type = try container.decode(ShippingRateType.self, forKey: .type)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
@@ -282,6 +262,53 @@ public struct ShippingRateCurrencyOption: Sendable, Codable, Equatable, Hashable
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encodeIfPresent(self.amount, forKey: .amount)
         try container.encodeIfPresent(self.taxBehavior, forKey: .taxBehavior)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct ShippingRateDeliveryEstimate: Sendable, Codable, Equatable, Hashable {
+    public var maximum: Nullable<ShippingRateDeliveryEstimateBound>
+    public var minimum: Nullable<ShippingRateDeliveryEstimateBound>
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(maximum: Nullable<ShippingRateDeliveryEstimateBound>, minimum: Nullable<ShippingRateDeliveryEstimateBound>, unknownFields: [String: JSONValue]? = nil) {
+        self.maximum = maximum
+        self.minimum = minimum
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case maximum
+        case minimum
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.maximum = try container.decodeIfPresent(Nullable<ShippingRateDeliveryEstimateBound>.self, forKey: .maximum) ?? .null
+        self.minimum = try container.decodeIfPresent(Nullable<ShippingRateDeliveryEstimateBound>.self, forKey: .minimum) ?? .null
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .maximum, .minimum: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.maximum, forKey: .maximum)
+        try container.encodeIfPresent(self.minimum, forKey: .minimum)
         if let unknownFields = unknownFields {
             for (key, value) in unknownFields {
                 if let codingKey = CodingKeys(stringValue: key) {
