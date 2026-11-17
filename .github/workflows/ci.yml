@@ -9,11 +9,37 @@ permissions:
   contents: read
 
 jobs:
+  linux-package:
+    name: Package (Linux, swift test)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - name: Setup Swift
+        uses: swift-actions/setup-swift@7ca6abe6b3b0e8b5421b88be48feee39cbf52c6a # v2.4.0
+        with:
+          swift-version: "6.2"
+      - name: Install stripe-mock
+        run: |
+          curl -fsSL -o /tmp/stripe-mock.tar.gz \
+            https://github.com/stripe/stripe-mock/releases/download/v0.206.0/stripe-mock_0.206.0_linux_amd64.tar.gz
+          mkdir -p "$HOME/.local/bin"
+          tar -xzf /tmp/stripe-mock.tar.gz -C "$HOME/.local/bin" stripe-mock || tar -xzf /tmp/stripe-mock.tar.gz -C "$HOME/.local/bin"
+          chmod +x "$HOME/.local/bin/stripe-mock"
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+          stripe-mock -version
+      - name: Check
+        run: |
+          set -eu
+          if ./scripts/check.sh 2>&1 | tee /tmp/check-output.txt; then
+            echo "check.sh passed"
+          else
+            echo "check.sh failed" >&2
+            cat /tmp/check-output.txt >&2
+            exit 1
+          fi
+
   macos-package:
-    # The Linux job was removed (decision 0008): GitHub's ubuntu runners
-    # failed at "Set up job" on four consecutive runs across ubuntu-latest
-    # and ubuntu-24.04, making every push red and masking real failures.
-    # The macOS job runs the full check.sh gate for the iPad-only product.
     name: Package and app (macOS, Xcode)
     runs-on: macos-latest
     timeout-minutes: 180

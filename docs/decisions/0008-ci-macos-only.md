@@ -1,5 +1,7 @@
 # 0008 — CI runs the full gate on macOS only
 
+Status: superseded by [0009](0009-restore-linux-ci.md). The "Set up job" failures were a bad action pin, not runner infrastructure.
+
 Date: 2026-11-17
 
 ## Context
