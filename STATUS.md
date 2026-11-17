@@ -2,9 +2,9 @@
 
 Keep every field current after every meaningful step. This file and `ROADMAP.md` are the truth when work resumes.
 
-- **Current milestone:** M2 (Account management) — unit tests written and compiling; runtime execution pending
-- **Last done:** CI red fixed: the Linux job had failed at "Set up job" (GitHub infra, before any step) on four consecutive runs across ubuntu-latest and ubuntu-24.04; removed it per decision 0008 (macOS job runs the full check.sh gate), flagged for the maintainer. M2 unit tests for the app layer written in TestsApp/ (KeychainStoreTests 4, AccountStoreTests 4, PermissionMapTests 12): fixed module import (@testable import Geist6, not App), added Foundation imports, rewrote PermissionMapTests against the real API (PermissionMap.dashboard/.management with entries/permission(for:)/isReadOnly/isWritable/entries(in:)/categories), fixed AccountStoreTests (@MainActor makeStore, ConnectedAccount.ConnectedAccountType). Test target compiles and links (TEST BUILD SUCCEEDED).
-- **Next step:** execute the M2 unit tests on the simulator (xcodebuild test currently hangs at test launch on this machine — check.sh is unaffected since it runs swift test + app build only), then M2 UI tests (setup flow, account list)
+- **Current milestone:** M2 (Account management) — unit tests written and passing (30/30 green); UI tests pending
+- **Last done:** M2 unit tests executed and passing (EXIT=0, 30/30). Fixed: KeychainStore now conforms to KeychainStoreProtocol (was missing conformance, causing linker error); KeychainStoreTests and AccountStoreTests now use InMemoryKeychainStore for isolation; PermissionMap.management duplicate-entry bug fixed (was adding write entries twice); duplicate CreditNotes in dashboard map removed; PermissionMapTests.managementHasWriteEntries() corrected to expect `_write` suffix instead of `"restricted"`. CI green (run 44045191141).
+- **Next step:** M2 UI tests (setup flow, account list), then M3
 - **Blocked on:** None
 
 ## Environment Check
