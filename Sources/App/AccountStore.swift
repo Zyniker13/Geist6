@@ -10,9 +10,9 @@ import Observation
 @Observable
 public final class AccountStore {
 
-  private let keychain: KeychainStore
+  private let keychain: KeychainStoreProtocol
 
-  public init(keychain: KeychainStore = KeychainStore()) {
+  public init(keychain: KeychainStoreProtocol = KeychainStore()) {
     self.keychain = keychain
   }
 

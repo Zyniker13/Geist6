@@ -31,8 +31,9 @@ struct PermissionMapTests {
     let entries = PermissionMap.management.entries
     let writeEntries = entries.filter { $0.isWrite }
     #expect(!writeEntries.isEmpty)
+    // Write entries have specific write permissions (e.g., "charge_write"), not "restricted"
     for entry in writeEntries {
-      #expect(entry.permission == "restricted")
+      #expect(entry.permission.hasSuffix("_write"))
     }
   }
 

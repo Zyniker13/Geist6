@@ -144,7 +144,6 @@ public struct PermissionMap: Sendable {
     entries.append(Entry(resource: "PaymentMethodConfigurations", permission: "payment_method_configurations_read", isWrite: false, category: .other))
     entries.append(Entry(resource: "TestClocks", permission: "billing_clock_read", isWrite: false, category: .other))
     entries.append(Entry(resource: "TaxRates", permission: "tax_rate_read", isWrite: false, category: .tax))
-    entries.append(Entry(resource: "CreditNotes", permission: "credit_note_read", isWrite: false, category: .billing))
     entries.append(Entry(resource: "Entitlements", permission: "entitlement_read", isWrite: false, category: .other))
     entries.append(Entry(resource: "CustomerSessions", permission: "customer_session_read", isWrite: false, category: .other))
     entries.append(Entry(resource: "ConfirmationTokens", permission: "confirmation_token_read", isWrite: false, category: .other))
@@ -188,14 +187,12 @@ public struct PermissionMap: Sendable {
       ("Mandates", "mandate_write"),
     ]
 
-    // Replace read-only entries with writable ones
-    var newEntries: [Entry] = []
-    for (resource, writePermission) in writes {
-      // Remove the old read entry
-      newEntries.append(Entry(resource: resource, permission: writePermission, isWrite: true, category: .payments))
+    // Remove read-only entries for resources that have write permissions
+    for (resource, _) in writes {
+      entries.removeAll { $0.resource == resource }
     }
 
-    // Add remaining writes
+    // Add write entries with correct categories
     for (resource, permission) in writes {
       let category: PermissionCategory = {
         switch resource {
@@ -228,16 +225,9 @@ public struct PermissionMap: Sendable {
           return .other
         }
       }()
-      newEntries.append(Entry(resource: resource, permission: permission, isWrite: true, category: category))
+      entries.append(Entry(resource: resource, permission: permission, isWrite: true, category: category))
     }
 
-    // Keep non-write entries from dashboard
-    for entry in dashboard.entries {
-      if !writes.contains(where: { $0.0 == entry.resource }) {
-        newEntries.append(entry)
-      }
-    }
-
-    return PermissionMap(entries: newEntries)
+    return PermissionMap(entries: entries)
   }()
 }

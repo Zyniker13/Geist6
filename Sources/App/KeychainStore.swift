@@ -6,7 +6,7 @@ import Security
 /// Keys are never stored in plaintext in memory longer than necessary.
 /// The Keychain API is thread-safe for individual calls; the store
 /// serialises all access through a dedicated queue.
-public final actor KeychainStore: Sendable {
+public final actor KeychainStore: KeychainStoreProtocol, Sendable {
 
   public init() {}
 
