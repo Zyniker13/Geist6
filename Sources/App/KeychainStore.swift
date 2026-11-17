@@ -65,9 +65,11 @@ public final actor KeychainStore: Sendable {
 
   /// Lists all account identifiers stored in the Keychain.
   public func listAccountKeys() async -> [String] {
+    // NOTE: Keychain queries do not support glob wildcards; kSecAttrAccount
+    // "acct_*" would match only the literal string. List every generic
+    // password item and filter by prefix in code instead.
     let query: [String: Any] = [
       kSecClass as String: kSecClassGenericPassword,
-      kSecAttrAccount as String: "acct_*",
       kSecReturnAttributes as String: true,
       kSecMatchLimit as String: kSecMatchLimitAll,
     ]
