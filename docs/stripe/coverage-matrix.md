@@ -25,8 +25,8 @@ One row for every operation on every resource in [`api-inventory.md`](api-invent
 | Balance | retrieve | GET | /v1/balance | 1 | M3 | Home dashboard (M3) | balance_read |
 | BalanceSettings | retrieve | GET | /v1/balance_settings | 2 | M7 | Generated list, detail, and edit views | unlisted (Dashboard key picker) |
 |  | update | POST | /v1/balance_settings | 2 | M7 | Generated list, detail, and edit views | unlisted (Dashboard key picker) |
-| BalanceTransaction | list | GET | /v1/balance_transactions | 1 | M3 | Balances screens (M7) | balance_transaction_source_read |
-|  | retrieve | GET | /v1/balance_transactions/{id} | 1 | M3 | Balances screens (M7) | balance_transaction_source_read |
+| BalanceTransaction | list | GET | /v1/balance_transactions | 1 | M4 | Payment timeline (M4); balances screens (M7); home metrics (M3) | balance_transaction_source_read |
+|  | retrieve | GET | /v1/balance_transactions/{id} | 1 | M4 | Payment timeline (M4); balances screens (M7); home metrics (M3) | balance_transaction_source_read |
 | BankAccount | delete | DELETE | /v1/accounts/{account}/external_accounts/{id} | 2 | M10 | Generated list, detail, and edit views | unlisted (Dashboard key picker) |
 |  | delete | DELETE | /v1/customers/{customer}/sources/{id} | 2 | M10 | Generated list, detail, and edit views | unlisted (Dashboard key picker) |
 |  | update | POST | /v1/accounts/{account}/external_accounts/{id} | 2 | M10 | Generated list, detail, and edit views | unlisted (Dashboard key picker) |

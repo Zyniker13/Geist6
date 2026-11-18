@@ -58,7 +58,8 @@ let tier1Screen: [String: String] = [
   "Product": "Catalog screens (M6)",
   "Price": "Catalog screens (M6)",
   "Balance": "Home dashboard (M3)",
-  "BalanceTransaction": "Balances screens (M7)",
+  "BalanceTransaction":
+    "Payment timeline (M4); balances screens (M7); home metrics (M3)",
   "Payout": "Payouts screens (M7)",
   "Dispute": "Disputes screens (M9)",
   "Account": "Account screens (M8); setup and account details (M2)",
@@ -74,7 +75,9 @@ let earlyMilestones: [String: String] = [
   "Account": "M2",
   // M3 home dashboard and search.
   "Balance": "M3",
-  "BalanceTransaction": "M3",
+  // M4 payments (BalanceTransaction's first crafted surface is M4's payment
+  // timeline; M3 home metrics also read it for period volume and net).
+  "BalanceTransaction": "M4",
   "Event": "M3",
   "CashBalance": "M7",
   // M4 payments.

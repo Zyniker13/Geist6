@@ -54,8 +54,12 @@ if xcodebuild -version >/dev/null 2>&1; then
 
     # The app is iPad-only: pick whichever iPad simulator is actually
     # installed (names differ across Xcode versions), and fail with a clear
-    # message when none exists instead of xcodebuild's exit 70.
-    SIM_NAME=$(xcrun simctl list devices available 2>/dev/null | awk '
+    # message when none exists instead of xcodebuild's exit 70. Locally a
+    # GEIST6_SIM_NAME env var can pin a specific device; CI leaves it unset.
+    if [ -n "${GEIST6_SIM_NAME:-}" ]; then
+        SIM_NAME="$GEIST6_SIM_NAME"
+    else
+        SIM_NAME=$(xcrun simctl list devices available 2>/dev/null | awk '
         /^-- iOS/ { have=1; next }
         /^--/ { if (have) exit; next }
         have && /iPad/ {
@@ -64,6 +68,7 @@ if xcodebuild -version >/dev/null 2>&1; then
             sub(/ \([A-F0-9-]{36}\) .*/, "", line)
             print line; exit
         }')
+    fi
     if [ -z "$SIM_NAME" ]; then
         echo "xcodebuild test: FAILED — no iPad simulator installed (the app is iPad-only). Install an iPad-capable iOS runtime." >&2
         kill "$MOCK_PID" 2>/dev/null || true
@@ -72,19 +77,24 @@ if xcodebuild -version >/dev/null 2>&1; then
     echo "app tests on simulator: $SIM_NAME"
 
     # Fresh derived data for every run: reusing a previous one can hang
-    # the PruneExplicitPrecompiledModules phase.
-    rm -rf /tmp/geist6-dd
+    # the PruneExplicitPrecompiledModules phase. The path is unique per
+    # run so two overlapping invocations can never clobber each other's
+    # build products mid-test.
+    DD=/tmp/geist6-dd-$$
+    rm -rf "$DD"
     if xcodebuild -project Geist6.xcodeproj -scheme Geist6 \
         -destination "platform=iOS Simulator,name=$SIM_NAME,OS=latest" \
-        -derivedDataPath /tmp/geist6-dd \
-        test > /tmp/geist6-xcode-test.txt 2>&1; then
-        echo "xcodebuild test: passed (full log in /tmp/geist6-xcode-test.txt)"
+        -derivedDataPath "$DD" \
+        test > /tmp/geist6-xcode-test-$$-$SIM_NAME.txt 2>&1; then
+        echo "xcodebuild test: passed (full log in /tmp/geist6-xcode-test-$$-$SIM_NAME.txt)"
     else
-        echo "xcodebuild test: FAILED (see /tmp/geist6-xcode-test.txt)" >&2
-        tail -40 /tmp/geist6-xcode-test.txt >&2
+        echo "xcodebuild test: FAILED (see /tmp/geist6-xcode-test-$$-$SIM_NAME.txt)" >&2
+        tail -40 /tmp/geist6-xcode-test-$$-$SIM_NAME.txt >&2
         kill "$MOCK_PID" 2>/dev/null || true
+        rm -rf "$DD"
         exit 1
     fi
+    rm -rf "$DD"
 
     kill "$MOCK_PID" 2>/dev/null || true
     wait "$MOCK_PID" 2>/dev/null || true
