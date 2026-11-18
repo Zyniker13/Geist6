@@ -31,6 +31,13 @@ public enum StripeJSON: Sendable, Equatable {
         return nil
     }
 
+    /// Subscript for dictionary-style field access on object values;
+    /// returns `.null` for non-objects or missing keys (safe default).
+    public subscript(key: String) -> StripeJSON {
+        if case .object(let fields) = self { return fields[key] ?? .null }
+        return .null
+    }
+
     /// Decodes any JSON document into the tree.
     public static func decode(_ data: Data) throws -> StripeJSON {
         let value = try JSONSerialization.jsonObject(with: data, options: [.fragmentsAllowed])
