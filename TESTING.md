@@ -52,3 +52,5 @@ xcodebuild -project Geist6.xcodeproj -scheme Geist6 \
 ## Results
 
 Record the latest results here: coverage per package target, benchmark numbers against the budgets, the manual passes, and the date of each.
+
+- 2026-11-17 (commit 6a05e08, CI run 44223930712): `scripts/check.sh` green on the GitHub macOS runner — swiftlint, swift-format, `swift build`, `swift test` (34 package tests), stripe-mock drift check, xcodegen, and the full `xcodebuild test` app suite (TestsApp unit tests incl. KeySafetyTests, TestsAppUI UI tests) all passed; the script exits non-zero on any failure, so the success conclusion covers every step. SPM test tally at the same commit: 34 tests, 0 failures.
