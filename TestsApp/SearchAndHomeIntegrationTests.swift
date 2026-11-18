@@ -39,7 +39,7 @@ struct SearchAndHomeIntegrationTests {
   // MARK: Search
 
   @Test func searchByChargeIDRetrievesTheCharge() async throws {
-    let service = SearchService(backend: makeBackend())
+    let service = SearchService(backend: SearchAndHomeIntegrationTests.makeBackend())
     let results = try await service.search("ch_1")
 
     let hit = try #require(results.hits.first)
@@ -52,7 +52,7 @@ struct SearchAndHomeIntegrationTests {
   }
 
   @Test func searchByAmountUsesTheSearchAPI() async throws {
-    let service = SearchService(backend: makeBackend())
+    let service = SearchService(backend: SearchAndHomeIntegrationTests.makeBackend())
     let results = try await service.search("amount:100")
 
     #expect(!results.hits.isEmpty)
@@ -69,7 +69,7 @@ struct SearchAndHomeIntegrationTests {
     // email, so this query takes the list-fallback path and the mock
     // returns its one fixture customer regardless of the filter. The
     // assertion is that the fallback completes and yields customers.
-    let service = SearchService(backend: makeBackend())
+    let service = SearchService(backend: SearchAndHomeIntegrationTests.makeBackend())
     let results = try await service.search("nobody@example.com")
 
     #expect(!results.hits.isEmpty)
@@ -84,7 +84,7 @@ struct SearchAndHomeIntegrationTests {
   // MARK: Open by ID
 
   @Test func openByIDFetchesARawInvoice() async throws {
-    let service = ObjectByIDService(backend: makeBackend())
+    let service = ObjectByIDService(backend: SearchAndHomeIntegrationTests.makeBackend())
     let resolved = try await service.fetch("in_1")
 
     #expect(resolved.kind == .invoice)
@@ -93,7 +93,7 @@ struct SearchAndHomeIntegrationTests {
   }
 
   @Test func openByUnknownIDThrows() async throws {
-    let service = ObjectByIDService(backend: makeBackend())
+    let service = ObjectByIDService(backend: SearchAndHomeIntegrationTests.makeBackend())
     await #expect(throws: ObjectByIDError.self) {
       _ = try await service.fetch("not a stripe id")
     }
@@ -102,7 +102,7 @@ struct SearchAndHomeIntegrationTests {
   // MARK: Home dashboard
 
   @Test func homeSnapshotForAWideWindowContainsEveryFixture() async throws {
-    let loader = HomeDataLoader(backend: makeBackend())
+    let loader = HomeDataLoader(backend: SearchAndHomeIntegrationTests.makeBackend())
     let snapshot = try await loader.load(period: Self.widePeriod, currency: "usd")
 
     #expect(snapshot.balances.count == 1)
@@ -121,7 +121,7 @@ struct SearchAndHomeIntegrationTests {
   }
 
   @Test func homeSnapshotForARecentWindowHasEmptyPeriodLists() async throws {
-    let loader = HomeDataLoader(backend: makeBackend())
+    let loader = HomeDataLoader(backend: SearchAndHomeIntegrationTests.makeBackend())
     let snapshot = try await loader.load(period: Self.narrowPeriod, currency: "usd")
 
     #expect(snapshot.payments.isEmpty)
