@@ -19,11 +19,18 @@ targets:
     platform: iOS
     sources:
       - Sources/App
+    info:
+      path: Support/Info.plist
+      properties:
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: true
     dependencies:
       - package: Geist6
         products:
           - StripeClient
           - StripeModels
+          - GeistData
+          - GeistMetrics
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: app.geist6.app
@@ -39,6 +46,12 @@ targets:
       - TestsApp
     dependencies:
       - target: Geist6
+      - package: Geist6
+        products:
+          - StripeClient
+          - StripeModels
+          - GeistData
+          - GeistMetrics
   Geist6UITests:
     type: bundle.ui-testing
     platform: iOS

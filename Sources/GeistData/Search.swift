@@ -1,15 +1,19 @@
 import Foundation
 import StripeModels
+import StripeClient
 
 /// A single result from global search.
-public enum SearchHit: Sendable, Identifiable, Equatable {
+public enum SearchHit: Sendable, Identifiable, Equatable, Hashable {
     case charge(Charge)
     case customer(Customer)
+    /// An object of a kind without a typed detail view, resolved by ID.
+    case object(kind: StripeObjectKind, id: String, json: StripeJSON)
 
     public var id: String {
         switch self {
         case .charge(let charge): return charge.id
         case .customer(let customer): return customer.id
+        case .object(_, let id, _): return id
         }
     }
 
@@ -20,7 +24,58 @@ public enum SearchHit: Sendable, Identifiable, Equatable {
             return charge.id
         case .customer(let customer):
             return customer.name?.valueOrNil ?? customer.email.valueOrNil ?? customer.id
+        case .object(let kind, let id, _):
+            return "\(kind.label) \(id)"
         }
+    }
+
+    /// The object kind of this hit, if it is one the open-by-ID router knows.
+    public var objectKind: StripeObjectKind? {
+        switch self {
+        case .charge: return .charge
+        case .customer: return .customer
+        case .object(let kind, _, _): return kind
+        }
+    }
+}
+
+/// Hashes by case and ID only. SwiftUI's `navigationDestination(item:)`
+/// needs `Hashable`, but the `.object` payload carries a raw JSON tree
+/// that is not hashable, and hashing a whole decoded object would be
+/// wasted work anyway: two hits with the same kind and ID are the same
+/// object.
+extension SearchHit {
+    public func hash(into hasher: inout Hasher) {
+        switch self {
+        case .charge: hasher.combine(0)
+        case .customer: hasher.combine(1)
+        case .object: hasher.combine(2)
+        }
+        hasher.combine(id)
+    }
+
+    public static func == (lhs: SearchHit, rhs: SearchHit) -> Bool {
+        switch (lhs, rhs) {
+        case (.charge(let a), .charge(let b)): return a == b
+        case (.customer(let a), .customer(let b)): return a == b
+        case let (.object(k1, i1, _), .object(k2, i2, _)): return k1 == k2 && i1 == i2
+        default: return false
+        }
+    }
+}
+
+/// The result set for a query, plus whether it came from the fallback path.
+///
+/// When the Stripe Search API is unavailable for a query, the service falls
+/// back to a plain list fetch filtered client-side. Those results cover only
+/// one page, so they are marked `approximate` for honest presentation.
+public struct SearchResultSet: Sendable, Equatable {
+    public let hits: [SearchHit]
+    public let approximate: Bool
+
+    public init(hits: [SearchHit], approximate: Bool = false) {
+        self.hits = hits
+        self.approximate = approximate
     }
 }
 
@@ -37,6 +92,10 @@ public enum SearchError: Error, Sendable, Equatable {
 /// 2. An email address filters the customer list.
 /// 3. A bare amount uses the charges Search API.
 /// 4. Anything else falls back to a general charges Search API query.
+///
+/// Steps 3 and 4 fall back to a plain charges list filtered client-side when
+/// the Search API reports itself unavailable (HTTP 404 or an explicit
+/// "not supported / not enabled" error); see `docs/decisions/0013`.
 public struct SearchService: Sendable {
     public let backend: any StripeDataBackend
 
@@ -45,16 +104,21 @@ public struct SearchService: Sendable {
     }
 
     /// The object kind a query's ID prefix names, if it is one we can open.
-    /// Only charges and customers are reachable through the data backend.
+    /// Charges and customers resolve to typed hits; every other known kind
+    /// resolves through the raw open-by-ID path.
     public static func idKind(_ id: String) -> IDKind? {
-        if id.hasPrefix("ch_") { return .charge }
-        if id.hasPrefix("cus_") { return .customer }
-        return nil
+        guard let kind = StripeObjectKind.match(id) else { return nil }
+        switch kind {
+        case .charge: return .charge
+        case .customer: return .customer
+        default: return .other(kind)
+        }
     }
 
-    public enum IDKind: Sendable {
+    public enum IDKind: Sendable, Equatable {
         case charge
         case customer
+        case other(StripeObjectKind)
     }
 
     /// Build a charges Search API query for a bare amount, or `nil` if the
@@ -70,8 +134,22 @@ public struct SearchService: Sendable {
         return nil
     }
 
+    /// Whether an error indicates the Search API is unavailable for this
+    /// object or account (as opposed to a transport or auth failure).
+    public static func searchUnavailable(_ error: Error) -> Bool {
+        guard let apiError = error as? StripeAPIError else { return false }
+        if apiError.status == 404 { return true }
+        let message = [apiError.detail.message, apiError.detail.code]
+            .compactMap { $0?.lowercased() }
+            .joined(separator: " ")
+        // Stripe's real wording is "Search has not been enabled for this
+        // account", so match "been enabled" as well as the shorter form.
+        let markers = ["been enabled", "not enabled", "no such endpoint", "does not support", "unsupported"]
+        return markers.contains { message.contains($0) }
+    }
+
     /// The full results list for a query.
-    public func search(_ query: String) async throws -> [SearchHit] {
+    public func search(_ query: String) async throws -> SearchResultSet {
         let trimmed = query.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else { throw SearchError.emptyQuery }
 
@@ -80,34 +158,83 @@ public struct SearchService: Sendable {
             switch kind {
             case .charge:
                 let charge = try await backend.retrieveCharge(id: trimmed)
-                return [.charge(charge)]
+                return SearchResultSet(hits: [.charge(charge)])
             case .customer:
                 let customer = try await backend.retrieveCustomer(id: trimmed)
-                return [.customer(customer)]
+                return SearchResultSet(hits: [.customer(customer)])
+            case .other(let stripeKind):
+                let resolved = try await ObjectByIDService(backend: backend).fetch(trimmed)
+                return SearchResultSet(hits: [.object(kind: stripeKind, id: resolved.id, json: resolved.json)])
             }
         }
 
         // 2. Email → customer list filter.
         if trimmed.contains("@") {
             let matches = try await backend.customers(created: nil, email: trimmed)
-            return matches.map { .customer($0) }
+            return SearchResultSet(hits: matches.map { .customer($0) })
         }
 
-        // 3. Amount → charges Search API.
+        // 3. Amount → charges Search API (with list fallback).
         if let amount = Self.amountQuery(trimmed) {
-            let matches = try await backend.searchCharges(query: amount)
-            return matches.map { .charge($0) }
+            do {
+                let matches = try await backend.searchCharges(query: amount)
+                return SearchResultSet(hits: matches.map { .charge($0) })
+            } catch {
+                guard Self.searchUnavailable(error) else { throw error }
+                let fallback = try await fallbackCharges(matching: trimmed)
+                return SearchResultSet(hits: fallback.0, approximate: true)
+            }
         }
 
-        // 4. Fallback: general charges Search API query.
-        let matches = try await backend.searchCharges(query: trimmed)
-        return matches.map { .charge($0) }
+        // 4. Fallback: general charges Search API query (with list fallback).
+        do {
+            let matches = try await backend.searchCharges(query: trimmed)
+            return SearchResultSet(hits: matches.map { .charge($0) })
+        } catch {
+            guard Self.searchUnavailable(error) else { throw error }
+            let fallback = try await fallbackCharges(matching: trimmed)
+            return SearchResultSet(hits: fallback.0, approximate: true)
+        }
+    }
+
+    /// Fetches the plain charges list and filters client-side by the query:
+    /// substring match on id/description/customer, or an exact amount when
+    /// the whole query parses as a number. One page, best-effort.
+    private func fallbackCharges(matching query: String) async throws -> ([SearchHit], Bool) {
+        let all = try await backend.charges(created: nil)
+        let needle = query.lowercased()
+        let amount = Int(query)
+        let matches = all.filter { charge in
+            if needle.contains("@"), let email = charge.billingDetails.email.valueOrNil {
+                return email.lowercased() == needle
+            }
+            if charge.id.lowercased().contains(needle) { return true }
+            if let description = charge.description.valueOrNil,
+                description.lowercased().contains(needle) {
+                return true
+            }
+            if let customer = Self.customerID(of: charge), customer.lowercased().contains(needle) {
+                return true
+            }
+            if let amount, charge.amount == amount { return true }
+            return false
+        }
+        return (matches.map { .charge($0) }, true)
+    }
+
+    /// The customer ID of a charge, whatever expanded shape the API sent.
+    private static func customerID(of charge: Charge) -> String? {
+        switch charge.customer.valueOrNil {
+        case .string(let id): return id
+        case .customer(let customer): return customer.id
+        default: return nil
+        }
     }
 
     /// The single best hit for a query, or `notFound` if there is none.
     public func resolve(_ query: String) async throws -> SearchHit {
-        let hits = try await search(query)
-        guard let first = hits.first else { throw SearchError.notFound(query) }
+        let results = try await search(query)
+        guard let first = results.hits.first else { throw SearchError.notFound(query) }
         return first
     }
 }

@@ -5,6 +5,7 @@ dist/
 
 # Generated Xcode project (source of truth: project.yml + `xcodegen generate`)
 *.xcodeproj/
+Support/
 
 # Xcode user state
 xcuserdata/

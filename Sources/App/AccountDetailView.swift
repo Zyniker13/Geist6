@@ -1,5 +1,4 @@
 import SwiftUI
-import os
 
 /// Detail view for a single account. Pushed from the account list;
 /// shows info and allows editing.
@@ -50,21 +49,17 @@ struct AccountDetailView: View {
     }
     .sheet(isPresented: $isEditing, onDismiss: {
       Task { await refresh() }
-    }) {
+    }, content: {
       EditAccountView(account: account, accountStore: accountStore) { updated in
         account = updated
       }
-    }
+    })
   }
 
   @MainActor
   private func refresh() async {
     if let updated = await accountStore.get(id: account.id) {
-      Logger(subsystem: "app.geist6", category: "accountstore")
-        .error("refresh got updated=\(updated.name, privacy: .public)")
       account = updated
-    } else {
-      Logger(subsystem: "app.geist6", category: "accountstore").error("refresh got NIL")
     }
   }
 }

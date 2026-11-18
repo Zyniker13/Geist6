@@ -14,4 +14,9 @@ enum AppConfig {
     let urlStr = arg.split(separator: "=", maxSplits: 1).last.map(String.init) ?? ""
     return URL(string: urlStr)
   }
+
+  /// The base URL to use: the override if present, otherwise the default.
+  static var effectiveBaseURL: URL {
+    apiBaseUrl ?? URL(string: "https://api.stripe.com")!
+  }
 }

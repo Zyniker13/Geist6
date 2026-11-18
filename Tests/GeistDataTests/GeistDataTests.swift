@@ -3,6 +3,7 @@ import GeistMetrics
 import StripeModels
 import XCTest
 @testable import GeistData
+@testable import StripeClient
 
 // MARK: - Fixtures
 
@@ -57,8 +58,11 @@ private enum Fixture {
 
     static func charge(
         _ amount: Int, created: Int, currency: String,
-        status: String, id: String = "ch_test_123"
+        status: String, id: String = "ch_test_123",
+        description: String? = nil, customer: String? = nil
     ) throws -> Charge {
+        let descriptionJSON = description.map { "\"description\": \"\($0)\"," } ?? ""
+        let customerJSON = customer.map { "\"customer\": \"\($0)\"," } ?? ""
         let json = """
         {
           "amount": \(amount),
@@ -69,6 +73,8 @@ private enum Fixture {
           "created": \(created),
           "currency": "\(currency)",
           "disputed": false,
+          \(descriptionJSON)
+          \(customerJSON)
           "id": "\(id)",
           "livemode": false,
           "metadata": {},
@@ -164,12 +170,19 @@ private final class FakeBackend: StripeDataBackend, @unchecked Sendable {
     private let payouts: [Payout]
     private let events: [Event]
     private let searchChargesResults: [Charge]
+    /// When set, `searchCharges` throws this error, to exercise the
+    /// list-fallback path (Decision 0013).
+    private let searchFailure: StripeAPIError?
+    /// Raw JSON bodies served by `rawObject(path:)`, keyed by path.
+    private let rawObjects: [String: Data]
 
     private var _btxCurrencies: [String?] = []
     private var _customerEmails: [String?] = []
     private var _retrieveChargeIDs: [String] = []
     private var _retrieveCustomerIDs: [String] = []
     private var _searchQueries: [String] = []
+    private var _rawPaths: [String] = []
+    private var _chargeListCalls = 0
 
     init(
         balance: Balance? = nil,
@@ -178,7 +191,9 @@ private final class FakeBackend: StripeDataBackend, @unchecked Sendable {
         customers: [Customer] = [],
         payouts: [Payout] = [],
         events: [Event] = [],
-        searchChargesResults: [Charge] = []
+        searchChargesResults: [Charge] = [],
+        searchFailure: StripeAPIError? = nil,
+        rawObjects: [String: Data] = [:]
     ) {
         self.balance = balance
         self.balanceTransactions = balanceTransactions
@@ -187,6 +202,8 @@ private final class FakeBackend: StripeDataBackend, @unchecked Sendable {
         self.payouts = payouts
         self.events = events
         self.searchChargesResults = searchChargesResults
+        self.searchFailure = searchFailure
+        self.rawObjects = rawObjects
     }
 
     var btxCurrencies: [String?] { lock.lock(); defer { lock.unlock() }; return _btxCurrencies }
@@ -194,6 +211,8 @@ private final class FakeBackend: StripeDataBackend, @unchecked Sendable {
     var retrieveChargeIDs: [String] { lock.lock(); defer { lock.unlock() }; return _retrieveChargeIDs }
     var retrieveCustomerIDs: [String] { lock.lock(); defer { lock.unlock() }; return _retrieveCustomerIDs }
     var searchQueries: [String] { lock.lock(); defer { lock.unlock() }; return _searchQueries }
+    var rawPaths: [String] { lock.lock(); defer { lock.unlock() }; return _rawPaths }
+    var chargeListCalls: Int { lock.lock(); defer { lock.unlock() }; return _chargeListCalls }
 
     private func record(_ body: () -> Void) {
         lock.lock(); defer { lock.unlock() }; body()
@@ -210,6 +229,7 @@ private final class FakeBackend: StripeDataBackend, @unchecked Sendable {
     }
 
     func charges(created: DateInterval?) async throws -> [Charge] {
+        record { _chargeListCalls += 1 }
         return charges
     }
 
@@ -241,7 +261,14 @@ private final class FakeBackend: StripeDataBackend, @unchecked Sendable {
 
     func searchCharges(query: String) async throws -> [Charge] {
         record { _searchQueries.append(query) }
+        if let searchFailure { throw searchFailure }
         return searchChargesResults
+    }
+
+    func rawObject(path: String) async throws -> Data {
+        record { _rawPaths.append(path) }
+        guard let body = rawObjects[path] else { throw TestError.notFound }
+        return body
     }
 }
 
@@ -377,9 +404,9 @@ final class SearchServiceTests: XCTestCase {
         let backend = FakeBackend(charges: [charge])
         let service = SearchService(backend: backend)
 
-        let hits = try await service.search("ch_open")
-        XCTAssertEqual(hits.count, 1)
-        guard case .charge(let found) = hits[0] else {
+        let results = try await service.search("ch_open")
+        XCTAssertEqual(results.hits.count, 1)
+        guard case .charge(let found) = results.hits[0] else {
             return XCTFail("expected a charge hit")
         }
         XCTAssertEqual(found.id, "ch_open")
@@ -393,9 +420,9 @@ final class SearchServiceTests: XCTestCase {
         let backend = FakeBackend(customers: [customer])
         let service = SearchService(backend: backend)
 
-        let hits = try await service.search("cus_open")
-        XCTAssertEqual(hits.count, 1)
-        guard case .customer(let found) = hits[0] else {
+        let results = try await service.search("cus_open")
+        XCTAssertEqual(results.hits.count, 1)
+        guard case .customer(let found) = results.hits[0] else {
             return XCTFail("expected a customer hit")
         }
         XCTAssertEqual(found.id, "cus_open")
@@ -408,7 +435,7 @@ final class SearchServiceTests: XCTestCase {
         let backend = FakeBackend(customers: [alice, bob])
         let service = SearchService(backend: backend)
 
-        let hits = try await service.search("alice@example.com")
+        let hits = try await service.search("alice@example.com").hits
         XCTAssertEqual(hits.count, 1)
         XCTAssertEqual(backend.customerEmails, ["alice@example.com"])
         // An email query must not hit the Search API.
@@ -420,7 +447,7 @@ final class SearchServiceTests: XCTestCase {
         let backend = FakeBackend(searchChargesResults: [charge])
         let service = SearchService(backend: backend)
 
-        let hits = try await service.search("1000")
+        let hits = try await service.search("1000").hits
         XCTAssertEqual(hits.count, 1)
         XCTAssertEqual(backend.searchQueries, ["amount:1000"])
     }
@@ -471,7 +498,10 @@ final class SearchServiceTests: XCTestCase {
     func testIDKind() {
         XCTAssertEqual(SearchService.idKind("ch_123"), .charge)
         XCTAssertEqual(SearchService.idKind("cus_123"), .customer)
-        XCTAssertNil(SearchService.idKind("pi_123"))
+        XCTAssertEqual(
+            SearchService.idKind("pi_123"),
+            .other(.paymentIntent)
+        )
         XCTAssertNil(SearchService.idKind("hello"))
     }
 
@@ -495,5 +525,264 @@ final class SearchServiceTests: XCTestCase {
 
         let bare = try Fixture.customer(created: t0, id: "cus_bare")
         XCTAssertEqual(SearchHit.customer(bare).title, "cus_bare")
+    }
+
+    // MARK: Object by ID
+
+    func testUnknownIDKindRoutesToRawObject() async throws {
+        let payoutJSON = """
+        {"id": "po_raw", "object": "payout", "amount": 50000, "status": "paid"}
+        """
+        let backend = FakeBackend(
+            rawObjects: ["/v1/payouts/po_raw": Data(payoutJSON.utf8)]
+        )
+        let service = SearchService(backend: backend)
+
+        let results = try await service.search("po_raw")
+        XCTAssertEqual(results.hits.count, 1)
+        guard case .object(let kind, let id, let json) = results.hits[0] else {
+            return XCTFail("expected an object hit")
+        }
+        XCTAssertEqual(kind, .payout)
+        XCTAssertEqual(id, "po_raw")
+        XCTAssertEqual(json.string(atPath: "status"), "paid")
+        XCTAssertEqual(results.hits[0].title, "Payout po_raw")
+        // The request went through the raw fetch, not a typed retrieve.
+        XCTAssertEqual(backend.rawPaths, ["/v1/payouts/po_raw"])
+        XCTAssertTrue(backend.retrieveChargeIDs.isEmpty)
+        XCTAssertTrue(backend.retrieveCustomerIDs.isEmpty)
+    }
+
+    func testObjectTitleUsesAvailableFields() throws {
+        let json = try StripeJSON.decode(Data(#"{"id": "in_raw", "object": "invoice"}"#.utf8))
+        let hit = SearchHit.object(kind: .invoice, id: "in_raw", json: json)
+        XCTAssertEqual(hit.title, "Invoice in_raw")
+        XCTAssertEqual(hit.objectKind, .invoice)
+        XCTAssertEqual(hit.id, "in_raw")
+    }
+
+    // MARK: Search fallback (Decision 0013)
+
+    /// Builds a `StripeAPIError` for the fallback matcher tests. `Detail` has
+    /// no memberwise init, so a message is decoded from JSON.
+    private func apiError(status: Int, message: String? = nil) throws -> StripeAPIError {
+        let detail: StripeAPIError.Detail
+        if let message {
+            detail = try JSONDecoder().decode(
+                StripeAPIError.Detail.self,
+                from: Data("{\"message\": \"\(message)\"}".utf8)
+            )
+        } else {
+            detail = StripeAPIError.Detail()
+        }
+        return StripeAPIError(status: status, type: .undocumented, detail: detail)
+    }
+
+    func testSearchUnavailableMatches404() throws {
+        XCTAssertTrue(SearchService.searchUnavailable(try apiError(status: 404)))
+    }
+
+    func testSearchUnavailableMatchesNotEnabledMessage() throws {
+        XCTAssertTrue(
+            SearchService.searchUnavailable(
+                try apiError(status: 400, message: "Search has not been enabled for this account")
+            )
+        )
+    }
+
+    func testSearchUnavailableRejectsOtherErrors() throws {
+        XCTAssertFalse(
+            SearchService.searchUnavailable(
+                try apiError(status: 400, message: "You did not specify a query")
+            )
+        )
+        XCTAssertFalse(
+            SearchService.searchUnavailable(
+                try apiError(status: 500, message: "Search backend is temporarily unavailable")
+            )
+        )
+    }
+
+    func testFallbackFiltersChargesOnUnavailableSearch() async throws {
+        // Search API 404 → the service fetches the charge list and filters.
+        let coffee = try Fixture.charge(
+            1_000, created: t0, currency: "usd", status: "succeeded",
+            id: "ch_coffee", description: "Coffee subscription"
+        )
+        let other = try Fixture.charge(
+            2_000, created: t0, currency: "usd", status: "succeeded", id: "ch_other"
+        )
+        let backend = FakeBackend(charges: [coffee, other], searchFailure: try apiError(status: 404))
+        let service = SearchService(backend: backend)
+
+        let results = try await service.search("coffee")
+        XCTAssertEqual(backend.searchQueries, ["coffee"])
+        XCTAssertEqual(backend.chargeListCalls, 1)
+        XCTAssertEqual(results.hits.map(\.id), ["ch_coffee"])
+        XCTAssertTrue(results.approximate)
+    }
+
+    func testFallbackMatchesIDAndCustomer() async throws {
+        let byID = try Fixture.charge(
+            1_000, created: t0, currency: "usd", status: "succeeded", id: "ch_special"
+        )
+        let byCustomer = try Fixture.charge(
+            2_000, created: t0, currency: "usd", status: "succeeded",
+            id: "ch_other", customer: "cus_special"
+        )
+        let backend = FakeBackend(
+            charges: [byID, byCustomer],
+            searchFailure: try apiError(status: 400, message: "Search has not been enabled for this account")
+        )
+        let service = SearchService(backend: backend)
+
+        let results = try await service.search("special")
+        XCTAssertEqual(results.hits.map(\.id), ["ch_special", "ch_other"])
+    }
+
+    func testFallbackMatchesBareAmount() async throws {
+        let charge = try Fixture.charge(
+            1_500, created: t0, currency: "usd", status: "succeeded", id: "ch_amt"
+        )
+        let backend = FakeBackend(charges: [charge], searchFailure: try apiError(status: 404))
+        let service = SearchService(backend: backend)
+
+        let results = try await service.search("1500")
+        XCTAssertEqual(results.hits.map(\.id), ["ch_amt"])
+        XCTAssertTrue(results.approximate)
+        // The Search API was tried first, then the list fallback.
+        XCTAssertEqual(backend.searchQueries, ["amount:1500"])
+        XCTAssertEqual(backend.chargeListCalls, 1)
+    }
+
+    func testNonAvailabilityErrorPropagates() async throws {
+        // A server error is not an availability error: it must surface.
+        let backend = FakeBackend(searchFailure: try apiError(status: 500, message: "backend down"))
+        let service = SearchService(backend: backend)
+        do {
+            _ = try await service.search("coffee")
+            XCTFail("expected the API error to propagate")
+        } catch let error as StripeAPIError {
+            XCTAssertEqual(error.status, 500)
+        } catch {
+            XCTFail("unexpected error type: \(error)")
+        }
+    }
+}
+
+// MARK: - StripeJSON / ObjectByIDService
+
+final class ObjectByIDTests: XCTestCase {
+    func testStripeObjectKindMatch() {
+        XCTAssertEqual(StripeObjectKind.match("ch_123"), .charge)
+        XCTAssertEqual(StripeObjectKind.match("cus_123"), .customer)
+        XCTAssertEqual(StripeObjectKind.match("po_123"), .payout)
+        XCTAssertEqual(StripeObjectKind.match("evt_123"), .event)
+        XCTAssertEqual(StripeObjectKind.match("txn_123"), .balanceTransaction)
+        XCTAssertEqual(StripeObjectKind.match("in_123"), .invoice)
+        XCTAssertEqual(StripeObjectKind.match("pi_123"), .paymentIntent)
+        XCTAssertEqual(StripeObjectKind.match("re_123"), .refund)
+        XCTAssertEqual(StripeObjectKind.match("sub_123"), .subscription)
+        XCTAssertEqual(StripeObjectKind.match("prod_123"), .product)
+        XCTAssertEqual(StripeObjectKind.match("acct_123"), .account)
+        XCTAssertEqual(StripeObjectKind.match("price_123"), .price)
+        XCTAssertNil(StripeObjectKind.match("pr_123"))
+        XCTAssertNil(StripeObjectKind.match("unknown_123"))
+        XCTAssertNil(StripeObjectKind.match("hello"))
+    }
+
+    func testCollectionPaths() {
+        XCTAssertEqual(StripeObjectKind.charge.collectionPath, "charges")
+        XCTAssertEqual(
+            StripeObjectKind.balanceTransaction.collectionPath,
+            "balance_transactions"
+        )
+        XCTAssertEqual(
+            StripeObjectKind.paymentIntent.collectionPath,
+            "payment_intents"
+        )
+    }
+
+    func testDecodeAndFlatten() throws {
+        let json = try StripeJSON.decode(Data("""
+        {
+          "id": "ch_1",
+          "object": "charge",
+          "amount": 1500,
+          "paid": true,
+          "note": null,
+          "tags": ["a", "b"],
+          "billing_details": {"email": "alice@example.com"},
+          "metadata": {"order": "42"}
+        }
+        """.utf8))
+        guard case .object(let root) = json else {
+            return XCTFail("expected an object")
+        }
+        XCTAssertEqual(root["id"]?.stringValue, "ch_1")
+        XCTAssertEqual(root["amount"]?.intValue, 1500)
+        XCTAssertEqual(root["paid"]?.boolValue, true)
+        XCTAssertEqual(root["note"], .null)
+        // Nested objects and arrays render as counts in the flat list.
+        XCTAssertEqual(json.flattened().first(where: { $0.key == "tags" })?.value, "[2]")
+        XCTAssertEqual(json.flattened().first(where: { $0.key == "billing_details" })?.value, "{…}")
+        XCTAssertEqual(root["billing_details"]?.flattened().first?.key, "email")
+        XCTAssertEqual(root["billing_details"]?.flattened().first?.value, "alice@example.com")
+        XCTAssertEqual(root["metadata"]?.flattened().first?.value, "42")
+    }
+
+    func testStringAtPath() throws {
+        let json = try StripeJSON.decode(Data("""
+        {"billing_details": {"email": "alice@example.com"}, "amount": 1500}
+        """.utf8))
+        XCTAssertEqual(json.string(atPath: "billing_details.email"), "alice@example.com")
+        XCTAssertNil(json.string(atPath: "amount"))
+        XCTAssertNil(json.string(atPath: "missing.path"))
+    }
+
+    func testFetchBuildsPathAndDecodes() async throws {
+        let payoutJSON = """
+        {"id": "po_fetch", "object": "payout", "amount": 50000, "status": "paid"}
+        """
+        let backend = FakeBackend(
+            rawObjects: ["/v1/payouts/po_fetch": Data(payoutJSON.utf8)]
+        )
+        let service = ObjectByIDService(backend: backend)
+
+        let fetched = try await service.fetch("po_fetch")
+        XCTAssertEqual(fetched.kind, .payout)
+        XCTAssertEqual(fetched.id, "po_fetch")
+        XCTAssertEqual(backend.rawPaths, ["/v1/payouts/po_fetch"])
+    }
+
+    func testFetchRejectsUnknownPrefix() async {
+        let service = ObjectByIDService(backend: FakeBackend())
+        do {
+            _ = try await service.fetch("not_a_stripe_id")
+            XCTFail("expected unknownKind")
+        } catch let error as ObjectByIDError {
+            guard case .unknownKind(let id) = error else {
+                return XCTFail("unexpected error: \(error)")
+            }
+            XCTAssertEqual(id, "not_a_stripe_id")
+        } catch {
+            XCTFail("unexpected error type: \(error)")
+        }
+    }
+
+    func testFetchDecodesIntoStripeJSON() async throws {
+        let json = """
+        {"id": "ch_fetch", "object": "charge", "amount": 2000, "paid": true}
+        """
+        let backend = FakeBackend(
+            rawObjects: ["/v1/charges/ch_fetch": Data(json.utf8)]
+        )
+        let fetched = try await ObjectByIDService(backend: backend).fetch("ch_fetch")
+        XCTAssertEqual(fetched.json.string(atPath: "id"), "ch_fetch")
+        guard case .object(let root) = fetched.json else {
+            return XCTFail("expected an object tree")
+        }
+        XCTAssertEqual(root["amount"]?.intValue, 2000)
+        XCTAssertEqual(root["paid"]?.boolValue, true)
     }
 }

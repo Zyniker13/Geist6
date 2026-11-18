@@ -35,6 +35,13 @@ public protocol StripeDataBackend: Sendable {
 
     /// Search charges with a Stripe Search API query string.
     func searchCharges(query: String) async throws -> [Charge]
+
+    /// Fetches the raw response body of a read-only GET under `/v1`.
+    ///
+    /// Used by the universal open-by-ID lookup, which has no typed model.
+    /// The path must be a GET collection path; this protocol has no write
+    /// methods, and the production conformance only ever issues GETs.
+    func rawObject(path: String) async throws -> Data
 }
 
 // MARK: - StripeClient conformance
@@ -123,5 +130,11 @@ extension StripeClient: StripeDataBackend {
         let params = ChargeSearchParams(query: query)
         let result = try await searchCharge(params)
         return result.data
+    }
+
+    public func rawObject(path: String) async throws -> Data {
+        // `params` is an unnamed `some Encodable`, so an explicit typed nil
+        // is required when no parameters are sent.
+        try await perform(method: "GET", path: path, params: Optional<[String: String]>.none).body
     }
 }

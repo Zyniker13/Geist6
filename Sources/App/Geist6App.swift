@@ -1,10 +1,5 @@
 import SwiftUI
 
-private enum MainTab: Hashable {
-  case home
-  case accounts
-}
-
 @main
 struct Geist6App: App {
   @State private var accountStore: AccountStore = {
@@ -17,25 +12,17 @@ struct Geist6App: App {
     return AccountStore()
   }()
 
-  // UI tests can start directly on the Accounts tab.
-  @State private var selection: MainTab = CommandLine.arguments.contains("--uitest-tab-accounts")
-    ? .accounts : .home
-
   var body: some Scene {
     WindowGroup {
-      TabView(selection: $selection) {
-        HomeView()
-          .tabItem {
-            Label("Home", systemImage: "house")
-          }
-          .tag(MainTab.home)
-        AccountListView()
-          .tabItem {
-            Label("Accounts", systemImage: "creditcard")
-          }
-          .tag(MainTab.accounts)
-      }
-      .environment(accountStore)
+      AppShellView()
+        .environment(accountStore)
+    }
+
+    // A window opened for a specific account, for example through
+    // "Open in New Window" in the sidebar (decision 0011).
+    WindowGroup("Geist6", for: UUID.self) { $seedAccountID in
+      AppShellView(seedAccountID: seedAccountID)
+        .environment(accountStore)
     }
   }
 }
