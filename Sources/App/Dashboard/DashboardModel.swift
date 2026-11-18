@@ -16,7 +16,12 @@ final class DashboardModel {
   private(set) var snapshot: HomeSnapshot?
   private let loader: HomeDataLoader
 
+  /// The backend the model was built with, for views that need a
+  /// direct read (for example the activity feed's event detail).
+  let backend: any StripeDataBackend
+
   init(backend: any StripeDataBackend) {
+    self.backend = backend
     loader = HomeDataLoader(backend: backend)
   }
 

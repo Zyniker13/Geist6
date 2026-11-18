@@ -291,6 +291,10 @@ final class HomeMetricsTests: XCTestCase {
         XCTAssertEqual(fig.recentActivity.first?.object, "customer")
         XCTAssertEqual(fig.recentActivity.last?.type, "charge.succeeded")
         XCTAssertEqual(fig.recentActivity.last?.object, "charge")
+        // The event's own ID travels with the item so the activity row
+        // can open the event detail.
+        XCTAssertEqual(fig.recentActivity.first?.eventID, "evt_new")
+        XCTAssertEqual(fig.recentActivity.last?.eventID, "evt_old")
     }
 
     func testRecentActivityCapsAtTwenty() throws {

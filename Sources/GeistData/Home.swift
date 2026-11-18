@@ -90,9 +90,15 @@ public struct HomeDataLoader: Sendable {
         async let payoutList = backend.payouts()
         async let eventList = backend.events(created: period)
 
-        let (bal, btx, charges, customers, payouts, events) = try await (
+        let (bal, btx, rawCharges, rawCustomers, payouts, rawEvents) = try await (
             balance, transactions, chargeList, customerList, payoutList, eventList
         )
+
+        // The server is asked to filter by `created`, but not every backend
+        // (including stripe-mock) honors it, so filter defensively here.
+        let charges = Self.inPeriod(rawCharges, period, \.created)
+        let customers = Self.inPeriod(rawCustomers, period, \.created)
+        let events = Self.inPeriod(rawEvents, period, \.created)
 
         let input = HomeMetricsInput(
             periodStart: period.start,
@@ -134,6 +140,16 @@ public struct HomeDataLoader: Sendable {
                 available: Money(amount: availableByCurrency[code, default: 0], currency: code),
                 pending: Money(amount: pendingByCurrency[code, default: 0], currency: code)
             )
+        }
+    }
+
+    /// Keep only the objects whose `created` timestamp falls in `period`.
+    private static func inPeriod<T>(
+        _ objects: [T], _ period: DateInterval, _ created: KeyPath<T, StripeTimestamp>
+    ) -> [T] {
+        objects.filter {
+            let date = $0[keyPath: created].date
+            return date >= period.start && date < period.end
         }
     }
 }

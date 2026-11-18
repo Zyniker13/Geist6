@@ -12,6 +12,7 @@ struct HomeView: View {
   @State private var model: DashboardModel?
   @State private var period: HomePeriod = .last30Days
   @State private var currency = "usd"
+  @State private var selectedEventID: String?
 
   private static let currencies = ["usd", "eur", "gbp", "cad", "aud", "jpy"]
 
@@ -29,6 +30,11 @@ struct HomeView: View {
     }
     .navigationTitle(account.name)
     .navigationBarTitleDisplayMode(.inline)
+    .navigationDestination(item: $selectedEventID) { eventID in
+      if let model {
+        EventActivityDetailView(eventID: eventID, backend: model.backend)
+      }
+    }
     .toolbar {
       ToolbarItem(placement: .topBarTrailing) {
         Picker("Period", selection: $period) {
@@ -245,18 +251,24 @@ struct HomeView: View {
           .foregroundStyle(.secondary)
       }
       ForEach(items, id: \.self) { item in
-        HStack(alignment: .firstTextBaseline) {
-          Text(item.type)
-            .font(.subheadline)
-          Text(item.object)
-            .font(.caption)
-            .foregroundStyle(.secondary)
-          Spacer()
-          Text(item.created, format: .relative(presentation: .named))
-            .font(.caption)
-            .foregroundStyle(.secondary)
+        Button {
+          selectedEventID = item.eventID
+        } label: {
+          HStack(alignment: .firstTextBaseline) {
+            Text(item.type)
+              .font(.subheadline)
+            Text(item.object)
+              .font(.caption)
+              .foregroundStyle(.secondary)
+            Spacer()
+            Text(item.created, format: .relative(presentation: .named))
+              .font(.caption)
+              .foregroundStyle(.secondary)
+          }
         }
+        .buttonStyle(.plain)
         .accessibilityElement(children: .combine)
+        .accessibilityIdentifier("home.activity.\(item.eventID)")
       }
     }
     .card()
@@ -279,7 +291,7 @@ struct HomeView: View {
 
   /// Formats money for display, honoring zero-decimal currencies.
   static func money(_ value: Money) -> String {
-    value.majorUnits.formatted(.currency(code: value.currency.uppercased()))
+    MoneyFormat.string(value)
   }
 }
 

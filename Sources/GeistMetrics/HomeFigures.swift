@@ -21,11 +21,14 @@ public struct ActivityItem: Sendable, Equatable, Hashable {
     public var type: String
     /// The object the event concerns, e.g. "charge" or "payout".
     public var object: String
+    /// The event's own ID, so the activity row can open the event.
+    public var eventID: String
     public var created: Date
 
-    public init(type: String, object: String, created: Date) {
+    public init(type: String, object: String, eventID: String, created: Date) {
         self.type = type
         self.object = object
+        self.eventID = eventID
         self.created = created
     }
 }

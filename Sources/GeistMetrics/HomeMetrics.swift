@@ -154,6 +154,7 @@ public enum HomeMetrics {
                 ActivityItem(
                     type: event.type.rawValue,
                     object: objectType(of: event),
+                    eventID: event.id,
                     created: event.created.date
                 )
             }
