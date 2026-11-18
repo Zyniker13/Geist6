@@ -16,6 +16,8 @@ The app shows people's money and can move it, so testing is part of the design, 
 
 Paths and commands are the plan; fill in the real ones as each suite is built.
 
+Built so far (as of M2): inventory, decoding, client contract, dashboard mode, key safety, UI tests. The remaining suites land with their milestones.
+
 | Suite | Proves | Where | Runs |
 | --- | --- | --- | --- |
 | Generator | The generated models match the pinned spec; regeneration produces no diff | `Tests/GeneratorTests/`, CI regeneration check | every CI run |
@@ -24,8 +26,8 @@ Paths and commands are the plan; fill in the real ones as each suite is built.
 | Client contract | Every endpoint works against `stripe-mock`: encoding, pagination, search, expansion, files, idempotency, retries, and every error type (`/v1`; `stripe-mock` serves only `/v1`, so `/v2` endpoints get the same coverage against hand-written response fixtures with obviously fake values) | `Tests/ClientTests/` | every CI run, macOS and Linux |
 | Dashboard mode | No write request can be sent in Dashboard mode | `Tests/ClientTests/ReadOnlyTests` | every CI run |
 | Money and metrics | Formatting in every currency, and dashboard and billing metrics against hand-checked fixtures | `Tests/ConsoleTests/` | every CI run |
-| Key safety | Keys never reach the cache, logs, exports, or copy-as-curl | `Tests/ConsoleTests/KeySafetyTests` | every CI run |
-| UI tests | Main flows work end to end on the iPad simulator against `stripe-mock` | the app's UI test target | every CI run on macOS |
+| Key safety | Keys never reach the cache, logs, exports, or copy-as-curl | `TestsApp/KeySafetyTests.swift` (app unit target; key not in debug descriptions, store metadata, or client error text) | every CI run on macOS |
+| UI tests | Main flows work end to end on the iPad simulator against `stripe-mock` | `TestsAppUI/` (scheme `Geist6`; runner takes `--api-base-url=http://127.0.0.1:12111`) | every CI run on macOS |
 | Accessibility audits | Every screen passes automated accessibility checks | the app's UI test target | every CI run on macOS |
 | Performance | Cold start, scrolling, and large caches stay within the M14 budgets | package benchmarks and UI test metrics | every CI run, full runs locally |
 | Coverage | Which lines no test reaches | `swift test --enable-code-coverage` | every CI run, threshold enforced for the package |
@@ -36,7 +38,16 @@ Paths and commands are the plan; fill in the real ones as each suite is built.
 scripts/check.sh            # what CI runs
 ```
 
-Document each other command here as it exists, with the time it takes.
+Individual commands as they exist today:
+
+```sh
+swift test                  # package logic tests (34 tests, ~5 s)
+# Xcode app target (unit + UI, 44 tests; needs the simulator and stripe-mock on :12111):
+xcodegen generate
+xcodebuild -project Geist6.xcodeproj -scheme Geist6 \
+  -destination 'platform=iOS Simulator,name=iPad (A16),OS=latest' \
+  -derivedDataPath /tmp/geist6-dd test
+```
 
 ## Results
 

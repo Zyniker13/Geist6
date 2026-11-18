@@ -11,7 +11,7 @@ struct HomeView: View {
         VStack(spacing: 16) {
           HStack {
             Circle()
-              .fill(Color(account.color))
+              .fill(AccountColor.color(for: account.color))
               .frame(width: 20, height: 20)
             Text(account.name)
               .font(.headline)

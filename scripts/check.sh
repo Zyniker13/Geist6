@@ -3,6 +3,10 @@
 set -eu
 cd "$(dirname "$0")/.."
 
+# xcodebuild needs an explicit developer dir on some machines; keep any
+# value the environment already provides (CI runners set their own).
+export DEVELOPER_DIR="${DEVELOPER_DIR:-/Applications/Xcode.app/Contents/Developer}"
+
 echo "== inventory check (spec vs generated docs) =="
 swift run inventory check
 
@@ -37,18 +41,36 @@ echo "== package tests (swift test) =="
 swift test
 
 if xcodebuild -version >/dev/null 2>&1; then
-    echo "== app build (xcodegen + xcodebuild) =="
-    if command -v xcodegen >/dev/null 2>&1; then
-        xcodegen generate
-    else
-        echo "xcodegen not installed; skipping app build (brew install xcodegen)" >&2
+    echo "== app tests (xcodegen + xcodebuild test: unit + UI) =="
+    if ! command -v xcodegen >/dev/null 2>&1; then
+        echo "xcodegen not installed; skipping app tests (brew install xcodegen)" >&2
         exit 1
     fi
-    xcodebuild -project Geist6.xcodeproj -scheme Geist6 \
+    xcodegen generate
+
+    stripe-mock --port 12111 &
+    MOCK_PID=$!
+    sleep 2
+
+    # Fresh derived data for every run: reusing a previous one can hang
+    # the PruneExplicitPrecompiledModules phase.
+    rm -rf /tmp/geist6-dd
+    if xcodebuild -project Geist6.xcodeproj -scheme Geist6 \
         -destination 'platform=iOS Simulator,name=iPad (A16),OS=latest' \
-        -quiet build
+        -derivedDataPath /tmp/geist6-dd \
+        test > /tmp/geist6-xcode-test.txt 2>&1; then
+        echo "xcodebuild test: passed (full log in /tmp/geist6-xcode-test.txt)"
+    else
+        echo "xcodebuild test: FAILED (see /tmp/geist6-xcode-test.txt)" >&2
+        tail -40 /tmp/geist6-xcode-test.txt >&2
+        kill "$MOCK_PID" 2>/dev/null || true
+        exit 1
+    fi
+
+    kill "$MOCK_PID" 2>/dev/null || true
+    wait "$MOCK_PID" 2>/dev/null || true
 else
-    echo "xcodebuild not present; skipping app build (Linux job)"
+    echo "xcodebuild not present; skipping app tests (Linux job)"
 fi
 
 echo "check.sh: all green"

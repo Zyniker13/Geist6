@@ -1,4 +1,6 @@
 import SwiftUI
+import StripeClient
+import StripeModels
 
 /// The setup flow: add a new Stripe account by pasting a key.
 struct SetupView: View {
@@ -9,29 +11,49 @@ struct SetupView: View {
   @State private var selectedColor: String = ".systemBlue"
 
   private var color: Color {
-    Color(selectedColor) ?? .gray
+    AccountColor.color(for: selectedColor)
   }
-  @State private var errorMessage: String? = nil
+  @State private var errorMessage: String?
   @State private var isAdding: Bool = false
   @Environment(\.dismiss) private var dismiss
 
   let accountStore: AccountStore
   let onAdded: () -> Void
 
+  /// Optional business name pre-filled from account verification.
+  @State private var verifiedName: String?
+  /// Optional country from account verification.
+  @State private var verifiedCountry: String?
+
   var body: some View {
     NavigationStack {
       Form {
+        if let verifiedName, !verifiedName.isEmpty {
+          Section("Account verified") {
+            Text(verifiedName)
+              .foregroundStyle(.primary)
+            if let country = verifiedCountry {
+              Text("Country: \(country)")
+                .foregroundStyle(.secondary)
+            }
+          }
+        }
+
         Section("Account name") {
           TextField("My Stripe account", text: $name)
+            .accessibilityIdentifier("setup.name")
         }
 
         Section("API key") {
           TextField("sk_live_… or sk_test_…", text: $apiKey)
+            .accessibilityIdentifier("setup.apiKey")
           Toggle("Live key", isOn: $live)
+            .accessibilityIdentifier("setup.live")
         }
 
         Section("Security") {
           Toggle("Dashboard lock (requires Face ID / passcode to write)", isOn: $dashboardLock)
+            .accessibilityIdentifier("setup.lock")
         }
 
         Section("Colour") {
@@ -45,6 +67,7 @@ struct SetupView: View {
           Section {
             Text(error)
               .foregroundStyle(.red)
+              .accessibilityIdentifier("setup.error")
           }
         }
       }
@@ -58,7 +81,9 @@ struct SetupView: View {
           Button("Add") {
             Task { await save() }
           }
-          .disabled(isAdding || name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || apiKey.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+          .accessibilityIdentifier("setup.add")
+          .disabled(isAdding || name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+            || apiKey.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
         }
       }
     }
@@ -78,21 +103,44 @@ struct SetupView: View {
       return
     }
 
+    // Verify the key works by calling GET /v1/account (skip in production without override)
+    if let baseURL = AppConfig.apiBaseUrl {
+      let client = StripeClient(apiKey: apiKey, mode: .management, baseURL: baseURL)
+      do {
+        let account: StripeModels.Account = try await client.request(method: "GET", path: "/v1/account")
+        if let bp = account.businessProfile, case .value(let profile) = bp {
+          if case .value(let unwrappedName) = profile.name { verifiedName = unwrappedName }
+        }
+        verifiedCountry = account.country
+      } catch {
+        errorMessage = "Could not verify API key—check the base URL and try again"
+        isAdding = false
+        return
+      }
+    }
+
     let trimmedName = name.trimmingCharacters(in: .whitespacesAndNewlines)
+    // Pre-fill name from verification if empty
+    let finalName = trimmedName.isEmpty ? (verifiedName ?? "") : trimmedName
+    guard !finalName.isEmpty else {
+      errorMessage = "Account name is required"
+      isAdding = false
+      return
+    }
 
     // Check for duplicate name
     let existing = await accountStore.list()
-    if existing.contains(where: { $0.name.lowercased() == trimmedName.lowercased() }) {
+    if existing.contains(where: { $0.name.lowercased() == finalName.lowercased() }) {
       errorMessage = "An account with this name already exists"
       isAdding = false
       return
     }
 
     let account = await accountStore.add(
-      name: trimmedName,
+      name: finalName,
       color: selectedColor,
       dashboardLock: dashboardLock,
-      apiKey: trimmed,
+      apiKey: apiKey,
       live: live
     )
 

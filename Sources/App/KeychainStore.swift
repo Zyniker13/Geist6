@@ -1,5 +1,6 @@
 import Foundation
 import Security
+import os
 
 /// Secure wrapper around the iOS Keychain for API keys and account metadata.
 ///
@@ -9,6 +10,36 @@ import Security
 public final actor KeychainStore: KeychainStoreProtocol, Sendable {
 
   public init() {}
+
+  // MARK: - Test support
+
+  /// Deletes every Keychain item this app owns (accounts, metadata, the
+  /// active-account pointer). Synchronous and nonisolated so the app can
+  /// wipe before any view exists when launched with --uitest-reset.
+  /// Enumerates all generic passwords and deletes only our key prefixes;
+  /// a bare kSecClass delete would also hit other apps' items.
+  public nonisolated static func wipeAccountsSync() {
+    let query: [String: Any] = [
+      kSecClass as String: kSecClassGenericPassword,
+      kSecReturnAttributes as String: true,
+      kSecMatchLimit as String: kSecMatchLimitAll,
+    ]
+
+    var items: CFTypeRef?
+    guard SecItemCopyMatching(query as CFDictionary, &items) == errSecSuccess,
+          let dataArray = items as? [[String: Any]]
+    else { return }
+
+    let owned = dataArray.compactMap { $0[kSecAttrAccount as String] as? String }
+      .filter { $0.hasPrefix("acct_") || $0.hasPrefix("meta_") || $0 == "active_account_id" }
+
+    for account in owned {
+      SecItemDelete([
+        kSecClass as String: kSecClassGenericPassword,
+        kSecAttrAccount as String: account,
+      ] as CFDictionary)
+    }
+  }
 
   // MARK: - Keychain access
 
@@ -51,7 +82,9 @@ public final actor KeychainStore: KeychainStoreProtocol, Sendable {
     let updateStatus = SecItemUpdate(updateQuery as CFDictionary, [kSecValueData: data] as CFDictionary)
     if updateStatus == errSecSuccess { return }
 
-    SecItemAdd(setQuery as CFDictionary, nil)
+    let addStatus = SecItemAdd(setQuery as CFDictionary, nil)
+    Logger(subsystem: "app.geist6", category: "keychain")
+      .error("write key=\(key, privacy: .public) update=\(updateStatus) add=\(addStatus)")
   }
 
   /// Deletes a value from the Keychain.

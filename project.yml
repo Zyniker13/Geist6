@@ -29,7 +29,9 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: app.geist6.app
         INFOPLIST_KEY_UILaunchScreen_Generation: true
         INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad: "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight"
-        CODE_SIGNING_ALLOWED: NO
+        # Simulator ad-hoc signing (default). Keychain access fails with
+        # errSecMissingEntitlement (-34018) when the app binary is left
+        # unsigned, so do not disable signing here.
   Geist6Tests:
     type: bundle.unit-test
     platform: iOS

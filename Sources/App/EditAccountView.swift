@@ -1,4 +1,5 @@
 import SwiftUI
+import os
 
 /// Edit an existing account's name, colour, and dashboard lock.
 struct EditAccountView: View {
@@ -12,7 +13,7 @@ struct EditAccountView: View {
   @State private var selectedColor: String
 
   private var color: Color {
-    Color(account.color) ?? .gray
+    AccountColor.color(for: selectedColor)
   }
 
   init(account: Account, accountStore: AccountStore, onUpdate: @escaping (Account) -> Void) {
@@ -29,10 +30,12 @@ struct EditAccountView: View {
       Form {
         Section("Account name") {
           TextField("Account name", text: $name)
+            .accessibilityIdentifier("edit.name")
         }
 
         Section("Security") {
           Toggle("Dashboard lock", isOn: $dashboardLock)
+            .accessibilityIdentifier("edit.lock")
         }
 
         Section("Colour") {
@@ -52,6 +55,7 @@ struct EditAccountView: View {
           Button("Save") {
             Task { await save() }
           }
+          .accessibilityIdentifier("edit.save")
           .disabled(name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
         }
       }
@@ -68,6 +72,14 @@ struct EditAccountView: View {
       color: selectedColor,
       dashboardLock: dashboardLock
     )
+
+    if let updated = await accountStore.get(id: account.id) {
+      Logger(subsystem: "app.geist6", category: "accountstore")
+        .error("save got updated=\(updated.name, privacy: .public)")
+      onUpdate(updated)
+    } else {
+      Logger(subsystem: "app.geist6", category: "accountstore").error("save get returned NIL")
+    }
 
     dismiss()
   }
