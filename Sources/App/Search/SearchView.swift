@@ -111,6 +111,27 @@ struct SearchView: View {
   }
 }
 
+/// Search result rows.
+extension SearchHit {
+  /// The secondary line under the title: the kind plus the fields that
+  /// explain why the hit matched — amount and state for a charge, email
+  /// for a named customer. Keeps a row self-explanatory, especially for
+  /// amount searches.
+  var caption: String {
+    switch self {
+    case .charge(let charge):
+      let money = MoneyFormat.string(Money(amount: charge.amount, currency: charge.currency))
+      return "Charge · \(money) · \(charge.status.rawValue)"
+    case .customer(let customer) where customer.name?.valueOrNil != nil:
+      return customer.email.valueOrNil.map { "Customer · \($0)" } ?? "Customer"
+    case .customer:
+      return "Customer"
+    case .object(let kind, _, _):
+      return kind.label
+    }
+  }
+}
+
 /// One search result row.
 struct SearchHitRow: View {
   let hit: SearchHit
@@ -124,7 +145,7 @@ struct SearchHitRow: View {
         Text(hit.title)
           .lineLimit(1)
           .foregroundStyle(.primary)
-        Text(hit.objectKind?.label ?? "Object")
+        Text(hit.caption)
           .font(.caption)
           .foregroundStyle(.secondary)
       }
