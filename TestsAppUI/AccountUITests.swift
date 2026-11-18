@@ -79,7 +79,7 @@ final class AccountUITests: XCTestCase {
   }
 
   /// Adds an account and waits for it to appear in the sidebar.
-  private func addAccountAndWait(_ app: XCUIApplication, name: String, key: String = "sk_test_uitest_123") {
+  private func addAccountAndWait(_ app: XCUIApplication, name: String, key: String = "sk_test_uitest123") {
     openSetup(app)
     addAccount(app, name: name, key: key)
     sidebarRow(app, named: name)
@@ -136,7 +136,7 @@ final class AccountUITests: XCTestCase {
     addAccountAndWait(app, name: "Duplicate")
 
     openSetup(app)
-    addAccount(app, name: "Duplicate", key: "sk_test_uitest_123")
+    addAccount(app, name: "Duplicate", key: "sk_test_uitest123")
 
     let error = app.staticTexts["setup.error"]
     XCTAssertTrue(error.waitForExistence(timeout: 10), "duplicate-name error missing")
@@ -157,7 +157,7 @@ final class AccountUITests: XCTestCase {
 
     let keyField = app.textFields["setup.apiKey"]
     keyField.tap(); taps += 1 // paste goes here
-    keyField.typeText("sk_test_uitest_123")
+    keyField.typeText("sk_test_uitest123")
 
     app.buttons["setup.add"].tap(); taps += 1
 

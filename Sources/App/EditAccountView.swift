@@ -1,12 +1,14 @@
 import SwiftUI
-import os
 
 /// Edit an existing account's name, colour, and dashboard lock.
+///
+/// Saving writes through the store; the store refreshes its
+/// observable cache, which is what the detail view reads, so no
+/// callback into the presenting view is needed.
 struct EditAccountView: View {
   @Environment(\.dismiss) private var dismiss
   let account: Account
   let accountStore: AccountStore
-  let onUpdate: (Account) -> Void
 
   @State private var name: String
   @State private var dashboardLock: Bool
@@ -16,10 +18,9 @@ struct EditAccountView: View {
     AccountColor.color(for: selectedColor)
   }
 
-  init(account: Account, accountStore: AccountStore, onUpdate: @escaping (Account) -> Void) {
+  init(account: Account, accountStore: AccountStore) {
     self.account = account
     self.accountStore = accountStore
-    self.onUpdate = onUpdate
     self._name = State(initialValue: account.name)
     self._dashboardLock = State(initialValue: account.dashboardLock)
     self._selectedColor = State(initialValue: account.color)
@@ -72,14 +73,6 @@ struct EditAccountView: View {
       color: selectedColor,
       dashboardLock: dashboardLock
     )
-
-    if let updated = await accountStore.get(id: account.id) {
-      Logger(subsystem: "app.geist6", category: "accountstore")
-        .error("save got updated=\(updated.name, privacy: .public)")
-      onUpdate(updated)
-    } else {
-      Logger(subsystem: "app.geist6", category: "accountstore").error("save get returned NIL")
-    }
 
     dismiss()
   }

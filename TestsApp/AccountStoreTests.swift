@@ -2,6 +2,7 @@ import Foundation
 import Testing
 @testable import Geist6
 
+@MainActor
 struct AccountStoreTests {
 
   @MainActor private func makeStore() async -> AccountStore {
@@ -165,5 +166,163 @@ struct AccountStoreTests {
     for t in types {
       #expect(!t.rawValue.isEmpty)
     }
+  }
+
+  // MARK: - In-memory cache (single source of truth for views)
+
+  @Test func cachedIsNilForNeverSeenAccount() async {
+    let store = await makeStore()
+    #expect(store.cached(id: UUID()) == nil)
+  }
+
+  @Test func addPopulatesCache() async {
+    let store = await makeStore()
+
+    let added = await store.add(
+      name: "Cache Add", color: ".systemBlue", dashboardLock: false,
+      apiKey: "«redacted:sk_test_…»", live: false)
+
+    let cached = store.cached(id: added.id)
+    #expect(cached?.name == "Cache Add")
+    #expect(cached?.id == added.id)
+  }
+
+  @Test func getPopulatesCache() async {
+    let store = await makeStore()
+
+    let added = await store.add(
+      name: "Cache Get", color: ".systemRed", dashboardLock: false,
+      apiKey: "«redacted:sk_test_…»", live: false)
+    _ = await store.get(id: added.id)
+
+    let cached = store.cached(id: added.id)
+    #expect(cached?.name == "Cache Get")
+  }
+
+  /// Regression for the lost-rename UI bug: after `update`, the
+  /// synchronous cache read must show the new name so a live view
+  /// re-renders even when view-local @State is lost to navigation
+  /// re-creation.
+  @Test func updateRefreshesColdCache() async {
+    let store = await makeStore()
+
+    let added = await store.add(
+      name: "Before", color: ".systemBlue", dashboardLock: false,
+      apiKey: "«redacted:sk_test_…»", live: false)
+
+    await store.update(id: added.id, name: "After", color: ".systemPurple", dashboardLock: true)
+
+    let cached = store.cached(id: added.id)
+    #expect(cached?.name == "After")
+    #expect(cached?.color == ".systemPurple")
+    #expect(cached?.dashboardLock == true)
+  }
+
+  @Test func updateRefreshesWarmCache() async {
+    let store = await makeStore()
+
+    let added = await store.add(
+      name: "Warm Before", color: ".systemBlue", dashboardLock: false,
+      apiKey: "«redacted:sk_test_…»", live: false)
+    _ = await store.get(id: added.id)
+
+    await store.update(id: added.id, name: "Warm After", color: ".systemBlue", dashboardLock: false)
+
+    #expect(store.cached(id: added.id)?.name == "Warm After")
+  }
+
+  @Test func removeEvictsCache() async {
+    let store = await makeStore()
+
+    let added = await store.add(
+      name: "Remove Cache", color: ".systemBlue", dashboardLock: false,
+      apiKey: "«redacted:sk_test_…»", live: false)
+    _ = await store.get(id: added.id)
+    #expect(store.cached(id: added.id) != nil)
+
+    await store.remove(id: added.id)
+    #expect(store.cached(id: added.id) == nil)
+  }
+
+  @Test func updateConnectedAccountsRefreshesCache() async {
+    let store = await makeStore()
+
+    let added = await store.add(
+      name: "Cache Connected", color: ".systemGreen", dashboardLock: false,
+      apiKey: "«redacted:sk_test_…»", live: false)
+    _ = await store.get(id: added.id)
+
+    let connected = [
+      ConnectedAccount(id: "acct_connected_1", displayName: "Sub", email: "sub@example.com", type: .standard)
+    ]
+    await store.updateConnectedAccounts(id: added.id, connected: connected)
+
+    #expect(store.cached(id: added.id)?.connectedAccounts.count == 1)
+    #expect(store.cached(id: added.id)?.connectedAccounts[0].displayName == "Sub")
+  }
+
+  // MARK: - Observable list (decision 0015)
+
+  /// Regression test for the stale-sidebar bug: every mutation path must
+  /// keep the observable `accountsList` in sync so consumers that read it
+  /// (shell sidebar, account list) re-render without their own reload
+  /// callbacks. The UI-level regression lives in AccountUITests
+  /// (testManageAccountsRename).
+  @Test func accountsListTracksAddUpdateRemove() async {
+    let store = await makeStore()
+
+    #expect(store.accountsList.isEmpty)
+
+    let account = await store.add(
+      name: "List Alpha", color: ".systemBlue", dashboardLock: false,
+      apiKey: makeKey("listalpha"), live: false
+    )
+    #expect(store.accountsList.map(\.id) == [account.id])
+
+    await store.update(
+      id: account.id, name: "List Alpha Renamed", color: ".systemRed", dashboardLock: true
+    )
+    #expect(store.accountsList.map(\.name) == ["List Alpha Renamed"])
+    #expect(store.accountsList.map(\.dashboardLock) == [true])
+
+    await store.remove(id: account.id)
+    #expect(store.accountsList.isEmpty)
+  }
+
+  /// Regression test for the root cause of the stale-sidebar bug:
+  /// `Account` previously compared equal by `id` only, so a rename produced
+  /// an array SwiftUI (and any diffing consumer) considered unchanged.
+  @Test func accountEqualityIncludesNameAndSettings() {
+    let base = Account(
+      name: "Alpha", color: ".systemBlue", dashboardLock: false,
+      apiKey: makeKey("alpha"), live: false
+    )
+    let renamed = Account(
+      id: base.id, name: "Beta", color: ".systemBlue", dashboardLock: false,
+      apiKey: makeKey("alpha"), live: false
+    )
+    #expect(base != renamed)
+    #expect(
+      base != Account(id: base.id, name: "Alpha", color: ".systemBlue",
+                      dashboardLock: true, apiKey: makeKey("alpha"), live: false))
+  }
+
+  @Test func accountsListIsSortedByNameCaseInsensitive() async {
+    let store = await makeStore()
+
+    _ = await store.add(
+      name: "bravo", color: ".systemBlue", dashboardLock: false,
+      apiKey: makeKey("bravo"), live: false
+    )
+    _ = await store.add(
+      name: "Alpha", color: ".systemRed", dashboardLock: false,
+      apiKey: makeKey("alphakey"), live: false
+    )
+
+    #expect(store.accountsList.map(\.name) == ["Alpha", "bravo"])
+  }
+
+  private func makeKey(_ suffix: String) -> String {
+    ["sk", "test", suffix].joined(separator: "_")
   }
 }

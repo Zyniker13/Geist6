@@ -22,10 +22,15 @@ struct AppShellView: View {
   /// The account this window was opened for, or nil for the default window.
   var seedAccountID: UUID?
 
-  @State private var accounts: [Account] = []
   @State private var activeID: UUID?
   @State private var selection: ShellDestination?
   @State private var searchText = ""
+
+  /// The observable account list. Reads track the store, so the shell
+  /// (and the sidebar it feeds) re-render on any account change — no
+  /// @State snapshot that can go stale when a navigation swap loses a
+  /// view instance (decision 0015).
+  private var accounts: [Account] { accountStore.accountsList }
 
   /// UI tests can ask to start on the accounts screen.
   private var initialSelection: ShellDestination? {
@@ -33,7 +38,7 @@ struct AppShellView: View {
   }
 
   var body: some View {
-    NavigationSplitView {
+    return NavigationSplitView {
       AppSidebarView(
         accounts: accounts,
         activeID: activeID,
@@ -127,7 +132,9 @@ struct AppShellView: View {
   /// account set (add, remove, rename), so the sidebar never shows a
   /// stale list.
   private func refreshAccounts() async {
-    accounts = await accountStore.list()
+    // Hydrate the store's observable list from the keychain; the
+    // sidebar reads the list directly, so no assignment is needed.
+    _ = await accountStore.list()
     activeID = await accountStore.activeID()
   }
 

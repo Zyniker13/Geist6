@@ -27,13 +27,18 @@ public struct Account: Identifiable, Codable, Sendable, Hashable {
     self.live = live
     self.connectedAccounts = connectedAccounts
   }
+}
 
-  public static func == (lhs: Account, rhs: Account) -> Bool {
-    lhs.id == rhs.id
+extension Account: CustomStringConvertible, CustomDebugStringConvertible {
+  /// A description that never exposes the API key.
+  public var description: String {
+    "Account(id: \(id), name: \(name), color: \(color), "
+      + "dashboardLock: \(dashboardLock), apiKey: [REDACTED], "
+      + "live: \(live), connectedAccounts: \(connectedAccounts.count))"
   }
 
-  public func hash(into hasher: inout Hasher) {
-    hasher.combine(id)
+  public var debugDescription: String {
+    description
   }
 }
 

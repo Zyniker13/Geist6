@@ -1,6 +1,5 @@
 import Foundation
 import Observation
-import os
 
 /// Manages the set of known Stripe accounts and their keys.
 ///
@@ -13,8 +12,42 @@ public final class AccountStore {
 
   private let keychain: KeychainStoreProtocol
 
+  /// In-memory mirror of known accounts. Keychain I/O refreshes it,
+  /// and `cached(id:)` gives views a synchronous, observable read so
+  /// a view re-renders when the store changes from any code path —
+  /// independent of per-view @State, which can be lost when
+  /// navigation or sheet re-creation swaps the view instance.
+  private var cache: [UUID: Account] = [:]
+
+  /// Observable, name-sorted list of every known account. Every
+  /// mutation path rebuilds it from the cache, so consumers that read
+  /// it directly (shell sidebar, account list) re-render on any
+  /// change — with no snapshot copies and no reload callbacks.
+  private(set) var accountsList: [Account] = []
+
+  /// Rebuilds `accountsList` from the cache after a cache change.
+  ///
+  /// Assigns only when the sorted contents actually differ: writing an
+  /// equal array still fires the observable's change notification, and a
+  /// change that SwiftUI then skips as no-output-change can leave the
+  /// observing views unregistered for later, real changes.
+  private func syncList() {
+    let sorted = cache.values.sorted {
+      $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending
+    }
+    guard sorted != accountsList else { return }
+    accountsList = sorted
+  }
+
   public init(keychain: KeychainStoreProtocol = KeychainStore()) {
     self.keychain = keychain
+  }
+
+  /// Synchronous, observable read of the in-memory cache. Views use
+  /// this instead of holding their own account state; any mutation
+  /// through `add`, `update`, or `remove` re-renders them.
+  public func cached(id: UUID) -> Account? {
+    cache[id]
   }
 
   // MARK: - Add / remove / get
@@ -53,11 +86,21 @@ public final class AccountStore {
       await keychain.write(key: "meta_\(account.id.uuidString)", value: String(data: data, encoding: .utf8) ?? "")
     }
 
+    cache[account.id] = account
+    syncList()
     return account
   }
 
   /// Returns the account with the given ID, or nil.
   public func get(id: UUID) async -> Account? {
+    let account = await read(id: id)
+    cache[id] = account
+    syncList()
+    return account
+  }
+
+  /// Reads the account from the Keychain without touching the cache.
+  private func read(id: UUID) async -> Account? {
     let key = "acct_\(id.uuidString)"
     let apiKey = await keychain.read(key: key)
     guard let apiKey else { return nil }
@@ -94,13 +137,20 @@ public final class AccountStore {
       }
     }
 
-    return accounts.sorted { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending }
+    let sorted = accounts.sorted { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending }
+    // The keychain is the source of truth: rebuild the observable
+    // list from what it actually contains, dropping any cache entry
+    // whose keychain rows are gone.
+    accountsList = sorted
+    return sorted
   }
 
   /// Removes an account and its key from the Keychain.
   public func remove(id: UUID) async {
     await keychain.delete(key: "acct_\(id.uuidString)")
     await keychain.delete(key: "meta_\(id.uuidString)")
+    cache[id] = nil
+    syncList()
   }
 
   /// Updates an account's metadata (name, color, dashboard lock).
@@ -135,6 +185,11 @@ public final class AccountStore {
     if let data {
       await keychain.write(key: metaKey, value: String(data: data, encoding: .utf8) ?? "")
     }
+
+    // Re-read from the Keychain so the cache mirrors the truth,
+    // including the case where the metadata previously did not exist.
+    cache[id] = await read(id: id)
+    syncList()
   }
 
   /// Updates the connected accounts for an existing account.
@@ -161,6 +216,9 @@ public final class AccountStore {
     if let data {
       await keychain.write(key: metaKey, value: String(data: data, encoding: .utf8) ?? "")
     }
+
+    cache[id] = await read(id: id)
+    syncList()
   }
 
   /// Returns the currently active account ID, or nil.
