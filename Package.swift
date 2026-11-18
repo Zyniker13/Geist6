@@ -12,6 +12,7 @@ let package = Package(
         .library(name: "StripeSpec", targets: ["StripeSpec"]),
         .library(name: "StripeModels", targets: ["StripeModels"]),
         .library(name: "StripeClient", targets: ["StripeClient"]),
+        .library(name: "GeistMetrics", targets: ["GeistMetrics"]),
     ],
     targets: [
         .target(
@@ -24,6 +25,10 @@ let package = Package(
         ),
         .target(
             name: "StripeClient",
+            dependencies: ["StripeModels"]
+        ),
+        .target(
+            name: "GeistMetrics",
             dependencies: ["StripeModels"]
         ),
         .executableTarget(
@@ -47,6 +52,10 @@ let package = Package(
         .testTarget(
             name: "SpecTests",
             dependencies: ["StripeSpec"]
+        ),
+        .testTarget(
+            name: "GeistMetricsTests",
+            dependencies: ["GeistMetrics"]
         ),
     ]
 )
