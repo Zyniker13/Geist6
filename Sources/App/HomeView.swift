@@ -13,6 +13,8 @@ struct HomeView: View {
   @State private var period: HomePeriod = .last30Days
   @State private var currency = "usd"
   @State private var selectedEventID: String?
+  @State private var paymentsClient: StripeClient?
+  @State private var showPayments = false
 
   private static let currencies = ["usd", "eur", "gbp", "cad", "aud", "jpy"]
 
@@ -35,7 +37,22 @@ struct HomeView: View {
         EventActivityDetailView(eventID: eventID, backend: model.backend)
       }
     }
+    .navigationDestination(isPresented: $showPayments) {
+      if let paymentsClient {
+        PaymentsView(account: account, backend: paymentsClient)
+      } else {
+        ProgressView()
+      }
+    }
     .toolbar {
+      ToolbarItem(placement: .topBarTrailing) {
+        Button {
+          showPayments = true
+        } label: {
+          Label("Payments", systemImage: "creditcard")
+        }
+        .accessibilityIdentifier("home.payments")
+      }
       ToolbarItem(placement: .topBarTrailing) {
         Picker("Period", selection: $period) {
           ForEach(HomePeriod.allCases) { option in
@@ -65,6 +82,13 @@ struct HomeView: View {
       }
     }
     .task(id: reloadKey) {
+      if paymentsClient == nil {
+        paymentsClient = StripeClient(
+          apiKey: account.apiKey,
+          mode: .management,
+          baseURL: AppConfig.effectiveBaseURL
+        )
+      }
       if model == nil {
         let client = StripeClient(
           apiKey: account.apiKey,
