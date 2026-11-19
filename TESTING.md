@@ -11,6 +11,7 @@ The app shows people's money and can move it, so testing is part of the design, 
 5. **Keys never leak.** Tests check that keys never appear in the cache, logs, exports, the audit log, copy-as-curl output, or crash output.
 6. **Local and CI are the same.** `scripts/check.sh` runs what CI runs. Jobs that need Xcode run when Xcode is present and are skipped with a clear message when it is not.
 7. **No test is skipped to get green.** A failing test is fixed, or the behavior it checks is changed by a decision record.
+8. **Never box an empty Swift collection literal (`{}` / `[]`) inside a `[String: Any]` fixture.** Boxing it into `Any` corrupts the heap on this toolchain ("freed pointer was not the last allocation"; the abort surfaces later, wherever the allocator next validates, e.g. inside JSONSerialization, not where the bug is). Write `NSDictionary()` / `NSArray()` instead — same JSON, no bug. This cost a full M4b debugging day; see the fixture-rule comment in `TestsApp/PaymentsWriteTests.swift`.
 
 ## Suites
 

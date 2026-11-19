@@ -2,9 +2,9 @@
 
 Keep every field current after every meaningful step. This file and `ROADMAP.md` are the truth when work resumes.
 
-- **Current milestone:** M4 (Payments) — M4a (read layer + payments tab) in review gate.
-- **Last done:** M4a code complete: `PaymentsBackend`/`StripePaymentsBackend` (`Sources/GeistData/Payments.swift`), payments tab with 6 segment lists + PI/Charge/Refund/SetupIntent/PaymentMethod/PaymentLink details, `PaymentTimelineLoader` joining intent→charges→refunds→disputes→balance transactions newest-first (decision 0016). App target builds green (BUILD SUCCEEDED, /tmp/m4a-build10.log), lint clean, and `PaymentTimelineTests` 3/3 pass (TEST_EXIT:0, /tmp/m4a-test6.log) after pinning fixture wire contracts (PI required keys `amount_capturable`/`amount_received`/`capture_method`/`confirmation_method`/`metadata`/`payment_method_types`; Dispute requires `balance_transactions`, full `evidence_details`, `evidence.enhanced_evidence`). M3 remains done (run nine green; commits 8ef0cfe, e153393, e2b2e5a, 8ba4379, 84d22ae pushed).
-- **Next step:** Commit/push M4a, then M4b write flows (refund full/partial/reason, PI cancel/capture/confirm, Charge update/capture + receipt link) behind the management-mode gate with confirmation dialogs, idempotency keys, and a dashboard-mode no-write UI test.
+- **Current milestone:** M4 (Payments) — M4a done (commit d56911e pushed); M4b (write flows) in progress.
+- **Last done:** M4b data + UI written: audit log (`AuditEntry`/`FileAuditStore`, `Sources/GeistData/AuditLog.swift`), `PaymentsWriteService` with three write-refusal gates and per-write idempotency keys (decision 0017), write-service unit tests (dashboard refusal, mid-session lock, idempotency, audit) written, `Account.dashboardLock` wired into client mode in `HomeView`, writer threaded through `PaymentsView`→all 3 detail views, shared write sheets (`WriteSheets.swift`), write UI wired in Charge/PI/Refund detail, and `TestsAppUI/PaymentWriteUITests.swift` (refund + capture flows, dashboard no-write). App-target build green after fixing the `|| await` autoclosure error (build2 log).
+- **Next step:** Run write-service unit tests via xcodebuild, run the three new UI tests against stripe-mock, lint changed files, update STATUS, then commit/push M4b and verify CI.
 - **Blocked on:** Nothing.
 
 ## Environment Check

@@ -1,0 +1,203 @@
+import XCTest
+
+/// M4b UI tests for payment write flows and the dashboard-mode no-write
+/// guarantee (decision 0017). stripe-mock on 127.0.0.1:12111 echoes fixture
+/// responses for writes, so these assert flow completion (sheet → confirm →
+/// success alert); state transitions are covered by service-level tests.
+///
+/// The API key is a hand-written, obviously fake placeholder that never
+/// leaves the test target.
+@MainActor
+final class PaymentWriteUITests: XCTestCase {
+
+  override func setUpWithError() throws {
+    continueAfterFailure = false
+  }
+
+  // MARK: - Helpers
+
+  @discardableResult
+  private func launchFresh() -> XCUIApplication {
+    let app = XCUIApplication()
+    app.launchArguments += ["--uitest-reset"]
+    app.launchArguments += ["--api-base-url=http://127.0.0.1:12111"]
+    app.launch()
+    return app
+  }
+
+  private func sidebarRow(_ app: XCUIApplication, named name: String) -> XCUIElement {
+    let row = app.descendants(matching: .any).matching(
+      NSPredicate(format: "identifier == %@", "sidebar.account.\(name)")
+    ).firstMatch
+    XCTAssertTrue(row.waitForExistence(timeout: 10), "sidebar row for \(name) not found")
+    return row
+  }
+
+  private func manageAccounts(_ app: XCUIApplication) -> XCUIElement {
+    let row = app.descendants(matching: .any).matching(
+      NSPredicate(format: "identifier == %@", "sidebar.manageAccounts")
+    ).firstMatch
+    XCTAssertTrue(row.waitForExistence(timeout: 10), "manage accounts row missing")
+    return row
+  }
+
+  private func accountRow(_ app: XCUIApplication, named name: String) -> XCUIElement {
+    let rows = app.buttons.matching(NSPredicate(format: "identifier == 'account.row'"))
+    let match = rows.matching(NSPredicate(format: "label CONTAINS %@", name)).firstMatch
+    XCTAssertTrue(match.waitForExistence(timeout: 10), "row for \(name) not found")
+    return match
+  }
+
+  private func openSetup(_ app: XCUIApplication) {
+    let addButton = app.buttons["accounts.add"]
+    XCTAssertTrue(addButton.waitForExistence(timeout: 10), "add button missing")
+    addButton.tap()
+    let nameField = app.textFields["setup.name"]
+    XCTAssertTrue(nameField.waitForExistence(timeout: 10), "setup sheet missing")
+  }
+
+  private func addAccountAndWait(_ app: XCUIApplication, name: String) {
+    openSetup(app)
+    let nameField = app.textFields["setup.name"]
+    nameField.tap()
+    nameField.typeText(name)
+    let keyField = app.textFields["setup.apiKey"]
+    keyField.tap()
+    keyField.typeText("sk_test_uibuild0000")
+    app.buttons["setup.add"].tap()
+    sidebarRow(app, named: name)
+  }
+
+  /// Opens the Payments screen for the just-added account and waits for the
+  /// payment-intent list.
+  private func openPayments(_ app: XCUIApplication) {
+    let paymentsButton = app.buttons["home.payments"]
+    XCTAssertTrue(paymentsButton.waitForExistence(timeout: 10), "payments button missing")
+    paymentsButton.tap()
+    let intentRow = app.descendants(matching: .any).matching(
+      NSPredicate(format: "identifier BEGINSWITH %@", "payments.row.")
+    ).firstMatch
+    XCTAssertTrue(intentRow.waitForExistence(timeout: 20), "payments row missing")
+  }
+
+  /// Opens the Charges segment and pushes the first charge's detail screen.
+  private func openFirstChargeDetail(_ app: XCUIApplication) {
+    let chargesSegment = app.buttons["Charges"]
+    XCTAssertTrue(chargesSegment.waitForExistence(timeout: 10), "charges segment missing")
+    chargesSegment.tap()
+
+    let chargeRow = app.descendants(matching: .any).matching(
+      NSPredicate(format: "identifier BEGINSWITH %@", "payments.row.ch_")
+    ).firstMatch
+    XCTAssertTrue(chargeRow.waitForExistence(timeout: 10), "charge row missing")
+    chargeRow.tap()
+
+    let chargeAmount = app.descendants(matching: .any).matching(
+      NSPredicate(format: "identifier == %@", "payments.charge.amount")
+    ).firstMatch
+    XCTAssertTrue(chargeAmount.waitForExistence(timeout: 20), "charge detail missing")
+  }
+
+  /// Flips the dashboard lock on for `name` through the edit screen.
+  private func enableDashboardLock(_ app: XCUIApplication, name: String) {
+    manageAccounts(app).tap()
+    accountRow(app, named: name).tap()
+    let editButton = app.buttons["detail.edit"]
+    XCTAssertTrue(editButton.waitForExistence(timeout: 10), "edit button missing")
+    editButton.tap()
+
+    let lockToggle = app.switches["edit.lock"]
+    XCTAssertTrue(lockToggle.waitForExistence(timeout: 10), "lock toggle missing")
+    let before = lockToggle.value as? String
+    lockToggle.tap()
+    sleep(1)
+    var after = lockToggle.value as? String
+    if after == before {
+      lockToggle.coordinate(withNormalizedOffset: CGVector(dx: 0.9, dy: 0.5)).tap()
+      sleep(1)
+      after = lockToggle.value as? String
+    }
+    XCTAssertNotEqual(after, before, "tapping the lock toggle must change its value")
+    app.buttons["edit.save"].tap()
+    app.buttons["detail.done"].tap()
+  }
+
+  // MARK: - Refund flow
+
+  func testRefundFlowCompletesAgainstMock() {
+    let app = launchFresh()
+    addAccountAndWait(app, name: "Refund Store")
+    openPayments(app)
+    openFirstChargeDetail(app)
+
+    let actionsMenu = app.buttons["payments.charge.actions"]
+    XCTAssertTrue(actionsMenu.waitForExistence(timeout: 10), "actions menu missing")
+    actionsMenu.tap()
+
+    let refundItem = app.buttons["payments.charge.refund"]
+    XCTAssertTrue(refundItem.waitForExistence(timeout: 10), "refund item missing")
+    refundItem.tap()
+
+    let submit = app.buttons["payments.refund.submit"]
+    XCTAssertTrue(submit.waitForExistence(timeout: 10), "refund sheet missing")
+    submit.tap()
+
+    let confirm = app.buttons["payments.refund.confirm"]
+    XCTAssertTrue(confirm.waitForExistence(timeout: 10), "refund confirmation missing")
+    confirm.tap()
+
+    let success = app.staticTexts["Refund created"]
+    XCTAssertTrue(success.waitForExistence(timeout: 15), "refund success alert missing")
+    app.buttons["OK"].tap()
+  }
+
+  // MARK: - Capture flow
+
+  func testCaptureFlowCompletesAgainstMock() {
+    let app = launchFresh()
+    addAccountAndWait(app, name: "Capture Store")
+    openPayments(app)
+    openFirstChargeDetail(app)
+
+    let actionsMenu = app.buttons["payments.charge.actions"]
+    XCTAssertTrue(actionsMenu.waitForExistence(timeout: 10), "actions menu missing")
+    actionsMenu.tap()
+
+    let captureItem = app.buttons["payments.charge.capture"]
+    XCTAssertTrue(captureItem.waitForExistence(timeout: 10), "capture item missing")
+    captureItem.tap()
+
+    let submit = app.buttons["payments.capture.submit"]
+    XCTAssertTrue(submit.waitForExistence(timeout: 10), "capture sheet missing")
+    submit.tap()
+
+    let confirm = app.buttons["payments.capture.confirm"]
+    XCTAssertTrue(confirm.waitForExistence(timeout: 10), "capture confirmation missing")
+    confirm.tap()
+
+    let success = app.staticTexts["Captured"]
+    XCTAssertTrue(success.waitForExistence(timeout: 15), "capture success alert missing")
+    app.buttons["OK"].tap()
+  }
+
+  // MARK: - Dashboard mode refuses writes
+
+  func testDashboardLockedAccountHasNoWriteControls() {
+    let app = launchFresh()
+    addAccountAndWait(app, name: "Locked Store")
+    enableDashboardLock(app, name: "Locked Store")
+    openPayments(app)
+    openFirstChargeDetail(app)
+
+    // The detail loads (read path works) but no Actions menu may appear.
+    sleep(3)
+    let actionsMenu = app.buttons["payments.charge.actions"]
+    XCTAssertFalse(actionsMenu.exists, "dashboard-locked account must not show write controls")
+    XCTAssertFalse(
+      app.buttons["payments.charge.refund"].exists,
+      "dashboard-locked account must not expose refund")
+    XCTAssertFalse(
+      app.buttons["payments.charge.capture"].exists,
+      "dashboard-locked account must not expose capture")
+  }
+}

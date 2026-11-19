@@ -12,9 +12,14 @@ struct ChargeDetailView: View {
 
   let chargeID: String
   let backend: any PaymentsBackend
+  /// Nil for dashboard-locked accounts: no write controls are shown.
+  let writer: PaymentsWriteService?
 
   @State private var phase: Phase = .loading
   @State private var balanceTransaction: BalanceTransaction?
+  @State private var refundPresented = false
+  @State private var capturePresented = false
+  @State private var writeResult: WriteResult?
 
   var body: some View {
     Group {
@@ -34,6 +39,46 @@ struct ChargeDetailView: View {
     .navigationTitle("Charge")
     .navigationBarTitleDisplayMode(.inline)
     .task(id: chargeID) { await load() }
+    .toolbar { actionsToolbar }
+    .sheet(isPresented: $refundPresented) {
+      if case .loaded(let charge) = phase, let writer {
+        RefundSheet(charge: charge, writer: writer, onFinished: handleWriteFinished)
+      }
+    }
+    .sheet(isPresented: $capturePresented) {
+      if case .loaded(let charge) = phase, let writer {
+        CaptureSheet(target: .charge(charge), writer: writer, onFinished: handleWriteFinished)
+      }
+    }
+    .writeResultAlert($writeResult)
+  }
+
+  @ToolbarContentBuilder
+  private var actionsToolbar: some ToolbarContent {
+    ToolbarItem(placement: .primaryAction) {
+      if let writer, case .loaded(let charge) = phase {
+        Menu {
+          if charge.amount > charge.amountRefunded {
+            Button("Refund…") { refundPresented = true }
+              .accessibilityIdentifier("payments.charge.refund")
+          }
+          if !charge.captured {
+            Button("Capture…") { capturePresented = true }
+              .accessibilityIdentifier("payments.charge.capture")
+          }
+        } label: {
+          Label("Actions", systemImage: "ellipsis.circle")
+        }
+        .accessibilityIdentifier("payments.charge.actions")
+      }
+    }
+  }
+
+  private func handleWriteFinished(_ result: WriteResult) {
+    refundPresented = false
+    capturePresented = false
+    writeResult = result
+    Task { await load() }
   }
 
   @ViewBuilder
@@ -122,8 +167,12 @@ struct RefundDetailView: View {
 
   let refundID: String
   let backend: any PaymentsBackend
+  /// Nil for dashboard-locked accounts: no write controls are shown.
+  let writer: PaymentsWriteService?
 
   @State private var phase: Phase = .loading
+  @State private var cancelPresented = false
+  @State private var writeResult: WriteResult?
 
   var body: some View {
     Group {
@@ -143,6 +192,42 @@ struct RefundDetailView: View {
     .navigationTitle("Refund")
     .navigationBarTitleDisplayMode(.inline)
     .task(id: refundID) { await load() }
+    .toolbar { cancelToolbar }
+    .confirmationDialog(
+      "Cancel this pending refund? The money stays with you.",
+      isPresented: $cancelPresented, titleVisibility: .visible
+    ) {
+      Button("Cancel refund", role: .destructive) {
+        Task { await runCancel() }
+      }
+      .accessibilityIdentifier("payments.refundDetail.cancelRun")
+      Button("Keep refund", role: .cancel) {}
+    }
+    .writeResultAlert($writeResult)
+  }
+
+  @ToolbarContentBuilder
+  private var cancelToolbar: some ToolbarContent {
+    ToolbarItem(placement: .primaryAction) {
+      if let writer, case .loaded(let refund) = phase,
+        refund.status.valueOrNil == "pending" {
+        Button("Cancel refund…") { cancelPresented = true }
+          .accessibilityIdentifier("payments.refundDetail.cancel")
+      }
+    }
+  }
+
+  private func runCancel() async {
+    guard let writer, case .loaded(let refund) = phase else { return }
+    do {
+      _ = try await writer.cancelRefund(
+        id: refund.id, summary: "Cancel refund \(refund.id)")
+      writeResult = WriteResult(
+        title: "Refund canceled", message: "Refund \(refund.id) is now canceled.")
+      await load()
+    } catch {
+      writeResult = WriteResult(title: "Write failed", message: writeErrorMessage(error))
+    }
   }
 
   @ViewBuilder

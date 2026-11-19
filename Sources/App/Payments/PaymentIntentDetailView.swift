@@ -31,10 +31,16 @@ struct PaymentIntentDetailView: View {
 
   let intentID: String
   let backend: any PaymentsBackend
+  /// Nil for dashboard-locked accounts: no write controls are shown.
+  let writer: PaymentsWriteService?
 
   @State private var phase: Phase = .loading
   @State private var timeline: PaymentTimeline?
   @State private var timelineFailed = false
+  @State private var capturePresented = false
+  @State private var cancelPresented = false
+  @State private var confirmPresented = false
+  @State private var writeResult: WriteResult?
 
   var body: some View {
     Group {
@@ -54,6 +60,85 @@ struct PaymentIntentDetailView: View {
     .navigationTitle("Payment")
     .navigationBarTitleDisplayMode(.inline)
     .task(id: intentID) { await load() }
+    .toolbar { actionsToolbar }
+    .sheet(isPresented: $capturePresented) {
+      if case .loaded(let intent) = phase, let writer {
+        CaptureSheet(target: .intent(intent), writer: writer, onFinished: handleWriteFinished)
+      }
+    }
+    .sheet(isPresented: $cancelPresented) {
+      if case .loaded(let intent) = phase, let writer {
+        CancelIntentSheet(intent: intent, writer: writer, onFinished: handleWriteFinished)
+      }
+    }
+    .confirmationDialog(
+      "Confirm this payment now? The customer's payment method will be charged.",
+      isPresented: $confirmPresented, titleVisibility: .visible
+    ) {
+      Button("Confirm now") {
+        Task { await runConfirm() }
+      }
+      .accessibilityIdentifier("payments.intent.confirmRun")
+      Button("Cancel", role: .cancel) {}
+    }
+    .writeResultAlert($writeResult)
+  }
+
+  @ToolbarContentBuilder
+  private var actionsToolbar: some ToolbarContent {
+    ToolbarItem(placement: .primaryAction) {
+      if let writer, case .loaded(let intent) = phase {
+        Menu {
+          if intent.status == .requiresConfirmation {
+            Button("Confirm…") { confirmPresented = true }
+              .accessibilityIdentifier("payments.intent.confirm")
+          }
+          if intent.status == .requiresCapture, intent.amountCapturable > 0 {
+            Button("Capture…") { capturePresented = true }
+              .accessibilityIdentifier("payments.intent.capture")
+          }
+          if isCancellable(intent.status) {
+            Button("Cancel intent…", role: .destructive) { cancelPresented = true }
+              .accessibilityIdentifier("payments.intent.cancel")
+          }
+        } label: {
+          Label("Actions", systemImage: "ellipsis.circle")
+        }
+        .accessibilityIdentifier("payments.intent.actions")
+      }
+    }
+  }
+
+  /// Stripe cancels intents in these (interactive) statuses.
+  private func isCancellable(_ status: PaymentIntentStatus) -> Bool {
+    switch status {
+    case .requiresPaymentMethod, .requiresConfirmation, .requiresCapture, .requiresAction,
+      .processing:
+      return true
+    case .canceled, .succeeded, .undocumented:
+      return false
+    }
+  }
+
+  private func handleWriteFinished(_ result: WriteResult) {
+    capturePresented = false
+    cancelPresented = false
+    writeResult = result
+    Task { await load() }
+  }
+
+  private func runConfirm() async {
+    guard let writer, case .loaded(let intent) = phase else { return }
+    do {
+      _ = try await writer.confirmPaymentIntent(
+        id: intent.id, summary: "Confirm \(intent.id)")
+      writeResult = WriteResult(
+        title: "Payment confirmed", message: "Confirm request sent for \(intent.id).")
+      await load()
+    } catch {
+      writeResult = WriteResult(
+        title: "Write failed", message: writeErrorMessage(error))
+    }
   }
 
   @ViewBuilder

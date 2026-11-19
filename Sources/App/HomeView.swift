@@ -9,11 +9,13 @@ import SwiftUI
 struct HomeView: View {
   let account: Account
 
+  @Environment(AccountStore.self) private var accountStore
   @State private var model: DashboardModel?
   @State private var period: HomePeriod = .last30Days
   @State private var currency = "usd"
   @State private var selectedEventID: String?
   @State private var paymentsClient: StripeClient?
+  @State private var writer: PaymentsWriteService?
   @State private var showPayments = false
 
   private static let currencies = ["usd", "eur", "gbp", "cad", "aud", "jpy"]
@@ -39,7 +41,7 @@ struct HomeView: View {
     }
     .navigationDestination(isPresented: $showPayments) {
       if let paymentsClient {
-        PaymentsView(account: account, backend: paymentsClient)
+        PaymentsView(account: account, backend: paymentsClient, writer: writer)
       } else {
         ProgressView()
       }
@@ -85,14 +87,29 @@ struct HomeView: View {
       if paymentsClient == nil {
         paymentsClient = StripeClient(
           apiKey: account.apiKey,
-          mode: .management,
+          mode: account.dashboardLock ? .dashboard : .management,
           baseURL: AppConfig.effectiveBaseURL
         )
+      }
+      // Gate 1: a writer exists only for accounts that are not
+      // dashboard-locked. Locked accounts build no write path at all.
+      if writer == nil, !account.dashboardLock, let paymentsClient {
+        let auditDirectory = FileManager.default.urls(
+          for: .applicationSupportDirectory, in: .userDomainMask
+        ).first!.appendingPathComponent("Geist6/Audit", isDirectory: true)
+        let storeBox = AccountStore.WeakStoreBox(accountStore)
+        writer = PaymentsWriteService(
+          client: paymentsClient, accountID: account.id.uuidString,
+          accountName: account.name,
+          audit: FileAuditStore(directory: auditDirectory),
+          dashboardLocked: { [storeBox] in
+            storeBox.store?.cached(id: account.id)?.dashboardLock ?? false
+          })
       }
       if model == nil {
         let client = StripeClient(
           apiKey: account.apiKey,
-          mode: .management,
+          mode: account.dashboardLock ? .dashboard : .management,
           baseURL: AppConfig.effectiveBaseURL
         )
         model = DashboardModel(backend: client)

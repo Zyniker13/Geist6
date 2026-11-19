@@ -18,6 +18,8 @@ enum PaymentRoute: Hashable {
 struct PaymentsView: View {
   let account: Account
   let backend: any PaymentsBackend
+  /// Nil for dashboard-locked accounts: no write UI exists at all.
+  let writer: PaymentsWriteService?
 
   @State private var model: PaymentsModel?
   @State private var segment: PaymentsModel.Segment = .paymentIntents
@@ -129,7 +131,7 @@ struct PaymentsView: View {
       if model.phase == .loading { ProgressView().padding(.top, 4) }
     }
     .navigationDestination(for: PaymentRoute.self) { route in
-      PaymentDetailView(route: route, backend: backend)
+      PaymentDetailView(route: route, backend: backend, writer: writer)
     }
   }
 
@@ -149,15 +151,16 @@ struct PaymentsView: View {
 struct PaymentDetailView: View {
   let route: PaymentRoute
   let backend: any PaymentsBackend
+  let writer: PaymentsWriteService?
 
   var body: some View {
     switch route {
     case .intent(let id):
-      PaymentIntentDetailView(intentID: id, backend: backend)
+      PaymentIntentDetailView(intentID: id, backend: backend, writer: writer)
     case .charge(let id):
-      ChargeDetailView(chargeID: id, backend: backend)
+      ChargeDetailView(chargeID: id, backend: backend, writer: writer)
     case .refund(let id):
-      RefundDetailView(refundID: id, backend: backend)
+      RefundDetailView(refundID: id, backend: backend, writer: writer)
     case .setupIntent(let id):
       SetupIntentDetailView(intentID: id, backend: backend)
     case .paymentMethod(let id):

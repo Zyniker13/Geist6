@@ -19,6 +19,15 @@ public final class AccountStore {
   /// navigation or sheet re-creation swaps the view instance.
   private var cache: [UUID: Account] = [:]
 
+  /// Lets a `@Sendable` closure hold the store weakly and reach it from the
+  /// main actor (used by the write service's live dashboard-lock check).
+  /// The box is the only Sendable part; the store itself is touched only
+  /// inside `@MainActor` closures.
+  final class WeakStoreBox: @unchecked Sendable {
+    weak var store: AccountStore?
+    init(_ store: AccountStore?) { self.store = store }
+  }
+
   /// Observable, name-sorted list of every known account. Every
   /// mutation path rebuilds it from the cache, so consumers that read
   /// it directly (shell sidebar, account list) re-render on any

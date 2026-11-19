@@ -1,0 +1,235 @@
+// PaymentsWrite.swift — Sources/GeistData
+// Money-affecting payment writes (refunds, captures, intent lifecycle).
+//
+// Three gates stand between a user action and Stripe:
+//   1. The UI only builds a writer for accounts that are not dashboard-locked
+//      (belt).
+//   2. This service refuses to run when the client is in dashboard mode,
+//      before anything else happens (suspenders), and records the refusal in
+//      the audit log.
+//   3. The client itself refuses every non-GET request in dashboard mode
+//      before anything reaches the network (floor).
+//
+// Every request carries an idempotency key — the same key that appears in
+// the audit entry, so a retry after an unclear failure repeats exactly one
+// request, not two.
+
+import Foundation
+import StripeClient
+import StripeModels
+
+public enum PaymentsWriteError: LocalizedError, Equatable {
+  /// The service was asked to write while the client is in dashboard mode.
+  case dashboardMode
+
+  public var errorDescription: String? {
+    switch self {
+    case .dashboardMode:
+      return "Dashboard mode is read-only. Unlock the account to make changes."
+    }
+  }
+}
+
+public struct PaymentsWriteService: Sendable {
+  /// Reads the account's CURRENT dashboard-lock state. Called before every
+  /// write so locking an account mid-session closes it immediately, even if
+  /// this writer was built while the account was unlocked.
+  public typealias DashboardLockProvider = @MainActor @Sendable () async -> Bool
+
+  public let client: StripeClient
+  public let accountID: String
+  public let accountName: String
+  public let audit: any AuditStore
+  private let dashboardLocked: DashboardLockProvider
+
+  public init(
+    client: StripeClient, accountID: String, accountName: String, audit: any AuditStore,
+    dashboardLocked: @escaping DashboardLockProvider = { false }
+  ) {
+    self.client = client
+    self.accountID = accountID
+    self.accountName = accountName
+    self.audit = audit
+    self.dashboardLocked = dashboardLocked
+  }
+
+  /// Runs one write: refuses in dashboard mode, performs the request with
+  /// an idempotency key, records the outcome, and decodes the response.
+  private func run<Response: Decodable>(
+    _ type: Response.Type,
+    method: String,
+    path: String,
+    params: (some Encodable)?,
+    key: String,
+    summary: String
+  ) async throws -> Response {
+    // Gate 2: refuse before anything else — both when the client was built
+    // in dashboard mode and when the account is locked right now.
+    var locked = client.mode == .dashboard
+    if !locked { locked = await dashboardLocked() }
+    guard !locked else {
+      await audit.record(
+        AuditEntry(
+          accountID: accountID,
+          accountName: accountName,
+          summary: summary,
+          method: method,
+          path: path,
+          idempotencyKey: key,
+          outcome: "refused: dashboard mode"
+        ))
+      throw PaymentsWriteError.dashboardMode
+    }
+    do {
+      let outcome = try await client.perform(
+        method: method, path: path, params: params, idempotencyKey: key)
+      let decoded: Response
+      do {
+        decoded = try StripeClient.decoder.decode(Response.self, from: outcome.body)
+      } catch {
+        throw StripeClientError.decodingFailed(underlying: error, path: path)
+      }
+      await audit.record(
+        AuditEntry(
+          accountID: accountID,
+          accountName: accountName,
+          summary: summary,
+          method: method,
+          path: path,
+          idempotencyKey: key,
+          requestID: outcome.requestId,
+          outcome: "succeeded"
+        ))
+      return decoded
+    } catch {
+      let message: String
+      if let apiError = error as? StripeAPIError {
+        message = apiError.description
+      } else if let local = error as? LocalizedError, let desc = local.errorDescription {
+        message = desc
+      } else {
+        message = String(describing: error)
+      }
+      await audit.record(
+        AuditEntry(
+          accountID: accountID,
+          accountName: accountName,
+          summary: summary,
+          method: method,
+          path: path,
+          idempotencyKey: key,
+          outcome: "failed: \(message)"
+        ))
+      throw error
+    }
+  }
+
+  private static func key() -> String { UUID().uuidString }
+
+  // MARK: - Refunds
+
+  /// Creates a refund on a charge. `amount == nil` refunds the full
+  /// remaining amount; `reason` is one of duplicate, fraudulent,
+  /// requested_by_customer, or nil.
+  public func createRefund(
+    charge: String, amount: Int?, reason: String?, summary: String
+  ) async throws -> Refund {
+    var params = RefundCreateParams()
+    params.charge = charge
+    params.amount = amount
+    if let reason {
+      params.reason = TerminalReaderReaderResourceRefundPaymentActionReason(rawValue: reason)
+    }
+    return try await run(
+      Refund.self, method: "POST", path: "/v1/refunds", params: params,
+      key: Self.key(), summary: summary)
+  }
+
+  /// Replaces a refund's metadata.
+  public func updateRefund(
+    id: String, metadata: [String: String]?, summary: String
+  ) async throws -> Refund {
+    var params = RefundUpdateParams()
+    if let metadata { params.metadata = .value(metadata) }
+    return try await run(
+      Refund.self, method: "POST", path: "/v1/refunds/\(id)", params: params,
+      key: Self.key(), summary: summary)
+  }
+
+  /// Cancels a pending refund.
+  public func cancelRefund(id: String, summary: String) async throws -> Refund {
+    return try await run(
+      Refund.self, method: "POST", path: "/v1/refunds/\(id)/cancel",
+      params: RefundCancelParams(), key: Self.key(), summary: summary)
+  }
+
+  /// Expires a pending refund (test-mode helper endpoint).
+  public func expireRefund(id: String, summary: String) async throws -> Refund {
+    return try await run(
+      Refund.self, method: "POST", path: "/v1/refunds/\(id)/expire",
+      params: RefundExpireParams(), key: Self.key(), summary: summary)
+  }
+
+  // MARK: - Charges
+
+  /// Captures an uncaptured charge. `amount == nil` captures the full
+  /// authorized amount.
+  public func captureCharge(
+    id: String, amount: Int?, receiptEmail: String?, summary: String
+  ) async throws -> Charge {
+    var params = ChargeCaptureParams()
+    params.amount = amount
+    params.receiptEmail = receiptEmail
+    return try await run(
+      Charge.self, method: "POST", path: "/v1/charges/\(id)/capture", params: params,
+      key: Self.key(), summary: summary)
+  }
+
+  /// Updates a charge's description and receipt email.
+  public func updateCharge(
+    id: String, description: String?, receiptEmail: String?, summary: String
+  ) async throws -> Charge {
+    var params = ChargeUpdateParams()
+    params.description = description
+    params.receiptEmail = receiptEmail
+    return try await run(
+      Charge.self, method: "POST", path: "/v1/charges/\(id)", params: params,
+      key: Self.key(), summary: summary)
+  }
+
+  // MARK: - Payment intents
+
+  /// Captures a manually-captured payment intent.
+  public func capturePaymentIntent(
+    id: String, amountToCapture: Int?, summary: String
+  ) async throws -> PaymentIntent {
+    var params = PaymentIntentCaptureParams()
+    params.amountToCapture = amountToCapture
+    return try await run(
+      PaymentIntent.self, method: "POST", path: "/v1/payment_intents/\(id)/capture",
+      params: params, key: Self.key(), summary: summary)
+  }
+
+  /// Cancels a payment intent. `reason` is one of abandoned, duplicate,
+  /// fraudulent, requested_by_customer, or nil.
+  public func cancelPaymentIntent(
+    id: String, reason: String?, summary: String
+  ) async throws -> PaymentIntent {
+    var params = PaymentIntentCancelParams()
+    if let reason {
+      params.cancellationReason = PaymentIntentCancelParamsCancellationReason(rawValue: reason)
+    }
+    return try await run(
+      PaymentIntent.self, method: "POST", path: "/v1/payment_intents/\(id)/cancel",
+      params: params, key: Self.key(), summary: summary)
+  }
+
+  /// Confirms a payment intent.
+  public func confirmPaymentIntent(
+    id: String, summary: String
+  ) async throws -> PaymentIntent {
+    return try await run(
+      PaymentIntent.self, method: "POST", path: "/v1/payment_intents/\(id)/confirm",
+      params: PaymentIntentConfirmParams(), key: Self.key(), summary: summary)
+  }
+}

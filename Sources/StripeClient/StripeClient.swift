@@ -502,7 +502,10 @@ public struct StripeClient: Sendable {
     }
   }
 
-  static let decoder: JSONDecoder = JSONDecoder()
+  /// Decoder used by `request` and by hand-written layers that fetch raw
+  /// outcomes through `perform` (the write service does, to capture the
+  /// request ID for its audit entries).
+  public static let decoder: JSONDecoder = JSONDecoder()
 
   private func execute(request: URLRequest, path: String) async throws -> RequestOutcome {
     var attempt = 0
