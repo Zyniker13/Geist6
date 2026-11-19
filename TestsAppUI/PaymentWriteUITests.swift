@@ -346,6 +346,92 @@ final class PaymentWriteUITests: XCTestCase {
     app.buttons["OK"].tap()
   }
 
+  // MARK: - Create payment link flow (M4c-4)
+
+  /// Creates a payment link from the Links segment's toolbar: switch
+  /// segment → sheet → fill price → confirm → success alert.
+  func testCreatePaymentLinkFlowCompletesAgainstMock() {
+    let app = launchFresh()
+    addAccountAndWait(app, name: "Link Store")
+    openPayments(app)
+
+    let linksSegment = app.buttons["Links"]
+    XCTAssertTrue(linksSegment.waitForExistence(timeout: 10), "links segment missing")
+    waitHittable(app, linksSegment, "links segment")
+    linksSegment.tap()
+    let switched = app.descendants(matching: .any).matching(
+      NSPredicate(format: "identifier == %@", "payments.segment.paymentLinks")
+    ).firstMatch
+    XCTAssertTrue(switched.waitForExistence(timeout: 10), "segment did not switch to links")
+
+    let newButton = app.buttons["payments.newLink"]
+    XCTAssertTrue(newButton.waitForExistence(timeout: 10), "new link button missing")
+    waitHittable(app, newButton, "new link button")
+    newButton.tap()
+
+    let priceField = app.textFields["payments.linkCreate.price"]
+    XCTAssertTrue(priceField.waitForExistence(timeout: 10), "create sheet missing")
+    priceField.tap()
+    priceField.typeText("price_test_123")
+
+    let submit = app.buttons["payments.linkCreate.submit"]
+    XCTAssertTrue(submit.waitForExistence(timeout: 10), "create submit missing")
+    submit.tap()
+
+    let confirm = app.buttons["payments.linkCreate.confirm"].firstMatch
+    XCTAssertTrue(confirm.waitForExistence(timeout: 10), "create confirmation missing")
+    confirm.tap()
+
+    let success = app.staticTexts["Link created"]
+    XCTAssertTrue(success.waitForExistence(timeout: 15), "create success alert missing")
+    app.buttons["OK"].tap()
+  }
+
+  // MARK: - Create charge flow (M4c-4)
+
+  /// Creates a charge from the Charges segment's toolbar: switch segment →
+  /// sheet → fill amount and source → confirm → success alert.
+  func testCreateChargeFlowCompletesAgainstMock() {
+    let app = launchFresh()
+    addAccountAndWait(app, name: "Charge Store")
+    openPayments(app)
+
+    let chargesSegment = app.buttons["Charges"]
+    XCTAssertTrue(chargesSegment.waitForExistence(timeout: 10), "charges segment missing")
+    waitHittable(app, chargesSegment, "charges segment")
+    chargesSegment.tap()
+    let switched = app.descendants(matching: .any).matching(
+      NSPredicate(format: "identifier == %@", "payments.segment.charges")
+    ).firstMatch
+    XCTAssertTrue(switched.waitForExistence(timeout: 10), "segment did not switch to charges")
+
+    let newButton = app.buttons["payments.newCharge"]
+    XCTAssertTrue(newButton.waitForExistence(timeout: 10), "new charge button missing")
+    waitHittable(app, newButton, "new charge button")
+    newButton.tap()
+
+    let amountField = app.textFields["payments.chargeCreate.amount"]
+    XCTAssertTrue(amountField.waitForExistence(timeout: 10), "create sheet missing")
+    amountField.tap()
+    amountField.typeText("1000")
+    let sourceField = app.textFields["payments.chargeCreate.source"]
+    XCTAssertTrue(sourceField.waitForExistence(timeout: 10), "source field missing")
+    sourceField.tap()
+    sourceField.typeText("pm_test_123")
+
+    let submit = app.buttons["payments.chargeCreate.submit"]
+    XCTAssertTrue(submit.waitForExistence(timeout: 10), "create submit missing")
+    submit.tap()
+
+    let confirm = app.buttons["payments.chargeCreate.confirm"].firstMatch
+    XCTAssertTrue(confirm.waitForExistence(timeout: 10), "create confirmation missing")
+    confirm.tap()
+
+    let success = app.staticTexts["Charge created"]
+    XCTAssertTrue(success.waitForExistence(timeout: 15), "create success alert missing")
+    app.buttons["OK"].tap()
+  }
+
   // MARK: - Dashboard mode refuses writes
 
   func testDashboardLockedAccountHasNoWriteControls() {
@@ -381,6 +467,29 @@ final class PaymentWriteUITests: XCTestCase {
       XCTAssertFalse(
         app.buttons["payments.newMethod"].exists,
         "dashboard-locked account must not expose create payment method")
+    }
+
+    // M4c-4: the same for the Links and Charges segments' create buttons.
+    let linksSegment = app.buttons["Links"]
+    if linksSegment.waitForExistence(timeout: 5) {
+      linksSegment.tap()
+      _ = app.descendants(matching: .any).matching(
+        NSPredicate(format: "identifier == %@", "payments.segment.paymentLinks")
+      ).firstMatch.waitForExistence(timeout: 5)
+      XCTAssertFalse(
+        app.buttons["payments.newLink"].exists,
+        "dashboard-locked account must not expose create payment link")
+    }
+
+    let chargesSegment = app.buttons["Charges"]
+    if chargesSegment.waitForExistence(timeout: 5) {
+      chargesSegment.tap()
+      _ = app.descendants(matching: .any).matching(
+        NSPredicate(format: "identifier == %@", "payments.segment.charges")
+      ).firstMatch.waitForExistence(timeout: 5)
+      XCTAssertFalse(
+        app.buttons["payments.newCharge"].exists,
+        "dashboard-locked account must not expose create charge")
     }
 
     openFirstChargeDetail(app)

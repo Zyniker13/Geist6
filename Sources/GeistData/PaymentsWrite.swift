@@ -404,4 +404,32 @@ public struct PaymentsWriteService: Sendable {
       PaymentMethod.self, method: "POST", path: "/v1/payment_methods/\(id)/detach",
       params: PaymentMethodDetachParams(), key: Self.key(), summary: summary)
   }
+
+  /// Creates a payment link with a single line item (price + quantity).
+  /// Multi-item and price-data links are explorer territory (M10).
+  public func createPaymentLink(
+    price: String, quantity: Int, summary: String
+  ) async throws -> PaymentLink {
+    let params = PaymentLinkCreateParams(
+      lineItems: [
+        PaymentLinkCreateParamsLineItemsItem(price: price, quantity: quantity)
+      ])
+    return try await run(
+      PaymentLink.self, method: "POST", path: "/v1/payment_links", params: params,
+      key: Self.key(), summary: summary)
+  }
+
+  /// Creates a charge against a payment method.
+  public func createCharge(
+    amount: Int, currency: String, source: String, description: String?, summary: String
+  ) async throws -> Charge {
+    var params = ChargeCreateParams()
+    params.amount = amount
+    params.currency = currency
+    params.source = source
+    if let description { params.description = description }
+    return try await run(
+      Charge.self, method: "POST", path: "/v1/charges", params: params,
+      key: Self.key(), summary: summary)
+  }
 }
