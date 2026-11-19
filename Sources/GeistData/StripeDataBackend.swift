@@ -36,6 +36,9 @@ public protocol StripeDataBackend: Sendable {
     /// Search charges with a Stripe Search API query string.
     func searchCharges(query: String) async throws -> [Charge]
 
+    /// Search payment intents with a Stripe Search API query string.
+    func searchPaymentIntents(query: String) async throws -> [PaymentIntent]
+
     /// Fetches the raw response body of a read-only GET under `/v1`.
     ///
     /// Used by the universal open-by-ID lookup, which has no typed model.

@@ -100,14 +100,10 @@ extension StripeClient: PaymentsBackend {
     public func searchPaymentIntents(query: String) async throws -> [PaymentIntent] {
         var params = PaymentIntentSearchParams()
         params.query = query
-        // The generated `searchPaymentIntent` maps the shared generic search
-        // result schema, which is typed for charges. The payment-intents
-        // search response decodes exactly like a list, so request it typed.
-        let result: PaymentFlowsPaymentIntentList = try await request(
-            method: "GET",
-            path: "/v1/payment_intents/search",
-            params: params
-        )
+        // Decision 0023: the generated client returns a dedicated
+        // `PaymentIntentSearchResult`, typed for payment intents, instead of
+        // the shared charge-typed `SearchResult` this endpoint once reused.
+        let result = try await searchPaymentIntent(params)
         return result.data
     }
 

@@ -6,6 +6,7 @@ import StripeClient
 public enum SearchHit: Sendable, Identifiable, Equatable, Hashable {
     case charge(Charge)
     case customer(Customer)
+    case paymentIntent(PaymentIntent)
     /// An object of a kind without a typed detail view, resolved by ID.
     case object(kind: StripeObjectKind, id: String, json: StripeJSON)
 
@@ -13,6 +14,7 @@ public enum SearchHit: Sendable, Identifiable, Equatable, Hashable {
         switch self {
         case .charge(let charge): return charge.id
         case .customer(let customer): return customer.id
+        case .paymentIntent(let intent): return intent.id
         case .object(_, let id, _): return id
         }
     }
@@ -24,6 +26,8 @@ public enum SearchHit: Sendable, Identifiable, Equatable, Hashable {
             return charge.id
         case .customer(let customer):
             return customer.name?.valueOrNil ?? customer.email.valueOrNil ?? customer.id
+        case .paymentIntent(let intent):
+            return intent.description.valueOrNil ?? intent.id
         case .object(let kind, let id, _):
             return "\(kind.label) \(id)"
         }
@@ -34,6 +38,7 @@ public enum SearchHit: Sendable, Identifiable, Equatable, Hashable {
         switch self {
         case .charge: return .charge
         case .customer: return .customer
+        case .paymentIntent: return .paymentIntent
         case .object(let kind, _, _): return kind
         }
     }
@@ -49,6 +54,7 @@ extension SearchHit {
         switch self {
         case .charge: hasher.combine(0)
         case .customer: hasher.combine(1)
+        case .paymentIntent: hasher.combine(3)
         case .object: hasher.combine(2)
         }
         hasher.combine(id)
@@ -58,6 +64,7 @@ extension SearchHit {
         switch (lhs, rhs) {
         case (.charge(let a), .charge(let b)): return a == b
         case (.customer(let a), .customer(let b)): return a == b
+        case (.paymentIntent(let a), .paymentIntent(let b)): return a == b
         case let (.object(k1, i1, _), .object(k2, i2, _)): return k1 == k2 && i1 == i2
         default: return false
         }
@@ -90,12 +97,14 @@ public enum SearchError: Error, Sendable, Equatable {
 /// The routing order is fixed and documented in `docs/metrics.md`:
 /// 1. A Stripe object ID opens that object directly (`retrieve`).
 /// 2. An email address filters the customer list.
-/// 3. A bare amount uses the charges Search API.
-/// 4. Anything else falls back to a general charges Search API query.
+/// 3. A bare amount searches charges and payment intents.
+/// 4. Anything else runs a general Search API query over charges and
+///    payment intents.
 ///
-/// Steps 3 and 4 fall back to a plain charges list filtered client-side when
-/// the Search API reports itself unavailable (HTTP 404 or an explicit
-/// "not supported / not enabled" error); see `docs/decisions/0013`.
+/// Steps 3 and 4 fall back to a plain charges list filtered client-side
+/// when the charges Search API reports itself unavailable (HTTP 404 or an
+/// explicit "not supported / not enabled" error); see `docs/decisions/0013`.
+/// Payment-intent Search hits merge into the same results; see 0023.
 public struct SearchService: Sendable {
     public let backend: any StripeDataBackend
 
@@ -174,27 +183,42 @@ public struct SearchService: Sendable {
             return SearchResultSet(hits: matches.map { .customer($0) })
         }
 
-        // 3. Amount → charges Search API (with list fallback).
+        // 3. Amount → charges and payment intents Search API (with fallback).
         if let amount = Self.amountQuery(trimmed) {
-            do {
-                let matches = try await backend.searchCharges(query: amount)
-                return SearchResultSet(hits: matches.map { .charge($0) })
-            } catch {
-                guard Self.searchUnavailable(error) else { throw error }
-                let fallback = try await fallbackCharges(matching: trimmed)
-                return SearchResultSet(hits: fallback.0, approximate: true)
-            }
+            return try await chargesAndIntents(amount)
         }
 
-        // 4. Fallback: general charges Search API query (with list fallback).
+        // 4. Fallback: general Search API query for charges and intents.
+        return try await chargesAndIntents(trimmed)
+    }
+
+    /// Searches charges and payment intents for one query, merging both
+    /// sides into a single result set. Each side tolerates its own
+    /// Search-unavailable error: a side that is unavailable contributes
+    /// nothing, and when the charge side is unavailable the client-side
+    /// fallback list supplies the charge hits (marked approximate). A
+    /// failure that is not an availability error is rethrown.
+    private func chargesAndIntents(_ query: String) async throws -> SearchResultSet {
+        var chargeHits: [SearchHit]?
         do {
-            let matches = try await backend.searchCharges(query: trimmed)
-            return SearchResultSet(hits: matches.map { .charge($0) })
+            chargeHits = try await backend.searchCharges(query: query).map { .charge($0) }
         } catch {
             guard Self.searchUnavailable(error) else { throw error }
-            let fallback = try await fallbackCharges(matching: trimmed)
-            return SearchResultSet(hits: fallback.0, approximate: true)
         }
+        var intentHits: [SearchHit] = []
+        do {
+            intentHits = try await backend.searchPaymentIntents(query: query)
+                .map { .paymentIntent($0) }
+        } catch {
+            guard Self.searchUnavailable(error) else { throw error }
+        }
+        if let chargeHits {
+            return SearchResultSet(hits: chargeHits + intentHits)
+        }
+        // Charges Search unavailable: fall back to the plain charges list
+        // (approximate), keeping any intent hits found alongside it.
+        let fallback = try await fallbackCharges(matching: query)
+        return SearchResultSet(hits: fallback.0 + intentHits, approximate: true)
     }
 
     /// Fetches the plain charges list and filters client-side by the query:

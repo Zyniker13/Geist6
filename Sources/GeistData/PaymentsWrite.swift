@@ -185,19 +185,37 @@ public struct PaymentsWriteService: Sendable {
       key: Self.key(), summary: summary)
   }
 
-  /// Updates a charge's description and receipt email.
+  /// Updates a charge's description, receipt email, and metadata.
   public func updateCharge(
-    id: String, description: String?, receiptEmail: String?, summary: String
+    id: String, description: String?, receiptEmail: String?, metadata: [String: String]?,
+    summary: String
   ) async throws -> Charge {
     var params = ChargeUpdateParams()
     params.description = description
     params.receiptEmail = receiptEmail
+    if let metadata {
+      params.metadata = .value(metadata)
+    }
     return try await run(
       Charge.self, method: "POST", path: "/v1/charges/\(id)", params: params,
       key: Self.key(), summary: summary)
   }
 
   // MARK: - Payment intents
+
+  /// Updates a payment intent's description and metadata.
+  public func updatePaymentIntent(
+    id: String, description: String?, metadata: [String: String]?, summary: String
+  ) async throws -> PaymentIntent {
+    var params = PaymentIntentUpdateParams()
+    params.description = description
+    if let metadata {
+      params.metadata = .value(metadata)
+    }
+    return try await run(
+      PaymentIntent.self, method: "POST", path: "/v1/payment_intents/\(id)",
+      params: params, key: Self.key(), summary: summary)
+  }
 
   /// Captures a manually-captured payment intent.
   public func capturePaymentIntent(
@@ -419,6 +437,18 @@ public struct PaymentsWriteService: Sendable {
       key: Self.key(), summary: summary)
   }
 
+  /// Updates a payment link's active state and metadata.
+  public func updatePaymentLink(
+    id: String, active: Bool?, metadata: [String: String]?, summary: String
+  ) async throws -> PaymentLink {
+    var params = PaymentLinkUpdateParams()
+    params.active = active
+    params.metadata = metadata
+    return try await run(
+      PaymentLink.self, method: "POST", path: "/v1/payment_links/\(id)",
+      params: params, key: Self.key(), summary: summary)
+  }
+
   /// Creates a charge against a payment method.
   public func createCharge(
     amount: Int, currency: String, source: String, description: String?, summary: String
@@ -441,4 +471,35 @@ public struct PaymentsWriteService: Sendable {
       CheckoutSession.self, method: "POST", path: "/v1/checkout/sessions/\(id)/expire",
       params: SessionExpireParams(), key: Self.key(), summary: summary)
   }
+}
+
+/// Formats a Stripe metadata dictionary as the one-pair-per-line
+/// "key=value" text an edit sheet's metadata field shows, keys sorted so a
+/// round trip through `parseMetadataLines` is stable.
+public func formatMetadataLines(_ metadata: [String: String]) -> String {
+  metadata
+    .sorted { $0.key < $1.key }
+    .map { "\($0.key)=\($0.value)" }
+    .joined(separator: "\n")
+}
+
+/// Parses the one-pair-per-line "key=value" text of an edit sheet's metadata
+/// field into a Stripe metadata dictionary. Blank lines are skipped and both
+/// sides of the `=` are trimmed; a later line for the same key wins. Any
+/// line without a `=` (or with an empty key) fails the whole parse, so the
+/// sheet can flag the text before submit. The metadata sent replaces the
+/// object's metadata wholesale, so empty text parses to an empty dictionary
+/// (clearing every key). Returns nil only when the text is malformed.
+public func parseMetadataLines(_ text: String) -> [String: String]? {
+  var result: [String: String] = [:]
+  for rawLine in text.split(separator: "\n") {
+    let line = rawLine.trimmingCharacters(in: .whitespaces)
+    guard !line.isEmpty else { continue }
+    guard let equals = line.firstIndex(of: "=") else { return nil }
+    let key = line[line.startIndex..<equals].trimmingCharacters(in: .whitespaces)
+    guard !key.isEmpty else { return nil }
+    let value = line[line.index(after: equals)...].trimmingCharacters(in: .whitespaces)
+    result[key] = value
+  }
+  return result
 }
