@@ -287,4 +287,68 @@ public struct PaymentsWriteService: Sendable {
       path: "/v1/payment_intents/\(id)/verify_microdeposits", params: params,
       key: Self.key(), summary: summary)
   }
+
+  // MARK: - Setup intents
+
+  /// Creates a setup intent. `usage` nil sends Stripe's default.
+  public func createSetupIntent(
+    customer: String?, description: String?, usage: String?, summary: String
+  ) async throws -> SetupIntent {
+    var params = SetupIntentCreateParams()
+    params.customer = customer
+    params.description = description
+    if let usage { params.usage = ConfirmationTokenSetupFutureUsage(rawValue: usage) }
+    return try await run(
+      SetupIntent.self, method: "POST", path: "/v1/setup_intents", params: params,
+      key: Self.key(), summary: summary)
+  }
+
+  /// Updates a setup intent's description.
+  public func updateSetupIntent(
+    id: String, description: String?, summary: String
+  ) async throws -> SetupIntent {
+    var params = SetupIntentUpdateParams()
+    params.description = description
+    return try await run(
+      SetupIntent.self, method: "POST", path: "/v1/setup_intents/\(id)", params: params,
+      key: Self.key(), summary: summary)
+  }
+
+  /// Cancels a setup intent. `reason` is one of abandoned, duplicate,
+  /// requested_by_customer, or nil.
+  public func cancelSetupIntent(
+    id: String, reason: String?, summary: String
+  ) async throws -> SetupIntent {
+    var params = SetupIntentCancelParams()
+    if let reason {
+      params.cancellationReason = SetupIntentCancellationReason(rawValue: reason)
+    }
+    return try await run(
+      SetupIntent.self, method: "POST", path: "/v1/setup_intents/\(id)/cancel", params: params,
+      key: Self.key(), summary: summary)
+  }
+
+  /// Confirms a setup intent, optionally attaching a payment method ID.
+  public func confirmSetupIntent(
+    id: String, paymentMethod: String?, summary: String
+  ) async throws -> SetupIntent {
+    var params = SetupIntentConfirmParams()
+    params.paymentMethod = paymentMethod
+    return try await run(
+      SetupIntent.self, method: "POST", path: "/v1/setup_intents/\(id)/confirm", params: params,
+      key: Self.key(), summary: summary)
+  }
+
+  /// Verifies microdeposits on a bank-debit setup intent: either the two
+  /// deposit amounts in cents or the descriptor code from the statement.
+  public func verifyMicrodepositsSetupIntent(
+    id: String, amounts: [Int]?, descriptorCode: String?, summary: String
+  ) async throws -> SetupIntent {
+    var params = SetupIntentVerifyMicrodepositsParams()
+    params.amounts = amounts
+    params.descriptorCode = descriptorCode
+    return try await run(
+      SetupIntent.self, method: "POST", path: "/v1/setup_intents/\(id)/verify_microdeposits",
+      params: params, key: Self.key(), summary: summary)
+  }
 }

@@ -89,7 +89,7 @@ struct PaymentIntentDetailView: View {
     .sheet(isPresented: $verifyDepositsPresented) {
       if case .loaded(let intent) = phase, let writer {
         VerifyMicrodepositsSheet(
-          intent: intent, writer: writer, onFinished: handleWriteFinished)
+          target: .paymentIntent(intent), writer: writer, onFinished: handleWriteFinished)
       }
     }
     .confirmationDialog(

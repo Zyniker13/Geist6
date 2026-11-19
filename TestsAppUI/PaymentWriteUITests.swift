@@ -253,6 +253,47 @@ final class PaymentWriteUITests: XCTestCase {
     app.buttons["OK"].tap()
   }
 
+  // MARK: - Create setup intent flow (M4c-2)
+
+  /// Creates a setup intent from the Setup segment's toolbar: switch
+  /// segment → sheet → fill customer → confirm → success alert.
+  func testCreateSetupIntentFlowCompletesAgainstMock() {
+    let app = launchFresh()
+    addAccountAndWait(app, name: "Setup Store")
+    openPayments(app)
+
+    let setupSegment = app.buttons["Setup"]
+    XCTAssertTrue(setupSegment.waitForExistence(timeout: 10), "setup segment missing")
+    waitHittable(app, setupSegment, "setup segment")
+    setupSegment.tap()
+    let switched = app.descendants(matching: .any).matching(
+      NSPredicate(format: "identifier == %@", "payments.segment.setupIntents")
+    ).firstMatch
+    XCTAssertTrue(switched.waitForExistence(timeout: 10), "segment did not switch to setup intents")
+
+    let newButton = app.buttons["payments.newSetupIntent"]
+    XCTAssertTrue(newButton.waitForExistence(timeout: 10), "new setup intent button missing")
+    waitHittable(app, newButton, "new setup intent button")
+    newButton.tap()
+
+    let customerField = app.textFields["payments.setupCreate.customer"]
+    XCTAssertTrue(customerField.waitForExistence(timeout: 10), "create sheet missing")
+    customerField.tap()
+    customerField.typeText("cus_test_123")
+
+    let submit = app.buttons["payments.setupCreate.submit"]
+    XCTAssertTrue(submit.waitForExistence(timeout: 10), "create submit missing")
+    submit.tap()
+
+    let confirm = app.buttons["payments.setupCreate.confirm"].firstMatch
+    XCTAssertTrue(confirm.waitForExistence(timeout: 10), "create confirmation missing")
+    confirm.tap()
+
+    let success = app.staticTexts["Intent created"]
+    XCTAssertTrue(success.waitForExistence(timeout: 15), "create success alert missing")
+    app.buttons["OK"].tap()
+  }
+
   // MARK: - Dashboard mode refuses writes
 
   func testDashboardLockedAccountHasNoWriteControls() {
@@ -265,6 +306,18 @@ final class PaymentWriteUITests: XCTestCase {
     XCTAssertFalse(
       app.buttons["payments.newIntent"].exists,
       "dashboard-locked account must not expose create intent")
+
+    // M4c-2: the same for the Setup segment's create button.
+    let setupSegment = app.buttons["Setup"]
+    if setupSegment.waitForExistence(timeout: 5) {
+      setupSegment.tap()
+      _ = app.descendants(matching: .any).matching(
+        NSPredicate(format: "identifier == %@", "payments.segment.setupIntents")
+      ).firstMatch.waitForExistence(timeout: 5)
+      XCTAssertFalse(
+        app.buttons["payments.newSetupIntent"].exists,
+        "dashboard-locked account must not expose create setup intent")
+    }
 
     openFirstChargeDetail(app)
 

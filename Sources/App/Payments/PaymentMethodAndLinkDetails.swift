@@ -2,7 +2,7 @@ import GeistData
 import StripeModels
 import SwiftUI
 
-/// The detail screen for one setup intent.
+/// The detail screen for one setup intent, with its write actions.
 struct SetupIntentDetailView: View {
   enum Phase: Equatable {
     case loading
@@ -12,8 +12,15 @@ struct SetupIntentDetailView: View {
 
   let intentID: String
   let backend: any PaymentsBackend
+  /// Nil for dashboard-locked accounts: no write controls are shown.
+  let writer: PaymentsWriteService?
 
   @State private var phase: Phase = .loading
+  @State private var confirmPresented = false
+  @State private var cancelPresented = false
+  @State private var updatePresented = false
+  @State private var verifyDepositsPresented = false
+  @State private var writeResult: WriteResult?
 
   var body: some View {
     Group {
@@ -33,6 +40,105 @@ struct SetupIntentDetailView: View {
     .navigationTitle("Setup Intent")
     .navigationBarTitleDisplayMode(.inline)
     .task(id: intentID) { await load() }
+    .toolbar { actionsToolbar }
+    .sheet(isPresented: $confirmPresented) {
+      if case .loaded(let intent) = phase, let writer {
+        ConfirmSetupIntentSheet(intent: intent, writer: writer, onFinished: handleWriteFinished)
+      }
+    }
+    .sheet(isPresented: $cancelPresented) {
+      if case .loaded(let intent) = phase, let writer {
+        CancelSetupIntentSheet(intent: intent, writer: writer, onFinished: handleWriteFinished)
+      }
+    }
+    .sheet(isPresented: $updatePresented) {
+      if case .loaded(let intent) = phase, let writer {
+        UpdateSetupIntentSheet(intent: intent, writer: writer, onFinished: handleWriteFinished)
+      }
+    }
+    .sheet(isPresented: $verifyDepositsPresented) {
+      if case .loaded(let intent) = phase, let writer {
+        VerifyMicrodepositsSheet(
+          target: .setupIntent(intent), writer: writer, onFinished: handleWriteFinished)
+      }
+    }
+    .writeResultAlert($writeResult)
+  }
+
+  @ToolbarContentBuilder
+  private var actionsToolbar: some ToolbarContent {
+    ToolbarItem(placement: .primaryAction) {
+      if let writer, case .loaded(let intent) = phase {
+        Menu {
+          if isConfirmable(intent.status) {
+            Button("Confirm…") { confirmPresented = true }
+              .accessibilityIdentifier("payments.setupIntent.confirm")
+          }
+          if isEditable(intent.status) {
+            Button("Edit description…") { updatePresented = true }
+              .accessibilityIdentifier("payments.setupIntent.edit")
+          }
+          if isVerifiable(intent) {
+            Button("Verify microdeposits…") { verifyDepositsPresented = true }
+              .accessibilityIdentifier("payments.setupIntent.verifyDeposits")
+          }
+          if isCancellable(intent.status) {
+            Button("Cancel intent…", role: .destructive) { cancelPresented = true }
+              .accessibilityIdentifier("payments.setupIntent.cancel")
+          }
+        } label: {
+          Label("Actions", systemImage: "ellipsis.circle")
+        }
+        .accessibilityIdentifier("payments.setupIntent.actions")
+      }
+    }
+  }
+
+  /// Stripe confirms setup intents in these (interactive) statuses.
+  private func isConfirmable(_ status: SetupIntentStatus) -> Bool {
+    switch status {
+    case .requiresPaymentMethod, .requiresConfirmation, .requiresAction:
+      return true
+    case .processing, .canceled, .succeeded, .undocumented:
+      return false
+    }
+  }
+
+  /// Stripe cancels setup intents in these statuses.
+  private func isCancellable(_ status: SetupIntentStatus) -> Bool {
+    switch status {
+    case .requiresPaymentMethod, .requiresConfirmation, .requiresAction, .processing:
+      return true
+    case .canceled, .succeeded, .undocumented:
+      return false
+    }
+  }
+
+  /// Completed intents no longer accept edits.
+  private func isEditable(_ status: SetupIntentStatus) -> Bool {
+    switch status {
+    case .canceled, .succeeded:
+      return false
+    case .processing, .requiresAction, .requiresConfirmation, .requiresPaymentMethod,
+      .undocumented:
+      return true
+    }
+  }
+
+  /// Microdeposit verification applies to bank-debit intents awaiting
+  /// customer verification.
+  private func isVerifiable(_ intent: SetupIntent) -> Bool {
+    intent.paymentMethodTypes.contains("us_bank_account")
+      && (intent.status == .requiresAction || intent.status == .processing)
+  }
+
+  private func handleWriteFinished(_ result: WriteResult) {
+    confirmPresented = false
+    cancelPresented = false
+    updatePresented = false
+    verifyDepositsPresented = false
+    writeResult = result
+    Task { await load() }
   }
 
   @ViewBuilder
@@ -54,6 +160,9 @@ struct SetupIntentDetailView: View {
         PaymentFactRow(label: "Created", value: "\(intent.created.date.formatted(date: .abbreviated, time: .omitted))")
         if let customer = intent.customer.valueOrNil {
           PaymentFactRow(label: "Customer", value: paymentCustomerID(customer))
+        }
+        if let description = intent.description.valueOrNil {
+          PaymentFactRow(label: "Description", value: description)
         }
       }
     }

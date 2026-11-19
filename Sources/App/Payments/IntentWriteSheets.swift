@@ -369,11 +369,25 @@ struct IncrementAuthorizationSheet: View {
 
 // MARK: - Verify microdeposits
 
+/// Which object a microdeposit verification belongs to: a payment intent
+/// or a setup intent (the endpoint and parameters are the same shape).
+enum VerifyMicrodepositsTarget {
+  case paymentIntent(PaymentIntent)
+  case setupIntent(SetupIntent)
+
+  var id: String {
+    switch self {
+    case .paymentIntent(let intent): return intent.id
+    case .setupIntent(let intent): return intent.id
+    }
+  }
+}
+
 /// Verifies microdeposits for a bank-debit intent, either with the two
 /// deposit amounts (1-99 cents each) or with the descriptor code printed
 /// on the customer's statement.
 struct VerifyMicrodepositsSheet: View {
-  let intent: PaymentIntent
+  let target: VerifyMicrodepositsTarget
   let writer: PaymentsWriteService
   let onFinished: (WriteResult) -> Void
 
@@ -466,7 +480,7 @@ struct VerifyMicrodepositsSheet: View {
         }
       }
       .confirmationDialog(
-        "Verify the microdeposits on " + intent.id + "?", isPresented: $confirmPresented,
+        "Verify the microdeposits on " + target.id + "?", isPresented: $confirmPresented,
         titleVisibility: .visible
       ) {
         Button("Verify deposits") {
@@ -482,15 +496,24 @@ struct VerifyMicrodepositsSheet: View {
     running = true
     failureText = nil
     do {
-      _ = try await writer.verifyMicrodepositsPaymentIntent(
-        id: intent.id,
-        amounts: mode == .amounts ? amounts : nil,
-        descriptorCode: mode == .descriptorCode ? code : nil,
-        summary: "Verify microdeposits on " + intent.id)
+      switch target {
+      case .paymentIntent(let intent):
+        _ = try await writer.verifyMicrodepositsPaymentIntent(
+          id: intent.id,
+          amounts: mode == .amounts ? amounts : nil,
+          descriptorCode: mode == .descriptorCode ? code : nil,
+          summary: "Verify microdeposits on " + intent.id)
+      case .setupIntent(let intent):
+        _ = try await writer.verifyMicrodepositsSetupIntent(
+          id: intent.id,
+          amounts: mode == .amounts ? amounts : nil,
+          descriptorCode: mode == .descriptorCode ? code : nil,
+          summary: "Verify microdeposits on " + intent.id)
+      }
       onFinished(
         WriteResult(
           title: "Verification submitted",
-          message: intent.id + " microdeposits verified."))
+          message: target.id + " microdeposits verified."))
     } catch {
       running = false
       failureText = writeErrorMessage(error)
