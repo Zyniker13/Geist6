@@ -154,19 +154,21 @@ struct PaymentDetailView: View {
   let writer: PaymentsWriteService?
 
   var body: some View {
-    switch route {
-    case .intent(let id):
-      PaymentIntentDetailView(intentID: id, backend: backend, writer: writer)
-    case .charge(let id):
-      ChargeDetailView(chargeID: id, backend: backend, writer: writer)
-    case .refund(let id):
-      RefundDetailView(refundID: id, backend: backend, writer: writer)
-    case .setupIntent(let id):
-      SetupIntentDetailView(intentID: id, backend: backend)
-    case .paymentMethod(let id):
-      PaymentMethodDetailView(methodID: id, backend: backend)
-    case .paymentLink(let id):
-      PaymentLinkDetailView(linkID: id, backend: backend)
+    Group {
+      switch route {
+      case .intent(let id):
+        PaymentIntentDetailView(intentID: id, backend: backend, writer: writer)
+      case .charge(let id):
+        ChargeDetailView(chargeID: id, backend: backend, writer: writer)
+      case .refund(let id):
+        RefundDetailView(refundID: id, backend: backend, writer: writer)
+      case .setupIntent(let id):
+        SetupIntentDetailView(intentID: id, backend: backend)
+      case .paymentMethod(let id):
+        PaymentMethodDetailView(methodID: id, backend: backend)
+      case .paymentLink(let id):
+        PaymentLinkDetailView(linkID: id, backend: backend)
+      }
     }
   }
 }

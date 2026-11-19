@@ -65,7 +65,7 @@ final class PaymentWriteUITests: XCTestCase {
     keyField.tap()
     keyField.typeText("sk_test_uibuild0000")
     app.buttons["setup.add"].tap()
-    sidebarRow(app, named: name)
+    sidebarRow(app, named: name).tap()
   }
 
   /// Opens the Payments screen for the just-added account and waits for the
@@ -80,23 +80,57 @@ final class PaymentWriteUITests: XCTestCase {
     XCTAssertTrue(intentRow.waitForExistence(timeout: 20), "payments row missing")
   }
 
+  /// Waits until `element` is actually tappable — existence alone is not
+  /// enough mid-animation, and a tap on an un-hittable element silently
+  /// no-ops.
+  private func waitHittable(_ app: XCUIApplication, _ element: XCUIElement,
+                            _ name: String, timeout: TimeInterval = 10) {
+    let exp = XCTNSPredicateExpectation(
+      predicate: NSPredicate(format: "hittable == true"), object: element)
+    let result = XCTWaiter.wait(for: [exp], timeout: timeout)
+    XCTAssertTrue(result == .completed, "\(name) never became hittable")
+  }
+
   /// Opens the Charges segment and pushes the first charge's detail screen.
   private func openFirstChargeDetail(_ app: XCUIApplication) {
     let chargesSegment = app.buttons["Charges"]
     XCTAssertTrue(chargesSegment.waitForExistence(timeout: 10), "charges segment missing")
+    waitHittable(app, chargesSegment, "charges segment")
     chargesSegment.tap()
+    // The picker's identifier tracks the selection, so its change proves the
+    // tap actually switched segments (an unobserved tap silently no-ops).
+    let switched = app.descendants(matching: .any).matching(
+      NSPredicate(format: "identifier == %@", "payments.segment.charges")
+    ).firstMatch
+    XCTAssertTrue(switched.waitForExistence(timeout: 10), "segment did not switch to charges")
 
     let chargeRow = app.descendants(matching: .any).matching(
       NSPredicate(format: "identifier BEGINSWITH %@", "payments.row.ch_")
     ).firstMatch
     XCTAssertTrue(chargeRow.waitForExistence(timeout: 10), "charge row missing")
-    chargeRow.tap()
+    waitHittable(app, chargeRow, "charge row")
+    // Tap near the row's bottom edge: a center tap can land on an overlapping
+    // header/segment control and silently switch the list instead of pushing.
+    chargeRow.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.9)).tap()
 
     let chargeAmount = app.descendants(matching: .any).matching(
       NSPredicate(format: "identifier == %@", "payments.charge.amount")
     ).firstMatch
+    if chargeAmount.waitForExistence(timeout: 20) == false {
+      let labels = app.staticTexts.allElementsBoundByIndex.prefix(30)
+        .map { "\($0.identifier)=\($0.label)" }
+      print("G6DUMP texts: \(labels.joined(separator: " | "))")
+      print("G6DUMP alerts: \(app.alerts.count) sheets: \(app.sheets.count) nav: \(app.navigationBars.count)")
+      print("G6DUMP onCharges: \(app.descendants(matching: .any).matching(NSPredicate(format: "identifier == %@", "payments.segment.charges")).firstMatch.exists)")
+      let shot = XCTAttachment(screenshot: app.screenshot())
+      shot.name = "failure-screenshot"
+      shot.lifetime = .keepAlways
+      add(shot)
+    }
     XCTAssertTrue(chargeAmount.waitForExistence(timeout: 20), "charge detail missing")
   }
+
+  /// MARK: write flows
 
   /// Flips the dashboard lock on for `name` through the edit screen.
   private func enableDashboardLock(_ app: XCUIApplication, name: String) {
@@ -120,6 +154,11 @@ final class PaymentWriteUITests: XCTestCase {
     XCTAssertNotEqual(after, before, "tapping the lock toggle must change its value")
     app.buttons["edit.save"].tap()
     app.buttons["detail.done"].tap()
+    // detail.done pops to the account list; return to the account's home
+    // screen through the (always visible) sidebar so the caller can open
+    // Payments. Regression (2026-11-18): without this the flow still sat
+    // on the account list and openPayments timed out.
+    sidebarRow(app, named: name).tap()
   }
 
   // MARK: - Refund flow
@@ -142,7 +181,7 @@ final class PaymentWriteUITests: XCTestCase {
     XCTAssertTrue(submit.waitForExistence(timeout: 10), "refund sheet missing")
     submit.tap()
 
-    let confirm = app.buttons["payments.refund.confirm"]
+    let confirm = app.buttons["payments.refund.confirm"].firstMatch
     XCTAssertTrue(confirm.waitForExistence(timeout: 10), "refund confirmation missing")
     confirm.tap()
 
@@ -171,7 +210,7 @@ final class PaymentWriteUITests: XCTestCase {
     XCTAssertTrue(submit.waitForExistence(timeout: 10), "capture sheet missing")
     submit.tap()
 
-    let confirm = app.buttons["payments.capture.confirm"]
+    let confirm = app.buttons["payments.capture.confirm"].firstMatch
     XCTAssertTrue(confirm.waitForExistence(timeout: 10), "capture confirmation missing")
     confirm.tap()
 

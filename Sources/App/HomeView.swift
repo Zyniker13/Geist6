@@ -4,21 +4,47 @@ import GeistMetrics
 import StripeClient
 import SwiftUI
 
+/// Pushes from the home dashboard onto the shell's navigation stack.
+/// Value-based so the stack path owns the pushed content's identity
+/// (decision 0016).
+enum HomeRoute: Hashable {
+  case payments
+  case event(String)
+}
+
 /// The home dashboard of one Stripe account: balances, period figures,
 /// daily volume, payouts, and recent activity (decision 0011).
 struct HomeView: View {
   let account: Account
+  /// The shell's navigation path. Value-based pushes keep the pushed
+  /// view's identity tied to the path entry instead of a closure that
+  /// ancestor re-renders can re-evaluate (decision 0016).
+  @Binding var path: NavigationPath
 
   @Environment(AccountStore.self) private var accountStore
-  @State private var model: DashboardModel?
+  @State private var model: DashboardModel
   @State private var period: HomePeriod = .last30Days
   @State private var currency = "usd"
-  @State private var selectedEventID: String?
-  @State private var paymentsClient: StripeClient?
+  @State private var paymentsClient: StripeClient
   @State private var writer: PaymentsWriteService?
-  @State private var showPayments = false
 
   private static let currencies = ["usd", "eur", "gbp", "cad", "aud", "jpy"]
+
+  init(account: Account, path: Binding<NavigationPath>) {
+    self.account = account
+    _path = path
+    // Built in init, not in .task: destination closures must be
+    // unconditional from the first render (decision 0018) — a closure
+    // that flips branches as @State settles makes SwiftUI rebuild the
+    // pushed view and reset its state.
+    let client = StripeClient(
+      apiKey: account.apiKey,
+      mode: account.dashboardLock ? .dashboard : .management,
+      baseURL: AppConfig.effectiveBaseURL
+    )
+    _paymentsClient = State(initialValue: client)
+    _model = State(initialValue: DashboardModel(backend: client))
+  }
 
   private var reloadKey: String {
     "\(account.id.uuidString)|\(period.rawValue)|\(currency)"
@@ -26,30 +52,22 @@ struct HomeView: View {
 
   var body: some View {
     Group {
-      if let model {
-        content(model)
-      } else {
-        ProgressView()
-      }
+      content(model)
     }
     .navigationTitle(account.name)
     .navigationBarTitleDisplayMode(.inline)
-    .navigationDestination(item: $selectedEventID) { eventID in
-      if let model {
-        EventActivityDetailView(eventID: eventID, backend: model.backend)
-      }
-    }
-    .navigationDestination(isPresented: $showPayments) {
-      if let paymentsClient {
+    .navigationDestination(for: HomeRoute.self) { route in
+      switch route {
+      case .payments:
         PaymentsView(account: account, backend: paymentsClient, writer: writer)
-      } else {
-        ProgressView()
+      case .event(let eventID):
+        EventActivityDetailView(eventID: eventID, backend: model.backend)
       }
     }
     .toolbar {
       ToolbarItem(placement: .topBarTrailing) {
         Button {
-          showPayments = true
+          path.append(HomeRoute.payments)
         } label: {
           Label("Payments", systemImage: "creditcard")
         }
@@ -84,16 +102,9 @@ struct HomeView: View {
       }
     }
     .task(id: reloadKey) {
-      if paymentsClient == nil {
-        paymentsClient = StripeClient(
-          apiKey: account.apiKey,
-          mode: account.dashboardLock ? .dashboard : .management,
-          baseURL: AppConfig.effectiveBaseURL
-        )
-      }
       // Gate 1: a writer exists only for accounts that are not
       // dashboard-locked. Locked accounts build no write path at all.
-      if writer == nil, !account.dashboardLock, let paymentsClient {
+      if writer == nil, !account.dashboardLock {
         let auditDirectory = FileManager.default.urls(
           for: .applicationSupportDirectory, in: .userDomainMask
         ).first!.appendingPathComponent("Geist6/Audit", isDirectory: true)
@@ -106,18 +117,10 @@ struct HomeView: View {
             storeBox.store?.cached(id: account.id)?.dashboardLock ?? false
           })
       }
-      if model == nil {
-        let client = StripeClient(
-          apiKey: account.apiKey,
-          mode: account.dashboardLock ? .dashboard : .management,
-          baseURL: AppConfig.effectiveBaseURL
-        )
-        model = DashboardModel(backend: client)
-      }
-      await model?.load(period: period, currency: currency)
+      await model.load(period: period, currency: currency)
     }
     .refreshable {
-      await model?.load(period: period, currency: currency)
+      await model.load(period: period, currency: currency)
     }
   }
 
@@ -292,9 +295,7 @@ struct HomeView: View {
           .foregroundStyle(.secondary)
       }
       ForEach(items, id: \.self) { item in
-        Button {
-          selectedEventID = item.eventID
-        } label: {
+        NavigationLink(value: HomeRoute.event(item.eventID)) {
           HStack(alignment: .firstTextBaseline) {
             Text(item.type)
               .font(.subheadline)

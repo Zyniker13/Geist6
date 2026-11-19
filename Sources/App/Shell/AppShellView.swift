@@ -25,6 +25,10 @@ struct AppShellView: View {
   @State private var activeID: UUID?
   @State private var selection: ShellDestination?
   @State private var searchText = ""
+  /// The detail stack's path. Owning it here (not per pushed view) keeps
+  /// pushed content's identity anchored to path entries across shell
+  /// re-renders (decision 0016).
+  @State private var path = NavigationPath()
 
   /// The observable account list. Reads track the store, so the shell
   /// (and the sidebar it feeds) re-render on any account change — no
@@ -50,9 +54,14 @@ struct AppShellView: View {
         onSubmitSearch: submitSearch
       )
     } detail: {
-      NavigationStack {
+      NavigationStack(path: $path) {
         detailContent
       }
+    }
+    .onChange(of: selection) {
+      // A new destination starts with an empty stack; a stale path would
+      // push old content for the previously selected account.
+      path = NavigationPath()
     }
     .task {
       await loadState()
@@ -68,7 +77,7 @@ struct AppShellView: View {
       })
     case .home(let id):
       if let account = accounts.first(where: { $0.id == id }) {
-        HomeView(account: account)
+        HomeView(account: account, path: $path)
       } else {
         ContentUnavailableView(
           "Account not found",
