@@ -2,9 +2,9 @@
 
 Keep every field current after every meaningful step. This file and `ROADMAP.md` are the truth when work resumes.
 
-- **Current milestone:** M4 (Payments) — M4a (d56911e) & M4b (db143ee) pushed; navigation fix committed (c93dc08, unpushed); full gate running.
-- **Last done:** check.sh aborted at lint (PaymentWriteUITests line-length error from the diagnostic era); both violations fixed, gate relaunched (log /tmp/g6-check12.log).
-- **Next step:** Gate green → push c93dc08 → verify CI → close M4b, start M4c.
+- **Current milestone:** M4 (Payments) — M4a (d56911e) & M4b (db143ee) pushed; navigation fix committed (c93dc08, unpushed).
+- **Last done:** check12 gate: 15/16 UI tests green; only ScreenshotUITests.testCaptureScreens failed — its bare `firstMatch` back-tap hit the detail nav bar's actions Menu (never ran under decision 0018 navigation before) instead of popping; back-taps now matched by label ("Payments" / "Shot Store") with existence waits.
+- **Next step:** testCaptureScreens verified green (175s) after label-matched back fix (ad30dae); check13 gate killed mid-run by session compaction cleanup (all unit phases green at 01:42, died before UI phase) — relaunched as check14 with persist_on_release. When green: push c93dc08+ec9a321+ad30dae, verify CI, close M4b, start M4c.
 - **Blocked on:** Nothing.
 
 ## Environment Check
