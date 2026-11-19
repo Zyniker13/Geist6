@@ -556,15 +556,17 @@ final class PaymentsWriteTests: XCTestCase {
     WriteStub.install(status: 200, json: chargeWriteFixture)
     _ = try await service.createCharge(
       amount: 1000, currency: "usd", source: "pm_test_123", description: nil, summary: "s")
+    WriteStub.install(status: 200, json: sessionWriteFixture)
+    _ = try await service.expireCheckoutSession(id: "cs_test_123", summary: "s")
 
     let requests = WriteStubURLProtocol.recordedRequests
-    XCTAssertEqual(requests.count, 24, "one request per verb")
+    XCTAssertEqual(requests.count, 25, "one request per verb")
     for (index, request) in requests.enumerated() {
       let key = try XCTUnwrap(keyOf(request), "request \(index) carries no idempotency key")
       XCTAssertFalse(key.isEmpty, "request \(index) carries an empty idempotency key")
     }
     let entries = await audit.entries(limit: 32)
-    XCTAssertEqual(entries.count, 24)
+    XCTAssertEqual(entries.count, 25)
     let auditedKeys = Set(entries.map(\.idempotencyKey))
     let sentKeys = Set(requests.compactMap(keyOf))
     XCTAssertEqual(auditedKeys, sentKeys, "audit keys must match the sent keys exactly")

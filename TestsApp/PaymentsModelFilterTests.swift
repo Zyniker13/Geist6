@@ -17,6 +17,9 @@ private final class FilterRecorder: @unchecked Sendable {
   var setupCustomer: String?
   var methodsCustomer: String?
   var linksActive: Bool?
+  var sessionsCreated: DateInterval?
+  var sessionsCustomer: String?
+  var sessionsStatus: String?
 }
 
 private enum StubError: Error { case missing }
@@ -27,6 +30,7 @@ private struct FilterRecordingBackend: PaymentsBackend {
   var intents: [PaymentIntent] = []
   var charges: [Charge] = []
   var refunds: [Refund] = []
+  var sessions: [CheckoutSession] = []
 
   func paymentIntents(created: DateInterval?, customer: String?) async throws -> [PaymentIntent] {
     recorder.listCalls.append("paymentIntents")
@@ -83,6 +87,19 @@ private struct FilterRecordingBackend: PaymentsBackend {
 
   func retrievePaymentLink(id: String) async throws -> PaymentLink { throw StubError.missing }
   func paymentLinkLineItems(id: String) async throws -> [Item] { [] }
+
+  func checkoutSessions(created: DateInterval?, customer: String?, status: String?)
+    async throws -> [CheckoutSession]
+  {
+    recorder.listCalls.append("checkoutSessions")
+    recorder.sessionsCreated = created
+    recorder.sessionsCustomer = customer
+    recorder.sessionsStatus = status
+    return sessions
+  }
+
+  func retrieveCheckoutSession(id: String) async throws -> CheckoutSession { throw StubError.missing }
+  func checkoutSessionLineItems(id: String) async throws -> [Item] { [] }
   func retrieveMandate(id: String) async throws -> Mandate { throw StubError.missing }
   func retrieveConfirmationToken(id: String) async throws -> ConfirmationToken {
     throw StubError.missing
@@ -184,6 +201,104 @@ private enum FilterFixtures {
     """
     return try JSONDecoder().decode(Refund.self, from: Data(json.utf8))
   }
+
+  /// The checkout-session fixture follows the stripe-mock sample shape; only
+  /// the fields the tests vary (id, created, status, customer) interpolate.
+  static func session(
+    id: String, created: Int, status: String, customer: String?
+  ) throws -> CheckoutSession {
+    let customerJSON = customer.map { "\"\($0)\"" } ?? "null"
+    let json = """
+    {
+      "adaptive_pricing": {"enabled": true},
+      "after_expiration": {"recovery": {
+        "allow_promotion_codes": true, "enabled": true,
+        "expires_at": null, "url": null}},
+      "allow_promotion_codes": null,
+      "allowed_payment_method_types": null,
+      "amount_subtotal": null,
+      "amount_total": null,
+      "automatic_tax": {"enabled": false, "liability": {"type": "account"},
+        "provider": null, "status": null},
+      "billing_address_collection": null,
+      "cancel_url": "https://example.com/cancel",
+      "client_reference_id": null,
+      "client_secret": null,
+      "collected_information": {"business_name": null, "individual_name": null,
+        "shipping_details": {"address": {"city": null, "country": null,
+          "line1": null, "line2": null, "postal_code": null, "state": null},
+          "name": "name"}},
+      "consent": {"promotions": null, "terms_of_service": null},
+      "consent_collection": {
+        "payment_method_reuse_agreement": {"position": "hidden"},
+        "promotions": null, "terms_of_service": null},
+      "created": \(created),
+      "currency": null,
+      "currency_conversion": {"amount_subtotal": 1555417355,
+        "amount_total": 1117121693, "fx_rate": "291452898",
+        "source_currency": "usd"},
+      "custom_fields": [],
+      "custom_text": {
+        "after_submit": {"message": "message"},
+        "shipping_address": {"message": "message"},
+        "submit": {"message": "message"},
+        "terms_of_service_acceptance": {"message": "message"}},
+      "customer": \(customerJSON),
+      "customer_account": null,
+      "customer_creation": null,
+      "customer_details": {"address": {"city": null, "country": null,
+          "line1": null, "line2": null, "postal_code": null, "state": null},
+        "business_name": null, "email": "alice@example.com",
+        "individual_name": null, "name": null, "phone": null,
+        "tax_exempt": "none", "tax_ids": null},
+      "customer_email": null,
+      "discounts": null,
+      "expires_at": 1234567890,
+      "id": "\(id)",
+      "integration_identifier": null,
+      "invoice": null,
+      "invoice_creation": {"enabled": true, "invoice_data": {
+        "account_tax_ids": null, "custom_fields": null, "description": null,
+        "footer": null, "issuer": {"type": "account"}, "metadata": null,
+        "rendering_options": {"amount_tax_display": null, "template": null}}},
+      "livemode": false,
+      "locale": null,
+      "managed_payments": {"enabled": true},
+      "metadata": {},
+      "mode": "payment",
+      "object": "checkout.session",
+      "origin_context": null,
+      "payment_intent": "pi_test_123",
+      "payment_link": null,
+      "payment_method_collection": null,
+      "payment_method_configuration_details": {"id": "obj_123", "parent": null},
+      "payment_method_options": {},
+      "payment_method_types": ["card"],
+      "payment_status": "unpaid",
+      "permissions": {"update_shipping_details": null},
+      "phone_number_collection": {"enabled": false},
+      "recovered_from": null,
+      "saved_payment_method_options": {"allow_redisplay_filters": null,
+        "payment_method_remove": null, "payment_method_save": null},
+      "setup_intent": null,
+      "shipping_address_collection": {"allowed_countries": ["SC"]},
+      "shipping_cost": {"amount_subtotal": 1555417355,
+        "amount_tax": 1424534716, "amount_total": 1117121693,
+        "shipping_rate": null},
+      "shipping_options": [],
+      "status": "\(status)",
+      "submit_type": null,
+      "subscription": null,
+      "success_url": "https://example.com/success",
+      "total_details": {"amount_discount": 406046392, "amount_shipping": null,
+        "amount_tax": 1424534716},
+      "ui_mode": null,
+      "url": "https://checkout.example.com/pay/c/\(id)",
+      "wallet_options": {}
+    }
+    """
+    return try JSONDecoder().decode(CheckoutSession.self, from: Data(json.utf8))
+  }
 }
 
 @MainActor
@@ -210,9 +325,15 @@ struct PaymentsModelFilterTests {
     #expect(recorder.methodsCustomer == "cus_test_9")
     // The links segment has no created or customer dimension.
     #expect(recorder.linksActive == nil)
+    // The checkout segment rides created, customer, and status server-side.
+    #expect(recorder.sessionsCustomer == "cus_test_9")
+    #expect(recorder.sessionsCreated?.start == filter.dateStart)
+    #expect(recorder.sessionsCreated?.end == filter.dateEnd)
+    #expect(recorder.sessionsStatus == "succeeded")
     // Every segment is refetched once per apply.
     #expect(recorder.listCalls == [
       "paymentIntents", "charges", "refunds", "setupIntents", "paymentMethods", "paymentLinks",
+      "checkoutSessions",
     ])
   }
 
@@ -269,5 +390,31 @@ struct PaymentsModelFilterTests {
 
     #expect(recorder.listCalls.isEmpty)
     #expect(model.filter == .none)
+  }
+
+  /// Checkout sessions: the created/customer/status dimensions ride the list
+  /// request server-side, and the fetched page is still trimmed client-side
+  /// (a session outside the filter must not appear).
+  @Test func checkoutFilterRidesServerParamsAndTrimsClientSide() async throws {
+    let recorder = FilterRecorder()
+    let backend = FilterRecordingBackend(
+      recorder: recorder,
+      sessions: [
+        try FilterFixtures.session(
+          id: "cs_test_match", created: 1_750_000_000, status: "open", customer: "cus_test_1"
+        ),
+        try FilterFixtures.session(
+          id: "cs_test_other", created: 1_750_000_000, status: "expired", customer: "cus_test_1"
+        ),
+      ]
+    )
+    let model = PaymentsModel(backend: backend)
+
+    await model.apply(PaymentsFilter(status: "open"))
+
+    #expect(recorder.sessionsStatus == "open")
+    #expect(recorder.sessionsCreated == nil, "the date range is unset and must not ride the request")
+    #expect(model.checkoutSessions.map(\.id) == ["cs_test_match"])
+    #expect(model.phase == .loaded)
   }
 }

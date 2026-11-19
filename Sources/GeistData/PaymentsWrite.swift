@@ -432,4 +432,13 @@ public struct PaymentsWriteService: Sendable {
       Charge.self, method: "POST", path: "/v1/charges", params: params,
       key: Self.key(), summary: summary)
   }
+
+  // MARK: - Checkout sessions
+
+  /// Expires an open checkout session: it can no longer be completed.
+  public func expireCheckoutSession(id: String, summary: String) async throws -> CheckoutSession {
+    return try await run(
+      CheckoutSession.self, method: "POST", path: "/v1/checkout/sessions/\(id)/expire",
+      params: SessionExpireParams(), key: Self.key(), summary: summary)
+  }
 }

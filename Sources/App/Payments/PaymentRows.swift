@@ -132,3 +132,29 @@ struct PaymentLinkRow: View {
     .accessibilityIdentifier("payments.row.\(link.id)")
   }
 }
+
+/// A checkout-session list row.
+struct CheckoutSessionRow: View {
+  let session: CheckoutSession
+
+  var body: some View {
+    PaymentRowCore(title: title, status: session.status.valueOrNil?.rawValue ?? "unknown") {
+      PaymentRowCaption(symbol: "cart", text: caption)
+    }
+    .accessibilityIdentifier("payments.row.\(session.id)")
+  }
+
+  private var title: String {
+    if let amount = session.amountTotal.valueOrNil, let currency = session.currency.valueOrNil {
+      return MoneyFormat.amount(amount, currency: currency)
+    }
+    return session.mode.rawValue
+  }
+
+  private var caption: String {
+    let email = session.customerDetails.valueOrNil?.email.valueOrNil
+      ?? session.customerEmail.valueOrNil
+    if let email, !email.isEmpty { return email }
+    return session.created.date.formatted(date: .abbreviated, time: .omitted)
+  }
+}

@@ -222,9 +222,11 @@ struct RefundDetailView: View {
     do {
       _ = try await writer.cancelRefund(
         id: refund.id, summary: "Cancel refund \(refund.id)")
+      // Reload first, then surface the result: setting writeResult before the
+      // phase swap cancels the pending alert presentation.
+      await load()
       writeResult = WriteResult(
         title: "Refund canceled", message: "Refund \(refund.id) is now canceled.")
-      await load()
     } catch {
       writeResult = WriteResult(title: "Write failed", message: writeErrorMessage(error))
     }

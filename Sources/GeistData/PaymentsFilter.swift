@@ -5,7 +5,7 @@ import StripeModels
 /// optional; an empty filter matches everything. `matches(_:)` applies only
 /// the dimensions a type has and ignores the rest, so one filter serves all
 /// six payment segments (intents, charges, refunds, setup intents, payment
-/// methods, payment links).
+/// methods, payment links, checkout sessions).
 ///
 /// Server-side narrowing is used where the backend protocol supports it
 /// (created range, customer, payment-link active state); every other
@@ -76,6 +76,7 @@ extension PaymentsFilter {
     /// The payment-list segments a filter can narrow.
     public enum Segment: String, CaseIterable, Sendable {
         case paymentIntents, charges, refunds, setupIntents, paymentMethods, paymentLinks
+        case checkoutSessions
     }
 
     /// A filter dimension, so the UI can show exactly the fields that mean
@@ -98,6 +99,8 @@ extension PaymentsFilter {
             return [.dateRange, .customer, .methodType]
         case .paymentLinks:
             return [.methodType, .linkActive]
+        case .checkoutSessions:
+            return [.dateRange, .customer, .status]
         }
     }
 
@@ -188,6 +191,15 @@ extension PaymentsFilter {
         matchesMethodType(link.paymentMethodTypes.valueOrNil?.map(\.rawValue) ?? [])
             && (linkActive.map { link.active == $0 } ?? true)
     }
+
+    /// Checkout sessions: created, customer, and status (`open`, `complete`,
+    /// `expired`) apply; amount is skipped because `amount_total` is null
+    /// until the session is completed.
+    public func matches(_ session: CheckoutSession) -> Bool {
+        matchesCreated(session.created)
+            && matchesCustomer(customerID(session.customer.valueOrNil))
+            && (status.map { session.status.valueOrNil?.rawValue == $0 } ?? true)
+    }
 }
 
 // MARK: - Customer extraction
@@ -223,6 +235,15 @@ private func customerID(_ customer: RefundCustomer?) -> String {
 }
 
 private func customerID(_ customer: SetupIntentCustomer?) -> String {
+    switch customer {
+    case .string(let id): return id
+    case .customer(let customer): return customer.id
+    case .deletedCustomer(let deleted): return deleted.id
+    case .none, .other: return ""
+    }
+}
+
+private func customerID(_ customer: CheckoutSessionCustomer?) -> String {
     switch customer {
     case .string(let id): return id
     case .customer(let customer): return customer.id

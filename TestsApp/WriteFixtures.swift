@@ -5,6 +5,107 @@
 
 import Foundation
 
+/// The checkout-session write fixture mirrors the stripe-mock sample shape
+/// (sanitized: fake IDs, example.com URLs, alice@example.com). Parsed from
+/// JSON so the decoded shape stays in parity with the real object.
+nonisolated(unsafe) let sessionWriteFixtureJSON = """
+{
+  "adaptive_pricing": {"enabled": true},
+  "after_expiration": {"recovery": {
+    "allow_promotion_codes": true, "enabled": true,
+    "expires_at": null, "url": null}},
+  "allow_promotion_codes": null,
+  "allowed_payment_method_types": null,
+  "amount_subtotal": null,
+  "amount_total": null,
+  "automatic_tax": {"enabled": false, "liability": {"type": "account"},
+    "provider": null, "status": null},
+  "billing_address_collection": null,
+  "cancel_url": "https://example.com/cancel",
+  "client_reference_id": null,
+  "client_secret": null,
+  "collected_information": {"business_name": null, "individual_name": null,
+    "shipping_details": {"address": {"city": null, "country": null,
+      "line1": null, "line2": null, "postal_code": null, "state": null},
+      "name": "name"}},
+  "consent": {"promotions": null, "terms_of_service": null},
+  "consent_collection": {
+    "payment_method_reuse_agreement": {"position": "hidden"},
+    "promotions": null, "terms_of_service": null},
+  "created": 1234567890,
+  "currency": null,
+  "currency_conversion": {"amount_subtotal": 1555417355,
+    "amount_total": 1117121693, "fx_rate": "291452898",
+    "source_currency": "usd"},
+  "custom_fields": [],
+  "custom_text": {
+    "after_submit": {"message": "message"},
+    "shipping_address": {"message": "message"},
+    "submit": {"message": "message"},
+    "terms_of_service_acceptance": {"message": "message"}},
+  "customer": null,
+  "customer_account": null,
+  "customer_creation": null,
+  "customer_details": {"address": {"city": null, "country": null,
+      "line1": null, "line2": null, "postal_code": null, "state": null},
+    "business_name": null, "email": "alice@example.com",
+    "individual_name": null, "name": null, "phone": null,
+    "tax_exempt": "none", "tax_ids": null},
+  "customer_email": null,
+  "discounts": null,
+  "expires_at": 1234567890,
+  "id": "cs_test_123",
+  "integration_identifier": null,
+  "invoice": null,
+  "invoice_creation": {"enabled": true, "invoice_data": {
+    "account_tax_ids": null, "custom_fields": null, "description": null,
+    "footer": null, "issuer": {"type": "account"}, "metadata": null,
+    "rendering_options": {"amount_tax_display": null, "template": null}}},
+  "livemode": false,
+  "locale": null,
+  "managed_payments": {"enabled": true},
+  "metadata": {},
+  "mode": "payment",
+  "object": "checkout.session",
+  "origin_context": null,
+  "payment_intent": "pi_test_123",
+  "payment_link": null,
+  "payment_method_collection": null,
+  "payment_method_configuration_details": {"id": "obj_123", "parent": null},
+  "payment_method_options": {},
+  "payment_method_types": ["card"],
+  "payment_status": "unpaid",
+  "permissions": {"update_shipping_details": null},
+  "phone_number_collection": {"enabled": false},
+  "recovered_from": null,
+  "saved_payment_method_options": {"allow_redisplay_filters": null,
+    "payment_method_remove": null, "payment_method_save": null},
+  "setup_intent": null,
+  "shipping_address_collection": {"allowed_countries": ["SC"]},
+  "shipping_cost": {"amount_subtotal": 1555417355,
+    "amount_tax": 1424534716, "amount_total": 1117121693,
+    "shipping_rate": null},
+  "shipping_options": [],
+  "status": "open",
+  "submit_type": null,
+  "subscription": null,
+  "success_url": "https://example.com/success",
+  "total_details": {"amount_discount": 406046392, "amount_shipping": null,
+    "amount_tax": 1424534716},
+  "ui_mode": null,
+  "url": "https://checkout.example.com/pay/c/cs_test_123",
+  "wallet_options": {}
+}
+"""
+
+nonisolated(unsafe) let sessionWriteFixture: [String: Any] = {
+  guard let parsed = try? JSONSerialization.jsonObject(with: Data(sessionWriteFixtureJSON.utf8)),
+    let dict = parsed as? [String: Any] else {
+    preconditionFailure("the checkout-session fixture JSON must parse")
+  }
+  return dict
+}()
+
 nonisolated(unsafe) let plinkWriteFixture: [String: Any] = [
     "active": true,
     "after_completion": [

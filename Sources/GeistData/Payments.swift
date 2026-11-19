@@ -52,6 +52,16 @@ public protocol PaymentsBackend: StripeDataBackend, Sendable {
     /// The line items of one payment link.
     func paymentLinkLineItems(id: String) async throws -> [Item]
 
+    /// Checkout sessions, optionally filtered by creation window, customer,
+    /// and status (`open`, `complete`, `expired`).
+    func checkoutSessions(created: DateInterval?, customer: String?, status: String?) async throws -> [CheckoutSession]
+
+    /// A single checkout session by ID.
+    func retrieveCheckoutSession(id: String) async throws -> CheckoutSession
+
+    /// The line items of one checkout session.
+    func checkoutSessionLineItems(id: String) async throws -> [Item]
+
     /// A single mandate by ID.
     func retrieveMandate(id: String) async throws -> Mandate
 
@@ -177,6 +187,33 @@ extension StripeClient: PaymentsBackend {
 
     public func paymentLinkLineItems(id: String) async throws -> [Item] {
         let result = try await listLineItemsPaymentLink(paymentLink: id)
+        return result.data
+    }
+
+    public func checkoutSessions(created: DateInterval?, customer: String?, status: String?) async throws -> [CheckoutSession] {
+        var params = SessionListParams()
+        if let created {
+            params.created = .sessionListParamsCreatedVariant1(
+                SessionListParamsCreatedVariant1(
+                    gte: Int(created.start.timeIntervalSince1970),
+                    lt: Int(created.end.timeIntervalSince1970)
+                )
+            )
+        }
+        params.customer = customer
+        if let status {
+            params.status = CheckoutSessionStatus(rawValue: status)
+        }
+        let result = try await listSessions(params)
+        return result.data
+    }
+
+    public func retrieveCheckoutSession(id: String) async throws -> CheckoutSession {
+        try await retrieveSession(session: id)
+    }
+
+    public func checkoutSessionLineItems(id: String) async throws -> [Item] {
+        let result = try await listLineItemsSession(session: id)
         return result.data
     }
 

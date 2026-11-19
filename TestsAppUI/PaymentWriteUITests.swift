@@ -504,5 +504,75 @@ final class PaymentWriteUITests: XCTestCase {
     XCTAssertFalse(
       app.buttons["payments.charge.capture"].exists,
       "dashboard-locked account must not expose capture")
+
+    // M4c-6: the same for the Checkout segment's expire control.
+    let checkoutSegment = app.buttons["Checkout"]
+    if checkoutSegment.waitForExistence(timeout: 5) {
+      checkoutSegment.tap()
+      _ = app.descendants(matching: .any).matching(
+        NSPredicate(format: "identifier == %@", "payments.segment.checkoutSessions")
+      ).firstMatch.waitForExistence(timeout: 5)
+      let sessionRow = app.descendants(matching: .any).matching(
+        NSPredicate(format: "identifier BEGINSWITH %@", "payments.row.cs_")
+      ).firstMatch
+      if sessionRow.waitForExistence(timeout: 10) {
+        waitHittable(app, sessionRow, "checkout session row")
+        sessionRow.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.9)).tap()
+        sleep(3)
+        XCTAssertFalse(
+          app.buttons["payments.checkoutDetail.expire"].exists,
+          "dashboard-locked account must not expose expire checkout session")
+      }
+    }
+  }
+
+  // MARK: - Expire checkout session flow (M4c-6)
+
+  /// Opens the Checkout segment, pushes the open session's detail screen,
+  /// and expires it: toolbar button → confirmation dialog → success alert.
+  /// stripe-mock echoes the session fixture back for the expire endpoint.
+  func testExpireCheckoutSessionFlowCompletesAgainstMock() {
+    let app = launchFresh()
+    addAccountAndWait(app, name: "Checkout Writes")
+    openPayments(app)
+
+    let checkoutSegment = app.buttons["Checkout"]
+    XCTAssertTrue(checkoutSegment.waitForExistence(timeout: 10), "checkout segment missing")
+    waitHittable(app, checkoutSegment, "checkout segment")
+    checkoutSegment.tap()
+    let switched = app.descendants(matching: .any).matching(
+      NSPredicate(format: "identifier == %@", "payments.segment.checkoutSessions")
+    ).firstMatch
+    XCTAssertTrue(switched.waitForExistence(timeout: 10), "segment did not switch to checkout")
+
+    let sessionRow = app.descendants(matching: .any).matching(
+      NSPredicate(format: "identifier BEGINSWITH %@", "payments.row.cs_")
+    ).firstMatch
+    XCTAssertTrue(sessionRow.waitForExistence(timeout: 15), "checkout session row missing")
+    waitHittable(app, sessionRow, "checkout session row")
+    sessionRow.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.9)).tap()
+
+    let expireButton = app.buttons["payments.checkoutDetail.expire"]
+    XCTAssertTrue(expireButton.waitForExistence(timeout: 15), "expire button missing")
+    waitHittable(app, expireButton, "expire button")
+    expireButton.tap()
+
+    let confirm = app.buttons["payments.checkoutDetail.expireRun"].firstMatch
+    XCTAssertTrue(confirm.waitForExistence(timeout: 10), "expire confirmation missing")
+    confirm.tap()
+
+    let success = app.staticTexts["Session expired"]
+    if success.waitForExistence(timeout: 15) == false {
+      let labels = app.staticTexts.allElementsBoundByIndex.prefix(40)
+        .map { "\($0.identifier)=\($0.label)" }
+      print("G6DUMP texts: \(labels.joined(separator: " | "))")
+      print("G6DUMP alerts: \(app.alerts.count) sheets: \(app.sheets.count) nav: \(app.navigationBars.count)")
+      let shot = XCTAttachment(screenshot: app.screenshot())
+      shot.name = "failure-screenshot"
+      shot.lifetime = .keepAlways
+      add(shot)
+    }
+    XCTAssertTrue(success.waitForExistence(timeout: 5), "expire success alert missing")
+    app.buttons["OK"].tap()
   }
 }

@@ -127,4 +127,61 @@ final class PaymentFilterUITests: XCTestCase {
     ).firstMatch
     XCTAssertTrue(restoredRow.waitForExistence(timeout: 15), "rows never returned after clear")
   }
+
+  /// The Checkout segment: switch to it, filter by session status (`open` →
+  /// `complete`), and prove the mock's open session narrows away and returns
+  /// on clear. Same round trip the intents segment proves, on new ground.
+  func testCheckoutSegmentFilterByStatus() {
+    let app = launchFresh()
+    addAccountAndWait(app, name: "Checkout Store")
+    openPayments(app)
+
+    let checkoutSegment = app.buttons["Checkout"]
+    XCTAssertTrue(checkoutSegment.waitForExistence(timeout: 10), "checkout segment missing")
+    waitHittable(app, checkoutSegment, "checkout segment")
+    checkoutSegment.tap()
+    let switched = app.descendants(matching: .any).matching(
+      NSPredicate(format: "identifier == %@", "payments.segment.checkoutSessions")
+    ).firstMatch
+    XCTAssertTrue(switched.waitForExistence(timeout: 10), "segment did not switch to checkout")
+
+    let sessionRow = app.descendants(matching: .any).matching(
+      NSPredicate(format: "identifier BEGINSWITH %@", "payments.row.cs_")
+    ).firstMatch
+    XCTAssertTrue(sessionRow.waitForExistence(timeout: 15), "checkout session row missing")
+
+    let filterButton = app.buttons["payments.filter"]
+    XCTAssertTrue(filterButton.waitForExistence(timeout: 10), "filter button missing")
+    waitHittable(app, filterButton, "filter button")
+    filterButton.tap()
+    let sheet = app.descendants(matching: .any).matching(
+      NSPredicate(format: "identifier == %@", "payments.filter.sheet")
+    ).firstMatch
+    XCTAssertTrue(sheet.waitForExistence(timeout: 10), "filter sheet missing")
+
+    let statusPicker = app.buttons["payments.filter.status"]
+    XCTAssertTrue(statusPicker.waitForExistence(timeout: 10), "status picker missing")
+    waitHittable(app, statusPicker, "status picker")
+    statusPicker.tap()
+    let option = app.buttons["complete"]
+    XCTAssertTrue(option.waitForExistence(timeout: 10), "complete option missing")
+    option.tap()
+
+    app.buttons["payments.filter.apply"].tap()
+
+    waitRowsGone(app)
+    XCTAssertTrue(
+      filteredEmptyState(app).waitForExistence(timeout: 10),
+      "filtered empty state missing on checkout segment")
+
+    // Clearing restores the session row.
+    waitHittable(app, filterButton, "filter button (second pass)")
+    filterButton.tap()
+    let clearAll = app.buttons["payments.filter.clear"]
+    XCTAssertTrue(clearAll.waitForExistence(timeout: 10), "clear button missing")
+    clearAll.tap()
+    app.buttons["payments.filter.apply"].tap()
+
+    XCTAssertTrue(sessionRow.waitForExistence(timeout: 15), "session row never returned after clear")
+  }
 }

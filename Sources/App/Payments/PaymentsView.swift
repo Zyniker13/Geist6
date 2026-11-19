@@ -10,6 +10,7 @@ enum PaymentRoute: Hashable {
   case setupIntent(String)
   case paymentMethod(String)
   case paymentLink(String)
+  case checkoutSession(String)
 }
 
 /// The payments tab: six browsable lists of one account's payment objects.
@@ -235,6 +236,12 @@ struct PaymentsView: View {
             PaymentLinkRow(link: link)
           }
         }
+      case .checkoutSessions:
+        ForEach(model.checkoutSessions, id: \.id) { session in
+          NavigationLink(value: PaymentRoute.checkoutSession(session.id)) {
+            CheckoutSessionRow(session: session)
+          }
+        }
       }
     }
     .overlay(alignment: .top) {
@@ -253,6 +260,7 @@ struct PaymentsView: View {
     case .setupIntents: return model.setupIntents.isEmpty
     case .paymentMethods: return model.paymentMethods.isEmpty
     case .paymentLinks: return model.paymentLinks.isEmpty
+    case .checkoutSessions: return model.checkoutSessions.isEmpty
     }
   }
 
@@ -291,6 +299,8 @@ struct PaymentDetailView: View {
         PaymentMethodDetailView(methodID: id, backend: backend, writer: writer)
       case .paymentLink(let id):
         PaymentLinkDetailView(linkID: id, backend: backend)
+      case .checkoutSession(let id):
+        CheckoutSessionDetailView(sessionID: id, backend: backend, writer: writer)
       }
     }
   }

@@ -187,6 +187,9 @@ private struct PaymentsFixtureBackend: PaymentsBackend {
   func paymentLinks(active: Bool?) async throws -> [PaymentLink] { [] }
   func retrievePaymentLink(id: String) async throws -> PaymentLink { throw StubError.missing }
   func paymentLinkLineItems(id: String) async throws -> [Item] { [] }
+  func checkoutSessions(created: DateInterval?, customer: String?, status: String?) async throws -> [CheckoutSession] { [] }
+  func retrieveCheckoutSession(id: String) async throws -> CheckoutSession { throw StubError.missing }
+  func checkoutSessionLineItems(id: String) async throws -> [Item] { [] }
   func retrieveMandate(id: String) async throws -> Mandate { throw StubError.missing }
   func retrieveConfirmationToken(id: String) async throws -> ConfirmationToken { throw StubError.missing }
   func intentLineItems(intent: String) async throws -> [PaymentIntentAmountDetailsLineItem] { [] }

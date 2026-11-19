@@ -252,6 +252,8 @@ struct PaymentsFilterSheet: View {
       ]
     case .paymentMethods, .paymentLinks:
       return []
+    case .checkoutSessions:
+      return ["open", "complete", "expired"]
     }
   }
 
