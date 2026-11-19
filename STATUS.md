@@ -3,8 +3,8 @@
 Keep every field current after every meaningful step. This file and `ROADMAP.md` are the truth when work resumes.
 
 - **Current milestone:** M4 (Payments) — M4a done (commit d56911e pushed); M4b (write flows) in progress.
-- **Last done:** M4b data + UI written: audit log (`AuditEntry`/`FileAuditStore`, `Sources/GeistData/AuditLog.swift`), `PaymentsWriteService` with three write-refusal gates and per-write idempotency keys (decision 0017), write-service unit tests (dashboard refusal, mid-session lock, idempotency, audit) written, `Account.dashboardLock` wired into client mode in `HomeView`, writer threaded through `PaymentsView`→all 3 detail views, shared write sheets (`WriteSheets.swift`), write UI wired in Charge/PI/Refund detail, and `TestsAppUI/PaymentWriteUITests.swift` (refund + capture flows, dashboard no-write). App-target build green after fixing the `|| await` autoclosure error (build2 log).
-- **Next step:** Run write-service unit tests via xcodebuild, run the three new UI tests against stripe-mock, lint changed files, update STATUS, then commit/push M4b and verify CI.
+- **Last done:** M4b write-service unit tests green: PaymentsWriteTests 14/14 in the app target (long-running heap-corruption bug in test fixtures root-caused — boxing an empty Swift collection literal into `Any` corrupts the heap; fixtures now use `NSDictionary()`/`NSArray()`, rule 8 in TESTING.md) and committed (c6ac475, M4b data+UI+tests).
+- **Next step:** Run the new UI tests (PaymentWriteUITests, ScreenshotUITests) against stripe-mock, run `scripts/check.sh` green, push, verify CI.
 - **Blocked on:** Nothing.
 
 ## Environment Check
@@ -45,6 +45,7 @@ One bullet per item: what is needed, why, and the milestone that needs it.
 
 ## Log
 
+- 2026-11-18: M4b write tests green: PaymentsWriteTests 14/14 in the app target; root-caused the multi-day heap-corruption crash — boxing an empty Swift collection literal (`{}`/`[]`) into `Any` corrupts the heap and the abort surfaces far from the cause (JSONSerialization was only the detection point); fixtures now use `NSDictionary()`/`NSArray()` (rule 8 in TESTING.md, fixture-rule comment in the test file). Committed c6ac475 (M4b data, write UI, write tests, decision 0017).
 - 2026-11-16: Roadmap written from general knowledge of Stripe; M0 checks it against Stripe's current documentation and API definition.
 - 2026-11-16: Environment check passed (Xcode 27.2, iPadOS 27.2 runtime, Swift 6.4.2, XcodeGen 2.46.0, SwiftLint 0.65.1, swift-format 604.0.0, stripe-mock 0.206.0; both source URLs 200).
 - 2026-11-16: M0: pinned Stripe's OpenAPI spec (release v2600, API version 2026-10-28.endive) and built `Tools/inventory`; generated `api-inventory.md`, `coverage-matrix.md`, and `api-inventory.json` (162 resources, 687 operations). Wrote the research notes in `docs/stripe/` (access, permissions, limits, versioning, events, brand) from the fetched Stripe pages; recorded decisions 0001–0006; logged the five review passes; filed the maintainer items. M0's done-when is met: notes cite sources, the tool's output matches the committed files, every resource has matrix rows, the fifth pass made no material change.
