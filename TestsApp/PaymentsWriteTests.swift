@@ -486,6 +486,11 @@ final class PaymentsWriteTests: XCTestCase {
       "metadata": NSDictionary(), "object": "setup_intent",
       "payment_method_types": ["card"], "status": "succeeded", "usage": "on_session",
     ]
+    let methodJSON: [String: Any] = [
+      "billing_details": NSDictionary(), "created": 1_700_000_000,
+      "id": "pm_test_123", "livemode": false, "object": "payment_method",
+      "type": "card",
+    ]
 
     func keyOf(_ request: URLRequest) -> String? {
       request.value(forHTTPHeaderField: "Idempotency-Key")
@@ -534,15 +539,27 @@ final class PaymentsWriteTests: XCTestCase {
     WriteStub.install(status: 200, json: setupJSON)
     _ = try await service.verifyMicrodepositsSetupIntent(
       id: "seti_test_123", amounts: [32, 45], descriptorCode: nil, summary: "s")
+    WriteStub.install(status: 200, json: methodJSON)
+    _ = try await service.createPaymentMethod(
+      type: "us_bank_account", cardNumber: nil, expMonth: nil, expYear: nil, cvc: nil,
+      summary: "s")
+    WriteStub.install(status: 200, json: methodJSON)
+    _ = try await service.updatePaymentMethod(
+      id: "pm_test_123", billingName: nil, billingEmail: nil, summary: "s")
+    WriteStub.install(status: 200, json: methodJSON)
+    _ = try await service.attachPaymentMethod(
+      id: "pm_test_123", customer: "cus_test_123", summary: "s")
+    WriteStub.install(status: 200, json: methodJSON)
+    _ = try await service.detachPaymentMethod(id: "pm_test_123", summary: "s")
 
     let requests = WriteStubURLProtocol.recordedRequests
-    XCTAssertEqual(requests.count, 18, "one request per verb")
+    XCTAssertEqual(requests.count, 22, "one request per verb")
     for (index, request) in requests.enumerated() {
       let key = try XCTUnwrap(keyOf(request), "request \(index) carries no idempotency key")
       XCTAssertFalse(key.isEmpty, "request \(index) carries an empty idempotency key")
     }
-    let entries = await audit.entries(limit: 20)
-    XCTAssertEqual(entries.count, 18)
+    let entries = await audit.entries(limit: 30)
+    XCTAssertEqual(entries.count, 22)
     let auditedKeys = Set(entries.map(\.idempotencyKey))
     let sentKeys = Set(requests.compactMap(keyOf))
     XCTAssertEqual(auditedKeys, sentKeys, "audit keys must match the sent keys exactly")

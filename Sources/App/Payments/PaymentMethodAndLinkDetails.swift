@@ -188,8 +188,14 @@ struct PaymentMethodDetailView: View {
 
   let methodID: String
   let backend: any PaymentsBackend
+  /// Nil for dashboard-locked accounts: no write controls are shown.
+  let writer: PaymentsWriteService?
 
   @State private var phase: Phase = .loading
+  @State private var attachPresented = false
+  @State private var updatePresented = false
+  @State private var detachConfirmed = false
+  @State private var writeResult: WriteResult?
 
   var body: some View {
     Group {
@@ -209,6 +215,74 @@ struct PaymentMethodDetailView: View {
     .navigationTitle("Payment Method")
     .navigationBarTitleDisplayMode(.inline)
     .task(id: methodID) { await load() }
+    .toolbar { actionsToolbar }
+    .sheet(isPresented: $attachPresented) {
+      if case .loaded(let method) = phase, let writer {
+        AttachPaymentMethodSheet(
+          method: method, writer: writer, onFinished: handleWriteFinished)
+      }
+    }
+    .sheet(isPresented: $updatePresented) {
+      if case .loaded(let method) = phase, let writer {
+        UpdatePaymentMethodSheet(
+          method: method, writer: writer, onFinished: handleWriteFinished)
+      }
+    }
+    .confirmationDialog(
+      "Detach this payment method from its customer? Future payments "
+        + "will need a new method.",
+      isPresented: $detachConfirmed, titleVisibility: .visible
+    ) {
+      Button("Detach", role: .destructive) {
+        Task { await runDetach() }
+      }
+      .accessibilityIdentifier("payments.methodDetach.confirm")
+      Button("Cancel", role: .cancel) {}
+    }
+    .writeResultAlert($writeResult)
+  }
+
+  @ToolbarContentBuilder
+  private var actionsToolbar: some ToolbarContent {
+    ToolbarItem(placement: .primaryAction) {
+      if let writer, case .loaded(let method) = phase {
+        Menu {
+          if method.customer.valueOrNil == nil {
+            Button("Attach to customer…") { attachPresented = true }
+              .accessibilityIdentifier("payments.method.attach")
+          } else {
+            Button("Detach from customer…", role: .destructive) { detachConfirmed = true }
+              .accessibilityIdentifier("payments.method.detach")
+          }
+          Button("Edit billing details…") { updatePresented = true }
+            .accessibilityIdentifier("payments.method.edit")
+        } label: {
+          Label("Actions", systemImage: "ellipsis.circle")
+        }
+        .accessibilityIdentifier("payments.method.actions")
+      }
+    }
+  }
+
+  private func handleWriteFinished(_ result: WriteResult) {
+    attachPresented = false
+    updatePresented = false
+    writeResult = result
+    Task { await load() }
+  }
+
+  private func runDetach() async {
+    guard let writer, case .loaded(let method) = phase else { return }
+    do {
+      _ = try await writer.detachPaymentMethod(
+        id: method.id, summary: "Detach " + method.id)
+      writeResult = WriteResult(
+        title: "Method detached", message: method.id + " has no customer now.")
+      await load()
+    } catch {
+      writeResult = WriteResult(
+        title: "Write failed", message: writeErrorMessage(error))
+    }
   }
 
   @ViewBuilder
@@ -231,6 +305,12 @@ struct PaymentMethodDetailView: View {
         }
         if let customer = method.customer.valueOrNil?.idOrNil {
           PaymentFactRow(label: "Customer", value: customer)
+        }
+        if let name = method.billingDetails.name.valueOrNil {
+          PaymentFactRow(label: "Name", value: name)
+        }
+        if let email = method.billingDetails.email.valueOrNil {
+          PaymentFactRow(label: "Email", value: email)
         }
       }
     }

@@ -294,6 +294,58 @@ final class PaymentWriteUITests: XCTestCase {
     app.buttons["OK"].tap()
   }
 
+  // MARK: - Create payment method flow (M4c-3)
+
+  /// Creates a card payment method from the Methods segment's toolbar.
+  func testCreatePaymentMethodFlowCompletesAgainstMock() {
+    let app = launchFresh()
+    addAccountAndWait(app, name: "Method Store")
+    openPayments(app)
+
+    let methodsSegment = app.buttons["Methods"]
+    XCTAssertTrue(methodsSegment.waitForExistence(timeout: 10), "methods segment missing")
+    waitHittable(app, methodsSegment, "methods segment")
+    methodsSegment.tap()
+    let switched = app.descendants(matching: .any).matching(
+      NSPredicate(format: "identifier == %@", "payments.segment.paymentMethods")
+    ).firstMatch
+    XCTAssertTrue(switched.waitForExistence(timeout: 10), "segment did not switch to methods")
+
+    let newButton = app.buttons["payments.newMethod"]
+    XCTAssertTrue(newButton.waitForExistence(timeout: 10), "new method button missing")
+    waitHittable(app, newButton, "new method button")
+    newButton.tap()
+
+    let numberField = app.textFields["payments.methodCreate.number"]
+    XCTAssertTrue(numberField.waitForExistence(timeout: 10), "create sheet missing")
+    numberField.tap()
+    numberField.typeText("4242424242424242")
+    let monthField = app.textFields["payments.methodCreate.expMonth"]
+    XCTAssertTrue(monthField.waitForExistence(timeout: 10), "exp month missing")
+    monthField.tap()
+    monthField.typeText("12")
+    let yearField = app.textFields["payments.methodCreate.expYear"]
+    XCTAssertTrue(yearField.waitForExistence(timeout: 10), "exp year missing")
+    yearField.tap()
+    yearField.typeText("2030")
+    let cvcField = app.textFields["payments.methodCreate.cvc"]
+    XCTAssertTrue(cvcField.waitForExistence(timeout: 10), "cvc missing")
+    cvcField.tap()
+    cvcField.typeText("123")
+
+    let submit = app.buttons["payments.methodCreate.submit"]
+    XCTAssertTrue(submit.waitForExistence(timeout: 10), "create submit missing")
+    submit.tap()
+
+    let confirm = app.buttons["payments.methodCreate.confirm"].firstMatch
+    XCTAssertTrue(confirm.waitForExistence(timeout: 10), "create confirmation missing")
+    confirm.tap()
+
+    let success = app.staticTexts["Method created"]
+    XCTAssertTrue(success.waitForExistence(timeout: 15), "create success alert missing")
+    app.buttons["OK"].tap()
+  }
+
   // MARK: - Dashboard mode refuses writes
 
   func testDashboardLockedAccountHasNoWriteControls() {
@@ -317,6 +369,18 @@ final class PaymentWriteUITests: XCTestCase {
       XCTAssertFalse(
         app.buttons["payments.newSetupIntent"].exists,
         "dashboard-locked account must not expose create setup intent")
+    }
+
+    // M4c-3: the same for the Methods segment's create button.
+    let methodsSegment = app.buttons["Methods"]
+    if methodsSegment.waitForExistence(timeout: 5) {
+      methodsSegment.tap()
+      _ = app.descendants(matching: .any).matching(
+        NSPredicate(format: "identifier == %@", "payments.segment.paymentMethods")
+      ).firstMatch.waitForExistence(timeout: 5)
+      XCTAssertFalse(
+        app.buttons["payments.newMethod"].exists,
+        "dashboard-locked account must not expose create payment method")
     }
 
     openFirstChargeDetail(app)

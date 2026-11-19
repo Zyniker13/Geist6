@@ -351,4 +351,57 @@ public struct PaymentsWriteService: Sendable {
       SetupIntent.self, method: "POST", path: "/v1/setup_intents/\(id)/verify_microdeposits",
       params: params, key: Self.key(), summary: summary)
   }
+
+  // MARK: - Payment methods
+
+  /// Creates a payment method. Tier-1 supports card details and type-only
+  /// methods; deeper per-type fields stay for the API explorer (M10).
+  public func createPaymentMethod(
+    type: String, cardNumber: String?, expMonth: Int?, expYear: Int?, cvc: String?,
+    summary: String
+  ) async throws -> PaymentMethod {
+    var params = PaymentMethodCreateParams()
+    params.type = CustomerListPaymentMethodsParamsType(rawValue: type)
+    if let cardNumber, let expMonth, let expYear {
+      params.card = .paymentMethodCreateParamsCardVariant1(
+        PaymentMethodCreateParamsCardVariant1(
+          cvc: cvc, expMonth: expMonth, expYear: expYear, number: cardNumber))
+    }
+    return try await run(
+      PaymentMethod.self, method: "POST", path: "/v1/payment_methods", params: params,
+      key: Self.key(), summary: summary)
+  }
+
+  /// Updates a payment method's billing name and email. An empty field
+  /// means "no change"; clearing a field is explorer territory (M10).
+  public func updatePaymentMethod(
+    id: String, billingName: String?, billingEmail: String?, summary: String
+  ) async throws -> PaymentMethod {
+    var params = PaymentMethodUpdateParams()
+    var details = PaymentMethodUpdateParamsBillingDetails()
+    if let billingName { details.name = .value(billingName) }
+    if let billingEmail { details.email = .value(billingEmail) }
+    params.billingDetails = details
+    return try await run(
+      PaymentMethod.self, method: "POST", path: "/v1/payment_methods/\(id)", params: params,
+      key: Self.key(), summary: summary)
+  }
+
+  /// Attaches a payment method to a customer.
+  public func attachPaymentMethod(
+    id: String, customer: String, summary: String
+  ) async throws -> PaymentMethod {
+    var params = PaymentMethodAttachParams()
+    params.customer = customer
+    return try await run(
+      PaymentMethod.self, method: "POST", path: "/v1/payment_methods/\(id)/attach",
+      params: params, key: Self.key(), summary: summary)
+  }
+
+  /// Detaches a payment method from its customer.
+  public func detachPaymentMethod(id: String, summary: String) async throws -> PaymentMethod {
+    return try await run(
+      PaymentMethod.self, method: "POST", path: "/v1/payment_methods/\(id)/detach",
+      params: PaymentMethodDetachParams(), key: Self.key(), summary: summary)
+  }
 }

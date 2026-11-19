@@ -25,6 +25,7 @@ struct PaymentsView: View {
   @State private var segment: PaymentsModel.Segment = .paymentIntents
   @State private var createPresented = false
   @State private var createSetupPresented = false
+  @State private var createMethodPresented = false
   @State private var writeResult: WriteResult?
 
   var body: some View {
@@ -60,6 +61,14 @@ struct PaymentsView: View {
           }
           .accessibilityIdentifier("payments.newSetupIntent")
         }
+        if writer != nil, segment == .paymentMethods {
+          Button {
+            createMethodPresented = true
+          } label: {
+            Label("New payment method", systemImage: "plus")
+          }
+          .accessibilityIdentifier("payments.newMethod")
+        }
       }
     }
     .sheet(isPresented: $createPresented) {
@@ -72,12 +81,18 @@ struct PaymentsView: View {
         CreateSetupIntentSheet(writer: writer, onFinished: handleCreateFinished)
       }
     }
+    .sheet(isPresented: $createMethodPresented) {
+      if let writer {
+        CreatePaymentMethodSheet(writer: writer, onFinished: handleCreateFinished)
+      }
+    }
     .writeResultAlert($writeResult)
   }
 
   private func handleCreateFinished(_ result: WriteResult) {
     createPresented = false
     createSetupPresented = false
+    createMethodPresented = false
     writeResult = result
     Task { await model?.load(segment) }
   }
@@ -206,7 +221,7 @@ struct PaymentDetailView: View {
       case .setupIntent(let id):
         SetupIntentDetailView(intentID: id, backend: backend, writer: writer)
       case .paymentMethod(let id):
-        PaymentMethodDetailView(methodID: id, backend: backend)
+        PaymentMethodDetailView(methodID: id, backend: backend, writer: writer)
       case .paymentLink(let id):
         PaymentLinkDetailView(linkID: id, backend: backend)
       }
