@@ -4,7 +4,7 @@ Keep every field current after every meaningful step. This file and `ROADMAP.md`
 
 - **Current milestone:** M4 (Payments) — M4a (d56911e) & M4b (db143ee) pushed; navigation fix committed (c93dc08, unpushed).
 - **Last done:** check12 gate: 15/16 UI tests green; only ScreenshotUITests.testCaptureScreens failed — its bare `firstMatch` back-tap hit the detail nav bar's actions Menu (never ran under decision 0018 navigation before) instead of popping; back-taps now matched by label ("Payments" / "Shot Store") with existence waits.
-- **Next step:** testCaptureScreens verified green (175s) after label-matched back fix (ad30dae); check13 gate killed mid-run by session compaction cleanup (all unit phases green at 01:42, died before UI phase) — relaunched as check14 with persist_on_release. When green: push c93dc08+ec9a321+ad30dae, verify CI, close M4b, start M4c.
+- **Next step:** check14 gate wrapper was SIGTERM'd at ~02:00 by session machinery (CHECK_EXIT:143, second such kill: check13 at 01:42) but its check.sh survived and continues the UI phase (xcodebuild 33655); verdict lands in /tmp/g6-check14.log. Poll the log; when "all green": push c93dc08+ec9a321+ad30dae, verify CI, close M4b, start M4c.
 - **Blocked on:** Nothing.
 
 ## Environment Check
