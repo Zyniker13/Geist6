@@ -1131,6 +1131,82 @@ public struct PriceUpdateParams: Sendable, Encodable, Hashable {
     }
 }
 
+public struct PriceSearchResult: Sendable, Codable, Equatable, Hashable, StripeSearchResult {
+    public var data: [Price]
+    public var hasMore: Bool
+    public var nextPage: Nullable<String>
+    public var object: SearchResultObject
+    public var totalCount: Int
+    public var url: String
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(data: [Price], hasMore: Bool, nextPage: Nullable<String>, object: SearchResultObject, totalCount: Int, url: String, unknownFields: [String: JSONValue]? = nil) {
+        self.data = data
+        self.hasMore = hasMore
+        self.nextPage = nextPage
+        self.object = object
+        self.totalCount = totalCount
+        self.url = url
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case data
+        case hasMore = "has_more"
+        case nextPage = "next_page"
+        case object
+        case totalCount = "total_count"
+        case url
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.data = try container.decode([Price].self, forKey: .data)
+        self.hasMore = try container.decode(Bool.self, forKey: .hasMore)
+        self.nextPage = try container.decodeIfPresent(Nullable<String>.self, forKey: .nextPage) ?? .null
+        self.object = try container.decode(SearchResultObject.self, forKey: .object)
+        self.totalCount = try container.decode(Int.self, forKey: .totalCount)
+        self.url = try container.decode(String.self, forKey: .url)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .data, .hasMore, .nextPage, .object, .totalCount, .url: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.data, forKey: .data)
+        try container.encodeIfPresent(self.hasMore, forKey: .hasMore)
+        try container.encodeIfPresent(self.nextPage, forKey: .nextPage)
+        try container.encodeIfPresent(self.object, forKey: .object)
+        try container.encodeIfPresent(self.totalCount, forKey: .totalCount)
+        try container.encodeIfPresent(self.url, forKey: .url)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+extension PriceSearchResult {
+    public var nextPageToken: String? {
+        switch nextPage {
+        case .value(let value): return value
+        default: return nil
+        }
+    }
+}
+
 public struct PriceList: Sendable, Codable, Equatable, Hashable, StripeList {
     public var data: [Price]
     public var hasMore: Bool

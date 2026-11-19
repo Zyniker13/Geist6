@@ -80,6 +80,11 @@ struct GeneratedType {
   let bucket: String
   let name: String
   let code: String
+  /// The Swift type of the `data` array element for list/search containers,
+  /// or nil for other shapes. Two inline response schemas can share a title
+  /// (every Stripe search response is titled "SearchResult") while carrying
+  /// different item types; the distinct item type is what tells them apart.
+  let dataItemType: String?
 }
 
 /// Resolves schemas to Swift type names and collects every type that must be
@@ -290,7 +295,7 @@ final class TypeEmitter {
     }
     let code = emitStruct(
       name: name, fields: fields, bucket: bucket, extraConformances: conformances)
-    pending.append((bucket, GeneratedType(bucket: bucket, name: name, code: code)))
+    pending.append((bucket, GeneratedType(bucket: bucket, name: name, code: code, dataItemType: nil)))
     return name
   }
 
@@ -546,7 +551,8 @@ final class TypeEmitter {
     lines.append("    }")
     lines.append("}")
     pending.append(
-      (bucket, GeneratedType(bucket: bucket, name: name, code: lines.joined(separator: "\n"))))
+      (bucket, GeneratedType(
+        bucket: bucket, name: name, code: lines.joined(separator: "\n"), dataItemType: nil)))
     return name
   }
 
@@ -654,7 +660,8 @@ final class TypeEmitter {
     lines.append("    }")
     lines.append("}")
     pending.append(
-      (bucket, GeneratedType(bucket: bucket, name: name, code: lines.joined(separator: "\n"))))
+      (bucket, GeneratedType(
+        bucket: bucket, name: name, code: lines.joined(separator: "\n"), dataItemType: nil)))
     return name
   }
 }

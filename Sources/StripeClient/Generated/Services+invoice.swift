@@ -31,7 +31,7 @@ extension StripeClient {
     }
 
     /// custom /v1/invoices/search (GET).
-    public func searchInvoice(_ params: InvoiceSearchParams? = nil, expand: [String]? = nil) async throws -> SearchResult {
+    public func searchInvoice(_ params: InvoiceSearchParams? = nil, expand: [String]? = nil) async throws -> InvoiceSearchResult {
         try await self.request(
             method: "GET",
             path: "/v1/invoices/search",

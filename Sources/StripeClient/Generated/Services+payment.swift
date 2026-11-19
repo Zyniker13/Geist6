@@ -40,7 +40,7 @@ extension StripeClient {
     }
 
     /// custom /v1/payment_intents/search (GET).
-    public func searchPaymentIntent(_ params: PaymentIntentSearchParams? = nil, expand: [String]? = nil) async throws -> SearchResult {
+    public func searchPaymentIntent(_ params: PaymentIntentSearchParams? = nil, expand: [String]? = nil) async throws -> PaymentIntentSearchResult {
         try await self.request(
             method: "GET",
             path: "/v1/payment_intents/search",

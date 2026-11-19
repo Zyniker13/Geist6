@@ -196,7 +196,16 @@ final class EndpointEmitter {
     let baseName =
       title.map { Naming.pascal($0) } ?? op.resourceClassName
       + (isSearch ? "SearchResult" : (isV2Page ? "Page" : "List"))
-    let name = emitter.registry.unique(baseName)
+    var name = emitter.registry.unique(baseName)
+    // Stripe titles every /search response "SearchResult" regardless of the
+    // item type, and `unique` memoizes per base name, so the second and later
+    // shapes would silently reuse the first struct's [Charge] data array.
+    // When the name is taken by a container with a different item type, pick
+    // a name that carries the item type (e.g. PaymentIntentSearchResult).
+    if let existing = listTypes.first(where: { $0.name == name }),
+      let existingItem = existing.dataItemType, existingItem != itemType {
+      name = emitter.registry.unique(itemType + (isSearch ? "SearchResult" : "List"))
+    }
 
     var fields: [ParsedSchema.Field] = []
     for (jsonName, schema) in props.sorted(by: { $0.key < $1.key }) {
@@ -271,7 +280,9 @@ final class EndpointEmitter {
         }
       }
       let finalCode = helpers.isEmpty ? code : code + "\n\n" + helpers.joined(separator: "\n\n")
-      listTypes.append(GeneratedType(bucket: bucketFor(op), name: name, code: finalCode))
+      listTypes.append(
+        GeneratedType(
+          bucket: bucketFor(op), name: name, code: finalCode, dataItemType: itemType))
     }
     return name
   }
@@ -318,7 +329,7 @@ final class EndpointEmitter {
       decodable: false,
       extraConformances: conformances
     )
-    paramsTypes.append(GeneratedType(bucket: bucketFor(op), name: name, code: code))
+    paramsTypes.append(GeneratedType(bucket: bucketFor(op), name: name, code: code, dataItemType: nil))
     return name
   }
 

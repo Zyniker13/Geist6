@@ -20,7 +20,7 @@ extension StripeClient {
     }
 
     /// custom /v1/customers/search (GET).
-    public func searchCustomer(_ params: CustomerSearchParams? = nil, expand: [String]? = nil) async throws -> SearchResult {
+    public func searchCustomer(_ params: CustomerSearchParams? = nil, expand: [String]? = nil) async throws -> CustomerSearchResult {
         try await self.request(
             method: "GET",
             path: "/v1/customers/search",
