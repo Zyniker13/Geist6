@@ -90,16 +90,26 @@ final class ScreenshotUITests: XCTestCase {
     Thread.sleep(forTimeInterval: 2)
     save(app, to: "/tmp/geist6-shot-charge-detail.png")
 
-    // 5. Refunds segment list.
-    app.navigationBars.buttons.firstMatch.tap()
+    // 5. Refunds segment list. The back chevron is matched by label: the
+    //    detail bar also hosts the actions Menu, so a bare firstMatch can
+    //    open the menu instead of popping (iPad, decision 0018 nav).
+    let back = app.navigationBars.buttons.matching(
+      NSPredicate(format: "label == %@ OR identifier == %@", "Payments", "Back")
+    ).firstMatch
+    XCTAssertTrue(back.waitForExistence(timeout: 10), "back button missing")
+    back.tap()
     let refundsSegment = app.buttons["Refunds"]
     XCTAssertTrue(refundsSegment.waitForExistence(timeout: 10), "refunds segment missing")
     refundsSegment.tap()
     Thread.sleep(forTimeInterval: 1)
     save(app, to: "/tmp/geist6-shot-payments-refunds.png")
 
-    // Back home before the search step.
-    app.navigationBars.buttons.firstMatch.tap()
+    // Back home before the search step (matched by label, as above).
+    let backHome = app.navigationBars.buttons.matching(
+      NSPredicate(format: "label == %@ OR identifier == %@", "Shot Store", "Back")
+    ).firstMatch
+    XCTAssertTrue(backHome.waitForExistence(timeout: 10), "back-to-home button missing")
+    backHome.tap()
     XCTAssertTrue(app.buttons["home.payments"].waitForExistence(timeout: 10), "home missing after payments")
 
     // 4. Search results for the fixture charge amount.
