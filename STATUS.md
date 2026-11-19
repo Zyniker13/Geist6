@@ -2,9 +2,9 @@
 
 Keep every field current after every meaningful step. This file and `ROADMAP.md` are the truth when work resumes.
 
-- **Current milestone:** M4 (Payments) — M4a (d56911e) & M4b (db143ee) pushed; navigation fix committed (c93dc08, unpushed).
-- **Last done:** check12 gate: 15/16 UI tests green; only ScreenshotUITests.testCaptureScreens failed — its bare `firstMatch` back-tap hit the detail nav bar's actions Menu (never ran under decision 0018 navigation before) instead of popping; back-taps now matched by label ("Payments" / "Shot Store") with existence waits.
-- **Next step:** check14's UI suite PASSED (16/16, 0 failed; Test Suite 'Geist6UITests.xctest' passed 02:31:26) before a third SIGTERM hit after the suite but before the verdict echo; M4b commits pushed (d56911e..3003b69). Verify CI green → close M4b → start M4c. Local detached gate re-run queued behind Geist4's lock as belt-and-suspenders.
+- **Current milestone:** M4 (Payments) — M4a (d56911e) & M4b (db143ee) CLOSED: check14 UI suite 16/16 passed, pushed d56911e..2feaea9, CI green on main. Now M4c: remaining tier-1 M4 rows (SetupIntent/PaymentMethod/PaymentLink/Charge writes, extra PaymentIntent writes, filters).
+- **Last done:** M4b closed — check14's UI suite passed 16/16 (0 failed) at 02:31:26 before a third SIGTERM cut the verdict echo; all commits pushed; CI success on 2feaea9.
+- **Next step:** M4c-1: PaymentIntent extra writes (create, apply_customer_balance, increment_authorization, verify_microdeposits) following the M4b sheet pattern (confirmation + idempotency + audit + dashboard lock). Then M4c-2 SetupIntent writes, M4c-3 PaymentMethod writes, M4c-4 PaymentLink + Charge create, M4c-5 filters, M4c-6 UI tests + full gate. Detached gate re-run (check15) still queued behind Geist4's lock as belt-and-suspenders.
 - **Blocked on:** Nothing.
 
 ## Environment Check
