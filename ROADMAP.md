@@ -145,7 +145,7 @@ Each milestone builds on the ones before it. Feature milestones (M4 to M11) each
 
 ### M4: Payments
 
-PaymentIntents, Charges, payment methods and their types, Refunds (full, partial, and with reason), Checkout Sessions, Payment Links, SetupIntents, captures and cancellations, the payment timeline (from the PaymentIntent, its charges, refunds, disputes, and balance transactions), receipts, filters by status, amount, date, customer, and method, plus the tier-2 rows that ride along with payments: Mandates, Confirmation Tokens, and the PaymentIntent amount-details line items.
+PaymentIntents, Charges, payment methods and their types, Refunds (full, partial, and with reason), Checkout Sessions, Payment Links, SetupIntents, captures and cancellations, the payment timeline (from the PaymentIntent, its charges, refunds, disputes, and balance transactions), receipts (decision 0021: surfaced through the charge's receipt fields and hosted receipt link — Stripe's OpenAPI definition models no standalone Receipt resource), filters by status, amount, date, customer, and method, plus the tier-2 rows that ride along with payments: Mandates, Confirmation Tokens, and the PaymentIntent amount-details line items (decision 0022: built early in M4 as compact structured views — mandate detail linked from the SetupIntent detail, confirmation tokens and mandates through open-by-ID and search, line items as a section on the PaymentIntent detail).
 
 **Done when:** every payments row in the coverage matrix is built at its tier; refund and capture flows pass UI tests against `stripe-mock` with confirmation and idempotency checked; and no write control appears in Dashboard mode (UI test).
 

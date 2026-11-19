@@ -37,6 +37,7 @@ struct PaymentIntentDetailView: View {
   @State private var phase: Phase = .loading
   @State private var timeline: PaymentTimeline?
   @State private var timelineFailed = false
+  @State private var lineItems: [PaymentIntentAmountDetailsLineItem]?
   @State private var capturePresented = false
   @State private var cancelPresented = false
   @State private var confirmPresented = false
@@ -212,6 +213,41 @@ struct PaymentIntentDetailView: View {
         }
       }
 
+      if let lineItems, !lineItems.isEmpty {
+        Section("Line items") {
+          ForEach(Array(lineItems.enumerated()), id: \.offset) { pair in
+            let item = pair.element
+            VStack(alignment: .leading, spacing: 2) {
+              HStack(alignment: .firstTextBaseline) {
+                Text(item.productName)
+                  .font(.subheadline.weight(.medium))
+                Spacer(minLength: 8)
+                Text(
+                  MoneyFormat.amount(
+                    item.unitCost * item.quantity, currency: intent.currency))
+              }
+              HStack(alignment: .firstTextBaseline) {
+                Text(
+                  "\(item.quantity) \u{00d7} "
+                    + MoneyFormat.amount(item.unitCost, currency: intent.currency))
+                  .font(.caption)
+                  .foregroundStyle(.secondary)
+                Spacer(minLength: 8)
+                if let tax = item.tax.valueOrNil, tax.totalTaxAmount > 0 {
+                  Text(
+                    "tax "
+                      + MoneyFormat.amount(tax.totalTaxAmount, currency: intent.currency))
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                }
+              }
+            }
+            .accessibilityElement(children: .combine)
+            .accessibilityIdentifier("payments.intent.lineItem.\(pair.offset)")
+          }
+        }
+      }
+
       Section("Timeline") {
         if let timeline {
           ForEach(timeline.entries) { entry in
@@ -232,6 +268,7 @@ struct PaymentIntentDetailView: View {
     phase = .loading
     timeline = nil
     timelineFailed = false
+    lineItems = nil
     do {
       let intent = try await backend.retrievePaymentIntent(id: intentID)
       phase = .loaded(intent)
@@ -240,6 +277,10 @@ struct PaymentIntentDetailView: View {
       } catch {
         timelineFailed = true
       }
+      // Amount-details line items are a best-effort companion: the
+      // endpoint only carries data when the intent was created with
+      // amount_details.line_items, so failures just leave the section off.
+      lineItems = try? await backend.intentLineItems(intent: intent.id)
     } catch {
       phase = .failed(String(describing: error))
     }

@@ -117,6 +117,29 @@ struct ChargeDetailView: View {
         }
       }
 
+      if charge.receiptEmail.valueOrNil != nil || charge.receiptNumber.valueOrNil != nil
+        || charge.receiptUrl.valueOrNil != nil {
+        Section("Receipt") {
+          if let email = charge.receiptEmail.valueOrNil {
+            PaymentFactRow(label: "Email", value: email)
+          }
+          if let number = charge.receiptNumber.valueOrNil, !number.isEmpty {
+            PaymentFactRow(label: "Number", value: number)
+          }
+          if let urlString = charge.receiptUrl.valueOrNil, let url = URL(string: urlString) {
+            Link(destination: url) {
+              HStack {
+                Text("Hosted receipt")
+                Spacer()
+                Image(systemName: "arrow.up.right")
+                  .font(.footnote)
+              }
+            }
+            .accessibilityIdentifier("payments.charge.receiptLink")
+          }
+        }
+      }
+
       if let transaction = balanceTransaction {
         Section("Balance") {
           PaymentFactRow(label: "Net", value: MoneyFormat.amount(transaction.net, currency: transaction.currency))

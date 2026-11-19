@@ -296,4 +296,76 @@ struct PaymentTimelineTests {
     #expect(!ids.contains("txn_missing"))
     #expect(!ids.contains("re_missing"))
   }
+
+  /// Decision 0021: receipts surface through the charge's receipt fields —
+  /// email, number, and the hosted receipt URL — decoded here so the charge
+  /// detail section has a proven data path.
+  @Test func chargeDecodesReceiptFieldsForDetailSection() throws {
+    let json = """
+    {
+      "amount": 2500,
+      "amount_capturable": 0,
+      "amount_captured": 2500,
+      "amount_refunded": 0,
+      "balance_transaction": null,
+      "billing_details": {},
+      "captured": true,
+      "created": 1700000000,
+      "currency": "usd",
+      "disputed": false,
+      "id": "ch_test_1",
+      "livemode": false,
+      "metadata": {},
+      "object": "charge",
+      "paid": true,
+      "receipt_email": "alice@example.com",
+      "receipt_number": "RNDR-test-0001",
+      "receipt_url": "https://pay.example.com/receipts/acct_test_123/ch_test_1",
+      "refunded": false,
+      "refunds": null,
+      "status": "succeeded"
+    }
+    """
+    let charge = try JSONDecoder().decode(Charge.self, from: Data(json.utf8))
+
+    #expect(charge.receiptEmail.valueOrNil == "alice@example.com")
+    #expect(charge.receiptNumber.valueOrNil == "RNDR-test-0001")
+    #expect(charge.receiptUrl.valueOrNil == "https://pay.example.com/receipts/acct_test_123/ch_test_1")
+    #expect(URL(string: charge.receiptUrl.valueOrNil ?? "") != nil)
+  }
+
+  /// A charge with no receipt fields at all (or null ones) yields no receipt
+  /// section values — the section hides instead of showing empty rows.
+  @Test func chargeWithoutReceiptFieldsDecodesToNil() throws {
+    let json = """
+    {
+      "amount": 2500,
+      "amount_capturable": 0,
+      "amount_captured": 2500,
+      "amount_refunded": 0,
+      "balance_transaction": null,
+      "billing_details": {},
+      "captured": true,
+      "created": 1700000000,
+      "currency": "usd",
+      "disputed": false,
+      "id": "ch_test_1",
+      "livemode": false,
+      "metadata": {},
+      "object": "charge",
+      "paid": true,
+      "receipt_email": null,
+      "receipt_number": null,
+      "receipt_url": null,
+      "refunded": false,
+      "refunds": null,
+      "status": "succeeded"
+    }
+    """
+    let charge = try JSONDecoder().decode(Charge.self, from: Data(json.utf8))
+
+    #expect(charge.receiptEmail.valueOrNil == nil)
+    #expect(charge.receiptNumber.valueOrNil == nil)
+    #expect(charge.receiptUrl.valueOrNil == nil)
+  }
 }

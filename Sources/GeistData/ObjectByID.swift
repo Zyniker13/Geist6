@@ -123,9 +123,11 @@ public enum StripeObjectKind: String, Sendable, CaseIterable, Equatable {
     case dispute = "dispute"
     case event = "event"
     case invoice = "invoice"
+    case mandate = "mandate"
     case paymentIntent = "payment_intent"
     case paymentMethod = "payment_method"
     case payout = "payout"
+    case confirmationToken = "confirmation_token"
     case price = "price"
     case product = "product"
     case refund = "refund"
@@ -150,6 +152,8 @@ public enum StripeObjectKind: String, Sendable, CaseIterable, Equatable {
             ("fr_", .dispute),
             ("evt_", .event),
             ("in_", .invoice),
+            ("ma_", .mandate),
+            ("ctoken_", .confirmationToken),
             ("pi_", .paymentIntent),
             ("pm_", .paymentMethod),
             ("po_", .payout),
@@ -178,9 +182,11 @@ public enum StripeObjectKind: String, Sendable, CaseIterable, Equatable {
         case .dispute: return "disputes"
         case .event: return "events"
         case .invoice: return "invoices"
+        case .mandate: return "mandates"
         case .paymentIntent: return "payment_intents"
         case .paymentMethod: return "payment_methods"
         case .payout: return "payouts"
+        case .confirmationToken: return "confirmation_tokens"
         case .price: return "prices"
         case .product: return "products"
         case .refund: return "refunds"
@@ -205,6 +211,8 @@ public enum StripeObjectKind: String, Sendable, CaseIterable, Equatable {
         case .paymentIntent: return "Payment intent"
         case .paymentMethod: return "Payment method"
         case .payout: return "Payout"
+        case .mandate: return "Mandate"
+        case .confirmationToken: return "Confirmation token"
         case .price: return "Price"
         case .product: return "Product"
         case .refund: return "Refund"

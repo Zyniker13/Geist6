@@ -165,6 +165,17 @@ struct SetupIntentDetailView: View {
           PaymentFactRow(label: "Description", value: description)
         }
       }
+
+      if let mandateID = intent.mandate.valueOrNil?.idOrNil {
+        Section("Mandate") {
+          NavigationLink {
+            MandateDetailView(mandateID: mandateID, backend: backend)
+          } label: {
+            Label("View mandate", systemImage: "signature")
+          }
+          .accessibilityIdentifier("payments.setupIntent.mandateLink")
+        }
+      }
     }
   }
 

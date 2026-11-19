@@ -48,13 +48,14 @@ struct SearchView: View {
 
   @State private var model: SearchModel?
   @State private var selectedHit: SearchHit?
+  @State private var paymentsBackend: (any PaymentsBackend)?
 
   var body: some View {
     Group {
       if let model {
         content(model)
           .navigationDestination(item: $selectedHit) { hit in
-            SearchHitView(hit: hit)
+            SearchHitView(hit: hit, paymentsBackend: paymentsBackend)
           }
       } else {
         ProgressView()
@@ -72,6 +73,7 @@ struct SearchView: View {
           baseURL: AppConfig.effectiveBaseURL
         )
         model = SearchModel(backend: client, initialQuery: initialQuery)
+        paymentsBackend = client
       } else if model?.query != initialQuery {
         model?.query = initialQuery
       }
@@ -159,6 +161,8 @@ struct SearchHitRow: View {
     case .charge, .paymentIntent, .setupIntent: "creditcard"
     case .customer: "person"
     case .payout: "banknote"
+    case .mandate: "signature"
+    case .confirmationToken: "number"
     case .event: "waveform"
     default: "doc"
     }
@@ -169,6 +173,7 @@ struct SearchHitRow: View {
 /// raw objects show the full key/value list.
 struct SearchHitView: View {
   let hit: SearchHit
+  var paymentsBackend: (any PaymentsBackend)?
 
   var body: some View {
     switch hit {
@@ -184,10 +189,18 @@ struct SearchHitView: View {
         ],
         title: "Customer"
       )
-    case .object(let kind, _, let json):
-      // Kinds without a typed detail view (payouts, events, invoices,
-      // everything else) show the full object as key/value pairs.
-      ObjectDetailView(json: json, title: kind.label)
+    case .object(let kind, let id, let json):
+      // Tier-2 payment kinds (decision 0022) route to their typed detail
+      // screens; the mandate screen re-fetches by ID. Kinds without a
+      // typed view (payouts, events, invoices, everything else) show the
+      // full object as key/value pairs.
+      if let paymentsBackend, kind == .mandate {
+        MandateDetailView(mandateID: id, backend: paymentsBackend)
+      } else if let paymentsBackend, kind == .confirmationToken {
+        ConfirmationTokenDetailView(tokenID: id, backend: paymentsBackend)
+      } else {
+        ObjectDetailView(json: json, title: kind.label)
+      }
     }
   }
 
