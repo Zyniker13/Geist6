@@ -48,7 +48,7 @@ let package = Package(
         ),
         .testTarget(
             name: "ClientTests",
-            dependencies: ["StripeClient"]
+            dependencies: ["StripeClient", "GeistData"]
         ),
         .testTarget(
             name: "ModelsTests",

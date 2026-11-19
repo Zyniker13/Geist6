@@ -191,7 +191,11 @@ extension StripeClient: PaymentsBackend {
     }
 
     public func retrieveBalanceTransaction(id: String) async throws -> BalanceTransaction {
-        try await retrieveBalanceTransaction(id: id)
+        // Unqualified `retrieveBalanceTransaction(id: id)` would re-enter THIS
+        // wrapper (same first label, default-arg-compatible signature) and spin
+        // the caller's actor forever. Spelling out the generated method's
+        // parameters makes the call unambiguous.
+        try await retrieveBalanceTransaction(id: id, nil, expand: nil)
     }
 }
 

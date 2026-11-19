@@ -48,9 +48,26 @@ if xcodebuild -version >/dev/null 2>&1; then
     fi
     xcodegen generate
 
+    # A stripe-mock left behind by an earlier crashed run still owns the
+    # port and the new one dies with "bind: address already in use",
+    # silently skipping every app test. Kill only stale stripe-mock
+    # processes on that port — never anything else.
+    STALE_MOCK=$(lsof -t -nP -i :12111 -sTCP:LISTEN 2>/dev/null | while read -r pid; do
+        [ "$(ps -p "$pid" -o comm= 2>/dev/null)" = "stripe-mock" ] && echo "$pid"
+    done)
+    if [ -n "$STALE_MOCK" ]; then
+        echo "killing stale stripe-mock on :12111 (pid $STALE_MOCK)" >&2
+        kill $STALE_MOCK 2>/dev/null || true
+        sleep 1
+    fi
+
     stripe-mock --port 12111 &
     MOCK_PID=$!
     sleep 2
+    if ! lsof -t -nP -i :12111 -sTCP:LISTEN >/dev/null 2>&1; then
+        echo "xcodebuild test: FAILED — stripe-mock did not start on :12111" >&2
+        exit 1
+    fi
 
     # The app is iPad-only: pick whichever iPad simulator is actually
     # installed (names differ across Xcode versions), and fail with a clear
@@ -76,6 +93,10 @@ if xcodebuild -version >/dev/null 2>&1; then
     fi
     echo "app tests on simulator: $SIM_NAME"
 
+    # The sim name contains spaces ("iPad Pro 13-inch (M5)"); an unquoted
+    # redirect word-splits and xcodebuild never runs. One quoted path per run.
+    TEST_LOG="/tmp/geist6-xcode-test-$$.txt"
+
     # Fresh derived data for every run: reusing a previous one can hang
     # the PruneExplicitPrecompiledModules phase. The path is unique per
     # run so two overlapping invocations can never clobber each other's
@@ -85,11 +106,11 @@ if xcodebuild -version >/dev/null 2>&1; then
     if xcodebuild -project Geist6.xcodeproj -scheme Geist6 \
         -destination "platform=iOS Simulator,name=$SIM_NAME,OS=latest" \
         -derivedDataPath "$DD" \
-        test > /tmp/geist6-xcode-test-$$-$SIM_NAME.txt 2>&1; then
-        echo "xcodebuild test: passed (full log in /tmp/geist6-xcode-test-$$-$SIM_NAME.txt)"
+        test > "$TEST_LOG" 2>&1; then
+        echo "xcodebuild test: passed (full log in $TEST_LOG)"
     else
-        echo "xcodebuild test: FAILED (see /tmp/geist6-xcode-test-$$-$SIM_NAME.txt)" >&2
-        tail -40 /tmp/geist6-xcode-test-$$-$SIM_NAME.txt >&2
+        echo "xcodebuild test: FAILED (see $TEST_LOG)" >&2
+        tail -40 "$TEST_LOG" >&2
         kill "$MOCK_PID" 2>/dev/null || true
         rm -rf "$DD"
         exit 1

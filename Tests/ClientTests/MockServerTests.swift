@@ -9,6 +9,7 @@ import XCTest
 import Foundation
 @testable import StripeClient
 import StripeModels
+import GeistData
 
 @MainActor
 final class MockServerTests: XCTestCase {
@@ -92,6 +93,45 @@ final class MockServerTests: XCTestCase {
     let deleted = try StripeClient.decoder.decode(
       DeletionResponse.self, from: result.body)
     XCTAssertTrue(deleted.deleted)
+  }
+
+  // MARK: - Regression: conformance wrappers must terminate
+
+  /// Regression (2026-11-18): the `StripeDataBackend` conformance wrapper
+  /// `StripeClient.retrieveBalanceTransaction(id:)` called itself, because
+  /// the generated service method shares its first parameter label (`id:`).
+  /// Every hop re-entered the wrapper on the caller's actor, so a call made
+  /// from the charge detail screen's MainActor `load()` spun the main
+  /// actor forever: the app never went idle and XCUITest timed out. The
+  /// wrapper must delegate to the generated
+  /// `retrieveBalanceTransaction(id:_:expand:)` instead.
+  ///
+  /// The call runs in a detached task raced against a timer: a regression
+  /// surfaces as this failure after 15 s instead of hanging the suite.
+  ///
+  /// Dispatch detail: the recursion only manifests when the call is made
+  /// through the `StripeDataBackend` protocol existential (as every app
+  /// view does) — there the witness is the wrapper, whose unqualified
+  /// `retrieveBalanceTransaction(id: id)` re-enters itself inside the
+  /// GeistData module. A direct `StripeClient` call from outside the
+  /// module resolves to the generated method instead and would make this
+  /// test a false green.
+  func testRetrieveBalanceTransactionWrapperTerminates() throws {
+    let client = MockHarness.client
+    let backend: any PaymentsBackend = client
+    let done = expectation(description: "retrieveBalanceTransaction returned")
+    Task.detached(priority: .utility) {
+      do {
+        _ = try await backend.retrieveBalanceTransaction(id: "txn_1234567890")
+        done.fulfill()
+      } catch {
+        XCTFail("unexpected error: \(error)")
+      }
+    }
+    let outcome = XCTWaiter.wait(for: [done], timeout: 15)
+    XCTAssertEqual(
+      outcome, .completed,
+      "retrieveBalanceTransaction(id:) did not return within 15 s; it must call the generated method, not itself")
   }
 
   // Search and 404-error handling are covered in RequestShapeTests via
