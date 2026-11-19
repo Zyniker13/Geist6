@@ -2,9 +2,9 @@
 
 Keep every field current after every meaningful step. This file and `ROADMAP.md` are the truth when work resumes.
 
-- **Current milestone:** M4 (Payments) — M4a (d56911e), M4b (db143ee) & M4c-1 CLOSED, CI green on main. Now M4c-2: SetupIntent writes (confirm with payment method, cancel) following the M4c-1 pattern.
-- **Last done:** M4c-1 closed — check.sh all green locally: PaymentsWriteTests 22/22 (8 new: create base/omitted-fields, dashboard-refusal for create, apply-balance with and without amount, increment total-only, verify deposits via amounts array and via descriptor code; the all-verbs idempotency loop now covers 13 verbs) and the UI suite 17/17 (new create-intent flow against stripe-mock; dashboard-locked accounts must not expose the toolbar create button). Pushed; CI pending check after push.
-- **Next step:** M4c-2 SetupIntent writes, M4c-3 PaymentMethod writes, M4c-4 PaymentLink + Charge create, M4c-5 filters, M4c-6 UI tests + full gate.
+- **Current milestone:** M4 (Payments) — M4a, M4b, M4c-1 & M4c-2 CLOSED (M4c-1 CI green on main). Now M4c-3: PaymentMethod writes.
+- **Last done:** M4c-2 closed — check.sh all green locally: PaymentsWriteTests 22/22, SetupIntentWriteTests 9/9 (new class; create base/empty, dashboard-refusal, update description, cancel reason, confirm with/without payment method, verify deposits amounts + descriptor code; all-verbs idempotency loop now covers 18 verbs), UI suite 18/18 (new create-setup-intent flow through the Setup segment; dashboard-locked accounts must not expose the Setup-segment create button). SetupIntentDetailView now takes the writer with a status-gated Actions menu (confirm / edit description / verify deposits / cancel); VerifyMicrodepositsSheet generalized over both intent kinds.
+- **Next step:** M4c-3 PaymentMethod writes, M4c-4 PaymentLink + Charge create, M4c-5 filters, M4c-6 UI tests + full gate. Then M5.
 - **Blocked on:** Nothing.
 
 ## Environment Check
@@ -45,6 +45,7 @@ One bullet per item: what is needed, why, and the milestone that needs it.
 
 ## Log
 
+- 2026-11-19: M4c-2 closed: SetupIntent writes (create, update, cancel, confirm, verify_microdeposits) end to end — five service methods, SetupIntentWriteSheets.swift (create/update/confirm/cancel), SetupIntentDetailView writer wiring with a status-gated menu, the Setup-segment toolbar create button, a new SetupIntentWriteTests class (9/9; split out to respect the type-body-length lint), the 18-verb idempotency loop, and +1 UI test (18/18). stripe-mock probes pinned the endpoint shapes (confirm/cancel accept an empty or reason-only form body). First gate run had one test bug (a two-mode test asserted against the first recorded body twice) — split into two tests, second run all green.
 - 2026-11-19: M4c-1 closed: PaymentIntent extra writes (create, apply_customer_balance, increment_authorization, verify_microdeposits) end to end — service methods in PaymentsWrite (dashboard-gated, idempotency-keyed, audited), IntentWriteSheets.swift with the four sheets, status-gated Actions menu entries, a toolbar create-intent button on Payments, +8 unit tests (22/22) and the 13-verb idempotency loop, +1 UI test (17/17) plus the locked-account toolbar assertion. check.sh all green on zGeist6_bot-iPad. Endpoint semantics pinned by live stripe-mock probes: increment_authorization takes only the new total amount (no currency); verify_microdeposits takes amounts[0..1] or descriptor_code; apply_customer_balance with no amount applies the remaining balance (empty body).
 - 2026-11-18: M4b write tests green: PaymentsWriteTests 14/14 in the app target; root-caused the multi-day heap-corruption crash — boxing an empty Swift collection literal (`{}`/`[]`) into `Any` corrupts the heap and the abort surfaces far from the cause (JSONSerialization was only the detection point); fixtures now use `NSDictionary()`/`NSArray()` (rule 8 in TESTING.md, fixture-rule comment in the test file). Committed c6ac475 (M4b data, write UI, write tests, decision 0017).
 - 2026-11-16: Roadmap written from general knowledge of Stripe; M0 checks it against Stripe's current documentation and API definition.
