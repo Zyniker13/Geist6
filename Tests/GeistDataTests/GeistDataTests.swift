@@ -87,6 +87,27 @@ private enum Fixture {
         return try decoder.decode(Charge.self, from: Data(json.utf8))
     }
 
+    static func paymentIntent(
+        _ amount: Int, created: Int, currency: String,
+        status: String, id: String = "pi_test_123", description: String? = nil
+    ) throws -> PaymentIntent {
+        let descriptionJSON = description.map { "\"description\": \"\($0)\"," } ?? ""
+        let json = """
+        {
+          "amount": \(amount),
+          "created": \(created),
+          "currency": "\(currency)",
+          \(descriptionJSON)
+          "id": "\(id)",
+          "livemode": false,
+          "metadata": {},
+          "object": "payment_intent",
+          "status": "\(status)"
+        }
+        """
+        return try decoder.decode(PaymentIntent.self, from: Data(json.utf8))
+    }
+
     static func customer(
         created: Int, id: String = "cus_test_123",
         name: String? = nil, email: String? = nil
@@ -170,9 +191,13 @@ private final class FakeBackend: StripeDataBackend, @unchecked Sendable {
     private let payouts: [Payout]
     private let events: [Event]
     private let searchChargesResults: [Charge]
+    private let searchPaymentIntentsResults: [PaymentIntent]
     /// When set, `searchCharges` throws this error, to exercise the
     /// list-fallback path (Decision 0013).
     private let searchFailure: StripeAPIError?
+    /// When set, `searchPaymentIntents` throws this error, to exercise the
+    /// intents-Search-unavailable path (Decision 0023).
+    private let searchIntentFailure: StripeAPIError?
     /// Raw JSON bodies served by `rawObject(path:)`, keyed by path.
     private let rawObjects: [String: Data]
 
@@ -181,6 +206,7 @@ private final class FakeBackend: StripeDataBackend, @unchecked Sendable {
     private var _retrieveChargeIDs: [String] = []
     private var _retrieveCustomerIDs: [String] = []
     private var _searchQueries: [String] = []
+    private var _intentSearchQueries: [String] = []
     private var _rawPaths: [String] = []
     private var _chargeListCalls = 0
 
@@ -192,7 +218,9 @@ private final class FakeBackend: StripeDataBackend, @unchecked Sendable {
         payouts: [Payout] = [],
         events: [Event] = [],
         searchChargesResults: [Charge] = [],
+        searchPaymentIntentsResults: [PaymentIntent] = [],
         searchFailure: StripeAPIError? = nil,
+        searchIntentFailure: StripeAPIError? = nil,
         rawObjects: [String: Data] = [:]
     ) {
         self.balance = balance
@@ -202,7 +230,9 @@ private final class FakeBackend: StripeDataBackend, @unchecked Sendable {
         self.payouts = payouts
         self.events = events
         self.searchChargesResults = searchChargesResults
+        self.searchPaymentIntentsResults = searchPaymentIntentsResults
         self.searchFailure = searchFailure
+        self.searchIntentFailure = searchIntentFailure
         self.rawObjects = rawObjects
     }
 
@@ -211,6 +241,7 @@ private final class FakeBackend: StripeDataBackend, @unchecked Sendable {
     var retrieveChargeIDs: [String] { lock.lock(); defer { lock.unlock() }; return _retrieveChargeIDs }
     var retrieveCustomerIDs: [String] { lock.lock(); defer { lock.unlock() }; return _retrieveCustomerIDs }
     var searchQueries: [String] { lock.lock(); defer { lock.unlock() }; return _searchQueries }
+    var intentSearchQueries: [String] { lock.lock(); defer { lock.unlock() }; return _intentSearchQueries }
     var rawPaths: [String] { lock.lock(); defer { lock.unlock() }; return _rawPaths }
     var chargeListCalls: Int { lock.lock(); defer { lock.unlock() }; return _chargeListCalls }
 
@@ -263,6 +294,12 @@ private final class FakeBackend: StripeDataBackend, @unchecked Sendable {
         record { _searchQueries.append(query) }
         if let searchFailure { throw searchFailure }
         return searchChargesResults
+    }
+
+    func searchPaymentIntents(query: String) async throws -> [PaymentIntent] {
+        record { _intentSearchQueries.append(query) }
+        if let searchIntentFailure { throw searchIntentFailure }
+        return searchPaymentIntentsResults
     }
 
     func rawObject(path: String) async throws -> Data {
@@ -578,6 +615,88 @@ final class SearchServiceTests: XCTestCase {
         return StripeAPIError(status: status, type: .undocumented, detail: detail)
     }
 
+    func testTextQueryMergesChargesAndIntents() async throws {
+        let charge = try Fixture.charge(
+            1_000, created: t0, currency: "usd", status: "succeeded", id: "ch_coffee"
+        )
+        let intent = try Fixture.paymentIntent(
+            1_000, created: t0, currency: "usd", status: "succeeded",
+            id: "pi_coffee", description: "Coffee prepayment"
+        )
+        let backend = FakeBackend(
+            searchChargesResults: [charge], searchPaymentIntentsResults: [intent]
+        )
+        let service = SearchService(backend: backend)
+
+        let results = try await service.search("coffee")
+        XCTAssertEqual(results.hits.map(\.id), ["ch_coffee", "pi_coffee"])
+        XCTAssertFalse(results.approximate)
+        XCTAssertEqual(backend.searchQueries, ["coffee"])
+        XCTAssertEqual(backend.intentSearchQueries, ["coffee"])
+        guard case .paymentIntent(let intentHit) = results.hits[1] else {
+            return XCTFail("expected a payment intent hit")
+        }
+        XCTAssertEqual(intentHit.id, "pi_coffee")
+    }
+
+    func testAmountQueryAlsoSearchesIntents() async throws {
+        let backend = FakeBackend(
+            searchChargesResults: [], searchPaymentIntentsResults: []
+        )
+        let service = SearchService(backend: backend)
+
+        _ = try await service.search("1500")
+        XCTAssertEqual(backend.searchQueries, ["amount:1500"])
+        XCTAssertEqual(backend.intentSearchQueries, ["amount:1500"])
+    }
+
+    func testIntentSearchUnavailableKeepsChargeHits() async throws {
+        let charge = try Fixture.charge(
+            1_000, created: t0, currency: "usd", status: "succeeded", id: "ch_coffee"
+        )
+        let backend = FakeBackend(
+            searchChargesResults: [charge], searchIntentFailure: try apiError(status: 404)
+        )
+        let service = SearchService(backend: backend)
+
+        let results = try await service.search("coffee")
+        XCTAssertEqual(results.hits.map(\.id), ["ch_coffee"])
+        XCTAssertFalse(results.approximate)
+        XCTAssertEqual(backend.chargeListCalls, 0)
+    }
+
+    func testIntentSearchPropagatesRealErrors() async throws {
+        let backend = FakeBackend(searchIntentFailure: try apiError(status: 500, message: "backend down"))
+        let service = SearchService(backend: backend)
+        do {
+            _ = try await service.search("coffee")
+            XCTFail("expected the API error to propagate")
+        } catch let error as StripeAPIError {
+            XCTAssertEqual(error.status, 500)
+        }
+    }
+
+    func testFallbackKeepsIntentHitsWhenChargeSearchUnavailable() async throws {
+        let coffee = try Fixture.charge(
+            1_000, created: t0, currency: "usd", status: "succeeded",
+            id: "ch_coffee", description: "Coffee subscription"
+        )
+        let intent = try Fixture.paymentIntent(
+            2_000, created: t0, currency: "usd", status: "succeeded",
+            id: "pi_coffee", description: "Coffee prepayment"
+        )
+        let backend = FakeBackend(
+            charges: [coffee],
+            searchPaymentIntentsResults: [intent],
+            searchFailure: try apiError(status: 404)
+        )
+        let service = SearchService(backend: backend)
+
+        let results = try await service.search("coffee")
+        XCTAssertEqual(results.hits.map(\.id), ["ch_coffee", "pi_coffee"])
+        XCTAssertTrue(results.approximate)
+    }
+
     func testSearchUnavailableMatches404() throws {
         XCTAssertTrue(SearchService.searchUnavailable(try apiError(status: 404)))
     }
@@ -784,5 +903,41 @@ final class ObjectByIDTests: XCTestCase {
         }
         XCTAssertEqual(root["amount"]?.intValue, 2000)
         XCTAssertEqual(root["paid"]?.boolValue, true)
+    }
+}
+
+// MARK: - Metadata parsing
+
+final class ParseMetadataLinesTests: XCTestCase {
+    func testParsesSimplePairs() throws {
+        XCTAssertEqual(parseMetadataLines("order_id=12345\ncolor=blue"), ["order_id": "12345", "color": "blue"])
+    }
+
+    func testTrimsWhitespaceAndSkipsBlankLines() {
+        XCTAssertEqual(
+            parseMetadataLines("  order_id = 12345 \n\n\tcolor=blue\n"),
+            ["order_id": "12345", "color": "blue"]
+        )
+    }
+
+    func testValueMayContainEquals() {
+        XCTAssertEqual(parseMetadataLines("query=a=b"), ["query": "a=b"])
+    }
+
+    func testDuplicateKeysKeepLastValue() {
+        XCTAssertEqual(parseMetadataLines("color=blue\ncolor=red"), ["color": "red"])
+    }
+
+    func testLineWithoutEqualsFailsParse() {
+        XCTAssertNil(parseMetadataLines("order_id=12345\nno equals sign"))
+    }
+
+    func testEmptyKeyFailsParse() {
+        XCTAssertNil(parseMetadataLines("=value"))
+    }
+
+    func testEmptyTextClearsAllMetadata() {
+        XCTAssertEqual(parseMetadataLines(""), [:])
+        XCTAssertEqual(parseMetadataLines("\n  \n"), [:])
     }
 }
