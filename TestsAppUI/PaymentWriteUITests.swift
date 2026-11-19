@@ -121,7 +121,9 @@ final class PaymentWriteUITests: XCTestCase {
         .map { "\($0.identifier)=\($0.label)" }
       print("G6DUMP texts: \(labels.joined(separator: " | "))")
       print("G6DUMP alerts: \(app.alerts.count) sheets: \(app.sheets.count) nav: \(app.navigationBars.count)")
-      print("G6DUMP onCharges: \(app.descendants(matching: .any).matching(NSPredicate(format: "identifier == %@", "payments.segment.charges")).firstMatch.exists)")
+      let chargesProbe = app.descendants(matching: .any)
+        .matching(NSPredicate(format: "identifier == %@", "payments.segment.charges")).firstMatch
+      print("G6DUMP onCharges: \(chargesProbe.exists)")
       let shot = XCTAttachment(screenshot: app.screenshot())
       shot.name = "failure-screenshot"
       shot.lifetime = .keepAlways
@@ -130,7 +132,7 @@ final class PaymentWriteUITests: XCTestCase {
     XCTAssertTrue(chargeAmount.waitForExistence(timeout: 20), "charge detail missing")
   }
 
-  /// MARK: write flows
+  // MARK: - Write flows
 
   /// Flips the dashboard lock on for `name` through the edit screen.
   private func enableDashboardLock(_ app: XCUIApplication, name: String) {
