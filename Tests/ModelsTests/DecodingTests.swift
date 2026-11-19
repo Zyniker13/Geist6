@@ -29,6 +29,10 @@ struct DecodingTests {
         """
         {
           "amount": 1099,
+          "amount_capturable": 0,
+          "amount_received": 0,
+          "capture_method": "automatic",
+          "confirmation_method": "automatic",
           "created": 1234567890,
           "currency": "usd",
           "description": "search fixture",
@@ -36,6 +40,7 @@ struct DecodingTests {
           "livemode": false,
           "metadata": {"order": "a1"},
           "object": "payment_intent",
+          "payment_method_types": ["card"],
           "status": "requires_payment_method"
         }
         """
@@ -86,10 +91,14 @@ struct DecodingTests {
           "amount": 100,
           "amount_captured": 100,
           "amount_refunded": 0,
+          "billing_details": {},
+          "captured": true,
           "created": 1234567890,
           "currency": "usd",
+          "disputed": false,
           "id": "ch_test_123",
           "livemode": false,
+          "metadata": {},
           "object": "charge",
           "paid": true,
           "refunded": false,

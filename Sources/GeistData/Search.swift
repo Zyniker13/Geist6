@@ -185,7 +185,7 @@ public struct SearchService: Sendable {
 
         // 3. Amount → charges and payment intents Search API (with fallback).
         if let amount = Self.amountQuery(trimmed) {
-            return try await chargesAndIntents(amount)
+            return try await chargesAndIntents(amount, clientQuery: trimmed)
         }
 
         // 4. Fallback: general Search API query for charges and intents.
@@ -197,17 +197,24 @@ public struct SearchService: Sendable {
     /// Search-unavailable error: a side that is unavailable contributes
     /// nothing, and when the charge side is unavailable the client-side
     /// fallback list supplies the charge hits (marked approximate). A
-    /// failure that is not an availability error is rethrown.
-    private func chargesAndIntents(_ query: String) async throws -> SearchResultSet {
+    /// failure that is not an availability error is rethrown. The Search
+    /// API receives `apiQuery` (the amount route sends `amount:<n>`);
+    /// `clientQuery` is what the client-side fallback filter matches
+    /// against, which must stay the user's own text, not the Search
+    /// syntax.
+    private func chargesAndIntents(
+        _ apiQuery: String, clientQuery: String? = nil
+    ) async throws -> SearchResultSet {
+        let matchQuery = clientQuery ?? apiQuery
         var chargeHits: [SearchHit]?
         do {
-            chargeHits = try await backend.searchCharges(query: query).map { .charge($0) }
+            chargeHits = try await backend.searchCharges(query: apiQuery).map { .charge($0) }
         } catch {
             guard Self.searchUnavailable(error) else { throw error }
         }
         var intentHits: [SearchHit] = []
         do {
-            intentHits = try await backend.searchPaymentIntents(query: query)
+            intentHits = try await backend.searchPaymentIntents(query: apiQuery)
                 .map { .paymentIntent($0) }
         } catch {
             guard Self.searchUnavailable(error) else { throw error }
@@ -217,7 +224,7 @@ public struct SearchService: Sendable {
         }
         // Charges Search unavailable: fall back to the plain charges list
         // (approximate), keeping any intent hits found alongside it.
-        let fallback = try await fallbackCharges(matching: query)
+        let fallback = try await fallbackCharges(matching: matchQuery)
         return SearchResultSet(hits: fallback.0 + intentHits, approximate: true)
     }
 

@@ -95,6 +95,10 @@ private enum Fixture {
         let json = """
         {
           "amount": \(amount),
+          "amount_capturable": 0,
+          "amount_received": 0,
+          "capture_method": "automatic",
+          "confirmation_method": "automatic",
           "created": \(created),
           "currency": "\(currency)",
           \(descriptionJSON)
@@ -102,6 +106,7 @@ private enum Fixture {
           "livemode": false,
           "metadata": {},
           "object": "payment_intent",
+          "payment_method_types": ["card"],
           "status": "\(status)"
         }
         """
