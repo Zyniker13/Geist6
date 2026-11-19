@@ -40,6 +40,9 @@ struct PaymentIntentDetailView: View {
   @State private var capturePresented = false
   @State private var cancelPresented = false
   @State private var confirmPresented = false
+  @State private var applyBalancePresented = false
+  @State private var incrementPresented = false
+  @State private var verifyDepositsPresented = false
   @State private var writeResult: WriteResult?
 
   var body: some View {
@@ -71,6 +74,24 @@ struct PaymentIntentDetailView: View {
         CancelIntentSheet(intent: intent, writer: writer, onFinished: handleWriteFinished)
       }
     }
+    .sheet(isPresented: $applyBalancePresented) {
+      if case .loaded(let intent) = phase, let writer {
+        ApplyCustomerBalanceSheet(
+          intent: intent, writer: writer, onFinished: handleWriteFinished)
+      }
+    }
+    .sheet(isPresented: $incrementPresented) {
+      if case .loaded(let intent) = phase, let writer {
+        IncrementAuthorizationSheet(
+          intent: intent, writer: writer, onFinished: handleWriteFinished)
+      }
+    }
+    .sheet(isPresented: $verifyDepositsPresented) {
+      if case .loaded(let intent) = phase, let writer {
+        VerifyMicrodepositsSheet(
+          intent: intent, writer: writer, onFinished: handleWriteFinished)
+      }
+    }
     .confirmationDialog(
       "Confirm this payment now? The customer's payment method will be charged.",
       isPresented: $confirmPresented, titleVisibility: .visible
@@ -96,6 +117,19 @@ struct PaymentIntentDetailView: View {
           if intent.status == .requiresCapture, intent.amountCapturable > 0 {
             Button("Capture…") { capturePresented = true }
               .accessibilityIdentifier("payments.intent.capture")
+          }
+          if intent.status == .requiresPaymentMethod {
+            Button("Apply customer balance…") { applyBalancePresented = true }
+              .accessibilityIdentifier("payments.intent.applyBalance")
+          }
+          if intent.status == .requiresCapture {
+            Button("Increment authorization…") { incrementPresented = true }
+              .accessibilityIdentifier("payments.intent.increment")
+          }
+          if isCancellable(intent.status),
+            intent.paymentMethodTypes.contains("us_bank_account") {
+            Button("Verify microdeposits…") { verifyDepositsPresented = true }
+              .accessibilityIdentifier("payments.intent.verifyDeposits")
           }
           if isCancellable(intent.status) {
             Button("Cancel intent…", role: .destructive) { cancelPresented = true }
@@ -123,6 +157,9 @@ struct PaymentIntentDetailView: View {
   private func handleWriteFinished(_ result: WriteResult) {
     capturePresented = false
     cancelPresented = false
+    applyBalancePresented = false
+    incrementPresented = false
+    verifyDepositsPresented = false
     writeResult = result
     Task { await load() }
   }

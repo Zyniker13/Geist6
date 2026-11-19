@@ -232,4 +232,59 @@ public struct PaymentsWriteService: Sendable {
       PaymentIntent.self, method: "POST", path: "/v1/payment_intents/\(id)/confirm",
       params: PaymentIntentConfirmParams(), key: Self.key(), summary: summary)
   }
+
+  /// Creates a payment intent with the sheet's base fields. `captureMethod`
+  /// nil means Stripe's default (automatic).
+  public func createPaymentIntent(
+    amount: Int, currency: String, customer: String?, description: String?,
+    captureMethod: PaymentIntentCaptureMethod?, summary: String
+  ) async throws -> PaymentIntent {
+    var params = PaymentIntentCreateParams(amount: amount, currency: currency)
+    params.customer = customer
+    params.description = description
+    params.captureMethod = captureMethod
+    return try await run(
+      PaymentIntent.self, method: "POST", path: "/v1/payment_intents", params: params,
+      key: Self.key(), summary: summary)
+  }
+
+  /// Manually reconciles a `customer_balance` payment intent: applies the
+  /// customer's balance to it. `amount == nil` applies the remaining balance.
+  public func applyCustomerBalancePaymentIntent(
+    id: String, amount: Int?, currency: String?, summary: String
+  ) async throws -> PaymentIntent {
+    var params = PaymentIntentApplyCustomerBalanceParams()
+    params.amount = amount
+    params.currency = currency
+    return try await run(
+      PaymentIntent.self, method: "POST",
+      path: "/v1/payment_intents/\(id)/apply_customer_balance", params: params,
+      key: Self.key(), summary: summary)
+  }
+
+  /// Increments a manual-capture authorization to a new, higher total
+  /// amount (the parameter is the new total, not the increase).
+  public func incrementAuthorizationPaymentIntent(
+    id: String, amount: Int, summary: String
+  ) async throws -> PaymentIntent {
+    var params = PaymentIntentIncrementAuthorizationParams(amount: amount)
+    return try await run(
+      PaymentIntent.self, method: "POST",
+      path: "/v1/payment_intents/\(id)/increment_authorization", params: params,
+      key: Self.key(), summary: summary)
+  }
+
+  /// Verifies microdeposits on a bank-debit intent: either the two deposit
+  /// amounts in cents or the descriptor code from the statement.
+  public func verifyMicrodepositsPaymentIntent(
+    id: String, amounts: [Int]?, descriptorCode: String?, summary: String
+  ) async throws -> PaymentIntent {
+    var params = PaymentIntentVerifyMicrodepositsParams()
+    params.amounts = amounts
+    params.descriptorCode = descriptorCode
+    return try await run(
+      PaymentIntent.self, method: "POST",
+      path: "/v1/payment_intents/\(id)/verify_microdeposits", params: params,
+      key: Self.key(), summary: summary)
+  }
 }

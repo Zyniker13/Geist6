@@ -13,8 +13,8 @@ enum PaymentRoute: Hashable {
 }
 
 /// The payments tab: six browsable lists of one account's payment objects.
-/// Read-only by construction; write controls arrive in M4b behind the
-/// management-mode gate.
+/// Writes live behind the management-mode gate: lifecycle actions on each
+/// object's detail screen, and creating payment intents from the toolbar.
 struct PaymentsView: View {
   let account: Account
   let backend: any PaymentsBackend
@@ -23,6 +23,8 @@ struct PaymentsView: View {
 
   @State private var model: PaymentsModel?
   @State private var segment: PaymentsModel.Segment = .paymentIntents
+  @State private var createPresented = false
+  @State private var writeResult: WriteResult?
 
   var body: some View {
     Group {
@@ -38,6 +40,32 @@ struct PaymentsView: View {
         model = PaymentsModel(backend: backend)
       }
       await model?.load(segment)
+    }
+    .toolbar {
+      ToolbarItem(placement: .primaryAction) {
+        if writer != nil, segment == .paymentIntents {
+          Button {
+            createPresented = true
+          } label: {
+            Label("New payment intent", systemImage: "plus")
+          }
+          .accessibilityIdentifier("payments.newIntent")
+        }
+      }
+    }
+    .sheet(isPresented: $createPresented) {
+      if let writer {
+        CreateIntentSheet(writer: writer, onFinished: handleCreateFinished)
+      }
+    }
+    .writeResultAlert($writeResult)
+  }
+
+  private func handleCreateFinished(_ result: WriteResult) {
+    createPresented = false
+    writeResult = result
+    if segment == .paymentIntents {
+      Task { await model?.load(segment) }
     }
   }
 

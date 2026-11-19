@@ -273,6 +273,161 @@ final class PaymentsWriteTests: XCTestCase {
     XCTAssertNil(WriteStub.firstBodyString(), "confirm with no params must send an empty body")
   }
 
+  // MARK: - Payment intent creation (M4c)
+
+  func testCreatePaymentIntentEncodesBaseFields() async throws {
+    let service = makeService(mode: .management)
+    WriteStub.install(status: 200, json: [
+      "amount": 1500, "amount_capturable": 1500, "amount_received": 0,
+      "capture_method": "manual", "confirmation_method": "automatic",
+      "created": 1_700_000_000, "currency": "eur", "customer": "cus_test_123",
+      "description": "Desk lamp", "id": "pi_test_124", "livemode": false,
+      "metadata": NSDictionary(), "object": "payment_intent",
+      "payment_method_types": ["card"], "status": "requires_confirmation",
+    ])
+    let intent = try await service.createPaymentIntent(
+      amount: 1500, currency: "eur", customer: "cus_test_123",
+      description: "Desk lamp", captureMethod: .manual, summary: "Create intent")
+    XCTAssertEqual(intent.id, "pi_test_124")
+    XCTAssertEqual(intent.status, .requiresConfirmation)
+    let request = try XCTUnwrap(WriteStubURLProtocol.recordedRequests.first)
+    XCTAssertEqual(request.httpMethod, "POST")
+    XCTAssertTrue(request.url!.path.hasSuffix("/v1/payment_intents"))
+    let body = try XCTUnwrap(WriteStub.firstBodyString())
+    XCTAssertEqual(
+      body,
+      "amount=1500&capture_method=manual&currency=eur&customer=cus_test_123"
+        + "&description=Desk+lamp")
+  }
+
+  func testCreatePaymentIntentOmitsOptionalFields() async throws {
+    let service = makeService(mode: .management)
+    WriteStub.install(status: 200, json: [
+      "amount": 2500, "amount_capturable": 2500, "amount_received": 0,
+      "capture_method": "automatic", "confirmation_method": "automatic",
+      "created": 1_700_000_000, "currency": "usd", "id": "pi_test_125",
+      "livemode": false, "metadata": NSDictionary(), "object": "payment_intent",
+      "payment_method_types": ["card"], "status": "requires_confirmation",
+    ])
+    _ = try await service.createPaymentIntent(
+      amount: 2500, currency: "usd", customer: nil, description: nil,
+      captureMethod: nil, summary: "Create intent")
+    XCTAssertEqual(try XCTUnwrap(WriteStub.firstBodyString()), "amount=2500&currency=usd")
+  }
+
+  func testDashboardModeRefusesCreateIntentBeforeNetwork() async throws {
+    let service = makeService(mode: .dashboard)
+    do {
+      _ = try await service.createPaymentIntent(
+        amount: 1500, currency: "usd", customer: nil, description: nil,
+        captureMethod: nil, summary: "Create intent")
+      XCTFail("dashboard-mode write should throw")
+    } catch let error as PaymentsWriteError {
+      XCTAssertEqual(error, .dashboardMode)
+    } catch {
+      XCTFail("Expected PaymentsWriteError.dashboardMode, got \(error)")
+    }
+    XCTAssertTrue(WriteStubURLProtocol.recordedRequests.isEmpty, "a dashboard-mode create reached the network")
+    let entries = await audit.entries(limit: 10)
+    XCTAssertEqual(entries.count, 1)
+    XCTAssertEqual(entries[0].outcome, "refused: dashboard mode")
+    XCTAssertEqual(entries[0].method, "POST")
+    XCTAssertEqual(entries[0].path, "/v1/payment_intents")
+  }
+
+  // MARK: - Payment intent balance, authorization, microdeposits (M4c)
+
+  func testApplyCustomerBalanceEncodesOptionalAmountAndCurrency() async throws {
+    let service = makeService(mode: .management)
+    WriteStub.install(status: 200, json: [
+      "amount": 1500, "amount_capturable": 0, "amount_received": 1500,
+      "capture_method": "automatic", "confirmation_method": "automatic",
+      "created": 1_700_000_000, "currency": "usd", "id": "pi_test_126",
+      "livemode": false, "metadata": NSDictionary(), "object": "payment_intent",
+      "payment_method_types": ["customer_balance"], "status": "processing",
+    ])
+    let intent = try await service.applyCustomerBalancePaymentIntent(
+      id: "pi_test_126", amount: 500, currency: "usd", summary: "Apply balance")
+    XCTAssertEqual(intent.id, "pi_test_126")
+    let request = try XCTUnwrap(WriteStubURLProtocol.recordedRequests.first)
+    XCTAssertTrue(
+      request.url!.path.hasSuffix("/v1/payment_intents/pi_test_126/apply_customer_balance"))
+    XCTAssertEqual(try XCTUnwrap(WriteStub.firstBodyString()), "amount=500&currency=usd")
+  }
+
+  func testApplyCustomerBalanceWithoutAmountSendsEmptyBody() async throws {
+    let service = makeService(mode: .management)
+    WriteStub.install(status: 200, json: [
+      "amount": 1500, "amount_capturable": 0, "amount_received": 1500,
+      "capture_method": "automatic", "confirmation_method": "automatic",
+      "created": 1_700_000_000, "currency": "usd", "id": "pi_test_126",
+      "livemode": false, "metadata": NSDictionary(), "object": "payment_intent",
+      "payment_method_types": ["customer_balance"], "status": "processing",
+    ])
+    _ = try await service.applyCustomerBalancePaymentIntent(
+      id: "pi_test_126", amount: nil, currency: nil, summary: "Apply balance")
+    XCTAssertNil(
+      WriteStub.firstBodyString(),
+      "applying the remaining balance must send an empty body")
+  }
+
+  func testIncrementAuthorizationEncodesNewTotalOnly() async throws {
+    let service = makeService(mode: .management)
+    WriteStub.install(status: 200, json: [
+      "amount": 3000, "amount_capturable": 3000, "amount_received": 0,
+      "capture_method": "manual", "confirmation_method": "automatic",
+      "created": 1_700_000_000, "currency": "usd", "id": "pi_test_127",
+      "livemode": false, "metadata": NSDictionary(), "object": "payment_intent",
+      "payment_method_types": ["card_present"], "status": "requires_capture",
+    ])
+    let intent = try await service.incrementAuthorizationPaymentIntent(
+      id: "pi_test_127", amount: 3000, summary: "Increment authorization")
+    XCTAssertEqual(intent.amount, 3000)
+    let request = try XCTUnwrap(WriteStubURLProtocol.recordedRequests.first)
+    XCTAssertTrue(
+      request.url!.path.hasSuffix("/v1/payment_intents/pi_test_127/increment_authorization"))
+    let body = try XCTUnwrap(WriteStub.firstBodyString())
+    XCTAssertEqual(body, "amount=3000", "the parameter is the new total, and nothing else")
+    XCTAssertFalse(body.contains("currency"), "currency is not a parameter of this endpoint")
+  }
+
+  func testVerifyMicrodepositsEncodesIndexedAmounts() async throws {
+    let service = makeService(mode: .management)
+    WriteStub.install(status: 200, json: [
+      "amount": 1500, "amount_capturable": 0, "amount_received": 0,
+      "capture_method": "automatic", "confirmation_method": "automatic",
+      "created": 1_700_000_000, "currency": "usd", "id": "pi_test_128",
+      "livemode": false, "metadata": NSDictionary(), "object": "payment_intent",
+      "payment_method_types": ["us_bank_account"], "status": "succeeded",
+    ])
+    let intent = try await service.verifyMicrodepositsPaymentIntent(
+      id: "pi_test_128", amounts: [32, 45], descriptorCode: nil,
+      summary: "Verify microdeposits")
+    XCTAssertEqual(intent.id, "pi_test_128")
+    let request = try XCTUnwrap(WriteStubURLProtocol.recordedRequests.first)
+    XCTAssertTrue(
+      request.url!.path.hasSuffix("/v1/payment_intents/pi_test_128/verify_microdeposits"))
+    XCTAssertEqual(
+      try XCTUnwrap(WriteStub.firstBodyString()),
+      "amounts%5B0%5D=32&amounts%5B1%5D=45")
+  }
+
+  func testVerifyMicrodepositsEncodesDescriptorCode() async throws {
+    let service = makeService(mode: .management)
+    WriteStub.install(status: 200, json: [
+      "amount": 1500, "amount_capturable": 0, "amount_received": 0,
+      "capture_method": "automatic", "confirmation_method": "automatic",
+      "created": 1_700_000_000, "currency": "usd", "id": "pi_test_128",
+      "livemode": false, "metadata": NSDictionary(), "object": "payment_intent",
+      "payment_method_types": ["us_bank_account"], "status": "succeeded",
+    ])
+    _ = try await service.verifyMicrodepositsPaymentIntent(
+      id: "pi_test_128", amounts: nil, descriptorCode: "SMT85QTW6VE",
+      summary: "Verify microdeposits")
+    XCTAssertEqual(
+      try XCTUnwrap(WriteStub.firstBodyString()), "descriptor_code=SMT85QTW6VE")
+  }
+
   // MARK: - Failure recording
 
   func testAPIFailureIsRecordedInAuditAndRethrown() async throws {
@@ -349,15 +504,28 @@ final class PaymentsWriteTests: XCTestCase {
     _ = try await service.cancelPaymentIntent(id: "pi_test_123", reason: nil, summary: "s")
     WriteStub.install(status: 200, json: intentJSON)
     _ = try await service.confirmPaymentIntent(id: "pi_test_123", summary: "s")
+    WriteStub.install(status: 200, json: intentJSON)
+    _ = try await service.createPaymentIntent(
+      amount: 1500, currency: "usd", customer: nil, description: nil,
+      captureMethod: nil, summary: "s")
+    WriteStub.install(status: 200, json: intentJSON)
+    _ = try await service.applyCustomerBalancePaymentIntent(
+      id: "pi_test_123", amount: nil, currency: nil, summary: "s")
+    WriteStub.install(status: 200, json: intentJSON)
+    _ = try await service.incrementAuthorizationPaymentIntent(
+      id: "pi_test_123", amount: 3000, summary: "s")
+    WriteStub.install(status: 200, json: intentJSON)
+    _ = try await service.verifyMicrodepositsPaymentIntent(
+      id: "pi_test_123", amounts: [32, 45], descriptorCode: nil, summary: "s")
 
     let requests = WriteStubURLProtocol.recordedRequests
-    XCTAssertEqual(requests.count, 9, "one request per verb")
+    XCTAssertEqual(requests.count, 13, "one request per verb")
     for (index, request) in requests.enumerated() {
       let key = try XCTUnwrap(keyOf(request), "request \(index) carries no idempotency key")
       XCTAssertFalse(key.isEmpty, "request \(index) carries an empty idempotency key")
     }
     let entries = await audit.entries(limit: 20)
-    XCTAssertEqual(entries.count, 9)
+    XCTAssertEqual(entries.count, 13)
     let auditedKeys = Set(entries.map(\.idempotencyKey))
     let sentKeys = Set(requests.compactMap(keyOf))
     XCTAssertEqual(auditedKeys, sentKeys, "audit keys must match the sent keys exactly")

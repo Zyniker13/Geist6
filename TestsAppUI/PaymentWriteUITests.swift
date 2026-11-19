@@ -1,6 +1,6 @@
 import XCTest
 
-/// M4b UI tests for payment write flows and the dashboard-mode no-write
+/// M4b/M4c UI tests for payment write flows and the dashboard-mode no-write
 /// guarantee (decision 0017). stripe-mock on 127.0.0.1:12111 echoes fixture
 /// responses for writes, so these assert flow completion (sheet → confirm →
 /// success alert); state transitions are covered by service-level tests.
@@ -221,6 +221,38 @@ final class PaymentWriteUITests: XCTestCase {
     app.buttons["OK"].tap()
   }
 
+  // MARK: - Create intent flow (M4c)
+
+  /// Creates a payment intent from the Payments toolbar: sheet → fill amount
+  /// → confirm → success alert. stripe-mock echoes a fixture intent back.
+  func testCreateIntentFlowCompletesAgainstMock() {
+    let app = launchFresh()
+    addAccountAndWait(app, name: "Create Store")
+    openPayments(app)
+
+    let newButton = app.buttons["payments.newIntent"]
+    XCTAssertTrue(newButton.waitForExistence(timeout: 10), "new intent button missing")
+    waitHittable(app, newButton, "new intent button")
+    newButton.tap()
+
+    let amountField = app.textFields["payments.create.amountField"]
+    XCTAssertTrue(amountField.waitForExistence(timeout: 10), "create sheet missing")
+    amountField.tap()
+    amountField.typeText("1500")
+
+    let submit = app.buttons["payments.create.submit"]
+    XCTAssertTrue(submit.waitForExistence(timeout: 10), "create submit missing")
+    submit.tap()
+
+    let confirm = app.buttons["payments.create.confirm"].firstMatch
+    XCTAssertTrue(confirm.waitForExistence(timeout: 10), "create confirmation missing")
+    confirm.tap()
+
+    let success = app.staticTexts["Intent created"]
+    XCTAssertTrue(success.waitForExistence(timeout: 15), "create success alert missing")
+    app.buttons["OK"].tap()
+  }
+
   // MARK: - Dashboard mode refuses writes
 
   func testDashboardLockedAccountHasNoWriteControls() {
@@ -228,6 +260,12 @@ final class PaymentWriteUITests: XCTestCase {
     addAccountAndWait(app, name: "Locked Store")
     enableDashboardLock(app, name: "Locked Store")
     openPayments(app)
+
+    // M4c: the create-intent toolbar button is a write control too.
+    XCTAssertFalse(
+      app.buttons["payments.newIntent"].exists,
+      "dashboard-locked account must not expose create intent")
+
     openFirstChargeDetail(app)
 
     // The detail loads (read path works) but no Actions menu may appear.
