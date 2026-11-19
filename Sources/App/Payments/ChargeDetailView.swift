@@ -19,6 +19,7 @@ struct ChargeDetailView: View {
   @State private var balanceTransaction: BalanceTransaction?
   @State private var refundPresented = false
   @State private var capturePresented = false
+  @State private var editPresented = false
   @State private var writeResult: WriteResult?
 
   var body: some View {
@@ -50,6 +51,11 @@ struct ChargeDetailView: View {
         CaptureSheet(target: .charge(charge), writer: writer, onFinished: handleWriteFinished)
       }
     }
+    .sheet(isPresented: $editPresented) {
+      if case .loaded(let charge) = phase, let writer {
+        EditChargeSheet(charge: charge, writer: writer, onFinished: handleWriteFinished)
+      }
+    }
     .writeResultAlert($writeResult)
   }
 
@@ -66,6 +72,8 @@ struct ChargeDetailView: View {
             Button("Capture…") { capturePresented = true }
               .accessibilityIdentifier("payments.charge.capture")
           }
+          Button("Edit description & metadata…") { editPresented = true }
+            .accessibilityIdentifier("payments.charge.edit")
         } label: {
           Label("Actions", systemImage: "ellipsis.circle")
         }
@@ -77,6 +85,7 @@ struct ChargeDetailView: View {
   private func handleWriteFinished(_ result: WriteResult) {
     refundPresented = false
     capturePresented = false
+    editPresented = false
     writeResult = result
     Task { await load() }
   }
@@ -148,6 +157,8 @@ struct ChargeDetailView: View {
         }
       }
 
+      MetadataSection(metadata: charge.metadata)
+
       let refunds = charge.refunds?.valueOrNil?.data ?? []
       if !refunds.isEmpty {
         Section("Refunds") {
@@ -195,6 +206,8 @@ struct RefundDetailView: View {
 
   @State private var phase: Phase = .loading
   @State private var cancelPresented = false
+  @State private var expirePresented = false
+  @State private var editPresented = false
   @State private var writeResult: WriteResult?
 
   var body: some View {
@@ -215,7 +228,13 @@ struct RefundDetailView: View {
     .navigationTitle("Refund")
     .navigationBarTitleDisplayMode(.inline)
     .task(id: refundID) { await load() }
-    .toolbar { cancelToolbar }
+    .toolbar { actionsToolbar }
+    .sheet(isPresented: $editPresented) {
+      if case .loaded(let refund) = phase, let writer {
+        EditRefundMetadataSheet(
+          refund: refund, writer: writer, onFinished: handleWriteFinished)
+      }
+    }
     .confirmationDialog(
       "Cancel this pending refund? The money stays with you.",
       isPresented: $cancelPresented, titleVisibility: .visible
@@ -226,17 +245,58 @@ struct RefundDetailView: View {
       .accessibilityIdentifier("payments.refundDetail.cancelRun")
       Button("Keep refund", role: .cancel) {}
     }
+    .confirmationDialog(
+      "Expire this pending refund?",
+      isPresented: $expirePresented, titleVisibility: .visible
+    ) {
+      Button("Expire refund", role: .destructive) {
+        Task { await runExpire() }
+      }
+      .accessibilityIdentifier("payments.refundDetail.expireRun")
+      Button("Keep refund", role: .cancel) {}
+    }
     .writeResultAlert($writeResult)
   }
 
   @ToolbarContentBuilder
-  private var cancelToolbar: some ToolbarContent {
+  private var actionsToolbar: some ToolbarContent {
     ToolbarItem(placement: .primaryAction) {
-      if let writer, case .loaded(let refund) = phase,
-        refund.status.valueOrNil == "pending" {
-        Button("Cancel refund…") { cancelPresented = true }
-          .accessibilityIdentifier("payments.refundDetail.cancel")
+      if let writer, case .loaded(let refund) = phase {
+        Menu {
+          Button("Edit metadata…") { editPresented = true }
+            .accessibilityIdentifier("payments.refundDetail.edit")
+          if refund.status.valueOrNil == "pending" {
+            Button("Cancel refund…", role: .destructive) { cancelPresented = true }
+              .accessibilityIdentifier("payments.refundDetail.cancel")
+            Button("Expire refund…", role: .destructive) { expirePresented = true }
+              .accessibilityIdentifier("payments.refundDetail.expire")
+          }
+        } label: {
+          Label("Actions", systemImage: "ellipsis.circle")
+        }
+        .accessibilityIdentifier("payments.refundDetail.actions")
       }
+    }
+  }
+
+  private func handleWriteFinished(_ result: WriteResult) {
+    editPresented = false
+    writeResult = result
+    Task { await load() }
+  }
+
+  private func runExpire() async {
+    guard let writer, case .loaded(let refund) = phase else { return }
+    do {
+      _ = try await writer.expireRefund(
+        id: refund.id, summary: "Expire refund \(refund.id)")
+      // Reload first, then surface the result: setting writeResult before the
+      // phase swap cancels the pending alert presentation.
+      await load()
+      writeResult = WriteResult(
+        title: "Refund expired", message: "Refund \(refund.id) is now canceled.")
+    } catch {
+      writeResult = WriteResult(title: "Write failed", message: writeErrorMessage(error))
     }
   }
 
@@ -269,6 +329,7 @@ struct RefundDetailView: View {
         .accessibilityIdentifier("payments.refund.amount")
       }
 
+      MetadataSection(metadata: refund.metadata.valueOrNil ?? [:])
       Section("Details") {
         PaymentFactRow(label: "Charge", value: refund.charge.valueOrNil?.idOrNil ?? "—")
         if let reason = refund.reason.valueOrNil {
@@ -288,3 +349,4 @@ struct RefundDetailView: View {
     }
   }
 }
+      

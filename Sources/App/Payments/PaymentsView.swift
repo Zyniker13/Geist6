@@ -298,7 +298,7 @@ struct PaymentDetailView: View {
       case .paymentMethod(let id):
         PaymentMethodDetailView(methodID: id, backend: backend, writer: writer)
       case .paymentLink(let id):
-        PaymentLinkDetailView(linkID: id, backend: backend)
+        PaymentLinkDetailView(linkID: id, backend: backend, writer: writer)
       case .checkoutSession(let id):
         CheckoutSessionDetailView(sessionID: id, backend: backend, writer: writer)
       }

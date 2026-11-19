@@ -128,6 +128,9 @@ extension SearchHit {
       return customer.email.valueOrNil.map { "Customer · \($0)" } ?? "Customer"
     case .customer:
       return "Customer"
+    case .paymentIntent(let intent):
+      let money = MoneyFormat.string(Money(amount: intent.amount, currency: intent.currency))
+      return "Payment · \(money) · \(intent.status.rawValue)"
     case .object(let kind, _, _):
       return kind.label
     }
@@ -179,13 +182,23 @@ struct SearchHitView: View {
     switch hit {
     case .charge(let charge):
       ObjectDetailView(fields: Self.chargeFields(charge), title: "Charge")
+    case .paymentIntent(let intent):
+      // Payments found through search open read-only: search never carries
+      // the account's writer, so no edit controls are shown (decision 0023).
+      if let paymentsBackend {
+        PaymentIntentDetailView(intentID: intent.id, backend: paymentsBackend, writer: nil)
+      } else {
+        ObjectDetailView(
+          fields: [("id", intent.id), ("status", intent.status.rawValue)], title: "Payment"
+        )
+      }
     case .customer(let customer):
       ObjectDetailView(
         fields: [
           ("id", customer.id),
           ("name", customer.name?.valueOrNil ?? "—"),
           ("email", customer.email.valueOrNil ?? "—"),
-          ("created", Self.dateFormatter.string(from: customer.created.date))
+          ("created", Self.dateFormatter.string(from: customer.created.date)),
         ],
         title: "Customer"
       )
@@ -209,7 +222,7 @@ struct SearchHitView: View {
       ("id", charge.id),
       ("status", charge.status.rawValue),
       ("amount", HomeView.money(Money(amount: charge.amount, currency: charge.currency))),
-      ("created", dateFormatter.string(from: charge.created.date))
+      ("created", dateFormatter.string(from: charge.created.date)),
     ]
     if let description = charge.description.valueOrNil {
       fields.append(("description", description))

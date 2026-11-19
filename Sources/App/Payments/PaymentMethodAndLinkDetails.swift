@@ -347,10 +347,14 @@ struct PaymentLinkDetailView: View {
 
   let linkID: String
   let backend: any PaymentsBackend
+  /// Nil for dashboard-locked accounts: no write controls are shown.
+  let writer: PaymentsWriteService?
 
   @State private var phase: Phase = .loading
   @State private var lineItems: [Item]?
   @State private var itemsFailed = false
+  @State private var editPresented = false
+  @State private var writeResult: WriteResult?
 
   var body: some View {
     Group {
@@ -370,6 +374,26 @@ struct PaymentLinkDetailView: View {
     .navigationTitle("Payment Link")
     .navigationBarTitleDisplayMode(.inline)
     .task(id: linkID) { await load() }
+    .toolbar {
+      ToolbarItem(placement: .primaryAction) {
+        if writer != nil, case .loaded = phase {
+          Button("Edit…") { editPresented = true }
+            .accessibilityIdentifier("payments.link.edit")
+        }
+      }
+    }
+    .sheet(isPresented: $editPresented) {
+      if case .loaded(let link) = phase, let writer {
+        EditPaymentLinkSheet(link: link, writer: writer, onFinished: handleWriteFinished)
+      }
+    }
+    .writeResultAlert($writeResult)
+  }
+
+  private func handleWriteFinished(_ result: WriteResult) {
+    editPresented = false
+    writeResult = result
+    Task { await load() }
   }
 
   @ViewBuilder
@@ -391,6 +415,7 @@ struct PaymentLinkDetailView: View {
           .textSelection(.enabled)
       }
 
+      MetadataSection(metadata: link.metadata)
       Section("Line Items") {
         if let lineItems {
           ForEach(Array(lineItems.enumerated()), id: \.offset) { _, item in

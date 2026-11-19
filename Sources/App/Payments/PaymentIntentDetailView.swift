@@ -44,6 +44,7 @@ struct PaymentIntentDetailView: View {
   @State private var applyBalancePresented = false
   @State private var incrementPresented = false
   @State private var verifyDepositsPresented = false
+  @State private var editPresented = false
   @State private var writeResult: WriteResult?
 
   var body: some View {
@@ -93,6 +94,11 @@ struct PaymentIntentDetailView: View {
           target: .paymentIntent(intent), writer: writer, onFinished: handleWriteFinished)
       }
     }
+    .sheet(isPresented: $editPresented) {
+      if case .loaded(let intent) = phase, let writer {
+        EditPaymentIntentSheet(intent: intent, writer: writer, onFinished: handleWriteFinished)
+      }
+    }
     .confirmationDialog(
       "Confirm this payment now? The customer's payment method will be charged.",
       isPresented: $confirmPresented, titleVisibility: .visible
@@ -132,6 +138,8 @@ struct PaymentIntentDetailView: View {
             Button("Verify microdeposits…") { verifyDepositsPresented = true }
               .accessibilityIdentifier("payments.intent.verifyDeposits")
           }
+          Button("Edit description & metadata…") { editPresented = true }
+            .accessibilityIdentifier("payments.intent.edit")
           if isCancellable(intent.status) {
             Button("Cancel intent…", role: .destructive) { cancelPresented = true }
               .accessibilityIdentifier("payments.intent.cancel")
@@ -161,6 +169,7 @@ struct PaymentIntentDetailView: View {
     applyBalancePresented = false
     incrementPresented = false
     verifyDepositsPresented = false
+    editPresented = false
     writeResult = result
     Task { await load() }
   }
@@ -248,6 +257,7 @@ struct PaymentIntentDetailView: View {
         }
       }
 
+      MetadataSection(metadata: intent.metadata)
       Section("Timeline") {
         if let timeline {
           ForEach(timeline.entries) { entry in
