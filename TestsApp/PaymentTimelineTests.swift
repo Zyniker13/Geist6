@@ -180,11 +180,11 @@ private struct PaymentsFixtureBackend: PaymentsBackend {
     return refund
   }
   func disputes(charge: String?) async throws -> [Dispute] { disputes }
-  func setupIntents(created: DateInterval?) async throws -> [SetupIntent] { [] }
+  func setupIntents(created: DateInterval?, customer: String?) async throws -> [SetupIntent] { [] }
   func retrieveSetupIntent(id: String) async throws -> SetupIntent { throw StubError.missing }
   func paymentMethods(customer: String?) async throws -> [PaymentMethod] { [] }
   func retrievePaymentMethod(id: String) async throws -> PaymentMethod { throw StubError.missing }
-  func paymentLinks() async throws -> [PaymentLink] { [] }
+  func paymentLinks(active: Bool?) async throws -> [PaymentLink] { [] }
   func retrievePaymentLink(id: String) async throws -> PaymentLink { throw StubError.missing }
   func paymentLinkLineItems(id: String) async throws -> [Item] { [] }
   func retrieveMandate(id: String) async throws -> Mandate { throw StubError.missing }

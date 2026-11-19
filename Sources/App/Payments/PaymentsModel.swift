@@ -44,33 +44,67 @@ final class PaymentsModel {
   private(set) var setupIntents: [SetupIntent] = []
   private(set) var paymentMethods: [PaymentMethod] = []
   private(set) var paymentLinks: [PaymentLink] = []
+  /// The active filter (M4c-5, decision 0019). Applied server-side where
+  /// the backend supports it and client-side over the fetched page.
+  private(set) var filter = PaymentsFilter()
 
   init(backend: any PaymentsBackend) {
     self.backend = backend
   }
 
   /// Loads the list backing one segment. Each segment loads independently:
-  /// a failure in one does not clear another.
+  /// a failure in one does not clear another. Server-side filter dimensions
+  /// (created range, customer, link active state) ride on the list request;
+  /// the remaining dimensions trim the fetched page client-side.
   func load(_ segment: Segment) async {
     phase = .loading
     do {
       switch segment {
       case .paymentIntents:
-        paymentIntents = try await backend.paymentIntents(created: nil, customer: nil)
+        var items = try await backend.paymentIntents(
+          created: filter.createdInterval, customer: filter.customer
+        )
+        if !filter.isEmpty { items = items.filter { filter.matches($0) } }
+        paymentIntents = items
       case .charges:
-        charges = try await backend.charges(created: nil, customer: nil, paymentIntent: nil)
+        var items = try await backend.charges(
+          created: filter.createdInterval, customer: filter.customer, paymentIntent: nil
+        )
+        if !filter.isEmpty { items = items.filter { filter.matches($0) } }
+        charges = items
       case .refunds:
-        refunds = try await backend.refunds(charge: nil)
+        var items = try await backend.refunds(charge: nil)
+        if !filter.isEmpty { items = items.filter { filter.matches($0) } }
+        refunds = items
       case .setupIntents:
-        setupIntents = try await backend.setupIntents(created: nil)
+        var items = try await backend.setupIntents(
+          created: filter.createdInterval, customer: filter.customer
+        )
+        if !filter.isEmpty { items = items.filter { filter.matches($0) } }
+        setupIntents = items
       case .paymentMethods:
-        paymentMethods = try await backend.paymentMethods(customer: nil)
+        var items = try await backend.paymentMethods(customer: filter.customer)
+        if !filter.isEmpty { items = items.filter { filter.matches($0) } }
+        paymentMethods = items
       case .paymentLinks:
-        paymentLinks = try await backend.paymentLinks()
+        var items = try await backend.paymentLinks(active: filter.linkActive)
+        if !filter.isEmpty { items = items.filter { filter.matches($0) } }
+        paymentLinks = items
       }
       phase = .loaded
     } catch {
       phase = .failed(String(describing: error))
+    }
+  }
+
+  /// Applies a new filter. The created-range and customer dimensions narrow
+  /// server-side, so every segment is refetched; call this after the filter
+  /// editor confirms, not per keystroke.
+  func apply(_ newFilter: PaymentsFilter) async {
+    guard newFilter != filter else { return }
+    filter = newFilter
+    for segment in Segment.allCases {
+      await load(segment)
     }
   }
 }

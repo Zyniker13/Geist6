@@ -31,8 +31,8 @@ public protocol PaymentsBackend: StripeDataBackend, Sendable {
     /// Disputes, optionally filtered client-side to one charge.
     func disputes(charge: String?) async throws -> [Dispute]
 
-    /// Setup intents created in `created`.
-    func setupIntents(created: DateInterval?) async throws -> [SetupIntent]
+    /// Setup intents created in `created`, optionally filtered by customer.
+    func setupIntents(created: DateInterval?, customer: String?) async throws -> [SetupIntent]
 
     /// A single setup intent by ID.
     func retrieveSetupIntent(id: String) async throws -> SetupIntent
@@ -43,8 +43,8 @@ public protocol PaymentsBackend: StripeDataBackend, Sendable {
     /// A single payment method by ID.
     func retrievePaymentMethod(id: String) async throws -> PaymentMethod
 
-    /// Payment links.
-    func paymentLinks() async throws -> [PaymentLink]
+    /// Payment links, optionally filtered by active state.
+    func paymentLinks(active: Bool?) async throws -> [PaymentLink]
 
     /// A single payment link by ID.
     func retrievePaymentLink(id: String) async throws -> PaymentLink
@@ -134,7 +134,7 @@ extension StripeClient: PaymentsBackend {
         return result.data
     }
 
-    public func setupIntents(created: DateInterval?) async throws -> [SetupIntent] {
+    public func setupIntents(created: DateInterval?, customer: String?) async throws -> [SetupIntent] {
         var params = SetupIntentListParams()
         if let created {
             params.created = .setupIntentListParamsCreatedVariant1(
@@ -144,6 +144,7 @@ extension StripeClient: PaymentsBackend {
                 )
             )
         }
+        params.customer = customer
         let result = try await listSetupIntents(params)
         return result.data
     }
@@ -163,8 +164,10 @@ extension StripeClient: PaymentsBackend {
         try await retrievePaymentMethod(paymentMethod: id)
     }
 
-    public func paymentLinks() async throws -> [PaymentLink] {
-        let result = try await listPaymentLinks()
+    public func paymentLinks(active: Bool?) async throws -> [PaymentLink] {
+        var params = PaymentLinkListParams()
+        params.active = active
+        let result = try await listPaymentLinks(params)
         return result.data
     }
 

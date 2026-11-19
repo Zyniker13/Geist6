@@ -26,6 +26,9 @@ struct PaymentsView: View {
   @State private var createPresented = false
   @State private var createSetupPresented = false
   @State private var createMethodPresented = false
+  @State private var createLinkPresented = false
+  @State private var createChargePresented = false
+  @State private var filterPresented = false
   @State private var writeResult: WriteResult?
 
   var body: some View {
@@ -44,6 +47,21 @@ struct PaymentsView: View {
       await model?.load(segment)
     }
     .toolbar {
+      // Two separate items: a single .primaryAction ToolbarItem renders only
+      // one of its children on iPadOS, which hid the create buttons.
+      ToolbarItem(placement: .primaryAction) {
+        Button {
+          filterPresented = true
+        } label: {
+          Label(
+            "Filter",
+            systemImage: model?.filter.isEmpty == false
+              ? "line.3.horizontal.decrease.circle.fill"
+              : "line.3.horizontal.decrease.circle"
+          )
+        }
+        .accessibilityIdentifier("payments.filter")
+      }
       ToolbarItem(placement: .primaryAction) {
         if writer != nil, segment == .paymentIntents {
           Button {
@@ -69,6 +87,22 @@ struct PaymentsView: View {
           }
           .accessibilityIdentifier("payments.newMethod")
         }
+        if writer != nil, segment == .paymentLinks {
+          Button {
+            createLinkPresented = true
+          } label: {
+            Label("New payment link", systemImage: "plus")
+          }
+          .accessibilityIdentifier("payments.newLink")
+        }
+        if writer != nil, segment == .charges {
+          Button {
+            createChargePresented = true
+          } label: {
+            Label("New charge", systemImage: "plus")
+          }
+          .accessibilityIdentifier("payments.newCharge")
+        }
       }
     }
     .sheet(isPresented: $createPresented) {
@@ -86,6 +120,24 @@ struct PaymentsView: View {
         CreatePaymentMethodSheet(writer: writer, onFinished: handleCreateFinished)
       }
     }
+    .sheet(isPresented: $createLinkPresented) {
+      if let writer {
+        CreatePaymentLinkSheet(writer: writer, onFinished: handleCreateFinished)
+      }
+    }
+    .sheet(isPresented: $createChargePresented) {
+      if let writer {
+        CreateChargeSheet(writer: writer, onFinished: handleCreateFinished)
+      }
+    }
+    .sheet(isPresented: $filterPresented) {
+      PaymentsFilterSheet(
+        segment: filterSegment,
+        current: model?.filter ?? .none
+      ) { applied in
+        Task { await model?.apply(applied) }
+      }
+    }
     .writeResultAlert($writeResult)
   }
 
@@ -93,6 +145,8 @@ struct PaymentsView: View {
     createPresented = false
     createSetupPresented = false
     createMethodPresented = false
+    createLinkPresented = false
+    createChargePresented = false
     writeResult = result
     Task { await model?.load(segment) }
   }
@@ -133,7 +187,7 @@ struct PaymentsView: View {
         ContentUnavailableView(
           "No \(segment.label)",
           systemImage: "creditcard",
-          description: Text("Nothing has been created yet.")
+          description: Text(emptyDescription(model))
         )
       }
     } else {
@@ -200,6 +254,19 @@ struct PaymentsView: View {
     case .paymentMethods: return model.paymentMethods.isEmpty
     case .paymentLinks: return model.paymentLinks.isEmpty
     }
+  }
+
+  /// Distinguishes "nothing exists yet" from "the filter narrowed it away".
+  private func emptyDescription(_ model: PaymentsModel) -> String {
+    if !model.filter.isEmpty, model.filter.isRelevant(to: filterSegment) {
+      return "No results match the filter."
+    }
+    return "Nothing has been created yet."
+  }
+
+  /// The view's segment and the filter's segment enum have the same cases.
+  private var filterSegment: PaymentsFilter.Segment {
+    PaymentsFilter.Segment(rawValue: segment.rawValue) ?? .paymentIntents
   }
 }
 
