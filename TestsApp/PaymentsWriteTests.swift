@@ -210,7 +210,7 @@ final class PaymentsWriteTests: XCTestCase {
     ])
     let charge = try await service.updateCharge(
       id: "ch_test_123", description: "Desk lamp", receiptEmail: "alice@example.com",
-      summary: "Update charge")
+      metadata: nil, summary: "Update charge")
     XCTAssertEqual(charge.description.valueOrNil, "Desk lamp")
     let request = try XCTUnwrap(WriteStubURLProtocol.recordedRequests.first)
     XCTAssertTrue(request.url!.path.hasSuffix("/v1/charges/ch_test_123"))
@@ -507,7 +507,8 @@ final class PaymentsWriteTests: XCTestCase {
     WriteStub.install(status: 200, json: chargeJSON)
     _ = try await service.captureCharge(id: "ch_test_123", amount: nil, receiptEmail: nil, summary: "s")
     WriteStub.install(status: 200, json: chargeJSON)
-    _ = try await service.updateCharge(id: "ch_test_123", description: nil, receiptEmail: nil, summary: "s")
+    _ = try await service.updateCharge(
+      id: "ch_test_123", description: nil, receiptEmail: nil, metadata: nil, summary: "s")
     WriteStub.install(status: 200, json: intentJSON)
     _ = try await service.capturePaymentIntent(id: "pi_test_123", amountToCapture: nil, summary: "s")
     WriteStub.install(status: 200, json: intentJSON)
