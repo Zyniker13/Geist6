@@ -19,3 +19,6 @@ xcuserdata/
 # Local secrets (never commit)
 .env
 *.env
+# Scratch build dirs from alternate swift-toolchain runs
+.build-gd/
+.build-swift-check/
