@@ -37,7 +37,7 @@ nonisolated(unsafe) let customerWriteFixtureJSON = """
   },
   "livemode": false,
   "metadata": {},
-  "name": null,
+  "name": "Bob",
   "next_invoice_sequence": 1,
   "object": "customer",
   "phone": null,
