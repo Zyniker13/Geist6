@@ -283,10 +283,12 @@ struct CustomerDetailScreen: View {
             ?? customer.id
         )
         .font(.title2.weight(.bold))
-        Text(customer.id)
-          .font(.caption2)
-          .foregroundStyle(.tertiary)
-          .textSelection(.enabled)
+        if customer.name?.valueOrNil != nil || customer.email.valueOrNil != nil {
+          Text(customer.id)
+            .font(.caption2)
+            .foregroundStyle(.tertiary)
+            .textSelection(.enabled)
+        }
       }
       .padding(.vertical, 4)
       .accessibilityIdentifier("customers.detail.name")
@@ -356,7 +358,7 @@ struct CustomerDetailScreen: View {
       } else {
         ForEach(paymentMethods, id: \.id) { method in
           VStack(alignment: .leading, spacing: 2) {
-            Text(method.type.rawValue)
+            Text(methodPreviewLabel(method))
               .font(.subheadline.weight(.medium))
             Text(method.id)
               .font(.caption)
@@ -487,6 +489,15 @@ struct CustomerDetailScreen: View {
         }
       }
     }
+  }
+
+  /// "brand •••• last4 · MM/YY" when the preview carries card details.
+  private func methodPreviewLabel(_ method: PaymentMethod) -> String {
+    if method.type == .card, let card = method.card {
+      return card.brand + " •••• " + card.last4 + " · " + String(card.expMonth)
+        + "/" + String(card.expYear % 100)
+    }
+    return method.type.rawValue
   }
 
   @ViewBuilder

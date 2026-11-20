@@ -112,7 +112,29 @@ final class ScreenshotUITests: XCTestCase {
     backHome.tap()
     XCTAssertTrue(app.buttons["home.payments"].waitForExistence(timeout: 10), "home missing after payments")
 
-    // 4. Search results for the fixture charge amount.
+    // 4. Customers tab: list and one customer detail. Runs before the
+    //    search step (the focused search field hides the home toolbar).
+    let customersButton = app.buttons["home.customers"]
+    XCTAssertTrue(customersButton.waitForExistence(timeout: 10), "customers button missing")
+    customersButton.tap()
+
+    let customerRow = app.descendants(matching: .any).matching(
+      NSPredicate(format: "identifier BEGINSWITH %@", "customers.row.")
+    ).firstMatch
+    XCTAssertTrue(customerRow.waitForExistence(timeout: 20), "customers row missing")
+    Thread.sleep(forTimeInterval: 1)
+    save(app, to: "/tmp/geist6-shot-customers.png")
+
+    customerRow.tap()
+
+    let detailName = app.descendants(matching: .any).matching(
+      NSPredicate(format: "identifier == %@", "customers.detail.name")
+    ).firstMatch
+    XCTAssertTrue(detailName.waitForExistence(timeout: 20), "customer detail missing")
+    Thread.sleep(forTimeInterval: 2)
+    save(app, to: "/tmp/geist6-shot-customer-detail.png")
+
+    // 5. Search results for the fixture charge amount.
     let field = app.searchFields.firstMatch
     XCTAssertTrue(field.waitForExistence(timeout: 10), "search field missing")
     field.tap()
@@ -124,5 +146,5 @@ final class ScreenshotUITests: XCTestCase {
     XCTAssertTrue(hit.waitForExistence(timeout: 20), "search hit missing")
     Thread.sleep(forTimeInterval: 1)
     save(app, to: "/tmp/geist6-shot-search.png")
-  }
+}
 }

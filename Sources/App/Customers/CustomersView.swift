@@ -139,12 +139,14 @@ struct CustomersView: View {
           NavigationLink(value: CustomerRoute.customer(customer.id)) {
             CustomerRow(customer: customer)
           }
+          .accessibilityIdentifier("customers.row.\(customer.id)")
         }
       case .taxIDs:
         ForEach(model.taxIDs, id: \.id) { taxID in
           NavigationLink(value: CustomerRoute.taxID(taxID.id)) {
             TaxIDRow(taxID: taxID)
           }
+          .accessibilityIdentifier("customers.taxRow.\(taxID.id)")
         }
       }
     }
@@ -194,9 +196,11 @@ struct CustomerRow: View {
     VStack(alignment: .leading, spacing: 2) {
       Text(title)
         .font(.body)
-      Text(subtitle)
-        .font(.footnote)
-        .foregroundStyle(.secondary)
+      if let email = customer.email.valueOrNil, !email.isEmpty, email != title {
+        Text(email)
+          .font(.footnote)
+          .foregroundStyle(.secondary)
+      }
       if let balance = customer.balance, balance != 0 {
         Text("Balance \(balance)")
           .font(.caption)
@@ -209,15 +213,6 @@ struct CustomerRow: View {
   private var title: String {
     if let name = customer.name?.valueOrNil, !name.isEmpty { return name }
     if let email = customer.email.valueOrNil, !email.isEmpty { return email }
-    return customer.id
-  }
-
-  private var subtitle: String {
-    if let name = customer.name?.valueOrNil, !name.isEmpty,
-      let email = customer.email.valueOrNil, !email.isEmpty
-    {
-      return email
-    }
     return customer.id
   }
 }
