@@ -601,8 +601,9 @@ extension View {
   }
 }
 
-/// A red error line shown inside a write sheet.
-private func failureSection(_ text: String, id: String) -> some View {
+/// A red error line shown inside a write sheet. Shared by the customer
+/// and billing sheets.
+func failureSection(_ text: String, id: String) -> some View {
   Section {
     Text(text)
       .font(.footnote)

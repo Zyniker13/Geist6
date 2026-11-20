@@ -10,6 +10,7 @@ import SwiftUI
 enum HomeRoute: Hashable {
   case payments
   case customers
+  case billing
   case event(String)
 }
 
@@ -29,6 +30,7 @@ struct HomeView: View {
   @State private var paymentsClient: StripeClient
   @State private var writer: PaymentsWriteService?
   @State private var customersWriter: CustomersWriteService?
+  @State private var billingWriter: BillingWriteService?
 
   private static let currencies = ["usd", "eur", "gbp", "cad", "aud", "jpy"]
 
@@ -64,6 +66,8 @@ struct HomeView: View {
         PaymentsView(account: account, backend: paymentsClient, writer: writer)
       case .customers:
         CustomersView(account: account, backend: paymentsClient, writer: customersWriter)
+      case .billing:
+        BillingView(account: account, backend: paymentsClient, writer: billingWriter)
       case .event(let eventID):
         EventActivityDetailView(eventID: eventID, backend: model.backend)
       }
@@ -84,6 +88,14 @@ struct HomeView: View {
           Label("Customers", systemImage: "person.2")
         }
         .accessibilityIdentifier("home.customers")
+      }
+      ToolbarItem(placement: .topBarTrailing) {
+        Button {
+          path.append(HomeRoute.billing)
+        } label: {
+          Label("Billing", systemImage: "shippingbox")
+        }
+        .accessibilityIdentifier("home.billing")
       }
       ToolbarItem(placement: .topBarTrailing) {
         Picker("Period", selection: $period) {
@@ -129,6 +141,13 @@ struct HomeView: View {
             storeBox.store?.cached(id: account.id)?.dashboardLock ?? false
           })
         customersWriter = CustomersWriteService(
+          client: paymentsClient, accountID: account.id.uuidString,
+          accountName: account.name,
+          audit: FileAuditStore(directory: auditDirectory),
+          dashboardLocked: { [storeBox] in
+            storeBox.store?.cached(id: account.id)?.dashboardLock ?? false
+          })
+        billingWriter = BillingWriteService(
           client: paymentsClient, accountID: account.id.uuidString,
           accountName: account.name,
           audit: FileAuditStore(directory: auditDirectory),
