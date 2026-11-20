@@ -51,10 +51,17 @@ if xcodebuild -version >/dev/null 2>&1; then
     # A stripe-mock left behind by an earlier crashed run still owns the
     # port and the new one dies with "bind: address already in use",
     # silently skipping every app test. Kill only stale stripe-mock
-    # processes on that port — never anything else.
+    # processes on that port — never anything else. Two traps live here:
+    # a `while read` loop whose controlling read hits EOF ends with a
+    # nonzero status even after a matching line, which would abort the
+    # whole script under `set -e` when nothing listens on the port; and
+    # `ps -o comm=` can report a full executable path, so compare the
+    # basename.
     STALE_MOCK=$(lsof -t -nP -i :12111 -sTCP:LISTEN 2>/dev/null | while read -r pid; do
-        [ "$(ps -p "$pid" -o comm= 2>/dev/null)" = "stripe-mock" ] && echo "$pid"
-    done)
+        if [ "$(basename "$(ps -p "$pid" -o comm= 2>/dev/null)")" = "stripe-mock" ]; then
+            echo "$pid"
+        fi
+    done || true)
     if [ -n "$STALE_MOCK" ]; then
         echo "killing stale stripe-mock on :12111 (pid $STALE_MOCK)" >&2
         kill $STALE_MOCK 2>/dev/null || true
