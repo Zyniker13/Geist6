@@ -1,5 +1,6 @@
 // BillingWrite.swift — Sources/GeistData
-// Product and price writes: create, update, and delete.
+// Billing writes: products, prices, coupons, and promotion codes —
+// create, update, and delete.
 //
 // Three gates stand between a user action and Stripe:
 //   1. The UI only builds a writer for accounts that are not dashboard-locked
@@ -255,5 +256,160 @@ public struct BillingWriteService: Sendable {
     return try await run(
       Price.self, method: "POST", path: "/v1/prices/\(id)", params: params,
       key: Self.key(), summary: summary)
+  }
+
+  // MARK: - Coupons
+
+  /// A coupon to create. Stripe requires exactly one of `percentOff` or
+  /// `amountOff`; `currency` is required when `amountOff` is set.
+  /// `duration` is one of "once", "repeating", "forever".
+  /// `metadata == nil` leaves metadata untouched; a non-nil value replaces
+  /// it wholesale.
+  public struct CouponDraft: Sendable {
+    public let name: String?
+    public let percentOff: Decimal?
+    public let amountOff: Int?
+    public let currency: String?
+    public let duration: String
+    public let durationInMonths: Int?
+    public let redeemBy: Date?
+    public let maxRedemptions: Int?
+    public let metadata: [String: String]?
+
+    public init(
+      name: String?, percentOff: Decimal?, amountOff: Int?, currency: String?,
+      duration: String, durationInMonths: Int?, redeemBy: Date?,
+      maxRedemptions: Int?, metadata: [String: String]?
+    ) {
+      self.name = name
+      self.percentOff = percentOff
+      self.amountOff = amountOff
+      self.currency = currency
+      self.duration = duration
+      self.durationInMonths = durationInMonths
+      self.redeemBy = redeemBy
+      self.maxRedemptions = maxRedemptions
+      self.metadata = metadata
+    }
+  }
+
+  /// Creates a coupon from `draft`.
+  public func createCoupon(draft: CouponDraft, summary: String) async throws -> Coupon {
+    var params = CouponCreateParams()
+    params.name = draft.name
+    params.percentOff = draft.percentOff
+    params.amountOff = draft.amountOff
+    params.currency = draft.currency
+    params.duration = CouponDuration(rawValue: draft.duration)
+    params.durationInMonths = draft.durationInMonths
+    if let redeemBy = draft.redeemBy {
+      params.redeemBy = StripeTimestamp(redeemBy)
+    }
+    params.maxRedemptions = draft.maxRedemptions
+    if let metadata = draft.metadata {
+      params.metadata = .value(metadata)
+    }
+    return try await run(
+      Coupon.self, method: "POST", path: "/v1/coupons", params: params,
+      key: Self.key(), summary: summary)
+  }
+
+  /// The editable fields of a coupon update. `nil` fields are left
+  /// untouched; a non-nil `metadata` replaces it wholesale (an empty
+  /// dictionary clears it).
+  public struct CouponUpdate: Sendable {
+    public let name: String?
+    public let metadata: [String: String]?
+
+    public init(name: String?, metadata: [String: String]?) {
+      self.name = name
+      self.metadata = metadata
+    }
+  }
+
+  /// Updates a coupon with the fields set in `update`.
+  public func updateCoupon(
+    id: String, update: CouponUpdate, summary: String
+  ) async throws -> Coupon {
+    var params = CouponUpdateParams()
+    params.name = update.name
+    if let metadata = update.metadata {
+      params.metadata = .value(metadata)
+    }
+    return try await run(
+      Coupon.self, method: "POST", path: "/v1/coupons/\(id)", params: params,
+      key: Self.key(), summary: summary)
+  }
+
+  /// Deletes a coupon.
+  public func deleteCoupon(id: String, summary: String) async throws -> DeletedCoupon {
+    return try await run(
+      DeletedCoupon.self, method: "DELETE", path: "/v1/coupons/\(id)",
+      params: CouponDeleteParams(), key: Self.key(), summary: summary)
+  }
+
+  // MARK: - Promotion codes
+
+  /// A promotion code to create. `code` is the redemption string; when nil,
+  /// Stripe generates one. `metadata == nil` leaves metadata untouched; a
+  /// non-nil value replaces it wholesale.
+  public struct PromotionCodeDraft: Sendable {
+    public let coupon: String
+    public let code: String?
+    public let active: Bool?
+    public let expiresAt: Date?
+    public let maxRedemptions: Int?
+    public let customer: String?
+    public let metadata: [String: String]?
+
+    public init(
+      coupon: String, code: String?, active: Bool?, expiresAt: Date?,
+      maxRedemptions: Int?, customer: String?, metadata: [String: String]?
+    ) {
+      self.coupon = coupon
+      self.code = code
+      self.active = active
+      self.expiresAt = expiresAt
+      self.maxRedemptions = maxRedemptions
+      self.customer = customer
+      self.metadata = metadata
+    }
+  }
+
+  /// Creates a promotion code from `draft`.
+  public func createPromotionCode(
+    draft: PromotionCodeDraft, summary: String
+  ) async throws -> PromotionCode {
+    var params = PromotionCodeCreateParams(
+      promotion: .init(coupon: draft.coupon, type: .coupon))
+    params.code = draft.code
+    params.active = draft.active
+    if let expiresAt = draft.expiresAt {
+      params.expiresAt = StripeTimestamp(expiresAt)
+    }
+    params.maxRedemptions = draft.maxRedemptions
+    params.customer = draft.customer
+    if let metadata = draft.metadata {
+      params.metadata = metadata
+    }
+    return try await run(
+      PromotionCode.self, method: "POST", path: "/v1/promotion_codes",
+      params: params, key: Self.key(), summary: summary)
+  }
+
+  /// Updates a promotion code's active flag and metadata. `nil` fields are
+  /// left untouched; a non-nil `metadata` replaces it wholesale (an empty
+  /// dictionary clears it).
+  public func updatePromotionCode(
+    id: String, active: Bool?, metadata: [String: String]?, summary: String
+  ) async throws -> PromotionCode {
+    var params = PromotionCodeUpdateParams()
+    params.active = active
+    if let metadata {
+      params.metadata = .value(metadata)
+    }
+    return try await run(
+      PromotionCode.self, method: "POST", path: "/v1/promotion_codes/\(id)",
+      params: params, key: Self.key(), summary: summary)
   }
 }

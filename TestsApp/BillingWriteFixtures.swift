@@ -125,3 +125,97 @@ nonisolated(unsafe) let oneTimePriceWriteFixture: [String: Any] = {
   }
   return dict
 }()
+
+// MARK: - Coupon
+
+nonisolated(unsafe) let couponWriteFixtureJSON = """
+{
+  "id": "coupon_test_123",
+  "object": "coupon",
+  "amount_off": 1000,
+  "applies_to": {"products": ["prod_123"]},
+  "created": 1234567890,
+  "currency": "usd",
+  "duration": "once",
+  "duration_in_months": null,
+  "livemode": false,
+  "max_redemptions": null,
+  "metadata": {
+    "note": "gift"
+  },
+  "name": "TEN-OFF",
+  "percent_off": null,
+  "redeem_by": null,
+  "times_redeemed": 0,
+  "valid": true
+}
+"""
+
+nonisolated(unsafe) let couponWriteFixture: [String: Any] = {
+  guard let parsed = try? JSONSerialization.jsonObject(
+    with: Data(couponWriteFixtureJSON.utf8)),
+    let dict = parsed as? [String: Any] else {
+    preconditionFailure("couponWriteFixtureJSON must decode")
+  }
+  return dict
+}()
+
+/// A percent-off coupon, for the list fixture and the update test.
+nonisolated(unsafe) let percentCouponFixture: [String: Any] = [
+  "id": "coupon_test_456",
+  "object": "coupon",
+  "amount_off": NSNull(),
+  "applies_to": NSNull(),
+  "created": 1234567890,
+  "currency": NSNull(),
+  "duration": "forever",
+  "duration_in_months": NSNull(),
+  "livemode": false,
+  "max_redemptions": 100,
+  "metadata": NSDictionary(),
+  "name": "HALF-OFF",
+  "percent_off": 50,
+  "redeem_by": 1798761600,
+  "times_redeemed": 3,
+  "valid": true,
+]
+
+nonisolated(unsafe) let couponDeleteFixture: [String: Any] = [
+  "deleted": true, "id": "coupon_test_123", "object": "coupon",
+]
+
+// MARK: - Promotion code
+
+nonisolated(unsafe) let promotionCodeWriteFixtureJSON = """
+{
+  "id": "promo_test_123",
+  "object": "promotion_code",
+  "active": true,
+  "code": "TEN-OFF",
+  "created": 1234567890,
+  "customer": null,
+  "customer_account": null,
+  "expires_at": null,
+  "livemode": false,
+  "max_redemptions": null,
+  "metadata": {
+    "note": "gift"
+  },
+  "promotion": {"coupon": "coupon_test_123", "type": "coupon"},
+  "restrictions": {
+    "first_time_transaction": false,
+    "minimum_amount": null,
+    "minimum_amount_currency": null
+  },
+  "times_redeemed": 0
+}
+"""
+
+nonisolated(unsafe) let promotionCodeWriteFixture: [String: Any] = {
+  guard let parsed = try? JSONSerialization.jsonObject(
+    with: Data(promotionCodeWriteFixtureJSON.utf8)),
+    let dict = parsed as? [String: Any] else {
+    preconditionFailure("promotionCodeWriteFixtureJSON must decode")
+  }
+  return dict
+}()

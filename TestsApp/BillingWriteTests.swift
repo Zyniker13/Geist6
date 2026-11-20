@@ -153,6 +153,104 @@ final class BillingWriteTests: XCTestCase {
       "active=true&metadata%5Bnote%5D=gift&nickname=Hoodie-Monthly")
   }
 
+  // MARK: - Coupons
+
+  func testCreateCouponEncodesPercentOffAndMetadata() async throws {
+    let service = makeService(mode: .management, dashboardLocked: { false })
+    WriteStub.install(status: 200, json: couponWriteFixture)
+    let coupon = try await service.createCoupon(
+      draft: .init(
+        name: "TEN-OFF", percentOff: 50, amountOff: nil, currency: nil,
+        duration: "once", durationInMonths: nil, redeemBy: nil,
+        maxRedemptions: nil, metadata: ["note": "gift"]),
+      summary: "Create coupon")
+    XCTAssertEqual(coupon.id, "coupon_test_123")
+    let request = try XCTUnwrap(WriteStubURLProtocol.recordedRequests.first)
+    XCTAssertEqual(request.httpMethod, "POST")
+    XCTAssertTrue(request.url!.path.hasSuffix("/v1/coupons"))
+    XCTAssertEqual(
+      try XCTUnwrap(WriteStub.firstBodyString()),
+      "duration=once&metadata%5Bnote%5D=gift&name=TEN-OFF&percent_off=50")
+  }
+
+  func testCreateCouponEncodesAmountOffWithCurrency() async throws {
+    let service = makeService(mode: .management, dashboardLocked: { false })
+    WriteStub.install(status: 200, json: couponWriteFixture)
+    let coupon = try await service.createCoupon(
+      draft: .init(
+        name: "TEN-OFF", percentOff: nil, amountOff: 1000, currency: "usd",
+        duration: "once", durationInMonths: nil, redeemBy: nil,
+        maxRedemptions: nil, metadata: nil),
+      summary: "Create coupon")
+    XCTAssertEqual(coupon.id, "coupon_test_123")
+    XCTAssertEqual(
+      try XCTUnwrap(WriteStub.firstBodyString()),
+      "amount_off=1000&currency=usd&duration=once&name=TEN-OFF")
+  }
+
+  func testUpdateCouponEncodesOnlySetFields() async throws {
+    let service = makeService(mode: .management, dashboardLocked: { false })
+    WriteStub.install(status: 200, json: couponWriteFixture)
+    let coupon = try await service.updateCoupon(
+      id: "coupon_test_123",
+      update: .init(name: "TEN-OFF-2", metadata: ["note": "gift"]),
+      summary: "Update coupon")
+    XCTAssertEqual(coupon.id, "coupon_test_123")
+    let request = try XCTUnwrap(WriteStubURLProtocol.recordedRequests.first)
+    XCTAssertEqual(request.httpMethod, "POST")
+    XCTAssertTrue(request.url!.path.hasSuffix("/v1/coupons/coupon_test_123"))
+    XCTAssertEqual(
+      try XCTUnwrap(WriteStub.firstBodyString()),
+      "metadata%5Bnote%5D=gift&name=TEN-OFF-2")
+  }
+
+  func testDeleteCouponSendsEmptyBodyAndDecodesDeletedObject() async throws {
+    let service = makeService(mode: .management, dashboardLocked: { false })
+    WriteStub.install(status: 200, json: couponDeleteFixture)
+    let deleted = try await service.deleteCoupon(id: "coupon_test_123", summary: "Delete coupon")
+    XCTAssertEqual(deleted.id, "coupon_test_123")
+    XCTAssertTrue(deleted.deleted)
+    let request = try XCTUnwrap(WriteStubURLProtocol.recordedRequests.first)
+    XCTAssertEqual(request.httpMethod, "DELETE")
+    XCTAssertTrue(request.url!.path.hasSuffix("/v1/coupons/coupon_test_123"))
+    XCTAssertNil(WriteStub.firstBodyString(), "delete takes no parameters")
+  }
+
+  // MARK: - Promotion codes
+
+  func testCreatePromotionCodeEncodesCouponReferenceAndLimits() async throws {
+    let service = makeService(mode: .management, dashboardLocked: { false })
+    WriteStub.install(status: 200, json: promotionCodeWriteFixture)
+    let code = try await service.createPromotionCode(
+      draft: .init(
+        coupon: "coupon_test_123", code: "TEN-OFF", active: true, expiresAt: nil,
+        maxRedemptions: 100, customer: nil, metadata: ["note": "gift"]),
+      summary: "Create promotion code")
+    XCTAssertEqual(code.id, "promo_test_123")
+    let request = try XCTUnwrap(WriteStubURLProtocol.recordedRequests.first)
+    XCTAssertEqual(request.httpMethod, "POST")
+    XCTAssertTrue(request.url!.path.hasSuffix("/v1/promotion_codes"))
+    XCTAssertEqual(
+      try XCTUnwrap(WriteStub.firstBodyString()),
+      "active=true&code=TEN-OFF&max_redemptions=100&metadata%5Bnote%5D=gift"
+        + "&promotion%5Bcoupon%5D=coupon_test_123&promotion%5Btype%5D=coupon")
+  }
+
+  func testUpdatePromotionCodeEncodesOnlySetFields() async throws {
+    let service = makeService(mode: .management, dashboardLocked: { false })
+    WriteStub.install(status: 200, json: promotionCodeWriteFixture)
+    let code = try await service.updatePromotionCode(
+      id: "promo_test_123", active: false, metadata: ["note": "gift"],
+      summary: "Update promotion code")
+    XCTAssertEqual(code.id, "promo_test_123")
+    let request = try XCTUnwrap(WriteStubURLProtocol.recordedRequests.first)
+    XCTAssertEqual(request.httpMethod, "POST")
+    XCTAssertTrue(request.url!.path.hasSuffix("/v1/promotion_codes/promo_test_123"))
+    XCTAssertEqual(
+      try XCTUnwrap(WriteStub.firstBodyString()),
+      "active=false&metadata%5Bnote%5D=gift")
+  }
+
   // MARK: - Dashboard mode gates
 
   func testDashboardModeRefusesCreateProduct() async throws {

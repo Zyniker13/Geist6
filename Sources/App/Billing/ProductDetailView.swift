@@ -98,7 +98,7 @@ struct ProductDetailView: View {
   private func load() async {
     phase = .loading
     do {
-      product = try await backend.retrieveProduct(id: productID)
+      product = try await backend.retrieveProduct(byID: productID)
       prices = try await backend.prices(product: productID)
       phase = .loaded
     } catch {

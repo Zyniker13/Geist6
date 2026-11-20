@@ -1,6 +1,7 @@
 // Billing.swift — Sources/GeistData
-// The product-catalog surface of the Stripe API used by the billing screens:
-// products and prices, with search and per-product price listings.
+// The billing surface of the Stripe API used by the billing screens:
+// products, prices, coupons, and promotion codes, with search and
+// per-product price listings.
 //
 // Like `PaymentsBackend` and `CustomersBackend`, this protocol is read-only:
 // it has no write methods, so a view model built on it cannot write by
@@ -20,7 +21,7 @@ public protocol BillingBackend: StripeDataBackend, Sendable {
     func searchProducts(query: String) async throws -> [Product]
 
     /// A single product.
-    func retrieveProduct(id: String) async throws -> Product
+    func retrieveProduct(byID: String) async throws -> Product
 
     /// Prices. The prices of one product when `product` is given; the
     /// account-wide listing otherwise.
@@ -31,6 +32,18 @@ public protocol BillingBackend: StripeDataBackend, Sendable {
 
     /// A single price.
     func retrievePrice(id: String) async throws -> Price
+
+    /// The account's coupons, newest first (Stripe's list order).
+    func coupons() async throws -> [Coupon]
+
+    /// A single coupon.
+    func retrieveCoupon(id: String) async throws -> Coupon
+
+    /// The account's promotion codes, newest first.
+    func promotionCodes() async throws -> [PromotionCode]
+
+    /// A single promotion code.
+    func retrievePromotionCode(id: String) async throws -> PromotionCode
 }
 
 // MARK: - StripeClient conformance
@@ -48,8 +61,8 @@ extension StripeClient: BillingBackend {
         return result.data
     }
 
-    public func retrieveProduct(id: String) async throws -> Product {
-        try await retrieveProduct(id: id)
+    public func retrieveProduct(byID: String) async throws -> Product {
+        try await self.retrieveProduct(id: byID)
     }
 
     public func prices(product: String?) async throws -> [Price] {
@@ -68,5 +81,23 @@ extension StripeClient: BillingBackend {
 
     public func retrievePrice(id: String) async throws -> Price {
         try await retrievePrice(price: id)
+    }
+
+    public func coupons() async throws -> [Coupon] {
+        let result = try await listCoupons()
+        return result.data
+    }
+
+    public func retrieveCoupon(id: String) async throws -> Coupon {
+        try await retrieveCoupon(coupon: id)
+    }
+
+    public func promotionCodes() async throws -> [PromotionCode] {
+        let result = try await listPromotionCodes()
+        return result.data
+    }
+
+    public func retrievePromotionCode(id: String) async throws -> PromotionCode {
+        try await retrievePromotionCode(promotionCode: id)
     }
 }
