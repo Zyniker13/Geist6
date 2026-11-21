@@ -141,11 +141,25 @@ if xcodebuild -version >/dev/null 2>&1; then
         LOCK="$HOME/.hermes/bin/sim-lock"
     fi
     if [ -n "${GEIST6_DD:-}" ]; then
+        # A stale prewarmed path must never silently skip suites added since
+        # it was built, so refresh the build first. When the path is already
+        # warm this is an incremental no-op build costing little; when it is
+        # stale it pulls the runner up to date with the current sources.
+        if ! $LOCK xcodebuild -project Geist6.xcodeproj -scheme Geist6 \
+            -destination "platform=iOS Simulator,name=$SIM_NAME,OS=latest" \
+            -derivedDataPath "$DD" \
+            -clonedSourcePackagesDirPath "$DD/pkgs" \
+            build-for-testing > "$TEST_LOG" 2>&1; then
+            echo "xcodebuild build-for-testing: FAILED (see $TEST_LOG)" >&2
+            tail -40 "$TEST_LOG" >&2
+            kill "$MOCK_PID" 2>/dev/null || true
+            exit 1
+        fi
         if $LOCK xcodebuild -project Geist6.xcodeproj -scheme Geist6 \
             -destination "platform=iOS Simulator,name=$SIM_NAME,OS=latest" \
             -derivedDataPath "$DD" \
             -clonedSourcePackagesDirPath "$DD/pkgs" \
-            test-without-building > "$TEST_LOG" 2>&1; then
+            test-without-building >> "$TEST_LOG" 2>&1; then
             echo "xcodebuild test: passed (prewarmed, full log in $TEST_LOG)"
         else
             echo "xcodebuild test: FAILED (see $TEST_LOG)" >&2
@@ -166,6 +180,19 @@ if xcodebuild -version >/dev/null 2>&1; then
         rm -rf "$DD"
         exit 1
     fi
+    # Suite-presence guard: every *UITests class in TestsAppUI must have run
+    # (and passed) in the log. A stale runner or a test-plan omission would
+    # otherwise pass the gate without ever executing the new suite (gate52:
+    # test-without-building on a stale DerivedData skipped
+    # InvoiceWriteUITests and still reported green).
+    for suite_file in TestsAppUI/*UITests.swift; do
+        suite=$(basename "$suite_file" .swift)
+        if ! grep -q "Test Suite '$suite' passed" "$TEST_LOG"; then
+            echo "check.sh: suite '$suite' never ran or did not pass" >&2
+            kill "$MOCK_PID" 2>/dev/null || true
+            exit 1
+        fi
+    done
     if [ -z "${GEIST6_DD:-}" ]; then
         rm -rf "$DD"
     fi
