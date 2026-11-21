@@ -15,6 +15,25 @@ final class ScreenshotUITests: XCTestCase {
     try? data?.write(to: URL(fileURLWithPath: path))
   }
 
+  /// Pops any pushed screens back to the home root via the nav back button.
+  /// The back button's identifier varies ('Back', 'BackButton') and the
+  /// detail sits two levels deep (detail → list → home), so loop until the
+  /// home buttons are back in the hierarchy.
+  private func backToHome(_ app: XCUIApplication, context: String) {
+    let backPredicate = NSPredicate(
+      format: "label == %@ OR identifier BEGINSWITH %@", "Shot Store", "Back"
+    )
+    for _ in 0..<3 {
+      if app.buttons["home.payments"].exists { return }
+      let back = app.navigationBars.buttons.matching(backPredicate).firstMatch
+      if back.exists { back.tap() }
+      _ = app.buttons["home.payments"].waitForExistence(timeout: 10)
+    }
+    XCTAssertTrue(
+      app.buttons["home.payments"].exists, "home missing (\(context))"
+    )
+  }
+
   func testCaptureScreens() throws {
     let app = XCUIApplication()
     app.launchArguments += ["--uitest-reset", "--api-base-url=http://127.0.0.1:12111"]
@@ -133,6 +152,31 @@ final class ScreenshotUITests: XCTestCase {
     XCTAssertTrue(detailName.waitForExistence(timeout: 20), "customer detail missing")
     Thread.sleep(forTimeInterval: 2)
     save(app, to: "/tmp/geist6-shot-customer-detail.png")
+
+    // 4b. Billing tab: catalog sections and coupon detail. Back to home
+    //     first — the customer detail pushed the home buttons out of the
+    //     hierarchy, same as the payments step above.
+    backToHome(app, context: "customers")
+
+    let billingButton = app.buttons["home.billing"]
+    XCTAssertTrue(billingButton.waitForExistence(timeout: 10), "billing button missing")
+    billingButton.tap()
+
+    let couponRow = app.descendants(matching: .any).matching(
+      NSPredicate(format: "identifier BEGINSWITH %@", "billing.row.coupon.")
+    ).firstMatch
+    XCTAssertTrue(couponRow.waitForExistence(timeout: 20), "coupon row missing")
+    Thread.sleep(forTimeInterval: 1)
+    save(app, to: "/tmp/geist6-shot-billing.png")
+
+    couponRow.tap()
+
+    let couponEdit = app.buttons["coupon.edit"]
+    XCTAssertTrue(couponEdit.waitForExistence(timeout: 20), "coupon detail missing")
+    Thread.sleep(forTimeInterval: 2)
+    save(app, to: "/tmp/geist6-shot-coupon-detail.png")
+
+    backToHome(app, context: "billing")
 
     // 5. Search results for the fixture charge amount.
     let field = app.searchFields.firstMatch
