@@ -92,7 +92,7 @@ extension StripeClient {
     }
 
     /// retrieve /v1/accounts/{account} (GET).
-    public func retrieveAccountV1AccountsAccount(account: String, _ params: AccountRetrieveParams? = nil, expand: [String]? = nil) async throws -> Account {
+    public func retrieveAccount(account: String, _ params: AccountsAccountRetrieveParams? = nil, expand: [String]? = nil) async throws -> Account {
         try await self.request(
             method: "GET",
             path: "/v1/accounts/\(Self.encodePathSegment(account))",

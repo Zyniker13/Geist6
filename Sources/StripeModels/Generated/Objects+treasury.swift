@@ -9898,6 +9898,242 @@ public struct ReceivedDebitCreateParamsInitiatingPaymentMethodDetails: Sendable,
     }
 }
 
+public struct TreasuryTransactionListParamsCreatedVariant1: Sendable, Codable, Equatable, Hashable {
+    public var gt: Int?
+    public var gte: Int?
+    public var lt: Int?
+    public var lte: Int?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(gt: Int? = nil, gte: Int? = nil, lt: Int? = nil, lte: Int? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.gt = gt
+        self.gte = gte
+        self.lt = lt
+        self.lte = lte
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case gt
+        case gte
+        case lt
+        case lte
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.gt = try container.decodeIfPresent(Int.self, forKey: .gt)
+        self.gte = try container.decodeIfPresent(Int.self, forKey: .gte)
+        self.lt = try container.decodeIfPresent(Int.self, forKey: .lt)
+        self.lte = try container.decodeIfPresent(Int.self, forKey: .lte)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .gt, .gte, .lt, .lte: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.gt, forKey: .gt)
+        try container.encodeIfPresent(self.gte, forKey: .gte)
+        try container.encodeIfPresent(self.lt, forKey: .lt)
+        try container.encodeIfPresent(self.lte, forKey: .lte)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+/// Polymorphic union; unknown shapes are kept in `other` (lossless).
+public enum TreasuryTransactionListParamsCreated: Sendable, Codable, Equatable, Hashable {
+    case treasuryTransactionListParamsCreatedVariant1(TreasuryTransactionListParamsCreatedVariant1)
+    case int(Int)
+    case other(JSONValue)
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        if let value = try? container.decode(TreasuryTransactionListParamsCreatedVariant1.self) { self = .treasuryTransactionListParamsCreatedVariant1(value); return }
+        if let value = try? container.decode(Int.self) { self = .int(value); return }
+        self = .other(try container.decode(JSONValue.self))
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        switch self {
+        case .treasuryTransactionListParamsCreatedVariant1(let value): try container.encode(value)
+        case .int(let value): try container.encode(value)
+        case .other(let value): try container.encode(value)
+        }
+    }
+}
+
+/// Lossless enum: values Stripe documents plus any value the API
+/// adds later, kept in `undocumented` instead of dropped.
+public enum TreasuryTransactionListParamsOrderBy: Sendable, Equatable, Hashable, LosslessEnum {
+    case created
+    case postedAt
+    case undocumented(String)
+
+    public init(rawValue raw: String) {
+        switch raw {
+        case "created": self = .created
+        case "posted_at": self = .postedAt
+        default: self = .undocumented(raw)
+        }
+    }
+
+    public var rawValue: String {
+        switch self {
+        case .created: return "created"
+        case .postedAt: return "posted_at"
+        case .undocumented(let value): return value
+        }
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        self.init(rawValue: try container.decode(String.self))
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(rawValue)
+    }
+}
+
+public struct TreasuryTransactionListParamsStatusTransitionsPostedAtVariant1: Sendable, Codable, Equatable, Hashable {
+    public var gt: Int?
+    public var gte: Int?
+    public var lt: Int?
+    public var lte: Int?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(gt: Int? = nil, gte: Int? = nil, lt: Int? = nil, lte: Int? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.gt = gt
+        self.gte = gte
+        self.lt = lt
+        self.lte = lte
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case gt
+        case gte
+        case lt
+        case lte
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.gt = try container.decodeIfPresent(Int.self, forKey: .gt)
+        self.gte = try container.decodeIfPresent(Int.self, forKey: .gte)
+        self.lt = try container.decodeIfPresent(Int.self, forKey: .lt)
+        self.lte = try container.decodeIfPresent(Int.self, forKey: .lte)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .gt, .gte, .lt, .lte: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.gt, forKey: .gt)
+        try container.encodeIfPresent(self.gte, forKey: .gte)
+        try container.encodeIfPresent(self.lt, forKey: .lt)
+        try container.encodeIfPresent(self.lte, forKey: .lte)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+/// Polymorphic union; unknown shapes are kept in `other` (lossless).
+public enum TreasuryTransactionListParamsStatusTransitionsPostedAt: Sendable, Codable, Equatable, Hashable {
+    case treasuryTransactionListParamsStatusTransitionsPostedAtVariant1(TreasuryTransactionListParamsStatusTransitionsPostedAtVariant1)
+    case int(Int)
+    case other(JSONValue)
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        if let value = try? container.decode(TreasuryTransactionListParamsStatusTransitionsPostedAtVariant1.self) { self = .treasuryTransactionListParamsStatusTransitionsPostedAtVariant1(value); return }
+        if let value = try? container.decode(Int.self) { self = .int(value); return }
+        self = .other(try container.decode(JSONValue.self))
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        switch self {
+        case .treasuryTransactionListParamsStatusTransitionsPostedAtVariant1(let value): try container.encode(value)
+        case .int(let value): try container.encode(value)
+        case .other(let value): try container.encode(value)
+        }
+    }
+}
+
+public struct TreasuryTransactionListParamsStatusTransitions: Sendable, Codable, Equatable, Hashable {
+    public var postedAt: TreasuryTransactionListParamsStatusTransitionsPostedAt?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(postedAt: TreasuryTransactionListParamsStatusTransitionsPostedAt? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.postedAt = postedAt
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case postedAt = "posted_at"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.postedAt = try container.decodeIfPresent(TreasuryTransactionListParamsStatusTransitionsPostedAt.self, forKey: .postedAt)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .postedAt: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.postedAt, forKey: .postedAt)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
 public struct TransactionEntryListParamsCreatedVariant1: Sendable, Codable, Equatable, Hashable {
     public var gt: Int?
     public var gte: Int?
@@ -11174,6 +11410,68 @@ public struct ReceivedDebitListParams: Sendable, Encodable, Hashable, V1ListPara
 }
 
 public struct ReceivedDebitRetrieveParams: Sendable, Encodable, Hashable {
+    public var id: String?
+
+    public init(id: String? = nil) {
+        self.id = id
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case id
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.id, forKey: .id)
+    }
+}
+
+public struct TreasuryTransactionListParams: Sendable, Encodable, Hashable, V1ListParams {
+    public var created: TreasuryTransactionListParamsCreated?
+    public var endingBefore: String?
+    public var financialAccount: String?
+    public var limit: Int?
+    public var orderBy: TreasuryTransactionListParamsOrderBy?
+    public var startingAfter: String?
+    public var status: TreasuryTransactionStatus?
+    public var statusTransitions: TreasuryTransactionListParamsStatusTransitions?
+
+    public init(created: TreasuryTransactionListParamsCreated? = nil, endingBefore: String? = nil, financialAccount: String? = nil, limit: Int? = nil, orderBy: TreasuryTransactionListParamsOrderBy? = nil, startingAfter: String? = nil, status: TreasuryTransactionStatus? = nil, statusTransitions: TreasuryTransactionListParamsStatusTransitions? = nil) {
+        self.created = created
+        self.endingBefore = endingBefore
+        self.financialAccount = financialAccount
+        self.limit = limit
+        self.orderBy = orderBy
+        self.startingAfter = startingAfter
+        self.status = status
+        self.statusTransitions = statusTransitions
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case created
+        case endingBefore = "ending_before"
+        case financialAccount = "financial_account"
+        case limit
+        case orderBy = "order_by"
+        case startingAfter = "starting_after"
+        case status
+        case statusTransitions = "status_transitions"
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.created, forKey: .created)
+        try container.encodeIfPresent(self.endingBefore, forKey: .endingBefore)
+        try container.encodeIfPresent(self.financialAccount, forKey: .financialAccount)
+        try container.encodeIfPresent(self.limit, forKey: .limit)
+        try container.encodeIfPresent(self.orderBy, forKey: .orderBy)
+        try container.encodeIfPresent(self.startingAfter, forKey: .startingAfter)
+        try container.encodeIfPresent(self.status, forKey: .status)
+        try container.encodeIfPresent(self.statusTransitions, forKey: .statusTransitions)
+    }
+}
+
+public struct TreasuryTransactionRetrieveParams: Sendable, Encodable, Hashable {
     public var id: String?
 
     public init(id: String? = nil) {

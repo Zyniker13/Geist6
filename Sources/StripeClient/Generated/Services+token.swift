@@ -20,10 +20,11 @@ extension StripeClient {
     }
 
     /// retrieve /v1/tokens/{token} (GET).
-    public func retrieveToken(token: String, expand: [String]? = nil) async throws -> Token {
+    public func retrieveToken(token: String, _ params: TokenRetrieveParams? = nil, expand: [String]? = nil) async throws -> Token {
         try await self.request(
             method: "GET",
             path: "/v1/tokens/\(Self.encodePathSegment(token))",
+            params: params,
             expand: expand,
         )
     }

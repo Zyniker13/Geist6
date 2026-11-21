@@ -40,6 +40,9 @@ do {
   // Phase 2: operations — params structs, list containers, client methods.
   let ops = try OpCollector.collect(schemas: schemas, paths: paths)
   let endpointEmitter = EndpointEmitter(emitter: emitter)
+  // Resolve method and params names across every operation before any
+  // emission so colliding names are owned deterministically.
+  try endpointEmitter.assignNames(for: ops)
 
   var opsByBucket: [String: [OpRequest]] = [:]
   for op in ops {

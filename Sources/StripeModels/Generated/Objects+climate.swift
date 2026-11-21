@@ -1235,7 +1235,7 @@ public struct OrderUpdateParams: Sendable, Encodable, Hashable {
     }
 }
 
-public struct ProductListParams: Sendable, Encodable, Hashable, V1ListParams {
+public struct ClimateProductListParams: Sendable, Encodable, Hashable, V1ListParams {
     public var endingBefore: String?
     public var limit: Int?
     public var startingAfter: String?
@@ -1260,7 +1260,7 @@ public struct ProductListParams: Sendable, Encodable, Hashable, V1ListParams {
     }
 }
 
-public struct ProductRetrieveParams: Sendable, Encodable, Hashable {
+public struct ClimateProductRetrieveParams: Sendable, Encodable, Hashable {
     public var product: String?
 
     public init(product: String? = nil) {

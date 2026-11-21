@@ -3190,6 +3190,2056 @@ public struct TerminalReaderReaderResourceToggle: Sendable, Codable, Equatable, 
     }
 }
 
+public struct TerminalConfigurationCreateParamsBbposWisepad3: Sendable, Codable, Equatable, Hashable {
+    public var splashscreen: Clearable<String>?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(splashscreen: Clearable<String>? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.splashscreen = splashscreen
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case splashscreen
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.splashscreen = try container.decodeIfPresent(Clearable<String>.self, forKey: .splashscreen)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .splashscreen: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.splashscreen, forKey: .splashscreen)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct TerminalConfigurationCreateParamsBbposWiseposE: Sendable, Codable, Equatable, Hashable {
+    public var splashscreen: Clearable<String>?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(splashscreen: Clearable<String>? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.splashscreen = splashscreen
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case splashscreen
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.splashscreen = try container.decodeIfPresent(Clearable<String>.self, forKey: .splashscreen)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .splashscreen: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.splashscreen, forKey: .splashscreen)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct TerminalConfigurationCreateParamsCellular: Sendable, Codable, Equatable, Hashable {
+    public var enabled: Bool
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(enabled: Bool, unknownFields: [String: JSONValue]? = nil) {
+        self.enabled = enabled
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case enabled
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.enabled = try container.decode(Bool.self, forKey: .enabled)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .enabled: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.enabled, forKey: .enabled)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct TerminalConfigurationCreateParamsOffline: Sendable, Codable, Equatable, Hashable {
+    public var enabled: Bool
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(enabled: Bool, unknownFields: [String: JSONValue]? = nil) {
+        self.enabled = enabled
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case enabled
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.enabled = try container.decode(Bool.self, forKey: .enabled)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .enabled: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.enabled, forKey: .enabled)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct TerminalConfigurationCreateParamsReaderSecurity: Sendable, Codable, Equatable, Hashable {
+    public var adminMenuPasscode: Clearable<String>?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(adminMenuPasscode: Clearable<String>? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.adminMenuPasscode = adminMenuPasscode
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case adminMenuPasscode = "admin_menu_passcode"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.adminMenuPasscode = try container.decodeIfPresent(Clearable<String>.self, forKey: .adminMenuPasscode)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .adminMenuPasscode: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.adminMenuPasscode, forKey: .adminMenuPasscode)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct TerminalConfigurationCreateParamsRebootWindow: Sendable, Codable, Equatable, Hashable {
+    public var endHour: Int
+    public var startHour: Int
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(endHour: Int, startHour: Int, unknownFields: [String: JSONValue]? = nil) {
+        self.endHour = endHour
+        self.startHour = startHour
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case endHour = "end_hour"
+        case startHour = "start_hour"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.endHour = try container.decode(Int.self, forKey: .endHour)
+        self.startHour = try container.decode(Int.self, forKey: .startHour)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .endHour, .startHour: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.endHour, forKey: .endHour)
+        try container.encodeIfPresent(self.startHour, forKey: .startHour)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct TerminalConfigurationCreateParamsStripeS700: Sendable, Codable, Equatable, Hashable {
+    public var splashscreen: Clearable<String>?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(splashscreen: Clearable<String>? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.splashscreen = splashscreen
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case splashscreen
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.splashscreen = try container.decodeIfPresent(Clearable<String>.self, forKey: .splashscreen)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .splashscreen: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.splashscreen, forKey: .splashscreen)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct TerminalConfigurationCreateParamsStripeS710: Sendable, Codable, Equatable, Hashable {
+    public var splashscreen: Clearable<String>?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(splashscreen: Clearable<String>? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.splashscreen = splashscreen
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case splashscreen
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.splashscreen = try container.decodeIfPresent(Clearable<String>.self, forKey: .splashscreen)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .splashscreen: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.splashscreen, forKey: .splashscreen)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct TerminalConfigurationCreateParamsStripeT600: Sendable, Codable, Equatable, Hashable {
+    public var splashscreen: Clearable<String>?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(splashscreen: Clearable<String>? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.splashscreen = splashscreen
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case splashscreen
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.splashscreen = try container.decodeIfPresent(Clearable<String>.self, forKey: .splashscreen)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .splashscreen: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.splashscreen, forKey: .splashscreen)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct TerminalConfigurationCreateParamsTippingAed: Sendable, Codable, Equatable, Hashable {
+    public var fixedAmounts: [Int]?
+    public var percentages: [Int]?
+    public var smartTipThreshold: Int?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(fixedAmounts: [Int]? = nil, percentages: [Int]? = nil, smartTipThreshold: Int? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.fixedAmounts = fixedAmounts
+        self.percentages = percentages
+        self.smartTipThreshold = smartTipThreshold
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case fixedAmounts = "fixed_amounts"
+        case percentages
+        case smartTipThreshold = "smart_tip_threshold"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.fixedAmounts = try container.decodeIfPresent([Int].self, forKey: .fixedAmounts)
+        self.percentages = try container.decodeIfPresent([Int].self, forKey: .percentages)
+        self.smartTipThreshold = try container.decodeIfPresent(Int.self, forKey: .smartTipThreshold)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .fixedAmounts, .percentages, .smartTipThreshold: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.fixedAmounts, forKey: .fixedAmounts)
+        try container.encodeIfPresent(self.percentages, forKey: .percentages)
+        try container.encodeIfPresent(self.smartTipThreshold, forKey: .smartTipThreshold)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct TerminalConfigurationCreateParamsTippingAud: Sendable, Codable, Equatable, Hashable {
+    public var fixedAmounts: [Int]?
+    public var percentages: [Int]?
+    public var smartTipThreshold: Int?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(fixedAmounts: [Int]? = nil, percentages: [Int]? = nil, smartTipThreshold: Int? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.fixedAmounts = fixedAmounts
+        self.percentages = percentages
+        self.smartTipThreshold = smartTipThreshold
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case fixedAmounts = "fixed_amounts"
+        case percentages
+        case smartTipThreshold = "smart_tip_threshold"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.fixedAmounts = try container.decodeIfPresent([Int].self, forKey: .fixedAmounts)
+        self.percentages = try container.decodeIfPresent([Int].self, forKey: .percentages)
+        self.smartTipThreshold = try container.decodeIfPresent(Int.self, forKey: .smartTipThreshold)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .fixedAmounts, .percentages, .smartTipThreshold: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.fixedAmounts, forKey: .fixedAmounts)
+        try container.encodeIfPresent(self.percentages, forKey: .percentages)
+        try container.encodeIfPresent(self.smartTipThreshold, forKey: .smartTipThreshold)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct TerminalConfigurationCreateParamsTippingCad: Sendable, Codable, Equatable, Hashable {
+    public var fixedAmounts: [Int]?
+    public var percentages: [Int]?
+    public var smartTipThreshold: Int?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(fixedAmounts: [Int]? = nil, percentages: [Int]? = nil, smartTipThreshold: Int? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.fixedAmounts = fixedAmounts
+        self.percentages = percentages
+        self.smartTipThreshold = smartTipThreshold
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case fixedAmounts = "fixed_amounts"
+        case percentages
+        case smartTipThreshold = "smart_tip_threshold"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.fixedAmounts = try container.decodeIfPresent([Int].self, forKey: .fixedAmounts)
+        self.percentages = try container.decodeIfPresent([Int].self, forKey: .percentages)
+        self.smartTipThreshold = try container.decodeIfPresent(Int.self, forKey: .smartTipThreshold)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .fixedAmounts, .percentages, .smartTipThreshold: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.fixedAmounts, forKey: .fixedAmounts)
+        try container.encodeIfPresent(self.percentages, forKey: .percentages)
+        try container.encodeIfPresent(self.smartTipThreshold, forKey: .smartTipThreshold)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct TerminalConfigurationCreateParamsTippingChf: Sendable, Codable, Equatable, Hashable {
+    public var fixedAmounts: [Int]?
+    public var percentages: [Int]?
+    public var smartTipThreshold: Int?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(fixedAmounts: [Int]? = nil, percentages: [Int]? = nil, smartTipThreshold: Int? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.fixedAmounts = fixedAmounts
+        self.percentages = percentages
+        self.smartTipThreshold = smartTipThreshold
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case fixedAmounts = "fixed_amounts"
+        case percentages
+        case smartTipThreshold = "smart_tip_threshold"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.fixedAmounts = try container.decodeIfPresent([Int].self, forKey: .fixedAmounts)
+        self.percentages = try container.decodeIfPresent([Int].self, forKey: .percentages)
+        self.smartTipThreshold = try container.decodeIfPresent(Int.self, forKey: .smartTipThreshold)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .fixedAmounts, .percentages, .smartTipThreshold: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.fixedAmounts, forKey: .fixedAmounts)
+        try container.encodeIfPresent(self.percentages, forKey: .percentages)
+        try container.encodeIfPresent(self.smartTipThreshold, forKey: .smartTipThreshold)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct TerminalConfigurationCreateParamsTippingCzk: Sendable, Codable, Equatable, Hashable {
+    public var fixedAmounts: [Int]?
+    public var percentages: [Int]?
+    public var smartTipThreshold: Int?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(fixedAmounts: [Int]? = nil, percentages: [Int]? = nil, smartTipThreshold: Int? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.fixedAmounts = fixedAmounts
+        self.percentages = percentages
+        self.smartTipThreshold = smartTipThreshold
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case fixedAmounts = "fixed_amounts"
+        case percentages
+        case smartTipThreshold = "smart_tip_threshold"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.fixedAmounts = try container.decodeIfPresent([Int].self, forKey: .fixedAmounts)
+        self.percentages = try container.decodeIfPresent([Int].self, forKey: .percentages)
+        self.smartTipThreshold = try container.decodeIfPresent(Int.self, forKey: .smartTipThreshold)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .fixedAmounts, .percentages, .smartTipThreshold: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.fixedAmounts, forKey: .fixedAmounts)
+        try container.encodeIfPresent(self.percentages, forKey: .percentages)
+        try container.encodeIfPresent(self.smartTipThreshold, forKey: .smartTipThreshold)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct TerminalConfigurationCreateParamsTippingDkk: Sendable, Codable, Equatable, Hashable {
+    public var fixedAmounts: [Int]?
+    public var percentages: [Int]?
+    public var smartTipThreshold: Int?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(fixedAmounts: [Int]? = nil, percentages: [Int]? = nil, smartTipThreshold: Int? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.fixedAmounts = fixedAmounts
+        self.percentages = percentages
+        self.smartTipThreshold = smartTipThreshold
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case fixedAmounts = "fixed_amounts"
+        case percentages
+        case smartTipThreshold = "smart_tip_threshold"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.fixedAmounts = try container.decodeIfPresent([Int].self, forKey: .fixedAmounts)
+        self.percentages = try container.decodeIfPresent([Int].self, forKey: .percentages)
+        self.smartTipThreshold = try container.decodeIfPresent(Int.self, forKey: .smartTipThreshold)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .fixedAmounts, .percentages, .smartTipThreshold: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.fixedAmounts, forKey: .fixedAmounts)
+        try container.encodeIfPresent(self.percentages, forKey: .percentages)
+        try container.encodeIfPresent(self.smartTipThreshold, forKey: .smartTipThreshold)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct TerminalConfigurationCreateParamsTippingEur: Sendable, Codable, Equatable, Hashable {
+    public var fixedAmounts: [Int]?
+    public var percentages: [Int]?
+    public var smartTipThreshold: Int?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(fixedAmounts: [Int]? = nil, percentages: [Int]? = nil, smartTipThreshold: Int? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.fixedAmounts = fixedAmounts
+        self.percentages = percentages
+        self.smartTipThreshold = smartTipThreshold
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case fixedAmounts = "fixed_amounts"
+        case percentages
+        case smartTipThreshold = "smart_tip_threshold"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.fixedAmounts = try container.decodeIfPresent([Int].self, forKey: .fixedAmounts)
+        self.percentages = try container.decodeIfPresent([Int].self, forKey: .percentages)
+        self.smartTipThreshold = try container.decodeIfPresent(Int.self, forKey: .smartTipThreshold)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .fixedAmounts, .percentages, .smartTipThreshold: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.fixedAmounts, forKey: .fixedAmounts)
+        try container.encodeIfPresent(self.percentages, forKey: .percentages)
+        try container.encodeIfPresent(self.smartTipThreshold, forKey: .smartTipThreshold)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct TerminalConfigurationCreateParamsTippingGbp: Sendable, Codable, Equatable, Hashable {
+    public var fixedAmounts: [Int]?
+    public var percentages: [Int]?
+    public var smartTipThreshold: Int?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(fixedAmounts: [Int]? = nil, percentages: [Int]? = nil, smartTipThreshold: Int? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.fixedAmounts = fixedAmounts
+        self.percentages = percentages
+        self.smartTipThreshold = smartTipThreshold
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case fixedAmounts = "fixed_amounts"
+        case percentages
+        case smartTipThreshold = "smart_tip_threshold"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.fixedAmounts = try container.decodeIfPresent([Int].self, forKey: .fixedAmounts)
+        self.percentages = try container.decodeIfPresent([Int].self, forKey: .percentages)
+        self.smartTipThreshold = try container.decodeIfPresent(Int.self, forKey: .smartTipThreshold)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .fixedAmounts, .percentages, .smartTipThreshold: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.fixedAmounts, forKey: .fixedAmounts)
+        try container.encodeIfPresent(self.percentages, forKey: .percentages)
+        try container.encodeIfPresent(self.smartTipThreshold, forKey: .smartTipThreshold)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct TerminalConfigurationCreateParamsTippingGip: Sendable, Codable, Equatable, Hashable {
+    public var fixedAmounts: [Int]?
+    public var percentages: [Int]?
+    public var smartTipThreshold: Int?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(fixedAmounts: [Int]? = nil, percentages: [Int]? = nil, smartTipThreshold: Int? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.fixedAmounts = fixedAmounts
+        self.percentages = percentages
+        self.smartTipThreshold = smartTipThreshold
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case fixedAmounts = "fixed_amounts"
+        case percentages
+        case smartTipThreshold = "smart_tip_threshold"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.fixedAmounts = try container.decodeIfPresent([Int].self, forKey: .fixedAmounts)
+        self.percentages = try container.decodeIfPresent([Int].self, forKey: .percentages)
+        self.smartTipThreshold = try container.decodeIfPresent(Int.self, forKey: .smartTipThreshold)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .fixedAmounts, .percentages, .smartTipThreshold: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.fixedAmounts, forKey: .fixedAmounts)
+        try container.encodeIfPresent(self.percentages, forKey: .percentages)
+        try container.encodeIfPresent(self.smartTipThreshold, forKey: .smartTipThreshold)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct TerminalConfigurationCreateParamsTippingHkd: Sendable, Codable, Equatable, Hashable {
+    public var fixedAmounts: [Int]?
+    public var percentages: [Int]?
+    public var smartTipThreshold: Int?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(fixedAmounts: [Int]? = nil, percentages: [Int]? = nil, smartTipThreshold: Int? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.fixedAmounts = fixedAmounts
+        self.percentages = percentages
+        self.smartTipThreshold = smartTipThreshold
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case fixedAmounts = "fixed_amounts"
+        case percentages
+        case smartTipThreshold = "smart_tip_threshold"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.fixedAmounts = try container.decodeIfPresent([Int].self, forKey: .fixedAmounts)
+        self.percentages = try container.decodeIfPresent([Int].self, forKey: .percentages)
+        self.smartTipThreshold = try container.decodeIfPresent(Int.self, forKey: .smartTipThreshold)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .fixedAmounts, .percentages, .smartTipThreshold: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.fixedAmounts, forKey: .fixedAmounts)
+        try container.encodeIfPresent(self.percentages, forKey: .percentages)
+        try container.encodeIfPresent(self.smartTipThreshold, forKey: .smartTipThreshold)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct TerminalConfigurationCreateParamsTippingHuf: Sendable, Codable, Equatable, Hashable {
+    public var fixedAmounts: [Int]?
+    public var percentages: [Int]?
+    public var smartTipThreshold: Int?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(fixedAmounts: [Int]? = nil, percentages: [Int]? = nil, smartTipThreshold: Int? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.fixedAmounts = fixedAmounts
+        self.percentages = percentages
+        self.smartTipThreshold = smartTipThreshold
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case fixedAmounts = "fixed_amounts"
+        case percentages
+        case smartTipThreshold = "smart_tip_threshold"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.fixedAmounts = try container.decodeIfPresent([Int].self, forKey: .fixedAmounts)
+        self.percentages = try container.decodeIfPresent([Int].self, forKey: .percentages)
+        self.smartTipThreshold = try container.decodeIfPresent(Int.self, forKey: .smartTipThreshold)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .fixedAmounts, .percentages, .smartTipThreshold: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.fixedAmounts, forKey: .fixedAmounts)
+        try container.encodeIfPresent(self.percentages, forKey: .percentages)
+        try container.encodeIfPresent(self.smartTipThreshold, forKey: .smartTipThreshold)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct TerminalConfigurationCreateParamsTippingJpy: Sendable, Codable, Equatable, Hashable {
+    public var fixedAmounts: [Int]?
+    public var percentages: [Int]?
+    public var smartTipThreshold: Int?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(fixedAmounts: [Int]? = nil, percentages: [Int]? = nil, smartTipThreshold: Int? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.fixedAmounts = fixedAmounts
+        self.percentages = percentages
+        self.smartTipThreshold = smartTipThreshold
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case fixedAmounts = "fixed_amounts"
+        case percentages
+        case smartTipThreshold = "smart_tip_threshold"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.fixedAmounts = try container.decodeIfPresent([Int].self, forKey: .fixedAmounts)
+        self.percentages = try container.decodeIfPresent([Int].self, forKey: .percentages)
+        self.smartTipThreshold = try container.decodeIfPresent(Int.self, forKey: .smartTipThreshold)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .fixedAmounts, .percentages, .smartTipThreshold: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.fixedAmounts, forKey: .fixedAmounts)
+        try container.encodeIfPresent(self.percentages, forKey: .percentages)
+        try container.encodeIfPresent(self.smartTipThreshold, forKey: .smartTipThreshold)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct TerminalConfigurationCreateParamsTippingMxn: Sendable, Codable, Equatable, Hashable {
+    public var fixedAmounts: [Int]?
+    public var percentages: [Int]?
+    public var smartTipThreshold: Int?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(fixedAmounts: [Int]? = nil, percentages: [Int]? = nil, smartTipThreshold: Int? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.fixedAmounts = fixedAmounts
+        self.percentages = percentages
+        self.smartTipThreshold = smartTipThreshold
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case fixedAmounts = "fixed_amounts"
+        case percentages
+        case smartTipThreshold = "smart_tip_threshold"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.fixedAmounts = try container.decodeIfPresent([Int].self, forKey: .fixedAmounts)
+        self.percentages = try container.decodeIfPresent([Int].self, forKey: .percentages)
+        self.smartTipThreshold = try container.decodeIfPresent(Int.self, forKey: .smartTipThreshold)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .fixedAmounts, .percentages, .smartTipThreshold: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.fixedAmounts, forKey: .fixedAmounts)
+        try container.encodeIfPresent(self.percentages, forKey: .percentages)
+        try container.encodeIfPresent(self.smartTipThreshold, forKey: .smartTipThreshold)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct TerminalConfigurationCreateParamsTippingMyr: Sendable, Codable, Equatable, Hashable {
+    public var fixedAmounts: [Int]?
+    public var percentages: [Int]?
+    public var smartTipThreshold: Int?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(fixedAmounts: [Int]? = nil, percentages: [Int]? = nil, smartTipThreshold: Int? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.fixedAmounts = fixedAmounts
+        self.percentages = percentages
+        self.smartTipThreshold = smartTipThreshold
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case fixedAmounts = "fixed_amounts"
+        case percentages
+        case smartTipThreshold = "smart_tip_threshold"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.fixedAmounts = try container.decodeIfPresent([Int].self, forKey: .fixedAmounts)
+        self.percentages = try container.decodeIfPresent([Int].self, forKey: .percentages)
+        self.smartTipThreshold = try container.decodeIfPresent(Int.self, forKey: .smartTipThreshold)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .fixedAmounts, .percentages, .smartTipThreshold: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.fixedAmounts, forKey: .fixedAmounts)
+        try container.encodeIfPresent(self.percentages, forKey: .percentages)
+        try container.encodeIfPresent(self.smartTipThreshold, forKey: .smartTipThreshold)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct TerminalConfigurationCreateParamsTippingNok: Sendable, Codable, Equatable, Hashable {
+    public var fixedAmounts: [Int]?
+    public var percentages: [Int]?
+    public var smartTipThreshold: Int?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(fixedAmounts: [Int]? = nil, percentages: [Int]? = nil, smartTipThreshold: Int? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.fixedAmounts = fixedAmounts
+        self.percentages = percentages
+        self.smartTipThreshold = smartTipThreshold
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case fixedAmounts = "fixed_amounts"
+        case percentages
+        case smartTipThreshold = "smart_tip_threshold"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.fixedAmounts = try container.decodeIfPresent([Int].self, forKey: .fixedAmounts)
+        self.percentages = try container.decodeIfPresent([Int].self, forKey: .percentages)
+        self.smartTipThreshold = try container.decodeIfPresent(Int.self, forKey: .smartTipThreshold)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .fixedAmounts, .percentages, .smartTipThreshold: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.fixedAmounts, forKey: .fixedAmounts)
+        try container.encodeIfPresent(self.percentages, forKey: .percentages)
+        try container.encodeIfPresent(self.smartTipThreshold, forKey: .smartTipThreshold)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct TerminalConfigurationCreateParamsTippingNzd: Sendable, Codable, Equatable, Hashable {
+    public var fixedAmounts: [Int]?
+    public var percentages: [Int]?
+    public var smartTipThreshold: Int?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(fixedAmounts: [Int]? = nil, percentages: [Int]? = nil, smartTipThreshold: Int? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.fixedAmounts = fixedAmounts
+        self.percentages = percentages
+        self.smartTipThreshold = smartTipThreshold
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case fixedAmounts = "fixed_amounts"
+        case percentages
+        case smartTipThreshold = "smart_tip_threshold"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.fixedAmounts = try container.decodeIfPresent([Int].self, forKey: .fixedAmounts)
+        self.percentages = try container.decodeIfPresent([Int].self, forKey: .percentages)
+        self.smartTipThreshold = try container.decodeIfPresent(Int.self, forKey: .smartTipThreshold)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .fixedAmounts, .percentages, .smartTipThreshold: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.fixedAmounts, forKey: .fixedAmounts)
+        try container.encodeIfPresent(self.percentages, forKey: .percentages)
+        try container.encodeIfPresent(self.smartTipThreshold, forKey: .smartTipThreshold)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct TerminalConfigurationCreateParamsTippingPln: Sendable, Codable, Equatable, Hashable {
+    public var fixedAmounts: [Int]?
+    public var percentages: [Int]?
+    public var smartTipThreshold: Int?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(fixedAmounts: [Int]? = nil, percentages: [Int]? = nil, smartTipThreshold: Int? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.fixedAmounts = fixedAmounts
+        self.percentages = percentages
+        self.smartTipThreshold = smartTipThreshold
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case fixedAmounts = "fixed_amounts"
+        case percentages
+        case smartTipThreshold = "smart_tip_threshold"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.fixedAmounts = try container.decodeIfPresent([Int].self, forKey: .fixedAmounts)
+        self.percentages = try container.decodeIfPresent([Int].self, forKey: .percentages)
+        self.smartTipThreshold = try container.decodeIfPresent(Int.self, forKey: .smartTipThreshold)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .fixedAmounts, .percentages, .smartTipThreshold: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.fixedAmounts, forKey: .fixedAmounts)
+        try container.encodeIfPresent(self.percentages, forKey: .percentages)
+        try container.encodeIfPresent(self.smartTipThreshold, forKey: .smartTipThreshold)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct TerminalConfigurationCreateParamsTippingRon: Sendable, Codable, Equatable, Hashable {
+    public var fixedAmounts: [Int]?
+    public var percentages: [Int]?
+    public var smartTipThreshold: Int?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(fixedAmounts: [Int]? = nil, percentages: [Int]? = nil, smartTipThreshold: Int? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.fixedAmounts = fixedAmounts
+        self.percentages = percentages
+        self.smartTipThreshold = smartTipThreshold
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case fixedAmounts = "fixed_amounts"
+        case percentages
+        case smartTipThreshold = "smart_tip_threshold"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.fixedAmounts = try container.decodeIfPresent([Int].self, forKey: .fixedAmounts)
+        self.percentages = try container.decodeIfPresent([Int].self, forKey: .percentages)
+        self.smartTipThreshold = try container.decodeIfPresent(Int.self, forKey: .smartTipThreshold)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .fixedAmounts, .percentages, .smartTipThreshold: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.fixedAmounts, forKey: .fixedAmounts)
+        try container.encodeIfPresent(self.percentages, forKey: .percentages)
+        try container.encodeIfPresent(self.smartTipThreshold, forKey: .smartTipThreshold)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct TerminalConfigurationCreateParamsTippingSek: Sendable, Codable, Equatable, Hashable {
+    public var fixedAmounts: [Int]?
+    public var percentages: [Int]?
+    public var smartTipThreshold: Int?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(fixedAmounts: [Int]? = nil, percentages: [Int]? = nil, smartTipThreshold: Int? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.fixedAmounts = fixedAmounts
+        self.percentages = percentages
+        self.smartTipThreshold = smartTipThreshold
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case fixedAmounts = "fixed_amounts"
+        case percentages
+        case smartTipThreshold = "smart_tip_threshold"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.fixedAmounts = try container.decodeIfPresent([Int].self, forKey: .fixedAmounts)
+        self.percentages = try container.decodeIfPresent([Int].self, forKey: .percentages)
+        self.smartTipThreshold = try container.decodeIfPresent(Int.self, forKey: .smartTipThreshold)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .fixedAmounts, .percentages, .smartTipThreshold: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.fixedAmounts, forKey: .fixedAmounts)
+        try container.encodeIfPresent(self.percentages, forKey: .percentages)
+        try container.encodeIfPresent(self.smartTipThreshold, forKey: .smartTipThreshold)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct TerminalConfigurationCreateParamsTippingSgd: Sendable, Codable, Equatable, Hashable {
+    public var fixedAmounts: [Int]?
+    public var percentages: [Int]?
+    public var smartTipThreshold: Int?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(fixedAmounts: [Int]? = nil, percentages: [Int]? = nil, smartTipThreshold: Int? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.fixedAmounts = fixedAmounts
+        self.percentages = percentages
+        self.smartTipThreshold = smartTipThreshold
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case fixedAmounts = "fixed_amounts"
+        case percentages
+        case smartTipThreshold = "smart_tip_threshold"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.fixedAmounts = try container.decodeIfPresent([Int].self, forKey: .fixedAmounts)
+        self.percentages = try container.decodeIfPresent([Int].self, forKey: .percentages)
+        self.smartTipThreshold = try container.decodeIfPresent(Int.self, forKey: .smartTipThreshold)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .fixedAmounts, .percentages, .smartTipThreshold: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.fixedAmounts, forKey: .fixedAmounts)
+        try container.encodeIfPresent(self.percentages, forKey: .percentages)
+        try container.encodeIfPresent(self.smartTipThreshold, forKey: .smartTipThreshold)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct TerminalConfigurationCreateParamsTippingUsd: Sendable, Codable, Equatable, Hashable {
+    public var fixedAmounts: [Int]?
+    public var percentages: [Int]?
+    public var smartTipThreshold: Int?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(fixedAmounts: [Int]? = nil, percentages: [Int]? = nil, smartTipThreshold: Int? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.fixedAmounts = fixedAmounts
+        self.percentages = percentages
+        self.smartTipThreshold = smartTipThreshold
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case fixedAmounts = "fixed_amounts"
+        case percentages
+        case smartTipThreshold = "smart_tip_threshold"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.fixedAmounts = try container.decodeIfPresent([Int].self, forKey: .fixedAmounts)
+        self.percentages = try container.decodeIfPresent([Int].self, forKey: .percentages)
+        self.smartTipThreshold = try container.decodeIfPresent(Int.self, forKey: .smartTipThreshold)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .fixedAmounts, .percentages, .smartTipThreshold: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.fixedAmounts, forKey: .fixedAmounts)
+        try container.encodeIfPresent(self.percentages, forKey: .percentages)
+        try container.encodeIfPresent(self.smartTipThreshold, forKey: .smartTipThreshold)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct TerminalConfigurationCreateParamsTipping: Sendable, Codable, Equatable, Hashable {
+    public var aed: TerminalConfigurationCreateParamsTippingAed?
+    public var aud: TerminalConfigurationCreateParamsTippingAud?
+    public var cad: TerminalConfigurationCreateParamsTippingCad?
+    public var chf: TerminalConfigurationCreateParamsTippingChf?
+    public var czk: TerminalConfigurationCreateParamsTippingCzk?
+    public var dkk: TerminalConfigurationCreateParamsTippingDkk?
+    public var eur: TerminalConfigurationCreateParamsTippingEur?
+    public var gbp: TerminalConfigurationCreateParamsTippingGbp?
+    public var gip: TerminalConfigurationCreateParamsTippingGip?
+    public var hkd: TerminalConfigurationCreateParamsTippingHkd?
+    public var huf: TerminalConfigurationCreateParamsTippingHuf?
+    public var jpy: TerminalConfigurationCreateParamsTippingJpy?
+    public var mxn: TerminalConfigurationCreateParamsTippingMxn?
+    public var myr: TerminalConfigurationCreateParamsTippingMyr?
+    public var nok: TerminalConfigurationCreateParamsTippingNok?
+    public var nzd: TerminalConfigurationCreateParamsTippingNzd?
+    public var pln: TerminalConfigurationCreateParamsTippingPln?
+    public var ron: TerminalConfigurationCreateParamsTippingRon?
+    public var sek: TerminalConfigurationCreateParamsTippingSek?
+    public var sgd: TerminalConfigurationCreateParamsTippingSgd?
+    public var usd: TerminalConfigurationCreateParamsTippingUsd?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(aed: TerminalConfigurationCreateParamsTippingAed? = nil, aud: TerminalConfigurationCreateParamsTippingAud? = nil, cad: TerminalConfigurationCreateParamsTippingCad? = nil, chf: TerminalConfigurationCreateParamsTippingChf? = nil, czk: TerminalConfigurationCreateParamsTippingCzk? = nil, dkk: TerminalConfigurationCreateParamsTippingDkk? = nil, eur: TerminalConfigurationCreateParamsTippingEur? = nil, gbp: TerminalConfigurationCreateParamsTippingGbp? = nil, gip: TerminalConfigurationCreateParamsTippingGip? = nil, hkd: TerminalConfigurationCreateParamsTippingHkd? = nil, huf: TerminalConfigurationCreateParamsTippingHuf? = nil, jpy: TerminalConfigurationCreateParamsTippingJpy? = nil, mxn: TerminalConfigurationCreateParamsTippingMxn? = nil, myr: TerminalConfigurationCreateParamsTippingMyr? = nil, nok: TerminalConfigurationCreateParamsTippingNok? = nil, nzd: TerminalConfigurationCreateParamsTippingNzd? = nil, pln: TerminalConfigurationCreateParamsTippingPln? = nil, ron: TerminalConfigurationCreateParamsTippingRon? = nil, sek: TerminalConfigurationCreateParamsTippingSek? = nil, sgd: TerminalConfigurationCreateParamsTippingSgd? = nil, usd: TerminalConfigurationCreateParamsTippingUsd? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.aed = aed
+        self.aud = aud
+        self.cad = cad
+        self.chf = chf
+        self.czk = czk
+        self.dkk = dkk
+        self.eur = eur
+        self.gbp = gbp
+        self.gip = gip
+        self.hkd = hkd
+        self.huf = huf
+        self.jpy = jpy
+        self.mxn = mxn
+        self.myr = myr
+        self.nok = nok
+        self.nzd = nzd
+        self.pln = pln
+        self.ron = ron
+        self.sek = sek
+        self.sgd = sgd
+        self.usd = usd
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case aed
+        case aud
+        case cad
+        case chf
+        case czk
+        case dkk
+        case eur
+        case gbp
+        case gip
+        case hkd
+        case huf
+        case jpy
+        case mxn
+        case myr
+        case nok
+        case nzd
+        case pln
+        case ron
+        case sek
+        case sgd
+        case usd
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.aed = try container.decodeIfPresent(TerminalConfigurationCreateParamsTippingAed.self, forKey: .aed)
+        self.aud = try container.decodeIfPresent(TerminalConfigurationCreateParamsTippingAud.self, forKey: .aud)
+        self.cad = try container.decodeIfPresent(TerminalConfigurationCreateParamsTippingCad.self, forKey: .cad)
+        self.chf = try container.decodeIfPresent(TerminalConfigurationCreateParamsTippingChf.self, forKey: .chf)
+        self.czk = try container.decodeIfPresent(TerminalConfigurationCreateParamsTippingCzk.self, forKey: .czk)
+        self.dkk = try container.decodeIfPresent(TerminalConfigurationCreateParamsTippingDkk.self, forKey: .dkk)
+        self.eur = try container.decodeIfPresent(TerminalConfigurationCreateParamsTippingEur.self, forKey: .eur)
+        self.gbp = try container.decodeIfPresent(TerminalConfigurationCreateParamsTippingGbp.self, forKey: .gbp)
+        self.gip = try container.decodeIfPresent(TerminalConfigurationCreateParamsTippingGip.self, forKey: .gip)
+        self.hkd = try container.decodeIfPresent(TerminalConfigurationCreateParamsTippingHkd.self, forKey: .hkd)
+        self.huf = try container.decodeIfPresent(TerminalConfigurationCreateParamsTippingHuf.self, forKey: .huf)
+        self.jpy = try container.decodeIfPresent(TerminalConfigurationCreateParamsTippingJpy.self, forKey: .jpy)
+        self.mxn = try container.decodeIfPresent(TerminalConfigurationCreateParamsTippingMxn.self, forKey: .mxn)
+        self.myr = try container.decodeIfPresent(TerminalConfigurationCreateParamsTippingMyr.self, forKey: .myr)
+        self.nok = try container.decodeIfPresent(TerminalConfigurationCreateParamsTippingNok.self, forKey: .nok)
+        self.nzd = try container.decodeIfPresent(TerminalConfigurationCreateParamsTippingNzd.self, forKey: .nzd)
+        self.pln = try container.decodeIfPresent(TerminalConfigurationCreateParamsTippingPln.self, forKey: .pln)
+        self.ron = try container.decodeIfPresent(TerminalConfigurationCreateParamsTippingRon.self, forKey: .ron)
+        self.sek = try container.decodeIfPresent(TerminalConfigurationCreateParamsTippingSek.self, forKey: .sek)
+        self.sgd = try container.decodeIfPresent(TerminalConfigurationCreateParamsTippingSgd.self, forKey: .sgd)
+        self.usd = try container.decodeIfPresent(TerminalConfigurationCreateParamsTippingUsd.self, forKey: .usd)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .aed, .aud, .cad, .chf, .czk, .dkk, .eur, .gbp, .gip, .hkd, .huf, .jpy, .mxn, .myr, .nok, .nzd, .pln, .ron, .sek, .sgd, .usd: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.aed, forKey: .aed)
+        try container.encodeIfPresent(self.aud, forKey: .aud)
+        try container.encodeIfPresent(self.cad, forKey: .cad)
+        try container.encodeIfPresent(self.chf, forKey: .chf)
+        try container.encodeIfPresent(self.czk, forKey: .czk)
+        try container.encodeIfPresent(self.dkk, forKey: .dkk)
+        try container.encodeIfPresent(self.eur, forKey: .eur)
+        try container.encodeIfPresent(self.gbp, forKey: .gbp)
+        try container.encodeIfPresent(self.gip, forKey: .gip)
+        try container.encodeIfPresent(self.hkd, forKey: .hkd)
+        try container.encodeIfPresent(self.huf, forKey: .huf)
+        try container.encodeIfPresent(self.jpy, forKey: .jpy)
+        try container.encodeIfPresent(self.mxn, forKey: .mxn)
+        try container.encodeIfPresent(self.myr, forKey: .myr)
+        try container.encodeIfPresent(self.nok, forKey: .nok)
+        try container.encodeIfPresent(self.nzd, forKey: .nzd)
+        try container.encodeIfPresent(self.pln, forKey: .pln)
+        try container.encodeIfPresent(self.ron, forKey: .ron)
+        try container.encodeIfPresent(self.sek, forKey: .sek)
+        try container.encodeIfPresent(self.sgd, forKey: .sgd)
+        try container.encodeIfPresent(self.usd, forKey: .usd)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct TerminalConfigurationCreateParamsVerifoneM425: Sendable, Codable, Equatable, Hashable {
+    public var splashscreen: Clearable<String>?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(splashscreen: Clearable<String>? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.splashscreen = splashscreen
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case splashscreen
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.splashscreen = try container.decodeIfPresent(Clearable<String>.self, forKey: .splashscreen)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .splashscreen: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.splashscreen, forKey: .splashscreen)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct TerminalConfigurationCreateParamsVerifoneP400: Sendable, Codable, Equatable, Hashable {
+    public var splashscreen: Clearable<String>?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(splashscreen: Clearable<String>? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.splashscreen = splashscreen
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case splashscreen
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.splashscreen = try container.decodeIfPresent(Clearable<String>.self, forKey: .splashscreen)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .splashscreen: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.splashscreen, forKey: .splashscreen)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct TerminalConfigurationCreateParamsVerifoneP630: Sendable, Codable, Equatable, Hashable {
+    public var splashscreen: Clearable<String>?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(splashscreen: Clearable<String>? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.splashscreen = splashscreen
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case splashscreen
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.splashscreen = try container.decodeIfPresent(Clearable<String>.self, forKey: .splashscreen)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .splashscreen: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.splashscreen, forKey: .splashscreen)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct TerminalConfigurationCreateParamsVerifoneUx700: Sendable, Codable, Equatable, Hashable {
+    public var splashscreen: Clearable<String>?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(splashscreen: Clearable<String>? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.splashscreen = splashscreen
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case splashscreen
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.splashscreen = try container.decodeIfPresent(Clearable<String>.self, forKey: .splashscreen)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .splashscreen: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.splashscreen, forKey: .splashscreen)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct TerminalConfigurationCreateParamsVerifoneV660p: Sendable, Codable, Equatable, Hashable {
+    public var splashscreen: Clearable<String>?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(splashscreen: Clearable<String>? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.splashscreen = splashscreen
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case splashscreen
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.splashscreen = try container.decodeIfPresent(Clearable<String>.self, forKey: .splashscreen)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .splashscreen: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.splashscreen, forKey: .splashscreen)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct TerminalConfigurationCreateParamsWifiEnterpriseEapPeap: Sendable, Codable, Equatable, Hashable {
+    public var caCertificateFile: String?
+    public var password: String
+    public var ssid: String
+    public var username: String
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(caCertificateFile: String? = nil, password: String, ssid: String, username: String, unknownFields: [String: JSONValue]? = nil) {
+        self.caCertificateFile = caCertificateFile
+        self.password = password
+        self.ssid = ssid
+        self.username = username
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case caCertificateFile = "ca_certificate_file"
+        case password
+        case ssid
+        case username
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.caCertificateFile = try container.decodeIfPresent(String.self, forKey: .caCertificateFile)
+        self.password = try container.decode(String.self, forKey: .password)
+        self.ssid = try container.decode(String.self, forKey: .ssid)
+        self.username = try container.decode(String.self, forKey: .username)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .caCertificateFile, .password, .ssid, .username: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.caCertificateFile, forKey: .caCertificateFile)
+        try container.encodeIfPresent(self.password, forKey: .password)
+        try container.encodeIfPresent(self.ssid, forKey: .ssid)
+        try container.encodeIfPresent(self.username, forKey: .username)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct TerminalConfigurationCreateParamsWifiEnterpriseEapTls: Sendable, Codable, Equatable, Hashable {
+    public var caCertificateFile: String?
+    public var clientCertificateFile: String
+    public var privateKeyFile: String
+    public var privateKeyFilePassword: String?
+    public var ssid: String
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(caCertificateFile: String? = nil, clientCertificateFile: String, privateKeyFile: String, privateKeyFilePassword: String? = nil, ssid: String, unknownFields: [String: JSONValue]? = nil) {
+        self.caCertificateFile = caCertificateFile
+        self.clientCertificateFile = clientCertificateFile
+        self.privateKeyFile = privateKeyFile
+        self.privateKeyFilePassword = privateKeyFilePassword
+        self.ssid = ssid
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case caCertificateFile = "ca_certificate_file"
+        case clientCertificateFile = "client_certificate_file"
+        case privateKeyFile = "private_key_file"
+        case privateKeyFilePassword = "private_key_file_password"
+        case ssid
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.caCertificateFile = try container.decodeIfPresent(String.self, forKey: .caCertificateFile)
+        self.clientCertificateFile = try container.decode(String.self, forKey: .clientCertificateFile)
+        self.privateKeyFile = try container.decode(String.self, forKey: .privateKeyFile)
+        self.privateKeyFilePassword = try container.decodeIfPresent(String.self, forKey: .privateKeyFilePassword)
+        self.ssid = try container.decode(String.self, forKey: .ssid)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .caCertificateFile, .clientCertificateFile, .privateKeyFile, .privateKeyFilePassword, .ssid: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.caCertificateFile, forKey: .caCertificateFile)
+        try container.encodeIfPresent(self.clientCertificateFile, forKey: .clientCertificateFile)
+        try container.encodeIfPresent(self.privateKeyFile, forKey: .privateKeyFile)
+        try container.encodeIfPresent(self.privateKeyFilePassword, forKey: .privateKeyFilePassword)
+        try container.encodeIfPresent(self.ssid, forKey: .ssid)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct TerminalConfigurationCreateParamsWifiPersonalPsk: Sendable, Codable, Equatable, Hashable {
+    public var password: String
+    public var ssid: String
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(password: String, ssid: String, unknownFields: [String: JSONValue]? = nil) {
+        self.password = password
+        self.ssid = ssid
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case password
+        case ssid
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.password = try container.decode(String.self, forKey: .password)
+        self.ssid = try container.decode(String.self, forKey: .ssid)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .password, .ssid: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.password, forKey: .password)
+        try container.encodeIfPresent(self.ssid, forKey: .ssid)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct TerminalConfigurationCreateParamsWifi: Sendable, Codable, Equatable, Hashable {
+    public var enterpriseEapPeap: TerminalConfigurationCreateParamsWifiEnterpriseEapPeap?
+    public var enterpriseEapTls: TerminalConfigurationCreateParamsWifiEnterpriseEapTls?
+    public var personalPsk: TerminalConfigurationCreateParamsWifiPersonalPsk?
+    public var type: TerminalConfigurationConfigurationResourceWifiConfigType
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(enterpriseEapPeap: TerminalConfigurationCreateParamsWifiEnterpriseEapPeap? = nil, enterpriseEapTls: TerminalConfigurationCreateParamsWifiEnterpriseEapTls? = nil, personalPsk: TerminalConfigurationCreateParamsWifiPersonalPsk? = nil, type: TerminalConfigurationConfigurationResourceWifiConfigType, unknownFields: [String: JSONValue]? = nil) {
+        self.enterpriseEapPeap = enterpriseEapPeap
+        self.enterpriseEapTls = enterpriseEapTls
+        self.personalPsk = personalPsk
+        self.type = type
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case enterpriseEapPeap = "enterprise_eap_peap"
+        case enterpriseEapTls = "enterprise_eap_tls"
+        case personalPsk = "personal_psk"
+        case type
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.enterpriseEapPeap = try container.decodeIfPresent(TerminalConfigurationCreateParamsWifiEnterpriseEapPeap.self, forKey: .enterpriseEapPeap)
+        self.enterpriseEapTls = try container.decodeIfPresent(TerminalConfigurationCreateParamsWifiEnterpriseEapTls.self, forKey: .enterpriseEapTls)
+        self.personalPsk = try container.decodeIfPresent(TerminalConfigurationCreateParamsWifiPersonalPsk.self, forKey: .personalPsk)
+        self.type = try container.decode(TerminalConfigurationConfigurationResourceWifiConfigType.self, forKey: .type)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .enterpriseEapPeap, .enterpriseEapTls, .personalPsk, .type: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.enterpriseEapPeap, forKey: .enterpriseEapPeap)
+        try container.encodeIfPresent(self.enterpriseEapTls, forKey: .enterpriseEapTls)
+        try container.encodeIfPresent(self.personalPsk, forKey: .personalPsk)
+        try container.encodeIfPresent(self.type, forKey: .type)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
 /// Polymorphic union; unknown shapes are kept in `other` (lossless).
 public enum ConfigurationResponse: Sendable, Codable, Equatable, Hashable {
     case terminalConfiguration(TerminalConfiguration)
@@ -3214,6 +5264,2267 @@ public enum ConfigurationResponse: Sendable, Codable, Equatable, Hashable {
         case .terminalConfiguration(let value): try container.encode(value)
         case .deletedTerminalConfiguration(let value): try container.encode(value)
         case .other(let value): try container.encode(value)
+        }
+    }
+}
+
+public struct TerminalConfigurationUpdateParamsBbposWisepad3: Sendable, Codable, Equatable, Hashable {
+    public var splashscreen: Clearable<String>?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(splashscreen: Clearable<String>? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.splashscreen = splashscreen
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case splashscreen
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.splashscreen = try container.decodeIfPresent(Clearable<String>.self, forKey: .splashscreen)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .splashscreen: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.splashscreen, forKey: .splashscreen)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct TerminalConfigurationUpdateParamsBbposWiseposE: Sendable, Codable, Equatable, Hashable {
+    public var splashscreen: Clearable<String>?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(splashscreen: Clearable<String>? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.splashscreen = splashscreen
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case splashscreen
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.splashscreen = try container.decodeIfPresent(Clearable<String>.self, forKey: .splashscreen)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .splashscreen: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.splashscreen, forKey: .splashscreen)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct TerminalConfigurationUpdateParamsCellular: Sendable, Codable, Equatable, Hashable {
+    public var enabled: Bool
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(enabled: Bool, unknownFields: [String: JSONValue]? = nil) {
+        self.enabled = enabled
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case enabled
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.enabled = try container.decode(Bool.self, forKey: .enabled)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .enabled: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.enabled, forKey: .enabled)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct TerminalConfigurationUpdateParamsOffline: Sendable, Codable, Equatable, Hashable {
+    public var enabled: Bool
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(enabled: Bool, unknownFields: [String: JSONValue]? = nil) {
+        self.enabled = enabled
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case enabled
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.enabled = try container.decode(Bool.self, forKey: .enabled)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .enabled: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.enabled, forKey: .enabled)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct TerminalConfigurationUpdateParamsReaderSecurity: Sendable, Codable, Equatable, Hashable {
+    public var adminMenuPasscode: Clearable<String>?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(adminMenuPasscode: Clearable<String>? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.adminMenuPasscode = adminMenuPasscode
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case adminMenuPasscode = "admin_menu_passcode"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.adminMenuPasscode = try container.decodeIfPresent(Clearable<String>.self, forKey: .adminMenuPasscode)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .adminMenuPasscode: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.adminMenuPasscode, forKey: .adminMenuPasscode)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct TerminalConfigurationUpdateParamsRebootWindow: Sendable, Codable, Equatable, Hashable {
+    public var endHour: Int
+    public var startHour: Int
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(endHour: Int, startHour: Int, unknownFields: [String: JSONValue]? = nil) {
+        self.endHour = endHour
+        self.startHour = startHour
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case endHour = "end_hour"
+        case startHour = "start_hour"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.endHour = try container.decode(Int.self, forKey: .endHour)
+        self.startHour = try container.decode(Int.self, forKey: .startHour)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .endHour, .startHour: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.endHour, forKey: .endHour)
+        try container.encodeIfPresent(self.startHour, forKey: .startHour)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct TerminalConfigurationUpdateParamsStripeS700: Sendable, Codable, Equatable, Hashable {
+    public var splashscreen: Clearable<String>?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(splashscreen: Clearable<String>? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.splashscreen = splashscreen
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case splashscreen
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.splashscreen = try container.decodeIfPresent(Clearable<String>.self, forKey: .splashscreen)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .splashscreen: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.splashscreen, forKey: .splashscreen)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct TerminalConfigurationUpdateParamsStripeS710: Sendable, Codable, Equatable, Hashable {
+    public var splashscreen: Clearable<String>?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(splashscreen: Clearable<String>? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.splashscreen = splashscreen
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case splashscreen
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.splashscreen = try container.decodeIfPresent(Clearable<String>.self, forKey: .splashscreen)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .splashscreen: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.splashscreen, forKey: .splashscreen)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct TerminalConfigurationUpdateParamsStripeT600: Sendable, Codable, Equatable, Hashable {
+    public var splashscreen: Clearable<String>?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(splashscreen: Clearable<String>? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.splashscreen = splashscreen
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case splashscreen
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.splashscreen = try container.decodeIfPresent(Clearable<String>.self, forKey: .splashscreen)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .splashscreen: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.splashscreen, forKey: .splashscreen)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct TerminalConfigurationUpdateParamsTippingAed: Sendable, Codable, Equatable, Hashable {
+    public var fixedAmounts: [Int]?
+    public var percentages: [Int]?
+    public var smartTipThreshold: Int?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(fixedAmounts: [Int]? = nil, percentages: [Int]? = nil, smartTipThreshold: Int? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.fixedAmounts = fixedAmounts
+        self.percentages = percentages
+        self.smartTipThreshold = smartTipThreshold
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case fixedAmounts = "fixed_amounts"
+        case percentages
+        case smartTipThreshold = "smart_tip_threshold"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.fixedAmounts = try container.decodeIfPresent([Int].self, forKey: .fixedAmounts)
+        self.percentages = try container.decodeIfPresent([Int].self, forKey: .percentages)
+        self.smartTipThreshold = try container.decodeIfPresent(Int.self, forKey: .smartTipThreshold)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .fixedAmounts, .percentages, .smartTipThreshold: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.fixedAmounts, forKey: .fixedAmounts)
+        try container.encodeIfPresent(self.percentages, forKey: .percentages)
+        try container.encodeIfPresent(self.smartTipThreshold, forKey: .smartTipThreshold)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct TerminalConfigurationUpdateParamsTippingAud: Sendable, Codable, Equatable, Hashable {
+    public var fixedAmounts: [Int]?
+    public var percentages: [Int]?
+    public var smartTipThreshold: Int?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(fixedAmounts: [Int]? = nil, percentages: [Int]? = nil, smartTipThreshold: Int? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.fixedAmounts = fixedAmounts
+        self.percentages = percentages
+        self.smartTipThreshold = smartTipThreshold
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case fixedAmounts = "fixed_amounts"
+        case percentages
+        case smartTipThreshold = "smart_tip_threshold"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.fixedAmounts = try container.decodeIfPresent([Int].self, forKey: .fixedAmounts)
+        self.percentages = try container.decodeIfPresent([Int].self, forKey: .percentages)
+        self.smartTipThreshold = try container.decodeIfPresent(Int.self, forKey: .smartTipThreshold)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .fixedAmounts, .percentages, .smartTipThreshold: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.fixedAmounts, forKey: .fixedAmounts)
+        try container.encodeIfPresent(self.percentages, forKey: .percentages)
+        try container.encodeIfPresent(self.smartTipThreshold, forKey: .smartTipThreshold)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct TerminalConfigurationUpdateParamsTippingCad: Sendable, Codable, Equatable, Hashable {
+    public var fixedAmounts: [Int]?
+    public var percentages: [Int]?
+    public var smartTipThreshold: Int?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(fixedAmounts: [Int]? = nil, percentages: [Int]? = nil, smartTipThreshold: Int? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.fixedAmounts = fixedAmounts
+        self.percentages = percentages
+        self.smartTipThreshold = smartTipThreshold
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case fixedAmounts = "fixed_amounts"
+        case percentages
+        case smartTipThreshold = "smart_tip_threshold"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.fixedAmounts = try container.decodeIfPresent([Int].self, forKey: .fixedAmounts)
+        self.percentages = try container.decodeIfPresent([Int].self, forKey: .percentages)
+        self.smartTipThreshold = try container.decodeIfPresent(Int.self, forKey: .smartTipThreshold)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .fixedAmounts, .percentages, .smartTipThreshold: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.fixedAmounts, forKey: .fixedAmounts)
+        try container.encodeIfPresent(self.percentages, forKey: .percentages)
+        try container.encodeIfPresent(self.smartTipThreshold, forKey: .smartTipThreshold)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct TerminalConfigurationUpdateParamsTippingChf: Sendable, Codable, Equatable, Hashable {
+    public var fixedAmounts: [Int]?
+    public var percentages: [Int]?
+    public var smartTipThreshold: Int?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(fixedAmounts: [Int]? = nil, percentages: [Int]? = nil, smartTipThreshold: Int? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.fixedAmounts = fixedAmounts
+        self.percentages = percentages
+        self.smartTipThreshold = smartTipThreshold
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case fixedAmounts = "fixed_amounts"
+        case percentages
+        case smartTipThreshold = "smart_tip_threshold"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.fixedAmounts = try container.decodeIfPresent([Int].self, forKey: .fixedAmounts)
+        self.percentages = try container.decodeIfPresent([Int].self, forKey: .percentages)
+        self.smartTipThreshold = try container.decodeIfPresent(Int.self, forKey: .smartTipThreshold)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .fixedAmounts, .percentages, .smartTipThreshold: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.fixedAmounts, forKey: .fixedAmounts)
+        try container.encodeIfPresent(self.percentages, forKey: .percentages)
+        try container.encodeIfPresent(self.smartTipThreshold, forKey: .smartTipThreshold)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct TerminalConfigurationUpdateParamsTippingCzk: Sendable, Codable, Equatable, Hashable {
+    public var fixedAmounts: [Int]?
+    public var percentages: [Int]?
+    public var smartTipThreshold: Int?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(fixedAmounts: [Int]? = nil, percentages: [Int]? = nil, smartTipThreshold: Int? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.fixedAmounts = fixedAmounts
+        self.percentages = percentages
+        self.smartTipThreshold = smartTipThreshold
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case fixedAmounts = "fixed_amounts"
+        case percentages
+        case smartTipThreshold = "smart_tip_threshold"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.fixedAmounts = try container.decodeIfPresent([Int].self, forKey: .fixedAmounts)
+        self.percentages = try container.decodeIfPresent([Int].self, forKey: .percentages)
+        self.smartTipThreshold = try container.decodeIfPresent(Int.self, forKey: .smartTipThreshold)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .fixedAmounts, .percentages, .smartTipThreshold: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.fixedAmounts, forKey: .fixedAmounts)
+        try container.encodeIfPresent(self.percentages, forKey: .percentages)
+        try container.encodeIfPresent(self.smartTipThreshold, forKey: .smartTipThreshold)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct TerminalConfigurationUpdateParamsTippingDkk: Sendable, Codable, Equatable, Hashable {
+    public var fixedAmounts: [Int]?
+    public var percentages: [Int]?
+    public var smartTipThreshold: Int?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(fixedAmounts: [Int]? = nil, percentages: [Int]? = nil, smartTipThreshold: Int? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.fixedAmounts = fixedAmounts
+        self.percentages = percentages
+        self.smartTipThreshold = smartTipThreshold
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case fixedAmounts = "fixed_amounts"
+        case percentages
+        case smartTipThreshold = "smart_tip_threshold"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.fixedAmounts = try container.decodeIfPresent([Int].self, forKey: .fixedAmounts)
+        self.percentages = try container.decodeIfPresent([Int].self, forKey: .percentages)
+        self.smartTipThreshold = try container.decodeIfPresent(Int.self, forKey: .smartTipThreshold)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .fixedAmounts, .percentages, .smartTipThreshold: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.fixedAmounts, forKey: .fixedAmounts)
+        try container.encodeIfPresent(self.percentages, forKey: .percentages)
+        try container.encodeIfPresent(self.smartTipThreshold, forKey: .smartTipThreshold)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct TerminalConfigurationUpdateParamsTippingEur: Sendable, Codable, Equatable, Hashable {
+    public var fixedAmounts: [Int]?
+    public var percentages: [Int]?
+    public var smartTipThreshold: Int?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(fixedAmounts: [Int]? = nil, percentages: [Int]? = nil, smartTipThreshold: Int? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.fixedAmounts = fixedAmounts
+        self.percentages = percentages
+        self.smartTipThreshold = smartTipThreshold
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case fixedAmounts = "fixed_amounts"
+        case percentages
+        case smartTipThreshold = "smart_tip_threshold"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.fixedAmounts = try container.decodeIfPresent([Int].self, forKey: .fixedAmounts)
+        self.percentages = try container.decodeIfPresent([Int].self, forKey: .percentages)
+        self.smartTipThreshold = try container.decodeIfPresent(Int.self, forKey: .smartTipThreshold)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .fixedAmounts, .percentages, .smartTipThreshold: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.fixedAmounts, forKey: .fixedAmounts)
+        try container.encodeIfPresent(self.percentages, forKey: .percentages)
+        try container.encodeIfPresent(self.smartTipThreshold, forKey: .smartTipThreshold)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct TerminalConfigurationUpdateParamsTippingGbp: Sendable, Codable, Equatable, Hashable {
+    public var fixedAmounts: [Int]?
+    public var percentages: [Int]?
+    public var smartTipThreshold: Int?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(fixedAmounts: [Int]? = nil, percentages: [Int]? = nil, smartTipThreshold: Int? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.fixedAmounts = fixedAmounts
+        self.percentages = percentages
+        self.smartTipThreshold = smartTipThreshold
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case fixedAmounts = "fixed_amounts"
+        case percentages
+        case smartTipThreshold = "smart_tip_threshold"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.fixedAmounts = try container.decodeIfPresent([Int].self, forKey: .fixedAmounts)
+        self.percentages = try container.decodeIfPresent([Int].self, forKey: .percentages)
+        self.smartTipThreshold = try container.decodeIfPresent(Int.self, forKey: .smartTipThreshold)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .fixedAmounts, .percentages, .smartTipThreshold: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.fixedAmounts, forKey: .fixedAmounts)
+        try container.encodeIfPresent(self.percentages, forKey: .percentages)
+        try container.encodeIfPresent(self.smartTipThreshold, forKey: .smartTipThreshold)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct TerminalConfigurationUpdateParamsTippingGip: Sendable, Codable, Equatable, Hashable {
+    public var fixedAmounts: [Int]?
+    public var percentages: [Int]?
+    public var smartTipThreshold: Int?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(fixedAmounts: [Int]? = nil, percentages: [Int]? = nil, smartTipThreshold: Int? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.fixedAmounts = fixedAmounts
+        self.percentages = percentages
+        self.smartTipThreshold = smartTipThreshold
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case fixedAmounts = "fixed_amounts"
+        case percentages
+        case smartTipThreshold = "smart_tip_threshold"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.fixedAmounts = try container.decodeIfPresent([Int].self, forKey: .fixedAmounts)
+        self.percentages = try container.decodeIfPresent([Int].self, forKey: .percentages)
+        self.smartTipThreshold = try container.decodeIfPresent(Int.self, forKey: .smartTipThreshold)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .fixedAmounts, .percentages, .smartTipThreshold: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.fixedAmounts, forKey: .fixedAmounts)
+        try container.encodeIfPresent(self.percentages, forKey: .percentages)
+        try container.encodeIfPresent(self.smartTipThreshold, forKey: .smartTipThreshold)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct TerminalConfigurationUpdateParamsTippingHkd: Sendable, Codable, Equatable, Hashable {
+    public var fixedAmounts: [Int]?
+    public var percentages: [Int]?
+    public var smartTipThreshold: Int?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(fixedAmounts: [Int]? = nil, percentages: [Int]? = nil, smartTipThreshold: Int? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.fixedAmounts = fixedAmounts
+        self.percentages = percentages
+        self.smartTipThreshold = smartTipThreshold
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case fixedAmounts = "fixed_amounts"
+        case percentages
+        case smartTipThreshold = "smart_tip_threshold"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.fixedAmounts = try container.decodeIfPresent([Int].self, forKey: .fixedAmounts)
+        self.percentages = try container.decodeIfPresent([Int].self, forKey: .percentages)
+        self.smartTipThreshold = try container.decodeIfPresent(Int.self, forKey: .smartTipThreshold)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .fixedAmounts, .percentages, .smartTipThreshold: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.fixedAmounts, forKey: .fixedAmounts)
+        try container.encodeIfPresent(self.percentages, forKey: .percentages)
+        try container.encodeIfPresent(self.smartTipThreshold, forKey: .smartTipThreshold)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct TerminalConfigurationUpdateParamsTippingHuf: Sendable, Codable, Equatable, Hashable {
+    public var fixedAmounts: [Int]?
+    public var percentages: [Int]?
+    public var smartTipThreshold: Int?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(fixedAmounts: [Int]? = nil, percentages: [Int]? = nil, smartTipThreshold: Int? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.fixedAmounts = fixedAmounts
+        self.percentages = percentages
+        self.smartTipThreshold = smartTipThreshold
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case fixedAmounts = "fixed_amounts"
+        case percentages
+        case smartTipThreshold = "smart_tip_threshold"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.fixedAmounts = try container.decodeIfPresent([Int].self, forKey: .fixedAmounts)
+        self.percentages = try container.decodeIfPresent([Int].self, forKey: .percentages)
+        self.smartTipThreshold = try container.decodeIfPresent(Int.self, forKey: .smartTipThreshold)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .fixedAmounts, .percentages, .smartTipThreshold: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.fixedAmounts, forKey: .fixedAmounts)
+        try container.encodeIfPresent(self.percentages, forKey: .percentages)
+        try container.encodeIfPresent(self.smartTipThreshold, forKey: .smartTipThreshold)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct TerminalConfigurationUpdateParamsTippingJpy: Sendable, Codable, Equatable, Hashable {
+    public var fixedAmounts: [Int]?
+    public var percentages: [Int]?
+    public var smartTipThreshold: Int?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(fixedAmounts: [Int]? = nil, percentages: [Int]? = nil, smartTipThreshold: Int? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.fixedAmounts = fixedAmounts
+        self.percentages = percentages
+        self.smartTipThreshold = smartTipThreshold
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case fixedAmounts = "fixed_amounts"
+        case percentages
+        case smartTipThreshold = "smart_tip_threshold"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.fixedAmounts = try container.decodeIfPresent([Int].self, forKey: .fixedAmounts)
+        self.percentages = try container.decodeIfPresent([Int].self, forKey: .percentages)
+        self.smartTipThreshold = try container.decodeIfPresent(Int.self, forKey: .smartTipThreshold)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .fixedAmounts, .percentages, .smartTipThreshold: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.fixedAmounts, forKey: .fixedAmounts)
+        try container.encodeIfPresent(self.percentages, forKey: .percentages)
+        try container.encodeIfPresent(self.smartTipThreshold, forKey: .smartTipThreshold)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct TerminalConfigurationUpdateParamsTippingMxn: Sendable, Codable, Equatable, Hashable {
+    public var fixedAmounts: [Int]?
+    public var percentages: [Int]?
+    public var smartTipThreshold: Int?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(fixedAmounts: [Int]? = nil, percentages: [Int]? = nil, smartTipThreshold: Int? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.fixedAmounts = fixedAmounts
+        self.percentages = percentages
+        self.smartTipThreshold = smartTipThreshold
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case fixedAmounts = "fixed_amounts"
+        case percentages
+        case smartTipThreshold = "smart_tip_threshold"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.fixedAmounts = try container.decodeIfPresent([Int].self, forKey: .fixedAmounts)
+        self.percentages = try container.decodeIfPresent([Int].self, forKey: .percentages)
+        self.smartTipThreshold = try container.decodeIfPresent(Int.self, forKey: .smartTipThreshold)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .fixedAmounts, .percentages, .smartTipThreshold: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.fixedAmounts, forKey: .fixedAmounts)
+        try container.encodeIfPresent(self.percentages, forKey: .percentages)
+        try container.encodeIfPresent(self.smartTipThreshold, forKey: .smartTipThreshold)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct TerminalConfigurationUpdateParamsTippingMyr: Sendable, Codable, Equatable, Hashable {
+    public var fixedAmounts: [Int]?
+    public var percentages: [Int]?
+    public var smartTipThreshold: Int?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(fixedAmounts: [Int]? = nil, percentages: [Int]? = nil, smartTipThreshold: Int? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.fixedAmounts = fixedAmounts
+        self.percentages = percentages
+        self.smartTipThreshold = smartTipThreshold
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case fixedAmounts = "fixed_amounts"
+        case percentages
+        case smartTipThreshold = "smart_tip_threshold"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.fixedAmounts = try container.decodeIfPresent([Int].self, forKey: .fixedAmounts)
+        self.percentages = try container.decodeIfPresent([Int].self, forKey: .percentages)
+        self.smartTipThreshold = try container.decodeIfPresent(Int.self, forKey: .smartTipThreshold)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .fixedAmounts, .percentages, .smartTipThreshold: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.fixedAmounts, forKey: .fixedAmounts)
+        try container.encodeIfPresent(self.percentages, forKey: .percentages)
+        try container.encodeIfPresent(self.smartTipThreshold, forKey: .smartTipThreshold)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct TerminalConfigurationUpdateParamsTippingNok: Sendable, Codable, Equatable, Hashable {
+    public var fixedAmounts: [Int]?
+    public var percentages: [Int]?
+    public var smartTipThreshold: Int?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(fixedAmounts: [Int]? = nil, percentages: [Int]? = nil, smartTipThreshold: Int? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.fixedAmounts = fixedAmounts
+        self.percentages = percentages
+        self.smartTipThreshold = smartTipThreshold
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case fixedAmounts = "fixed_amounts"
+        case percentages
+        case smartTipThreshold = "smart_tip_threshold"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.fixedAmounts = try container.decodeIfPresent([Int].self, forKey: .fixedAmounts)
+        self.percentages = try container.decodeIfPresent([Int].self, forKey: .percentages)
+        self.smartTipThreshold = try container.decodeIfPresent(Int.self, forKey: .smartTipThreshold)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .fixedAmounts, .percentages, .smartTipThreshold: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.fixedAmounts, forKey: .fixedAmounts)
+        try container.encodeIfPresent(self.percentages, forKey: .percentages)
+        try container.encodeIfPresent(self.smartTipThreshold, forKey: .smartTipThreshold)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct TerminalConfigurationUpdateParamsTippingNzd: Sendable, Codable, Equatable, Hashable {
+    public var fixedAmounts: [Int]?
+    public var percentages: [Int]?
+    public var smartTipThreshold: Int?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(fixedAmounts: [Int]? = nil, percentages: [Int]? = nil, smartTipThreshold: Int? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.fixedAmounts = fixedAmounts
+        self.percentages = percentages
+        self.smartTipThreshold = smartTipThreshold
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case fixedAmounts = "fixed_amounts"
+        case percentages
+        case smartTipThreshold = "smart_tip_threshold"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.fixedAmounts = try container.decodeIfPresent([Int].self, forKey: .fixedAmounts)
+        self.percentages = try container.decodeIfPresent([Int].self, forKey: .percentages)
+        self.smartTipThreshold = try container.decodeIfPresent(Int.self, forKey: .smartTipThreshold)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .fixedAmounts, .percentages, .smartTipThreshold: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.fixedAmounts, forKey: .fixedAmounts)
+        try container.encodeIfPresent(self.percentages, forKey: .percentages)
+        try container.encodeIfPresent(self.smartTipThreshold, forKey: .smartTipThreshold)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct TerminalConfigurationUpdateParamsTippingPln: Sendable, Codable, Equatable, Hashable {
+    public var fixedAmounts: [Int]?
+    public var percentages: [Int]?
+    public var smartTipThreshold: Int?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(fixedAmounts: [Int]? = nil, percentages: [Int]? = nil, smartTipThreshold: Int? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.fixedAmounts = fixedAmounts
+        self.percentages = percentages
+        self.smartTipThreshold = smartTipThreshold
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case fixedAmounts = "fixed_amounts"
+        case percentages
+        case smartTipThreshold = "smart_tip_threshold"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.fixedAmounts = try container.decodeIfPresent([Int].self, forKey: .fixedAmounts)
+        self.percentages = try container.decodeIfPresent([Int].self, forKey: .percentages)
+        self.smartTipThreshold = try container.decodeIfPresent(Int.self, forKey: .smartTipThreshold)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .fixedAmounts, .percentages, .smartTipThreshold: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.fixedAmounts, forKey: .fixedAmounts)
+        try container.encodeIfPresent(self.percentages, forKey: .percentages)
+        try container.encodeIfPresent(self.smartTipThreshold, forKey: .smartTipThreshold)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct TerminalConfigurationUpdateParamsTippingRon: Sendable, Codable, Equatable, Hashable {
+    public var fixedAmounts: [Int]?
+    public var percentages: [Int]?
+    public var smartTipThreshold: Int?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(fixedAmounts: [Int]? = nil, percentages: [Int]? = nil, smartTipThreshold: Int? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.fixedAmounts = fixedAmounts
+        self.percentages = percentages
+        self.smartTipThreshold = smartTipThreshold
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case fixedAmounts = "fixed_amounts"
+        case percentages
+        case smartTipThreshold = "smart_tip_threshold"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.fixedAmounts = try container.decodeIfPresent([Int].self, forKey: .fixedAmounts)
+        self.percentages = try container.decodeIfPresent([Int].self, forKey: .percentages)
+        self.smartTipThreshold = try container.decodeIfPresent(Int.self, forKey: .smartTipThreshold)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .fixedAmounts, .percentages, .smartTipThreshold: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.fixedAmounts, forKey: .fixedAmounts)
+        try container.encodeIfPresent(self.percentages, forKey: .percentages)
+        try container.encodeIfPresent(self.smartTipThreshold, forKey: .smartTipThreshold)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct TerminalConfigurationUpdateParamsTippingSek: Sendable, Codable, Equatable, Hashable {
+    public var fixedAmounts: [Int]?
+    public var percentages: [Int]?
+    public var smartTipThreshold: Int?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(fixedAmounts: [Int]? = nil, percentages: [Int]? = nil, smartTipThreshold: Int? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.fixedAmounts = fixedAmounts
+        self.percentages = percentages
+        self.smartTipThreshold = smartTipThreshold
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case fixedAmounts = "fixed_amounts"
+        case percentages
+        case smartTipThreshold = "smart_tip_threshold"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.fixedAmounts = try container.decodeIfPresent([Int].self, forKey: .fixedAmounts)
+        self.percentages = try container.decodeIfPresent([Int].self, forKey: .percentages)
+        self.smartTipThreshold = try container.decodeIfPresent(Int.self, forKey: .smartTipThreshold)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .fixedAmounts, .percentages, .smartTipThreshold: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.fixedAmounts, forKey: .fixedAmounts)
+        try container.encodeIfPresent(self.percentages, forKey: .percentages)
+        try container.encodeIfPresent(self.smartTipThreshold, forKey: .smartTipThreshold)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct TerminalConfigurationUpdateParamsTippingSgd: Sendable, Codable, Equatable, Hashable {
+    public var fixedAmounts: [Int]?
+    public var percentages: [Int]?
+    public var smartTipThreshold: Int?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(fixedAmounts: [Int]? = nil, percentages: [Int]? = nil, smartTipThreshold: Int? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.fixedAmounts = fixedAmounts
+        self.percentages = percentages
+        self.smartTipThreshold = smartTipThreshold
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case fixedAmounts = "fixed_amounts"
+        case percentages
+        case smartTipThreshold = "smart_tip_threshold"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.fixedAmounts = try container.decodeIfPresent([Int].self, forKey: .fixedAmounts)
+        self.percentages = try container.decodeIfPresent([Int].self, forKey: .percentages)
+        self.smartTipThreshold = try container.decodeIfPresent(Int.self, forKey: .smartTipThreshold)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .fixedAmounts, .percentages, .smartTipThreshold: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.fixedAmounts, forKey: .fixedAmounts)
+        try container.encodeIfPresent(self.percentages, forKey: .percentages)
+        try container.encodeIfPresent(self.smartTipThreshold, forKey: .smartTipThreshold)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct TerminalConfigurationUpdateParamsTippingUsd: Sendable, Codable, Equatable, Hashable {
+    public var fixedAmounts: [Int]?
+    public var percentages: [Int]?
+    public var smartTipThreshold: Int?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(fixedAmounts: [Int]? = nil, percentages: [Int]? = nil, smartTipThreshold: Int? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.fixedAmounts = fixedAmounts
+        self.percentages = percentages
+        self.smartTipThreshold = smartTipThreshold
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case fixedAmounts = "fixed_amounts"
+        case percentages
+        case smartTipThreshold = "smart_tip_threshold"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.fixedAmounts = try container.decodeIfPresent([Int].self, forKey: .fixedAmounts)
+        self.percentages = try container.decodeIfPresent([Int].self, forKey: .percentages)
+        self.smartTipThreshold = try container.decodeIfPresent(Int.self, forKey: .smartTipThreshold)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .fixedAmounts, .percentages, .smartTipThreshold: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.fixedAmounts, forKey: .fixedAmounts)
+        try container.encodeIfPresent(self.percentages, forKey: .percentages)
+        try container.encodeIfPresent(self.smartTipThreshold, forKey: .smartTipThreshold)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct TerminalConfigurationUpdateParamsTipping: Sendable, Codable, Equatable, Hashable {
+    public var aed: TerminalConfigurationUpdateParamsTippingAed?
+    public var aud: TerminalConfigurationUpdateParamsTippingAud?
+    public var cad: TerminalConfigurationUpdateParamsTippingCad?
+    public var chf: TerminalConfigurationUpdateParamsTippingChf?
+    public var czk: TerminalConfigurationUpdateParamsTippingCzk?
+    public var dkk: TerminalConfigurationUpdateParamsTippingDkk?
+    public var eur: TerminalConfigurationUpdateParamsTippingEur?
+    public var gbp: TerminalConfigurationUpdateParamsTippingGbp?
+    public var gip: TerminalConfigurationUpdateParamsTippingGip?
+    public var hkd: TerminalConfigurationUpdateParamsTippingHkd?
+    public var huf: TerminalConfigurationUpdateParamsTippingHuf?
+    public var jpy: TerminalConfigurationUpdateParamsTippingJpy?
+    public var mxn: TerminalConfigurationUpdateParamsTippingMxn?
+    public var myr: TerminalConfigurationUpdateParamsTippingMyr?
+    public var nok: TerminalConfigurationUpdateParamsTippingNok?
+    public var nzd: TerminalConfigurationUpdateParamsTippingNzd?
+    public var pln: TerminalConfigurationUpdateParamsTippingPln?
+    public var ron: TerminalConfigurationUpdateParamsTippingRon?
+    public var sek: TerminalConfigurationUpdateParamsTippingSek?
+    public var sgd: TerminalConfigurationUpdateParamsTippingSgd?
+    public var usd: TerminalConfigurationUpdateParamsTippingUsd?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(aed: TerminalConfigurationUpdateParamsTippingAed? = nil, aud: TerminalConfigurationUpdateParamsTippingAud? = nil, cad: TerminalConfigurationUpdateParamsTippingCad? = nil, chf: TerminalConfigurationUpdateParamsTippingChf? = nil, czk: TerminalConfigurationUpdateParamsTippingCzk? = nil, dkk: TerminalConfigurationUpdateParamsTippingDkk? = nil, eur: TerminalConfigurationUpdateParamsTippingEur? = nil, gbp: TerminalConfigurationUpdateParamsTippingGbp? = nil, gip: TerminalConfigurationUpdateParamsTippingGip? = nil, hkd: TerminalConfigurationUpdateParamsTippingHkd? = nil, huf: TerminalConfigurationUpdateParamsTippingHuf? = nil, jpy: TerminalConfigurationUpdateParamsTippingJpy? = nil, mxn: TerminalConfigurationUpdateParamsTippingMxn? = nil, myr: TerminalConfigurationUpdateParamsTippingMyr? = nil, nok: TerminalConfigurationUpdateParamsTippingNok? = nil, nzd: TerminalConfigurationUpdateParamsTippingNzd? = nil, pln: TerminalConfigurationUpdateParamsTippingPln? = nil, ron: TerminalConfigurationUpdateParamsTippingRon? = nil, sek: TerminalConfigurationUpdateParamsTippingSek? = nil, sgd: TerminalConfigurationUpdateParamsTippingSgd? = nil, usd: TerminalConfigurationUpdateParamsTippingUsd? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.aed = aed
+        self.aud = aud
+        self.cad = cad
+        self.chf = chf
+        self.czk = czk
+        self.dkk = dkk
+        self.eur = eur
+        self.gbp = gbp
+        self.gip = gip
+        self.hkd = hkd
+        self.huf = huf
+        self.jpy = jpy
+        self.mxn = mxn
+        self.myr = myr
+        self.nok = nok
+        self.nzd = nzd
+        self.pln = pln
+        self.ron = ron
+        self.sek = sek
+        self.sgd = sgd
+        self.usd = usd
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case aed
+        case aud
+        case cad
+        case chf
+        case czk
+        case dkk
+        case eur
+        case gbp
+        case gip
+        case hkd
+        case huf
+        case jpy
+        case mxn
+        case myr
+        case nok
+        case nzd
+        case pln
+        case ron
+        case sek
+        case sgd
+        case usd
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.aed = try container.decodeIfPresent(TerminalConfigurationUpdateParamsTippingAed.self, forKey: .aed)
+        self.aud = try container.decodeIfPresent(TerminalConfigurationUpdateParamsTippingAud.self, forKey: .aud)
+        self.cad = try container.decodeIfPresent(TerminalConfigurationUpdateParamsTippingCad.self, forKey: .cad)
+        self.chf = try container.decodeIfPresent(TerminalConfigurationUpdateParamsTippingChf.self, forKey: .chf)
+        self.czk = try container.decodeIfPresent(TerminalConfigurationUpdateParamsTippingCzk.self, forKey: .czk)
+        self.dkk = try container.decodeIfPresent(TerminalConfigurationUpdateParamsTippingDkk.self, forKey: .dkk)
+        self.eur = try container.decodeIfPresent(TerminalConfigurationUpdateParamsTippingEur.self, forKey: .eur)
+        self.gbp = try container.decodeIfPresent(TerminalConfigurationUpdateParamsTippingGbp.self, forKey: .gbp)
+        self.gip = try container.decodeIfPresent(TerminalConfigurationUpdateParamsTippingGip.self, forKey: .gip)
+        self.hkd = try container.decodeIfPresent(TerminalConfigurationUpdateParamsTippingHkd.self, forKey: .hkd)
+        self.huf = try container.decodeIfPresent(TerminalConfigurationUpdateParamsTippingHuf.self, forKey: .huf)
+        self.jpy = try container.decodeIfPresent(TerminalConfigurationUpdateParamsTippingJpy.self, forKey: .jpy)
+        self.mxn = try container.decodeIfPresent(TerminalConfigurationUpdateParamsTippingMxn.self, forKey: .mxn)
+        self.myr = try container.decodeIfPresent(TerminalConfigurationUpdateParamsTippingMyr.self, forKey: .myr)
+        self.nok = try container.decodeIfPresent(TerminalConfigurationUpdateParamsTippingNok.self, forKey: .nok)
+        self.nzd = try container.decodeIfPresent(TerminalConfigurationUpdateParamsTippingNzd.self, forKey: .nzd)
+        self.pln = try container.decodeIfPresent(TerminalConfigurationUpdateParamsTippingPln.self, forKey: .pln)
+        self.ron = try container.decodeIfPresent(TerminalConfigurationUpdateParamsTippingRon.self, forKey: .ron)
+        self.sek = try container.decodeIfPresent(TerminalConfigurationUpdateParamsTippingSek.self, forKey: .sek)
+        self.sgd = try container.decodeIfPresent(TerminalConfigurationUpdateParamsTippingSgd.self, forKey: .sgd)
+        self.usd = try container.decodeIfPresent(TerminalConfigurationUpdateParamsTippingUsd.self, forKey: .usd)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .aed, .aud, .cad, .chf, .czk, .dkk, .eur, .gbp, .gip, .hkd, .huf, .jpy, .mxn, .myr, .nok, .nzd, .pln, .ron, .sek, .sgd, .usd: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.aed, forKey: .aed)
+        try container.encodeIfPresent(self.aud, forKey: .aud)
+        try container.encodeIfPresent(self.cad, forKey: .cad)
+        try container.encodeIfPresent(self.chf, forKey: .chf)
+        try container.encodeIfPresent(self.czk, forKey: .czk)
+        try container.encodeIfPresent(self.dkk, forKey: .dkk)
+        try container.encodeIfPresent(self.eur, forKey: .eur)
+        try container.encodeIfPresent(self.gbp, forKey: .gbp)
+        try container.encodeIfPresent(self.gip, forKey: .gip)
+        try container.encodeIfPresent(self.hkd, forKey: .hkd)
+        try container.encodeIfPresent(self.huf, forKey: .huf)
+        try container.encodeIfPresent(self.jpy, forKey: .jpy)
+        try container.encodeIfPresent(self.mxn, forKey: .mxn)
+        try container.encodeIfPresent(self.myr, forKey: .myr)
+        try container.encodeIfPresent(self.nok, forKey: .nok)
+        try container.encodeIfPresent(self.nzd, forKey: .nzd)
+        try container.encodeIfPresent(self.pln, forKey: .pln)
+        try container.encodeIfPresent(self.ron, forKey: .ron)
+        try container.encodeIfPresent(self.sek, forKey: .sek)
+        try container.encodeIfPresent(self.sgd, forKey: .sgd)
+        try container.encodeIfPresent(self.usd, forKey: .usd)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct TerminalConfigurationUpdateParamsVerifoneM425: Sendable, Codable, Equatable, Hashable {
+    public var splashscreen: Clearable<String>?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(splashscreen: Clearable<String>? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.splashscreen = splashscreen
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case splashscreen
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.splashscreen = try container.decodeIfPresent(Clearable<String>.self, forKey: .splashscreen)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .splashscreen: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.splashscreen, forKey: .splashscreen)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct TerminalConfigurationUpdateParamsVerifoneP400: Sendable, Codable, Equatable, Hashable {
+    public var splashscreen: Clearable<String>?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(splashscreen: Clearable<String>? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.splashscreen = splashscreen
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case splashscreen
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.splashscreen = try container.decodeIfPresent(Clearable<String>.self, forKey: .splashscreen)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .splashscreen: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.splashscreen, forKey: .splashscreen)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct TerminalConfigurationUpdateParamsVerifoneP630: Sendable, Codable, Equatable, Hashable {
+    public var splashscreen: Clearable<String>?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(splashscreen: Clearable<String>? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.splashscreen = splashscreen
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case splashscreen
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.splashscreen = try container.decodeIfPresent(Clearable<String>.self, forKey: .splashscreen)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .splashscreen: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.splashscreen, forKey: .splashscreen)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct TerminalConfigurationUpdateParamsVerifoneUx700: Sendable, Codable, Equatable, Hashable {
+    public var splashscreen: Clearable<String>?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(splashscreen: Clearable<String>? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.splashscreen = splashscreen
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case splashscreen
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.splashscreen = try container.decodeIfPresent(Clearable<String>.self, forKey: .splashscreen)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .splashscreen: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.splashscreen, forKey: .splashscreen)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct TerminalConfigurationUpdateParamsVerifoneV660p: Sendable, Codable, Equatable, Hashable {
+    public var splashscreen: Clearable<String>?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(splashscreen: Clearable<String>? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.splashscreen = splashscreen
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case splashscreen
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.splashscreen = try container.decodeIfPresent(Clearable<String>.self, forKey: .splashscreen)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .splashscreen: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.splashscreen, forKey: .splashscreen)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct TerminalConfigurationUpdateParamsWifiEnterpriseEapPeap: Sendable, Codable, Equatable, Hashable {
+    public var caCertificateFile: String?
+    public var password: String
+    public var ssid: String
+    public var username: String
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(caCertificateFile: String? = nil, password: String, ssid: String, username: String, unknownFields: [String: JSONValue]? = nil) {
+        self.caCertificateFile = caCertificateFile
+        self.password = password
+        self.ssid = ssid
+        self.username = username
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case caCertificateFile = "ca_certificate_file"
+        case password
+        case ssid
+        case username
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.caCertificateFile = try container.decodeIfPresent(String.self, forKey: .caCertificateFile)
+        self.password = try container.decode(String.self, forKey: .password)
+        self.ssid = try container.decode(String.self, forKey: .ssid)
+        self.username = try container.decode(String.self, forKey: .username)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .caCertificateFile, .password, .ssid, .username: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.caCertificateFile, forKey: .caCertificateFile)
+        try container.encodeIfPresent(self.password, forKey: .password)
+        try container.encodeIfPresent(self.ssid, forKey: .ssid)
+        try container.encodeIfPresent(self.username, forKey: .username)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct TerminalConfigurationUpdateParamsWifiEnterpriseEapTls: Sendable, Codable, Equatable, Hashable {
+    public var caCertificateFile: String?
+    public var clientCertificateFile: String
+    public var privateKeyFile: String
+    public var privateKeyFilePassword: String?
+    public var ssid: String
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(caCertificateFile: String? = nil, clientCertificateFile: String, privateKeyFile: String, privateKeyFilePassword: String? = nil, ssid: String, unknownFields: [String: JSONValue]? = nil) {
+        self.caCertificateFile = caCertificateFile
+        self.clientCertificateFile = clientCertificateFile
+        self.privateKeyFile = privateKeyFile
+        self.privateKeyFilePassword = privateKeyFilePassword
+        self.ssid = ssid
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case caCertificateFile = "ca_certificate_file"
+        case clientCertificateFile = "client_certificate_file"
+        case privateKeyFile = "private_key_file"
+        case privateKeyFilePassword = "private_key_file_password"
+        case ssid
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.caCertificateFile = try container.decodeIfPresent(String.self, forKey: .caCertificateFile)
+        self.clientCertificateFile = try container.decode(String.self, forKey: .clientCertificateFile)
+        self.privateKeyFile = try container.decode(String.self, forKey: .privateKeyFile)
+        self.privateKeyFilePassword = try container.decodeIfPresent(String.self, forKey: .privateKeyFilePassword)
+        self.ssid = try container.decode(String.self, forKey: .ssid)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .caCertificateFile, .clientCertificateFile, .privateKeyFile, .privateKeyFilePassword, .ssid: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.caCertificateFile, forKey: .caCertificateFile)
+        try container.encodeIfPresent(self.clientCertificateFile, forKey: .clientCertificateFile)
+        try container.encodeIfPresent(self.privateKeyFile, forKey: .privateKeyFile)
+        try container.encodeIfPresent(self.privateKeyFilePassword, forKey: .privateKeyFilePassword)
+        try container.encodeIfPresent(self.ssid, forKey: .ssid)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct TerminalConfigurationUpdateParamsWifiPersonalPsk: Sendable, Codable, Equatable, Hashable {
+    public var password: String
+    public var ssid: String
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(password: String, ssid: String, unknownFields: [String: JSONValue]? = nil) {
+        self.password = password
+        self.ssid = ssid
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case password
+        case ssid
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.password = try container.decode(String.self, forKey: .password)
+        self.ssid = try container.decode(String.self, forKey: .ssid)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .password, .ssid: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.password, forKey: .password)
+        try container.encodeIfPresent(self.ssid, forKey: .ssid)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct TerminalConfigurationUpdateParamsWifi: Sendable, Codable, Equatable, Hashable {
+    public var enterpriseEapPeap: TerminalConfigurationUpdateParamsWifiEnterpriseEapPeap?
+    public var enterpriseEapTls: TerminalConfigurationUpdateParamsWifiEnterpriseEapTls?
+    public var personalPsk: TerminalConfigurationUpdateParamsWifiPersonalPsk?
+    public var type: TerminalConfigurationConfigurationResourceWifiConfigType
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(enterpriseEapPeap: TerminalConfigurationUpdateParamsWifiEnterpriseEapPeap? = nil, enterpriseEapTls: TerminalConfigurationUpdateParamsWifiEnterpriseEapTls? = nil, personalPsk: TerminalConfigurationUpdateParamsWifiPersonalPsk? = nil, type: TerminalConfigurationConfigurationResourceWifiConfigType, unknownFields: [String: JSONValue]? = nil) {
+        self.enterpriseEapPeap = enterpriseEapPeap
+        self.enterpriseEapTls = enterpriseEapTls
+        self.personalPsk = personalPsk
+        self.type = type
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case enterpriseEapPeap = "enterprise_eap_peap"
+        case enterpriseEapTls = "enterprise_eap_tls"
+        case personalPsk = "personal_psk"
+        case type
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.enterpriseEapPeap = try container.decodeIfPresent(TerminalConfigurationUpdateParamsWifiEnterpriseEapPeap.self, forKey: .enterpriseEapPeap)
+        self.enterpriseEapTls = try container.decodeIfPresent(TerminalConfigurationUpdateParamsWifiEnterpriseEapTls.self, forKey: .enterpriseEapTls)
+        self.personalPsk = try container.decodeIfPresent(TerminalConfigurationUpdateParamsWifiPersonalPsk.self, forKey: .personalPsk)
+        self.type = try container.decode(TerminalConfigurationConfigurationResourceWifiConfigType.self, forKey: .type)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .enterpriseEapPeap, .enterpriseEapTls, .personalPsk, .type: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.enterpriseEapPeap, forKey: .enterpriseEapPeap)
+        try container.encodeIfPresent(self.enterpriseEapTls, forKey: .enterpriseEapTls)
+        try container.encodeIfPresent(self.personalPsk, forKey: .personalPsk)
+        try container.encodeIfPresent(self.type, forKey: .type)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct TerminalLocationCreateParamsAddress: Sendable, Codable, Equatable, Hashable {
+    public var city: String?
+    public var country: String
+    public var line1: String?
+    public var line2: String?
+    public var postalCode: String?
+    public var state: String?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(city: String? = nil, country: String, line1: String? = nil, line2: String? = nil, postalCode: String? = nil, state: String? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.city = city
+        self.country = country
+        self.line1 = line1
+        self.line2 = line2
+        self.postalCode = postalCode
+        self.state = state
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case city
+        case country
+        case line1
+        case line2
+        case postalCode = "postal_code"
+        case state
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.city = try container.decodeIfPresent(String.self, forKey: .city)
+        self.country = try container.decode(String.self, forKey: .country)
+        self.line1 = try container.decodeIfPresent(String.self, forKey: .line1)
+        self.line2 = try container.decodeIfPresent(String.self, forKey: .line2)
+        self.postalCode = try container.decodeIfPresent(String.self, forKey: .postalCode)
+        self.state = try container.decodeIfPresent(String.self, forKey: .state)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .city, .country, .line1, .line2, .postalCode, .state: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.city, forKey: .city)
+        try container.encodeIfPresent(self.country, forKey: .country)
+        try container.encodeIfPresent(self.line1, forKey: .line1)
+        try container.encodeIfPresent(self.line2, forKey: .line2)
+        try container.encodeIfPresent(self.postalCode, forKey: .postalCode)
+        try container.encodeIfPresent(self.state, forKey: .state)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct TerminalLocationCreateParamsAddressKana: Sendable, Codable, Equatable, Hashable {
+    public var city: String?
+    public var country: String?
+    public var line1: String?
+    public var line2: String?
+    public var postalCode: String?
+    public var state: String?
+    public var town: String?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(city: String? = nil, country: String? = nil, line1: String? = nil, line2: String? = nil, postalCode: String? = nil, state: String? = nil, town: String? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.city = city
+        self.country = country
+        self.line1 = line1
+        self.line2 = line2
+        self.postalCode = postalCode
+        self.state = state
+        self.town = town
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case city
+        case country
+        case line1
+        case line2
+        case postalCode = "postal_code"
+        case state
+        case town
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.city = try container.decodeIfPresent(String.self, forKey: .city)
+        self.country = try container.decodeIfPresent(String.self, forKey: .country)
+        self.line1 = try container.decodeIfPresent(String.self, forKey: .line1)
+        self.line2 = try container.decodeIfPresent(String.self, forKey: .line2)
+        self.postalCode = try container.decodeIfPresent(String.self, forKey: .postalCode)
+        self.state = try container.decodeIfPresent(String.self, forKey: .state)
+        self.town = try container.decodeIfPresent(String.self, forKey: .town)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .city, .country, .line1, .line2, .postalCode, .state, .town: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.city, forKey: .city)
+        try container.encodeIfPresent(self.country, forKey: .country)
+        try container.encodeIfPresent(self.line1, forKey: .line1)
+        try container.encodeIfPresent(self.line2, forKey: .line2)
+        try container.encodeIfPresent(self.postalCode, forKey: .postalCode)
+        try container.encodeIfPresent(self.state, forKey: .state)
+        try container.encodeIfPresent(self.town, forKey: .town)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct TerminalLocationCreateParamsAddressKanji: Sendable, Codable, Equatable, Hashable {
+    public var city: String?
+    public var country: String?
+    public var line1: String?
+    public var line2: String?
+    public var postalCode: String?
+    public var state: String?
+    public var town: String?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(city: String? = nil, country: String? = nil, line1: String? = nil, line2: String? = nil, postalCode: String? = nil, state: String? = nil, town: String? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.city = city
+        self.country = country
+        self.line1 = line1
+        self.line2 = line2
+        self.postalCode = postalCode
+        self.state = state
+        self.town = town
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case city
+        case country
+        case line1
+        case line2
+        case postalCode = "postal_code"
+        case state
+        case town
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.city = try container.decodeIfPresent(String.self, forKey: .city)
+        self.country = try container.decodeIfPresent(String.self, forKey: .country)
+        self.line1 = try container.decodeIfPresent(String.self, forKey: .line1)
+        self.line2 = try container.decodeIfPresent(String.self, forKey: .line2)
+        self.postalCode = try container.decodeIfPresent(String.self, forKey: .postalCode)
+        self.state = try container.decodeIfPresent(String.self, forKey: .state)
+        self.town = try container.decodeIfPresent(String.self, forKey: .town)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .city, .country, .line1, .line2, .postalCode, .state, .town: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.city, forKey: .city)
+        try container.encodeIfPresent(self.country, forKey: .country)
+        try container.encodeIfPresent(self.line1, forKey: .line1)
+        try container.encodeIfPresent(self.line2, forKey: .line2)
+        try container.encodeIfPresent(self.postalCode, forKey: .postalCode)
+        try container.encodeIfPresent(self.state, forKey: .state)
+        try container.encodeIfPresent(self.town, forKey: .town)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
         }
     }
 }
@@ -4489,6 +8800,87 @@ public enum ReaderSucceedInputCollectionParamsSkipNonRequiredInputs: Sendable, E
     }
 }
 
+public struct TerminalConfigurationCreateParams: Sendable, Encodable, Hashable {
+    public var bbposWisepad3: TerminalConfigurationCreateParamsBbposWisepad3?
+    public var bbposWiseposE: TerminalConfigurationCreateParamsBbposWiseposE?
+    public var cellular: Clearable<TerminalConfigurationCreateParamsCellular>?
+    public var name: String?
+    public var offline: Clearable<TerminalConfigurationCreateParamsOffline>?
+    public var readerSecurity: Clearable<TerminalConfigurationCreateParamsReaderSecurity>?
+    public var rebootWindow: TerminalConfigurationCreateParamsRebootWindow?
+    public var stripeS700: TerminalConfigurationCreateParamsStripeS700?
+    public var stripeS710: TerminalConfigurationCreateParamsStripeS710?
+    public var stripeT600: TerminalConfigurationCreateParamsStripeT600?
+    public var tipping: Clearable<TerminalConfigurationCreateParamsTipping>?
+    public var verifoneM425: TerminalConfigurationCreateParamsVerifoneM425?
+    public var verifoneP400: TerminalConfigurationCreateParamsVerifoneP400?
+    public var verifoneP630: TerminalConfigurationCreateParamsVerifoneP630?
+    public var verifoneUx700: TerminalConfigurationCreateParamsVerifoneUx700?
+    public var verifoneV660p: TerminalConfigurationCreateParamsVerifoneV660p?
+    public var wifi: Clearable<TerminalConfigurationCreateParamsWifi>?
+
+    public init(bbposWisepad3: TerminalConfigurationCreateParamsBbposWisepad3? = nil, bbposWiseposE: TerminalConfigurationCreateParamsBbposWiseposE? = nil, cellular: Clearable<TerminalConfigurationCreateParamsCellular>? = nil, name: String? = nil, offline: Clearable<TerminalConfigurationCreateParamsOffline>? = nil, readerSecurity: Clearable<TerminalConfigurationCreateParamsReaderSecurity>? = nil, rebootWindow: TerminalConfigurationCreateParamsRebootWindow? = nil, stripeS700: TerminalConfigurationCreateParamsStripeS700? = nil, stripeS710: TerminalConfigurationCreateParamsStripeS710? = nil, stripeT600: TerminalConfigurationCreateParamsStripeT600? = nil, tipping: Clearable<TerminalConfigurationCreateParamsTipping>? = nil, verifoneM425: TerminalConfigurationCreateParamsVerifoneM425? = nil, verifoneP400: TerminalConfigurationCreateParamsVerifoneP400? = nil, verifoneP630: TerminalConfigurationCreateParamsVerifoneP630? = nil, verifoneUx700: TerminalConfigurationCreateParamsVerifoneUx700? = nil, verifoneV660p: TerminalConfigurationCreateParamsVerifoneV660p? = nil, wifi: Clearable<TerminalConfigurationCreateParamsWifi>? = nil) {
+        self.bbposWisepad3 = bbposWisepad3
+        self.bbposWiseposE = bbposWiseposE
+        self.cellular = cellular
+        self.name = name
+        self.offline = offline
+        self.readerSecurity = readerSecurity
+        self.rebootWindow = rebootWindow
+        self.stripeS700 = stripeS700
+        self.stripeS710 = stripeS710
+        self.stripeT600 = stripeT600
+        self.tipping = tipping
+        self.verifoneM425 = verifoneM425
+        self.verifoneP400 = verifoneP400
+        self.verifoneP630 = verifoneP630
+        self.verifoneUx700 = verifoneUx700
+        self.verifoneV660p = verifoneV660p
+        self.wifi = wifi
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case bbposWisepad3 = "bbpos_wisepad3"
+        case bbposWiseposE = "bbpos_wisepos_e"
+        case cellular
+        case name
+        case offline
+        case readerSecurity = "reader_security"
+        case rebootWindow = "reboot_window"
+        case stripeS700 = "stripe_s700"
+        case stripeS710 = "stripe_s710"
+        case stripeT600 = "stripe_t600"
+        case tipping
+        case verifoneM425 = "verifone_m425"
+        case verifoneP400 = "verifone_p400"
+        case verifoneP630 = "verifone_p630"
+        case verifoneUx700 = "verifone_ux700"
+        case verifoneV660p = "verifone_v660p"
+        case wifi
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.bbposWisepad3, forKey: .bbposWisepad3)
+        try container.encodeIfPresent(self.bbposWiseposE, forKey: .bbposWiseposE)
+        try container.encodeIfPresent(self.cellular, forKey: .cellular)
+        try container.encodeIfPresent(self.name, forKey: .name)
+        try container.encodeIfPresent(self.offline, forKey: .offline)
+        try container.encodeIfPresent(self.readerSecurity, forKey: .readerSecurity)
+        try container.encodeIfPresent(self.rebootWindow, forKey: .rebootWindow)
+        try container.encodeIfPresent(self.stripeS700, forKey: .stripeS700)
+        try container.encodeIfPresent(self.stripeS710, forKey: .stripeS710)
+        try container.encodeIfPresent(self.stripeT600, forKey: .stripeT600)
+        try container.encodeIfPresent(self.tipping, forKey: .tipping)
+        try container.encodeIfPresent(self.verifoneM425, forKey: .verifoneM425)
+        try container.encodeIfPresent(self.verifoneP400, forKey: .verifoneP400)
+        try container.encodeIfPresent(self.verifoneP630, forKey: .verifoneP630)
+        try container.encodeIfPresent(self.verifoneUx700, forKey: .verifoneUx700)
+        try container.encodeIfPresent(self.verifoneV660p, forKey: .verifoneV660p)
+        try container.encodeIfPresent(self.wifi, forKey: .wifi)
+    }
+}
+
 public struct ConfigurationDeleteParams: Sendable, Encodable, Hashable {
     public var configuration: String?
 
@@ -4502,6 +8894,137 @@ public struct ConfigurationDeleteParams: Sendable, Encodable, Hashable {
 
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.configuration, forKey: .configuration)
+    }
+}
+
+public struct TerminalConfigurationListParams: Sendable, Encodable, Hashable, V1ListParams {
+    public var endingBefore: String?
+    public var isAccountDefault: Bool?
+    public var limit: Int?
+    public var startingAfter: String?
+
+    public init(endingBefore: String? = nil, isAccountDefault: Bool? = nil, limit: Int? = nil, startingAfter: String? = nil) {
+        self.endingBefore = endingBefore
+        self.isAccountDefault = isAccountDefault
+        self.limit = limit
+        self.startingAfter = startingAfter
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case endingBefore = "ending_before"
+        case isAccountDefault = "is_account_default"
+        case limit
+        case startingAfter = "starting_after"
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.endingBefore, forKey: .endingBefore)
+        try container.encodeIfPresent(self.isAccountDefault, forKey: .isAccountDefault)
+        try container.encodeIfPresent(self.limit, forKey: .limit)
+        try container.encodeIfPresent(self.startingAfter, forKey: .startingAfter)
+    }
+}
+
+public struct TerminalConfigurationRetrieveParams: Sendable, Encodable, Hashable {
+    public var configuration: String?
+
+    public init(configuration: String? = nil) {
+        self.configuration = configuration
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case configuration
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.configuration, forKey: .configuration)
+    }
+}
+
+public struct TerminalConfigurationUpdateParams: Sendable, Encodable, Hashable {
+    public var bbposWisepad3: Clearable<TerminalConfigurationUpdateParamsBbposWisepad3>?
+    public var bbposWiseposE: Clearable<TerminalConfigurationUpdateParamsBbposWiseposE>?
+    public var cellular: Clearable<TerminalConfigurationUpdateParamsCellular>?
+    public var name: String?
+    public var offline: Clearable<TerminalConfigurationUpdateParamsOffline>?
+    public var readerSecurity: Clearable<TerminalConfigurationUpdateParamsReaderSecurity>?
+    public var rebootWindow: Clearable<TerminalConfigurationUpdateParamsRebootWindow>?
+    public var stripeS700: Clearable<TerminalConfigurationUpdateParamsStripeS700>?
+    public var stripeS710: Clearable<TerminalConfigurationUpdateParamsStripeS710>?
+    public var stripeT600: Clearable<TerminalConfigurationUpdateParamsStripeT600>?
+    public var tipping: Clearable<TerminalConfigurationUpdateParamsTipping>?
+    public var verifoneM425: Clearable<TerminalConfigurationUpdateParamsVerifoneM425>?
+    public var verifoneP400: Clearable<TerminalConfigurationUpdateParamsVerifoneP400>?
+    public var verifoneP630: Clearable<TerminalConfigurationUpdateParamsVerifoneP630>?
+    public var verifoneUx700: Clearable<TerminalConfigurationUpdateParamsVerifoneUx700>?
+    public var verifoneV660p: Clearable<TerminalConfigurationUpdateParamsVerifoneV660p>?
+    public var wifi: Clearable<TerminalConfigurationUpdateParamsWifi>?
+    public var configuration: String?
+
+    public init(bbposWisepad3: Clearable<TerminalConfigurationUpdateParamsBbposWisepad3>? = nil, bbposWiseposE: Clearable<TerminalConfigurationUpdateParamsBbposWiseposE>? = nil, cellular: Clearable<TerminalConfigurationUpdateParamsCellular>? = nil, name: String? = nil, offline: Clearable<TerminalConfigurationUpdateParamsOffline>? = nil, readerSecurity: Clearable<TerminalConfigurationUpdateParamsReaderSecurity>? = nil, rebootWindow: Clearable<TerminalConfigurationUpdateParamsRebootWindow>? = nil, stripeS700: Clearable<TerminalConfigurationUpdateParamsStripeS700>? = nil, stripeS710: Clearable<TerminalConfigurationUpdateParamsStripeS710>? = nil, stripeT600: Clearable<TerminalConfigurationUpdateParamsStripeT600>? = nil, tipping: Clearable<TerminalConfigurationUpdateParamsTipping>? = nil, verifoneM425: Clearable<TerminalConfigurationUpdateParamsVerifoneM425>? = nil, verifoneP400: Clearable<TerminalConfigurationUpdateParamsVerifoneP400>? = nil, verifoneP630: Clearable<TerminalConfigurationUpdateParamsVerifoneP630>? = nil, verifoneUx700: Clearable<TerminalConfigurationUpdateParamsVerifoneUx700>? = nil, verifoneV660p: Clearable<TerminalConfigurationUpdateParamsVerifoneV660p>? = nil, wifi: Clearable<TerminalConfigurationUpdateParamsWifi>? = nil, configuration: String? = nil) {
+        self.bbposWisepad3 = bbposWisepad3
+        self.bbposWiseposE = bbposWiseposE
+        self.cellular = cellular
+        self.name = name
+        self.offline = offline
+        self.readerSecurity = readerSecurity
+        self.rebootWindow = rebootWindow
+        self.stripeS700 = stripeS700
+        self.stripeS710 = stripeS710
+        self.stripeT600 = stripeT600
+        self.tipping = tipping
+        self.verifoneM425 = verifoneM425
+        self.verifoneP400 = verifoneP400
+        self.verifoneP630 = verifoneP630
+        self.verifoneUx700 = verifoneUx700
+        self.verifoneV660p = verifoneV660p
+        self.wifi = wifi
+        self.configuration = configuration
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case bbposWisepad3 = "bbpos_wisepad3"
+        case bbposWiseposE = "bbpos_wisepos_e"
+        case cellular
+        case name
+        case offline
+        case readerSecurity = "reader_security"
+        case rebootWindow = "reboot_window"
+        case stripeS700 = "stripe_s700"
+        case stripeS710 = "stripe_s710"
+        case stripeT600 = "stripe_t600"
+        case tipping
+        case verifoneM425 = "verifone_m425"
+        case verifoneP400 = "verifone_p400"
+        case verifoneP630 = "verifone_p630"
+        case verifoneUx700 = "verifone_ux700"
+        case verifoneV660p = "verifone_v660p"
+        case wifi
+        case configuration
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.bbposWisepad3, forKey: .bbposWisepad3)
+        try container.encodeIfPresent(self.bbposWiseposE, forKey: .bbposWiseposE)
+        try container.encodeIfPresent(self.cellular, forKey: .cellular)
+        try container.encodeIfPresent(self.name, forKey: .name)
+        try container.encodeIfPresent(self.offline, forKey: .offline)
+        try container.encodeIfPresent(self.readerSecurity, forKey: .readerSecurity)
+        try container.encodeIfPresent(self.rebootWindow, forKey: .rebootWindow)
+        try container.encodeIfPresent(self.stripeS700, forKey: .stripeS700)
+        try container.encodeIfPresent(self.stripeS710, forKey: .stripeS710)
+        try container.encodeIfPresent(self.stripeT600, forKey: .stripeT600)
+        try container.encodeIfPresent(self.tipping, forKey: .tipping)
+        try container.encodeIfPresent(self.verifoneM425, forKey: .verifoneM425)
+        try container.encodeIfPresent(self.verifoneP400, forKey: .verifoneP400)
+        try container.encodeIfPresent(self.verifoneP630, forKey: .verifoneP630)
+        try container.encodeIfPresent(self.verifoneUx700, forKey: .verifoneUx700)
+        try container.encodeIfPresent(self.verifoneV660p, forKey: .verifoneV660p)
+        try container.encodeIfPresent(self.wifi, forKey: .wifi)
         try container.encodeIfPresent(self.configuration, forKey: .configuration)
     }
 }
@@ -4523,7 +9046,98 @@ public struct ConnectionTokenCreateParams: Sendable, Encodable, Hashable {
     }
 }
 
+public struct TerminalLocationCreateParams: Sendable, Encodable, Hashable {
+    public var address: TerminalLocationCreateParamsAddress?
+    public var addressKana: TerminalLocationCreateParamsAddressKana?
+    public var addressKanji: TerminalLocationCreateParamsAddressKanji?
+    public var configurationOverrides: String?
+    public var displayName: String?
+    public var displayNameKana: String?
+    public var displayNameKanji: String?
+    public var metadata: Clearable<[String: String]>?
+    public var phone: String?
+
+    public init(address: TerminalLocationCreateParamsAddress? = nil, addressKana: TerminalLocationCreateParamsAddressKana? = nil, addressKanji: TerminalLocationCreateParamsAddressKanji? = nil, configurationOverrides: String? = nil, displayName: String? = nil, displayNameKana: String? = nil, displayNameKanji: String? = nil, metadata: Clearable<[String: String]>? = nil, phone: String? = nil) {
+        self.address = address
+        self.addressKana = addressKana
+        self.addressKanji = addressKanji
+        self.configurationOverrides = configurationOverrides
+        self.displayName = displayName
+        self.displayNameKana = displayNameKana
+        self.displayNameKanji = displayNameKanji
+        self.metadata = metadata
+        self.phone = phone
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case address
+        case addressKana = "address_kana"
+        case addressKanji = "address_kanji"
+        case configurationOverrides = "configuration_overrides"
+        case displayName = "display_name"
+        case displayNameKana = "display_name_kana"
+        case displayNameKanji = "display_name_kanji"
+        case metadata
+        case phone
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.address, forKey: .address)
+        try container.encodeIfPresent(self.addressKana, forKey: .addressKana)
+        try container.encodeIfPresent(self.addressKanji, forKey: .addressKanji)
+        try container.encodeIfPresent(self.configurationOverrides, forKey: .configurationOverrides)
+        try container.encodeIfPresent(self.displayName, forKey: .displayName)
+        try container.encodeIfPresent(self.displayNameKana, forKey: .displayNameKana)
+        try container.encodeIfPresent(self.displayNameKanji, forKey: .displayNameKanji)
+        try container.encodeIfPresent(self.metadata, forKey: .metadata)
+        try container.encodeIfPresent(self.phone, forKey: .phone)
+    }
+}
+
 public struct LocationDeleteParams: Sendable, Encodable, Hashable {
+    public var location: String?
+
+    public init(location: String? = nil) {
+        self.location = location
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case location
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.location, forKey: .location)
+    }
+}
+
+public struct TerminalLocationListParams: Sendable, Encodable, Hashable, V1ListParams {
+    public var endingBefore: String?
+    public var limit: Int?
+    public var startingAfter: String?
+
+    public init(endingBefore: String? = nil, limit: Int? = nil, startingAfter: String? = nil) {
+        self.endingBefore = endingBefore
+        self.limit = limit
+        self.startingAfter = startingAfter
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case endingBefore = "ending_before"
+        case limit
+        case startingAfter = "starting_after"
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.endingBefore, forKey: .endingBefore)
+        try container.encodeIfPresent(self.limit, forKey: .limit)
+        try container.encodeIfPresent(self.startingAfter, forKey: .startingAfter)
+    }
+}
+
+public struct TerminalLocationRetrieveParams: Sendable, Encodable, Hashable {
     public var location: String?
 
     public init(location: String? = nil) {

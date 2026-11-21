@@ -1773,6 +1773,251 @@ public enum AccountRefreshParamsFeaturesItem: Sendable, Equatable, Hashable, Los
     }
 }
 
+public struct FinancialConnectionsAccountListParamsAccountHolder: Sendable, Codable, Equatable, Hashable {
+    public var account: String?
+    public var customer: String?
+    public var customerAccount: String?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(account: String? = nil, customer: String? = nil, customerAccount: String? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.account = account
+        self.customer = customer
+        self.customerAccount = customerAccount
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case account
+        case customer
+        case customerAccount = "customer_account"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.account = try container.decodeIfPresent(String.self, forKey: .account)
+        self.customer = try container.decodeIfPresent(String.self, forKey: .customer)
+        self.customerAccount = try container.decodeIfPresent(String.self, forKey: .customerAccount)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .account, .customer, .customerAccount: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.account, forKey: .account)
+        try container.encodeIfPresent(self.customer, forKey: .customer)
+        try container.encodeIfPresent(self.customerAccount, forKey: .customerAccount)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct FinancialConnectionsSessionCreateParamsAccountHolder: Sendable, Codable, Equatable, Hashable {
+    public var account: String?
+    public var customer: String?
+    public var customerAccount: String?
+    public var type: BankConnectionsResourceAccountholderType
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(account: String? = nil, customer: String? = nil, customerAccount: String? = nil, type: BankConnectionsResourceAccountholderType, unknownFields: [String: JSONValue]? = nil) {
+        self.account = account
+        self.customer = customer
+        self.customerAccount = customerAccount
+        self.type = type
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case account
+        case customer
+        case customerAccount = "customer_account"
+        case type
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.account = try container.decodeIfPresent(String.self, forKey: .account)
+        self.customer = try container.decodeIfPresent(String.self, forKey: .customer)
+        self.customerAccount = try container.decodeIfPresent(String.self, forKey: .customerAccount)
+        self.type = try container.decode(BankConnectionsResourceAccountholderType.self, forKey: .type)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .account, .customer, .customerAccount, .type: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.account, forKey: .account)
+        try container.encodeIfPresent(self.customer, forKey: .customer)
+        try container.encodeIfPresent(self.customerAccount, forKey: .customerAccount)
+        try container.encodeIfPresent(self.type, forKey: .type)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct FinancialConnectionsSessionCreateParamsFilters: Sendable, Codable, Equatable, Hashable {
+    public var accountSubcategories: [BankConnectionsResourceLinkAccountSessionFiltersAccountSubcategoriesItem]?
+    public var country: String?
+    public var requirePaymentMethodSupport: BankConnectionsResourceLinkAccountSessionFiltersRequirePaymentMethodSupport?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(accountSubcategories: [BankConnectionsResourceLinkAccountSessionFiltersAccountSubcategoriesItem]? = nil, country: String? = nil, requirePaymentMethodSupport: BankConnectionsResourceLinkAccountSessionFiltersRequirePaymentMethodSupport? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.accountSubcategories = accountSubcategories
+        self.country = country
+        self.requirePaymentMethodSupport = requirePaymentMethodSupport
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case accountSubcategories = "account_subcategories"
+        case country
+        case requirePaymentMethodSupport = "require_payment_method_support"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.accountSubcategories = try container.decodeIfPresent([BankConnectionsResourceLinkAccountSessionFiltersAccountSubcategoriesItem].self, forKey: .accountSubcategories)
+        self.country = try container.decodeIfPresent(String.self, forKey: .country)
+        self.requirePaymentMethodSupport = try container.decodeIfPresent(BankConnectionsResourceLinkAccountSessionFiltersRequirePaymentMethodSupport.self, forKey: .requirePaymentMethodSupport)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .accountSubcategories, .country, .requirePaymentMethodSupport: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.accountSubcategories, forKey: .accountSubcategories)
+        try container.encodeIfPresent(self.country, forKey: .country)
+        try container.encodeIfPresent(self.requirePaymentMethodSupport, forKey: .requirePaymentMethodSupport)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct FinancialConnectionsSessionCreateParamsLimits: Sendable, Codable, Equatable, Hashable {
+    public var accounts: Clearable<Int>
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(accounts: Clearable<Int>, unknownFields: [String: JSONValue]? = nil) {
+        self.accounts = accounts
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case accounts
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.accounts = try container.decode(Clearable<Int>.self, forKey: .accounts)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .accounts: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.accounts, forKey: .accounts)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct FinancialConnectionsSessionCreateParamsManualEntry: Sendable, Codable, Equatable, Hashable {
+    public var mode: BankConnectionsResourceLinkAccountSessionManualEntryMode?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(mode: BankConnectionsResourceLinkAccountSessionManualEntryMode? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.mode = mode
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case mode
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.mode = try container.decodeIfPresent(BankConnectionsResourceLinkAccountSessionManualEntryMode.self, forKey: .mode)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .mode: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.mode, forKey: .mode)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
 public struct TransactionListParamsTransactedAtVariant1: Sendable, Codable, Equatable, Hashable {
     public var gt: Int?
     public var gte: Int?
@@ -2005,6 +2250,114 @@ public struct AccountUnsubscribeParams: Sendable, Encodable, Hashable {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encodeIfPresent(self.features, forKey: .features)
         try container.encodeIfPresent(self.account, forKey: .account)
+    }
+}
+
+public struct FinancialConnectionsAccountListParams: Sendable, Encodable, Hashable, V1ListParams {
+    public var accountHolder: FinancialConnectionsAccountListParamsAccountHolder?
+    public var endingBefore: String?
+    public var limit: Int?
+    public var session: String?
+    public var startingAfter: String?
+
+    public init(accountHolder: FinancialConnectionsAccountListParamsAccountHolder? = nil, endingBefore: String? = nil, limit: Int? = nil, session: String? = nil, startingAfter: String? = nil) {
+        self.accountHolder = accountHolder
+        self.endingBefore = endingBefore
+        self.limit = limit
+        self.session = session
+        self.startingAfter = startingAfter
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case accountHolder = "account_holder"
+        case endingBefore = "ending_before"
+        case limit
+        case session
+        case startingAfter = "starting_after"
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.accountHolder, forKey: .accountHolder)
+        try container.encodeIfPresent(self.endingBefore, forKey: .endingBefore)
+        try container.encodeIfPresent(self.limit, forKey: .limit)
+        try container.encodeIfPresent(self.session, forKey: .session)
+        try container.encodeIfPresent(self.startingAfter, forKey: .startingAfter)
+    }
+}
+
+public struct FinancialConnectionsAccountRetrieveParams: Sendable, Encodable, Hashable {
+    public var account: String?
+
+    public init(account: String? = nil) {
+        self.account = account
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case account
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.account, forKey: .account)
+    }
+}
+
+public struct FinancialConnectionsSessionCreateParams: Sendable, Encodable, Hashable {
+    public var accountHolder: FinancialConnectionsSessionCreateParamsAccountHolder
+    public var filters: FinancialConnectionsSessionCreateParamsFilters?
+    public var limits: FinancialConnectionsSessionCreateParamsLimits?
+    public var manualEntry: FinancialConnectionsSessionCreateParamsManualEntry?
+    public var permissions: [CheckoutFinancialConnectionsPaymentMethodOptionsPermissionsItem]
+    public var prefetch: [CheckoutFinancialConnectionsPaymentMethodOptionsPrefetchItem]?
+    public var returnUrl: String?
+
+    public init(accountHolder: FinancialConnectionsSessionCreateParamsAccountHolder, filters: FinancialConnectionsSessionCreateParamsFilters? = nil, limits: FinancialConnectionsSessionCreateParamsLimits? = nil, manualEntry: FinancialConnectionsSessionCreateParamsManualEntry? = nil, permissions: [CheckoutFinancialConnectionsPaymentMethodOptionsPermissionsItem], prefetch: [CheckoutFinancialConnectionsPaymentMethodOptionsPrefetchItem]? = nil, returnUrl: String? = nil) {
+        self.accountHolder = accountHolder
+        self.filters = filters
+        self.limits = limits
+        self.manualEntry = manualEntry
+        self.permissions = permissions
+        self.prefetch = prefetch
+        self.returnUrl = returnUrl
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case accountHolder = "account_holder"
+        case filters
+        case limits
+        case manualEntry = "manual_entry"
+        case permissions
+        case prefetch
+        case returnUrl = "return_url"
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.accountHolder, forKey: .accountHolder)
+        try container.encodeIfPresent(self.filters, forKey: .filters)
+        try container.encodeIfPresent(self.limits, forKey: .limits)
+        try container.encodeIfPresent(self.manualEntry, forKey: .manualEntry)
+        try container.encodeIfPresent(self.permissions, forKey: .permissions)
+        try container.encodeIfPresent(self.prefetch, forKey: .prefetch)
+        try container.encodeIfPresent(self.returnUrl, forKey: .returnUrl)
+    }
+}
+
+public struct FinancialConnectionsSessionRetrieveParams: Sendable, Encodable, Hashable {
+    public var session: String?
+
+    public init(session: String? = nil) {
+        self.session = session
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case session
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.session, forKey: .session)
     }
 }
 

@@ -43,11 +43,17 @@ enum SpecParse {
 
 enum GenError: Error, CustomStringConvertible {
   case unexpectedShape(String)
+  case duplicateParamsType(String)
+  case unassignedName(String)
 
   var description: String {
     switch self {
     case .unexpectedShape(let detail):
-      return "unexpected spec shape: \(detail)"
+      return "unexpected spec shape: " + detail
+    case .duplicateParamsType(let name):
+      return "duplicate params type name: " + name
+    case .unassignedName(let detail):
+      return "operation left without an assigned name: " + detail
     }
   }
 }

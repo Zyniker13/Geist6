@@ -163,7 +163,7 @@ extension StripeClient {
     }
 
     /// create /v1/customers/{customer}/tax_ids (POST).
-    public func createTaxId(customer: String, _ params: TaxIdCreateParams, expand: [String]? = nil, idempotencyKey: String? = nil) async throws -> TaxId {
+    public func createTaxId(customer: String, _ params: CustomersTaxIdCreateParams, expand: [String]? = nil, idempotencyKey: String? = nil) async throws -> TaxId {
         try await self.request(
             method: "POST",
             path: "/v1/customers/\(Self.encodePathSegment(customer))/tax_ids",
@@ -174,17 +174,18 @@ extension StripeClient {
     }
 
     /// create /v1/tax_ids (POST).
-    public func createTaxIdV1TaxIds(expand: [String]? = nil, idempotencyKey: String? = nil) async throws -> TaxId {
+    public func createTaxId(_ params: TaxIdCreateParams, expand: [String]? = nil, idempotencyKey: String? = nil) async throws -> TaxId {
         try await self.request(
             method: "POST",
             path: "/v1/tax_ids",
+            params: params,
             expand: expand,
             idempotencyKey: idempotencyKey,
         )
     }
 
     /// delete /v1/customers/{customer}/tax_ids/{id} (DELETE).
-    public func deleteTaxId(customer: String, id: String, _ params: TaxIdDeleteParams, expand: [String]? = nil, idempotencyKey: String? = nil) async throws -> DeletedTaxId {
+    public func deleteTaxId(customer: String, id: String, _ params: CustomersTaxIdDeleteParams, expand: [String]? = nil, idempotencyKey: String? = nil) async throws -> DeletedTaxId {
         try await self.request(
             method: "DELETE",
             path: "/v1/customers/\(Self.encodePathSegment(customer))/tax_ids/\(Self.encodePathSegment(id))",
@@ -195,17 +196,18 @@ extension StripeClient {
     }
 
     /// delete /v1/tax_ids/{id} (DELETE).
-    public func deleteTaxIdV1TaxIdsId(id: String, expand: [String]? = nil, idempotencyKey: String? = nil) async throws -> DeletedTaxId {
+    public func deleteTaxId(id: String, _ params: TaxIdDeleteParams, expand: [String]? = nil, idempotencyKey: String? = nil) async throws -> DeletedTaxId {
         try await self.request(
             method: "DELETE",
             path: "/v1/tax_ids/\(Self.encodePathSegment(id))",
+            params: params,
             expand: expand,
             idempotencyKey: idempotencyKey,
         )
     }
 
     /// list /v1/customers/{customer}/tax_ids (GET).
-    public func listTaxIds(customer: String, _ params: TaxIdListParams? = nil, expand: [String]? = nil) async throws -> TaxIDsList {
+    public func listTaxIds(customer: String, _ params: CustomersTaxIdListParams? = nil, expand: [String]? = nil) async throws -> TaxIDsList {
         try await self.request(
             method: "GET",
             path: "/v1/customers/\(Self.encodePathSegment(customer))/tax_ids",
@@ -215,16 +217,17 @@ extension StripeClient {
     }
 
     /// list /v1/tax_ids (GET).
-    public func listTaxIdsV1TaxIds(expand: [String]? = nil) async throws -> TaxIDsList {
+    public func listTaxIds(_ params: TaxIdListParams? = nil, expand: [String]? = nil) async throws -> TaxIDsList {
         try await self.request(
             method: "GET",
             path: "/v1/tax_ids",
+            params: params,
             expand: expand,
         )
     }
 
     /// retrieve /v1/customers/{customer}/tax_ids/{id} (GET).
-    public func retrieveTaxId(customer: String, id: String, _ params: TaxIdRetrieveParams? = nil, expand: [String]? = nil) async throws -> TaxId {
+    public func retrieveTaxId(customer: String, id: String, _ params: CustomersTaxIdRetrieveParams? = nil, expand: [String]? = nil) async throws -> TaxId {
         try await self.request(
             method: "GET",
             path: "/v1/customers/\(Self.encodePathSegment(customer))/tax_ids/\(Self.encodePathSegment(id))",
@@ -234,10 +237,11 @@ extension StripeClient {
     }
 
     /// retrieve /v1/tax_ids/{id} (GET).
-    public func retrieveTaxIdV1TaxIdsId(id: String, expand: [String]? = nil) async throws -> TaxId {
+    public func retrieveTaxId(id: String, _ params: TaxIdRetrieveParams? = nil, expand: [String]? = nil) async throws -> TaxId {
         try await self.request(
             method: "GET",
             path: "/v1/tax_ids/\(Self.encodePathSegment(id))",
+            params: params,
             expand: expand,
         )
     }
@@ -317,10 +321,11 @@ extension StripeClient {
     }
 
     /// retrieve /v1/tax/transactions/{transaction} (GET).
-    public func retrieveTransaction(transaction: String, expand: [String]? = nil) async throws -> TaxTransaction {
+    public func retrieveTransaction(transaction: String, _ params: TaxTransactionRetrieveParams? = nil, expand: [String]? = nil) async throws -> TaxTransaction {
         try await self.request(
             method: "GET",
             path: "/v1/tax/transactions/\(Self.encodePathSegment(transaction))",
+            params: params,
             expand: expand,
         )
     }

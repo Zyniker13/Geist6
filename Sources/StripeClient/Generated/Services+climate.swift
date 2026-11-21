@@ -62,7 +62,7 @@ extension StripeClient {
     }
 
     /// list /v1/climate/products (GET).
-    public func listProducts(_ params: ProductListParams? = nil, expand: [String]? = nil) async throws -> ClimateRemovalsProductsList {
+    public func listClimateProducts(_ params: ClimateProductListParams? = nil, expand: [String]? = nil) async throws -> ClimateRemovalsProductsList {
         try await self.request(
             method: "GET",
             path: "/v1/climate/products",
@@ -72,7 +72,7 @@ extension StripeClient {
     }
 
     /// retrieve /v1/climate/products/{product} (GET).
-    public func retrieveProduct(product: String, _ params: ProductRetrieveParams? = nil, expand: [String]? = nil) async throws -> ClimateProduct {
+    public func retrieveProduct(product: String, _ params: ClimateProductRetrieveParams? = nil, expand: [String]? = nil) async throws -> ClimateProduct {
         try await self.request(
             method: "GET",
             path: "/v1/climate/products/\(Self.encodePathSegment(product))",

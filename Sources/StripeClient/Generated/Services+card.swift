@@ -20,17 +20,18 @@ extension StripeClient {
     }
 
     /// delete /v1/customers/{customer}/sources/{id} (DELETE).
-    public func deleteCardV1CustomersCustomerSourcesId(customer: String, id: String, expand: [String]? = nil, idempotencyKey: String? = nil) async throws -> CardResponse {
+    public func deleteCard(customer: String, id: String, _ params: CustomersCardDeleteParams, expand: [String]? = nil, idempotencyKey: String? = nil) async throws -> CardResponse {
         try await self.request(
             method: "DELETE",
             path: "/v1/customers/\(Self.encodePathSegment(customer))/sources/\(Self.encodePathSegment(id))",
+            params: params,
             expand: expand,
             idempotencyKey: idempotencyKey,
         )
     }
 
     /// update /v1/accounts/{account}/external_accounts/{id} (POST).
-    public func updateCard(account: String, id: String, _ params: CardUpdateParams, expand: [String]? = nil, idempotencyKey: String? = nil) async throws -> ExternalAccount {
+    public func updateCard(account: String, id: String, _ params: AccountsCardUpdateParams, expand: [String]? = nil, idempotencyKey: String? = nil) async throws -> ExternalAccount {
         try await self.request(
             method: "POST",
             path: "/v1/accounts/\(Self.encodePathSegment(account))/external_accounts/\(Self.encodePathSegment(id))",
@@ -41,10 +42,11 @@ extension StripeClient {
     }
 
     /// update /v1/customers/{customer}/sources/{id} (POST).
-    public func updateCardV1CustomersCustomerSourcesId(customer: String, id: String, expand: [String]? = nil, idempotencyKey: String? = nil) async throws -> CardResponse {
+    public func updateCard(customer: String, id: String, _ params: CustomersCardUpdateParams, expand: [String]? = nil, idempotencyKey: String? = nil) async throws -> CardResponse {
         try await self.request(
             method: "POST",
             path: "/v1/customers/\(Self.encodePathSegment(customer))/sources/\(Self.encodePathSegment(id))",
+            params: params,
             expand: expand,
             idempotencyKey: idempotencyKey,
         )

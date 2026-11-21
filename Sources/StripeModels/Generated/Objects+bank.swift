@@ -1605,6 +1605,130 @@ public struct BankAccountUpdateParamsDocuments: Sendable, Codable, Equatable, Ha
     }
 }
 
+public struct CustomersBankAccountUpdateParamsOwnerAddress: Sendable, Codable, Equatable, Hashable {
+    public var city: String?
+    public var country: String?
+    public var line1: String?
+    public var line2: String?
+    public var postalCode: String?
+    public var state: String?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(city: String? = nil, country: String? = nil, line1: String? = nil, line2: String? = nil, postalCode: String? = nil, state: String? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.city = city
+        self.country = country
+        self.line1 = line1
+        self.line2 = line2
+        self.postalCode = postalCode
+        self.state = state
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case city
+        case country
+        case line1
+        case line2
+        case postalCode = "postal_code"
+        case state
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.city = try container.decodeIfPresent(String.self, forKey: .city)
+        self.country = try container.decodeIfPresent(String.self, forKey: .country)
+        self.line1 = try container.decodeIfPresent(String.self, forKey: .line1)
+        self.line2 = try container.decodeIfPresent(String.self, forKey: .line2)
+        self.postalCode = try container.decodeIfPresent(String.self, forKey: .postalCode)
+        self.state = try container.decodeIfPresent(String.self, forKey: .state)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .city, .country, .line1, .line2, .postalCode, .state: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.city, forKey: .city)
+        try container.encodeIfPresent(self.country, forKey: .country)
+        try container.encodeIfPresent(self.line1, forKey: .line1)
+        try container.encodeIfPresent(self.line2, forKey: .line2)
+        try container.encodeIfPresent(self.postalCode, forKey: .postalCode)
+        try container.encodeIfPresent(self.state, forKey: .state)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CustomersBankAccountUpdateParamsOwner: Sendable, Codable, Equatable, Hashable {
+    public var address: CustomersBankAccountUpdateParamsOwnerAddress?
+    public var email: String?
+    public var name: String?
+    public var phone: String?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(address: CustomersBankAccountUpdateParamsOwnerAddress? = nil, email: String? = nil, name: String? = nil, phone: String? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.address = address
+        self.email = email
+        self.name = name
+        self.phone = phone
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case address
+        case email
+        case name
+        case phone
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.address = try container.decodeIfPresent(CustomersBankAccountUpdateParamsOwnerAddress.self, forKey: .address)
+        self.email = try container.decodeIfPresent(String.self, forKey: .email)
+        self.name = try container.decodeIfPresent(String.self, forKey: .name)
+        self.phone = try container.decodeIfPresent(String.self, forKey: .phone)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .address, .email, .name, .phone: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.address, forKey: .address)
+        try container.encodeIfPresent(self.email, forKey: .email)
+        try container.encodeIfPresent(self.name, forKey: .name)
+        try container.encodeIfPresent(self.phone, forKey: .phone)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
 public struct BankAccountVerifyParams: Sendable, Encodable, Hashable {
     public var amounts: [Int]?
     public var customer: String?
@@ -1647,6 +1771,27 @@ public struct BankAccountDeleteParams: Sendable, Encodable, Hashable {
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encodeIfPresent(self.account, forKey: .account)
+        try container.encodeIfPresent(self.id, forKey: .id)
+    }
+}
+
+public struct CustomersBankAccountDeleteParams: Sendable, Encodable, Hashable {
+    public var customer: String?
+    public var id: String?
+
+    public init(customer: String? = nil, id: String? = nil) {
+        self.customer = customer
+        self.id = id
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case customer
+        case id
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.customer, forKey: .customer)
         try container.encodeIfPresent(self.id, forKey: .id)
     }
 }
@@ -1728,6 +1873,79 @@ public struct BankAccountUpdateParams: Sendable, Encodable, Hashable {
         try container.encodeIfPresent(self.metadata, forKey: .metadata)
         try container.encodeIfPresent(self.name, forKey: .name)
         try container.encodeIfPresent(self.account, forKey: .account)
+        try container.encodeIfPresent(self.id, forKey: .id)
+    }
+}
+
+public struct CustomersBankAccountUpdateParams: Sendable, Encodable, Hashable {
+    public var accountHolderName: String?
+    public var accountHolderType: InboundTransfersPaymentMethodDetailsUsBankAccountAccountHolderType?
+    public var addressCity: String?
+    public var addressCountry: String?
+    public var addressLine1: String?
+    public var addressLine2: String?
+    public var addressState: String?
+    public var addressZip: String?
+    public var expMonth: String?
+    public var expYear: String?
+    public var metadata: Clearable<[String: String]>?
+    public var name: String?
+    public var owner: CustomersBankAccountUpdateParamsOwner?
+    public var customer: String?
+    public var id: String?
+
+    public init(accountHolderName: String? = nil, accountHolderType: InboundTransfersPaymentMethodDetailsUsBankAccountAccountHolderType? = nil, addressCity: String? = nil, addressCountry: String? = nil, addressLine1: String? = nil, addressLine2: String? = nil, addressState: String? = nil, addressZip: String? = nil, expMonth: String? = nil, expYear: String? = nil, metadata: Clearable<[String: String]>? = nil, name: String? = nil, owner: CustomersBankAccountUpdateParamsOwner? = nil, customer: String? = nil, id: String? = nil) {
+        self.accountHolderName = accountHolderName
+        self.accountHolderType = accountHolderType
+        self.addressCity = addressCity
+        self.addressCountry = addressCountry
+        self.addressLine1 = addressLine1
+        self.addressLine2 = addressLine2
+        self.addressState = addressState
+        self.addressZip = addressZip
+        self.expMonth = expMonth
+        self.expYear = expYear
+        self.metadata = metadata
+        self.name = name
+        self.owner = owner
+        self.customer = customer
+        self.id = id
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case accountHolderName = "account_holder_name"
+        case accountHolderType = "account_holder_type"
+        case addressCity = "address_city"
+        case addressCountry = "address_country"
+        case addressLine1 = "address_line1"
+        case addressLine2 = "address_line2"
+        case addressState = "address_state"
+        case addressZip = "address_zip"
+        case expMonth = "exp_month"
+        case expYear = "exp_year"
+        case metadata
+        case name
+        case owner
+        case customer
+        case id
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.accountHolderName, forKey: .accountHolderName)
+        try container.encodeIfPresent(self.accountHolderType, forKey: .accountHolderType)
+        try container.encodeIfPresent(self.addressCity, forKey: .addressCity)
+        try container.encodeIfPresent(self.addressCountry, forKey: .addressCountry)
+        try container.encodeIfPresent(self.addressLine1, forKey: .addressLine1)
+        try container.encodeIfPresent(self.addressLine2, forKey: .addressLine2)
+        try container.encodeIfPresent(self.addressState, forKey: .addressState)
+        try container.encodeIfPresent(self.addressZip, forKey: .addressZip)
+        try container.encodeIfPresent(self.expMonth, forKey: .expMonth)
+        try container.encodeIfPresent(self.expYear, forKey: .expYear)
+        try container.encodeIfPresent(self.metadata, forKey: .metadata)
+        try container.encodeIfPresent(self.name, forKey: .name)
+        try container.encodeIfPresent(self.owner, forKey: .owner)
+        try container.encodeIfPresent(self.customer, forKey: .customer)
         try container.encodeIfPresent(self.id, forKey: .id)
     }
 }

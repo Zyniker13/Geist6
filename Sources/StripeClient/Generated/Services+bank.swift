@@ -31,10 +31,11 @@ extension StripeClient {
     }
 
     /// delete /v1/customers/{customer}/sources/{id} (DELETE).
-    public func deleteBankAccountV1CustomersCustomerSourcesId(customer: String, id: String, expand: [String]? = nil, idempotencyKey: String? = nil) async throws -> BankAccountResponse {
+    public func deleteBankAccount(customer: String, id: String, _ params: CustomersBankAccountDeleteParams, expand: [String]? = nil, idempotencyKey: String? = nil) async throws -> BankAccountResponse {
         try await self.request(
             method: "DELETE",
             path: "/v1/customers/\(Self.encodePathSegment(customer))/sources/\(Self.encodePathSegment(id))",
+            params: params,
             expand: expand,
             idempotencyKey: idempotencyKey,
         )
@@ -52,10 +53,11 @@ extension StripeClient {
     }
 
     /// update /v1/customers/{customer}/sources/{id} (POST).
-    public func updateBankAccountV1CustomersCustomerSourcesId(customer: String, id: String, expand: [String]? = nil, idempotencyKey: String? = nil) async throws -> BankAccountResponse {
+    public func updateBankAccount(customer: String, id: String, _ params: CustomersBankAccountUpdateParams, expand: [String]? = nil, idempotencyKey: String? = nil) async throws -> BankAccountResponse {
         try await self.request(
             method: "POST",
             path: "/v1/customers/\(Self.encodePathSegment(customer))/sources/\(Self.encodePathSegment(id))",
+            params: params,
             expand: expand,
             idempotencyKey: idempotencyKey,
         )

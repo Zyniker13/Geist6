@@ -454,19 +454,21 @@ extension StripeClient {
     }
 
     /// list /v1/treasury/transactions (GET).
-    public func listTransactions(expand: [String]? = nil) async throws -> TreasuryTransactionsResourceTransactionList {
+    public func listTreasuryTransactions(_ params: TreasuryTransactionListParams? = nil, expand: [String]? = nil) async throws -> TreasuryTransactionsResourceTransactionList {
         try await self.request(
             method: "GET",
             path: "/v1/treasury/transactions",
+            params: params,
             expand: expand,
         )
     }
 
     /// retrieve /v1/treasury/transactions/{id} (GET).
-    public func retrieveTransaction(id: String, expand: [String]? = nil) async throws -> TreasuryTransaction {
+    public func retrieveTransaction(id: String, _ params: TreasuryTransactionRetrieveParams? = nil, expand: [String]? = nil) async throws -> TreasuryTransaction {
         try await self.request(
             method: "GET",
             path: "/v1/treasury/transactions/\(Self.encodePathSegment(id))",
+            params: params,
             expand: expand,
         )
     }

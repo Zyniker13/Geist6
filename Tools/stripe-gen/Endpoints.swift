@@ -120,6 +120,211 @@ final class EndpointEmitter {
   private var paramsTypes: [GeneratedType] = []
   private var listTypes: [GeneratedType] = []
   private var serviceFiles: [(bucket: String, code: String)] = []
+  /// Final client method name and params type name per operation identity.
+  /// Assigned in one pre-pass over every operation before emission, so
+  /// naming never depends on file or bucket ordering.
+  private var methodNames: [String: String] = [:]
+  private var paramsNames: [String: String] = [:]
+
+  private func identity(_ op: OpRequest) -> String {
+    op.resourceSchemaKey + "|" + op.methodName + "|" + op.http + "|" + op.path
+  }
+
+  /// Deterministically assigns every operation's client method name and
+  /// params type name before any emission, so naming never depends on file
+  /// or bucket ordering. Methods keep the plain name unless a bare call
+  /// could be ambiguous: only two fully-defaulted overloads with the same
+  /// argument labels conflict, and the canonical claimant (v1 before v2,
+  /// fewer path segments, then the smaller path) wins it while the rest
+  /// get a path-prefixed name. Params structs must be unique types, so
+  /// every contested params base is resolved by the same canonical rule.
+  /// Without this pass the generator silently dropped params structs on
+  /// name collisions, which left those methods unable to send filters or
+  /// request bodies, and a per-bucket method dedup missed cross-bucket
+  /// pairs, which left ambiguous overloads for bare calls like
+  /// `listProducts()`.
+  func assignNames(for ops: [OpRequest]) throws {
+    let sorted = ops.sorted { a, b in
+      if a.resourceClassName != b.resourceClassName {
+        return a.resourceClassName < b.resourceClassName
+      }
+      if a.methodType != b.methodType { return a.methodType < b.methodType }
+      return a.path < b.path
+    }
+    var methodClaims: [String: [OpRequest]] = [:]
+    var paramsClaims: [String: [OpRequest]] = [:]
+    for op in sorted {
+      methodClaims[methodName(op), default: []].append(op)
+      paramsClaims[paramsBaseName(op), default: []].append(op)
+    }
+
+    // The canonical claimant: prefer v1 over v2, then fewer path segments,
+    // then the lexicographically smaller path.
+    func winner(_ candidates: [OpRequest]) -> OpRequest {
+      candidates.min { a, b in
+        if a.isV2 != b.isV2 { return !a.isV2 }
+        let aSegments = a.path.split(separator: "/").count
+        let bSegments = b.path.split(separator: "/").count
+        if aSegments != bSegments { return aSegments < bSegments }
+        return a.path < b.path
+      } ?? candidates[0]
+    }
+
+    // Two same-name methods are only ambiguous when one argument list can
+    // match both. Overloads with a path parameter differ in argument
+    // labels, and create/update methods take a required params value, so
+    // those resolve by label or type. Only same-label, fully-defaulted
+    // overloads can be ambiguous — a bare call matches both — so only
+    // those contest the plain name.
+    func labelKey(_ op: OpRequest) -> String {
+      var labels = pathParameterNames(op.path).map { Naming.camel($0) }
+      if op.bodySchema != nil || !op.queryParameters.isEmpty { labels.append("_") }
+      labels.append("expand")
+      if op.http != "get" { labels.append("idempotencyKey") }
+      return labels.joined(separator: "|")
+    }
+
+    func allDefaulted(_ op: OpRequest) -> Bool {
+      if !pathParameterNames(op.path).isEmpty { return false }
+      let hasParams = op.bodySchema != nil || !op.queryParameters.isEmpty
+      if hasParams {
+        return op.http == "get" || op.methodType == "list" || op.methodType == "search"
+      }
+      return true
+    }
+
+    var claimedDefaultMethods = Set<String>()
+    var claimedParams = Set<String>()
+
+    func claimDefaultMethod(_ base: String, labels: String) -> String {
+      var candidate = base
+      var counter = 2
+      while claimedDefaultMethods.contains(candidate + "|" + labels) {
+        candidate = base + String(counter)
+        counter += 1
+      }
+      claimedDefaultMethods.insert(candidate + "|" + labels)
+      return candidate
+    }
+
+    func claimParams(_ base: String) -> String {
+      var candidate = base
+      var counter = 2
+      while claimedParams.contains(candidate) {
+        candidate = base + String(counter)
+        counter += 1
+      }
+      claimedParams.insert(candidate)
+      return candidate
+    }
+
+    // Methods: ops that can never be called ambiguously (path parameters or
+    // a required params value) keep the plain name. Fully-defaulted ops
+    // keep it too, unless the same name and argument labels are already
+    // claimed by another fully-defaulted op; then only the canonical one
+    // keeps it and the rest get path-prefixed names.
+    var methodLosers: [(op: OpRequest, plain: String)] = []
+    for (base, candidates) in methodClaims {
+      for op in candidates where !allDefaulted(op) {
+        methodNames[identity(op)] = base
+      }
+      var byLabels: [String: [OpRequest]] = [:]
+      for op in candidates where allDefaulted(op) {
+        byLabels[labelKey(op), default: []].append(op)
+      }
+      for (labels, group) in byLabels {
+        if group.count == 1 {
+          methodNames[identity(group[0])] = claimDefaultMethod(base, labels: labels)
+        } else {
+          let canonical = winner(group)
+          methodNames[identity(canonical)] = claimDefaultMethod(base, labels: labels)
+          for op in group where identity(op) != identity(canonical) {
+            methodLosers.append((op, base))
+          }
+        }
+      }
+    }
+
+    // Params structs must be unique types no matter how the methods are
+    // named, so every contested params base is resolved the same way.
+    var paramsLosers: [(op: OpRequest, base: String)] = []
+    for (base, candidates) in paramsClaims {
+      if candidates.count == 1 {
+        let name = claimParams(base)
+        paramsNames[identity(candidates[0])] = name
+        _ = emitter.registry.unique(name)
+      } else {
+        let canonical = winner(candidates)
+        let name = claimParams(base)
+        paramsNames[identity(canonical)] = name
+        _ = emitter.registry.unique(name)
+        for op in candidates where identity(op) != identity(canonical) {
+          paramsLosers.append((op, base))
+        }
+      }
+    }
+
+    // Round 2: losers are renamed with a path prefix.
+    for (op, plain) in methodLosers {
+      let prefix = Naming.pascal(pathPrefix(op))
+      var candidate = insertPrefix(prefix, into: plain, op: op)
+      if claimedDefaultMethods.contains(candidate + "|" + labelKey(op)) {
+        candidate = insertPrefix(Naming.pascal(fullPathPrefix(op)), into: plain, op: op)
+      }
+      methodNames[identity(op)] = claimDefaultMethod(candidate, labels: labelKey(op))
+    }
+    for (op, base) in paramsLosers {
+      var candidate = Naming.pascal(pathPrefix(op)) + base
+      if claimedParams.contains(candidate) {
+        candidate = Naming.pascal(fullPathPrefix(op)) + base
+      }
+      let name = claimParams(candidate)
+      paramsNames[identity(op)] = name
+      _ = emitter.registry.unique(name)
+    }
+  }
+
+  /// The params struct name an operation would use if it owned the plain
+  /// name: resource class + camel method + Params, for example
+  /// ProductListParams.
+  private func paramsBaseName(_ op: OpRequest) -> String {
+    op.resourceClassName + Naming.pascal(op.methodName) + "Params"
+  }
+
+  /// Inserts a path prefix right after the leading verb: listProducts
+  /// with prefix Climate becomes listClimateProducts. Falls back to a
+  /// plain concatenation when the name does not start with a known verb.
+  private func insertPrefix(_ prefix: String, into name: String, op: OpRequest) -> String {
+    let verb: String
+    switch op.methodType {
+    case "list": verb = "list"
+    case "search": verb = "search"
+    default: verb = Naming.camel(op.methodName)
+    }
+    guard name.hasPrefix(verb), name.count > verb.count else {
+      return prefix + name
+    }
+    let rest = name.dropFirst(verb.count)
+    // list + Climate + Products -> listClimateProducts
+    return verb + prefix + rest
+  }
+
+  /// The assigned params struct name for an operation.
+  private func paramsTypeName(_ op: OpRequest) throws -> String {
+    guard let name = paramsNames[identity(op)] else {
+      throw GenError.unassignedName(identity(op))
+    }
+    return name
+  }
+
+  /// The assigned client method name for an operation.
+  func finalMethodName(_ op: OpRequest) throws -> String {
+    guard let name = methodNames[identity(op)] else {
+      throw GenError.unassignedName(identity(op))
+    }
+    return name
+  }
+
   /// methodName overrides for awkward generated names.
   private let methodOverrides: [String: String] = [
     "FeeRefund.refund": "refundApplicationFee",
@@ -136,9 +341,31 @@ final class EndpointEmitter {
 
   // MARK: Naming
 
-  private func paramsTypeName(_ op: OpRequest) -> String {
-    let base = op.resourceClassName + Naming.pascal(op.methodName) + "Params"
-    return emitter.registry.unique(base)
+  /// The first non-version, non-parameter path segment, PascalCased, with
+  /// a V2 prefix for v2 paths. For example, /v1/checkout/sessions gives
+  /// "Checkout" and /v2/core/accounts gives "V2Core".
+  private func pathPrefix(_ op: OpRequest) -> String {
+    let segments = op.path.split(separator: "/").map(String.init)
+    let first = segments.first(where: { !Self.isVersionSegment($0) && !$0.hasPrefix("{") })
+      ?? op.resourceClassName
+    let p = Naming.pascal(first)
+    return op.isV2 ? "V2" + p : p
+  }
+
+  /// Every non-version, non-parameter path segment, PascalCased, with a
+  /// V2 prefix for v2 paths. Fallback when two operations share the first
+  /// path segment.
+  private func fullPathPrefix(_ op: OpRequest) -> String {
+    let segments = op.path.split(separator: "/").map(String.init)
+      .filter { !Self.isVersionSegment($0) && !$0.hasPrefix("{") }
+    let raw = segments.joined(separator: "_")
+    let p = Naming.pascal(raw.isEmpty ? op.resourceClassName : raw)
+    return op.isV2 ? "V2" + p : p
+  }
+
+  private static func isVersionSegment(_ segment: String) -> Bool {
+    guard segment.hasPrefix("v"), segment.count > 1 else { return false }
+    return segment.dropFirst().allSatisfy(\.isNumber)
   }
 
   private func collectionName(_ op: OpRequest) -> String {
@@ -312,9 +539,12 @@ final class EndpointEmitter {
     }
     guard !fields.isEmpty else { return nil }
 
-    let name = paramsTypeName(op)
-    // Dedup: skip if a params type with this name already exists.
-    guard !paramsTypes.contains(where: { $0.name == name }) else { return nil }
+    let name = try paramsTypeName(op)
+    // Fail loudly if the name is somehow taken: a silently missing params
+    // struct would leave the method unable to send its request body.
+    guard !paramsTypes.contains(where: { $0.name == name }) else {
+      throw GenError.duplicateParamsType(name)
+    }
     // List params with the standard cursor fields conform to V1ListParams
     // so the auto-pagination helper can walk them generically.
     var conformances: [String] = []
@@ -339,15 +569,8 @@ final class EndpointEmitter {
     var lines: [String] = []
     lines.append("// Generated client methods for the \(bucket) resources.")
     lines.append("extension StripeClient {")
-    var usedNames = Set<String>()
     for op in ops {
-      var name = methodName(op)
-      if usedNames.contains(name) {
-        // Distinguish by path when two resources share a class name
-        // and method (for example, two `list` operations).
-        name = Naming.camel(name + Naming.pascal(op.path))
-      }
-      usedNames.insert(name)
+      let name = try finalMethodName(op)
 
       let paramsName: String? = try paramsType(for: op)
       let returnType = try responseType(for: op)

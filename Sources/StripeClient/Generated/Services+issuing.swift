@@ -225,10 +225,11 @@ extension StripeClient {
     }
 
     /// update /v1/issuing/cards/{card} (POST).
-    public func updateCard(card: String, expand: [String]? = nil, idempotencyKey: String? = nil) async throws -> IssuingCard {
+    public func updateCard(card: String, _ params: CardUpdateParams, expand: [String]? = nil, idempotencyKey: String? = nil) async throws -> IssuingCard {
         try await self.request(
             method: "POST",
             path: "/v1/issuing/cards/\(Self.encodePathSegment(card))",
+            params: params,
             expand: expand,
             idempotencyKey: idempotencyKey,
         )
@@ -299,28 +300,31 @@ extension StripeClient {
     }
 
     /// list /v1/issuing/disputes (GET).
-    public func listDisputes(expand: [String]? = nil) async throws -> IssuingDisputeList {
+    public func listIssuingDisputes(_ params: IssuingDisputeListParams? = nil, expand: [String]? = nil) async throws -> IssuingDisputeList {
         try await self.request(
             method: "GET",
             path: "/v1/issuing/disputes",
+            params: params,
             expand: expand,
         )
     }
 
     /// retrieve /v1/issuing/disputes/{dispute} (GET).
-    public func retrieveDispute(dispute: String, expand: [String]? = nil) async throws -> IssuingDispute {
+    public func retrieveDispute(dispute: String, _ params: IssuingDisputeRetrieveParams? = nil, expand: [String]? = nil) async throws -> IssuingDispute {
         try await self.request(
             method: "GET",
             path: "/v1/issuing/disputes/\(Self.encodePathSegment(dispute))",
+            params: params,
             expand: expand,
         )
     }
 
     /// update /v1/issuing/disputes/{dispute} (POST).
-    public func updateDispute(dispute: String, expand: [String]? = nil, idempotencyKey: String? = nil) async throws -> IssuingDispute {
+    public func updateDispute(dispute: String, _ params: IssuingDisputeUpdateParams, expand: [String]? = nil, idempotencyKey: String? = nil) async throws -> IssuingDispute {
         try await self.request(
             method: "POST",
             path: "/v1/issuing/disputes/\(Self.encodePathSegment(dispute))",
+            params: params,
             expand: expand,
             idempotencyKey: idempotencyKey,
         )
@@ -432,7 +436,7 @@ extension StripeClient {
     }
 
     /// retrieve /v1/issuing/tokens/{token} (GET).
-    public func retrieveToken(token: String, _ params: TokenRetrieveParams? = nil, expand: [String]? = nil) async throws -> IssuingToken {
+    public func retrieveToken(token: String, _ params: IssuingTokenRetrieveParams? = nil, expand: [String]? = nil) async throws -> IssuingToken {
         try await self.request(
             method: "GET",
             path: "/v1/issuing/tokens/\(Self.encodePathSegment(token))",
@@ -486,19 +490,21 @@ extension StripeClient {
     }
 
     /// list /v1/issuing/transactions (GET).
-    public func listTransactions(expand: [String]? = nil) async throws -> IssuingTransactionList {
+    public func listIssuingTransactions(_ params: IssuingTransactionListParams? = nil, expand: [String]? = nil) async throws -> IssuingTransactionList {
         try await self.request(
             method: "GET",
             path: "/v1/issuing/transactions",
+            params: params,
             expand: expand,
         )
     }
 
     /// retrieve /v1/issuing/transactions/{transaction} (GET).
-    public func retrieveTransaction(transaction: String, expand: [String]? = nil) async throws -> IssuingTransaction {
+    public func retrieveTransaction(transaction: String, _ params: IssuingTransactionRetrieveParams? = nil, expand: [String]? = nil) async throws -> IssuingTransaction {
         try await self.request(
             method: "GET",
             path: "/v1/issuing/transactions/\(Self.encodePathSegment(transaction))",
+            params: params,
             expand: expand,
         )
     }

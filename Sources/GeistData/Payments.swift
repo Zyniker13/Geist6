@@ -124,13 +124,13 @@ extension StripeClient: PaymentsBackend {
     }
 
     public func refunds(charge: String?) async throws -> [Refund] {
-        let result = try await listRefundsV1Refunds()
+        let result = try await listRefunds()
         guard let charge else { return result.data }
         return result.data.filter { $0.charge.valueOrNil?.idOrNil == charge }
     }
 
     public func retrieveRefund(id: String) async throws -> Refund {
-        try await retrieveRefundV1RefundsRefund(refund: id)
+        try await retrieveRefund(refund: id)
     }
 
     public func disputes(charge: String?) async throws -> [Dispute] {

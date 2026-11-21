@@ -41,19 +41,21 @@ extension StripeClient {
     }
 
     /// list /v1/products (GET).
-    public func listProducts(expand: [String]? = nil) async throws -> ProductList {
+    public func listProducts(_ params: ProductListParams? = nil, expand: [String]? = nil) async throws -> ProductList {
         try await self.request(
             method: "GET",
             path: "/v1/products",
+            params: params,
             expand: expand,
         )
     }
 
     /// retrieve /v1/products/{id} (GET).
-    public func retrieveProduct(id: String, expand: [String]? = nil) async throws -> Product {
+    public func retrieveProduct(id: String, _ params: ProductRetrieveParams? = nil, expand: [String]? = nil) async throws -> Product {
         try await self.request(
             method: "GET",
             path: "/v1/products/\(Self.encodePathSegment(id))",
+            params: params,
             expand: expand,
         )
     }

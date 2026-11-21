@@ -3288,3 +3288,20 @@ public struct TokenCreateParams: Sendable, Encodable, Hashable {
         try container.encodeIfPresent(self.pii, forKey: .pii)
     }
 }
+
+public struct TokenRetrieveParams: Sendable, Encodable, Hashable {
+    public var token: String?
+
+    public init(token: String? = nil) {
+        self.token = token
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case token
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.token, forKey: .token)
+    }
+}

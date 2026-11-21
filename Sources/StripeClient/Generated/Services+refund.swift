@@ -42,7 +42,7 @@ extension StripeClient {
     }
 
     /// list /v1/charges/{charge}/refunds (GET).
-    public func listRefunds(charge: String, _ params: RefundListParams? = nil, expand: [String]? = nil) async throws -> RefundList {
+    public func listRefunds(charge: String, _ params: ChargesRefundListParams? = nil, expand: [String]? = nil) async throws -> RefundList {
         try await self.request(
             method: "GET",
             path: "/v1/charges/\(Self.encodePathSegment(charge))/refunds",
@@ -52,16 +52,17 @@ extension StripeClient {
     }
 
     /// list /v1/refunds (GET).
-    public func listRefundsV1Refunds(expand: [String]? = nil) async throws -> APIMethodRefundList {
+    public func listRefunds(_ params: RefundListParams? = nil, expand: [String]? = nil) async throws -> APIMethodRefundList {
         try await self.request(
             method: "GET",
             path: "/v1/refunds",
+            params: params,
             expand: expand,
         )
     }
 
     /// retrieve /v1/charges/{charge}/refunds/{refund} (GET).
-    public func retrieveRefund(charge: String, refund: String, _ params: RefundRetrieveParams? = nil, expand: [String]? = nil) async throws -> Refund {
+    public func retrieveRefund(charge: String, refund: String, _ params: ChargesRefundRetrieveParams? = nil, expand: [String]? = nil) async throws -> Refund {
         try await self.request(
             method: "GET",
             path: "/v1/charges/\(Self.encodePathSegment(charge))/refunds/\(Self.encodePathSegment(refund))",
@@ -71,10 +72,11 @@ extension StripeClient {
     }
 
     /// retrieve /v1/refunds/{refund} (GET).
-    public func retrieveRefundV1RefundsRefund(refund: String, expand: [String]? = nil) async throws -> Refund {
+    public func retrieveRefund(refund: String, _ params: RefundRetrieveParams? = nil, expand: [String]? = nil) async throws -> Refund {
         try await self.request(
             method: "GET",
             path: "/v1/refunds/\(Self.encodePathSegment(refund))",
+            params: params,
             expand: expand,
         )
     }

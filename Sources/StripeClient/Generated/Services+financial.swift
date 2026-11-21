@@ -63,38 +63,42 @@ extension StripeClient {
     }
 
     /// list /v1/financial_connections/accounts (GET).
-    public func listAccounts(expand: [String]? = nil) async throws -> BankConnectionsResourceLinkedAccountList {
+    public func listFinancialConnectionsAccounts(_ params: FinancialConnectionsAccountListParams? = nil, expand: [String]? = nil) async throws -> BankConnectionsResourceLinkedAccountList {
         try await self.request(
             method: "GET",
             path: "/v1/financial_connections/accounts",
+            params: params,
             expand: expand,
         )
     }
 
     /// retrieve /v1/financial_connections/accounts/{account} (GET).
-    public func retrieveAccount(account: String, expand: [String]? = nil) async throws -> FinancialConnectionsAccount {
+    public func retrieveAccount(account: String, _ params: FinancialConnectionsAccountRetrieveParams? = nil, expand: [String]? = nil) async throws -> FinancialConnectionsAccount {
         try await self.request(
             method: "GET",
             path: "/v1/financial_connections/accounts/\(Self.encodePathSegment(account))",
+            params: params,
             expand: expand,
         )
     }
 
     /// create /v1/financial_connections/sessions (POST).
-    public func createSession(expand: [String]? = nil, idempotencyKey: String? = nil) async throws -> FinancialConnectionsSession {
+    public func createSession(_ params: FinancialConnectionsSessionCreateParams, expand: [String]? = nil, idempotencyKey: String? = nil) async throws -> FinancialConnectionsSession {
         try await self.request(
             method: "POST",
             path: "/v1/financial_connections/sessions",
+            params: params,
             expand: expand,
             idempotencyKey: idempotencyKey,
         )
     }
 
     /// retrieve /v1/financial_connections/sessions/{session} (GET).
-    public func retrieveSession(session: String, expand: [String]? = nil) async throws -> FinancialConnectionsSession {
+    public func retrieveSession(session: String, _ params: FinancialConnectionsSessionRetrieveParams? = nil, expand: [String]? = nil) async throws -> FinancialConnectionsSession {
         try await self.request(
             method: "GET",
             path: "/v1/financial_connections/sessions/\(Self.encodePathSegment(session))",
+            params: params,
             expand: expand,
         )
     }

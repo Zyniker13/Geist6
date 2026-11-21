@@ -9,10 +9,11 @@ import StripeModels
 // Generated client methods for the checkout resources.
 extension StripeClient {
     /// create /v1/checkout/sessions (POST).
-    public func createSession(expand: [String]? = nil, idempotencyKey: String? = nil) async throws -> CheckoutSession {
+    public func createSession(_ params: CheckoutSessionCreateParams, expand: [String]? = nil, idempotencyKey: String? = nil) async throws -> CheckoutSession {
         try await self.request(
             method: "POST",
             path: "/v1/checkout/sessions",
+            params: params,
             expand: expand,
             idempotencyKey: idempotencyKey,
         )

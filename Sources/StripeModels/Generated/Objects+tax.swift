@@ -15020,6 +15020,120 @@ public struct SettingsUpdateParamsHeadOffice: Sendable, Codable, Equatable, Hash
     }
 }
 
+public struct TaxIdCreateParamsOwner: Sendable, Codable, Equatable, Hashable {
+    public var account: String?
+    public var customer: String?
+    public var customerAccount: String?
+    public var type: TaxIDsOwnerType
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(account: String? = nil, customer: String? = nil, customerAccount: String? = nil, type: TaxIDsOwnerType, unknownFields: [String: JSONValue]? = nil) {
+        self.account = account
+        self.customer = customer
+        self.customerAccount = customerAccount
+        self.type = type
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case account
+        case customer
+        case customerAccount = "customer_account"
+        case type
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.account = try container.decodeIfPresent(String.self, forKey: .account)
+        self.customer = try container.decodeIfPresent(String.self, forKey: .customer)
+        self.customerAccount = try container.decodeIfPresent(String.self, forKey: .customerAccount)
+        self.type = try container.decode(TaxIDsOwnerType.self, forKey: .type)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .account, .customer, .customerAccount, .type: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.account, forKey: .account)
+        try container.encodeIfPresent(self.customer, forKey: .customer)
+        try container.encodeIfPresent(self.customerAccount, forKey: .customerAccount)
+        try container.encodeIfPresent(self.type, forKey: .type)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct TaxIdListParamsOwner: Sendable, Codable, Equatable, Hashable {
+    public var account: String?
+    public var customer: String?
+    public var customerAccount: String?
+    public var type: TaxIDsOwnerType
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(account: String? = nil, customer: String? = nil, customerAccount: String? = nil, type: TaxIDsOwnerType, unknownFields: [String: JSONValue]? = nil) {
+        self.account = account
+        self.customer = customer
+        self.customerAccount = customerAccount
+        self.type = type
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case account
+        case customer
+        case customerAccount = "customer_account"
+        case type
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.account = try container.decodeIfPresent(String.self, forKey: .account)
+        self.customer = try container.decodeIfPresent(String.self, forKey: .customer)
+        self.customerAccount = try container.decodeIfPresent(String.self, forKey: .customerAccount)
+        self.type = try container.decode(TaxIDsOwnerType.self, forKey: .type)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .account, .customer, .customerAccount, .type: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.account, forKey: .account)
+        try container.encodeIfPresent(self.customer, forKey: .customer)
+        try container.encodeIfPresent(self.customerAccount, forKey: .customerAccount)
+        try container.encodeIfPresent(self.type, forKey: .type)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
 public struct TaxRateListParamsCreatedVariant1: Sendable, Codable, Equatable, Hashable {
     public var gt: Int?
     public var gte: Int?
@@ -15586,7 +15700,7 @@ public struct TaxCodeRetrieveParams: Sendable, Encodable, Hashable {
     }
 }
 
-public struct TaxIdCreateParams: Sendable, Encodable, Hashable {
+public struct CustomersTaxIdCreateParams: Sendable, Encodable, Hashable {
     public var type: CustomerCreateParamsTaxIdDataItemType
     public var value: String
     public var customer: String?
@@ -15611,7 +15725,32 @@ public struct TaxIdCreateParams: Sendable, Encodable, Hashable {
     }
 }
 
-public struct TaxIdDeleteParams: Sendable, Encodable, Hashable {
+public struct TaxIdCreateParams: Sendable, Encodable, Hashable {
+    public var owner: TaxIdCreateParamsOwner?
+    public var type: CustomerCreateParamsTaxIdDataItemType
+    public var value: String
+
+    public init(owner: TaxIdCreateParamsOwner? = nil, type: CustomerCreateParamsTaxIdDataItemType, value: String) {
+        self.owner = owner
+        self.type = type
+        self.value = value
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case owner
+        case type
+        case value
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.owner, forKey: .owner)
+        try container.encodeIfPresent(self.type, forKey: .type)
+        try container.encodeIfPresent(self.value, forKey: .value)
+    }
+}
+
+public struct CustomersTaxIdDeleteParams: Sendable, Encodable, Hashable {
     public var customer: String?
     public var id: String?
 
@@ -15632,7 +15771,24 @@ public struct TaxIdDeleteParams: Sendable, Encodable, Hashable {
     }
 }
 
-public struct TaxIdListParams: Sendable, Encodable, Hashable, V1ListParams {
+public struct TaxIdDeleteParams: Sendable, Encodable, Hashable {
+    public var id: String?
+
+    public init(id: String? = nil) {
+        self.id = id
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case id
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.id, forKey: .id)
+    }
+}
+
+public struct CustomersTaxIdListParams: Sendable, Encodable, Hashable, V1ListParams {
     public var customer: String?
     public var endingBefore: String?
     public var limit: Int?
@@ -15661,7 +15817,36 @@ public struct TaxIdListParams: Sendable, Encodable, Hashable, V1ListParams {
     }
 }
 
-public struct TaxIdRetrieveParams: Sendable, Encodable, Hashable {
+public struct TaxIdListParams: Sendable, Encodable, Hashable, V1ListParams {
+    public var endingBefore: String?
+    public var limit: Int?
+    public var owner: TaxIdListParamsOwner?
+    public var startingAfter: String?
+
+    public init(endingBefore: String? = nil, limit: Int? = nil, owner: TaxIdListParamsOwner? = nil, startingAfter: String? = nil) {
+        self.endingBefore = endingBefore
+        self.limit = limit
+        self.owner = owner
+        self.startingAfter = startingAfter
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case endingBefore = "ending_before"
+        case limit
+        case owner
+        case startingAfter = "starting_after"
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.endingBefore, forKey: .endingBefore)
+        try container.encodeIfPresent(self.limit, forKey: .limit)
+        try container.encodeIfPresent(self.owner, forKey: .owner)
+        try container.encodeIfPresent(self.startingAfter, forKey: .startingAfter)
+    }
+}
+
+public struct CustomersTaxIdRetrieveParams: Sendable, Encodable, Hashable {
     public var customer: String?
     public var id: String?
 
@@ -15678,6 +15863,23 @@ public struct TaxIdRetrieveParams: Sendable, Encodable, Hashable {
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encodeIfPresent(self.customer, forKey: .customer)
+        try container.encodeIfPresent(self.id, forKey: .id)
+    }
+}
+
+public struct TaxIdRetrieveParams: Sendable, Encodable, Hashable {
+    public var id: String?
+
+    public init(id: String? = nil) {
+        self.id = id
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case id
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encodeIfPresent(self.id, forKey: .id)
     }
 }
@@ -15933,6 +16135,23 @@ public struct TransactionListLineItemsParams: Sendable, Encodable, Hashable, V1L
         try container.encodeIfPresent(self.endingBefore, forKey: .endingBefore)
         try container.encodeIfPresent(self.limit, forKey: .limit)
         try container.encodeIfPresent(self.startingAfter, forKey: .startingAfter)
+        try container.encodeIfPresent(self.transaction, forKey: .transaction)
+    }
+}
+
+public struct TaxTransactionRetrieveParams: Sendable, Encodable, Hashable {
+    public var transaction: String?
+
+    public init(transaction: String? = nil) {
+        self.transaction = transaction
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case transaction
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encodeIfPresent(self.transaction, forKey: .transaction)
     }
 }

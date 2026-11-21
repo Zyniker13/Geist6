@@ -13011,6 +13011,439 @@ public enum CardListParamsCreated: Sendable, Codable, Equatable, Hashable {
     }
 }
 
+/// Lossless enum: values Stripe documents plus any value the API
+/// adds later, kept in `undocumented` instead of dropped.
+public enum CardUpdateParamsCancellationReason: Sendable, Equatable, Hashable, LosslessEnum {
+    case lost
+    case stolen
+    case undocumented(String)
+
+    public init(rawValue raw: String) {
+        switch raw {
+        case "lost": self = .lost
+        case "stolen": self = .stolen
+        default: self = .undocumented(raw)
+        }
+    }
+
+    public var rawValue: String {
+        switch self {
+        case .lost: return "lost"
+        case .stolen: return "stolen"
+        case .undocumented(let value): return value
+        }
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        self.init(rawValue: try container.decode(String.self))
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(rawValue)
+    }
+}
+
+public struct CardUpdateParamsPin: Sendable, Codable, Equatable, Hashable {
+    public var encryptedNumber: String?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(encryptedNumber: String? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.encryptedNumber = encryptedNumber
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case encryptedNumber = "encrypted_number"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.encryptedNumber = try container.decodeIfPresent(String.self, forKey: .encryptedNumber)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .encryptedNumber: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.encryptedNumber, forKey: .encryptedNumber)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CardUpdateParamsShippingAddress: Sendable, Codable, Equatable, Hashable {
+    public var city: String
+    public var country: String
+    public var line1: String
+    public var line2: String?
+    public var postalCode: String
+    public var state: String?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(city: String, country: String, line1: String, line2: String? = nil, postalCode: String, state: String? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.city = city
+        self.country = country
+        self.line1 = line1
+        self.line2 = line2
+        self.postalCode = postalCode
+        self.state = state
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case city
+        case country
+        case line1
+        case line2
+        case postalCode = "postal_code"
+        case state
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.city = try container.decode(String.self, forKey: .city)
+        self.country = try container.decode(String.self, forKey: .country)
+        self.line1 = try container.decode(String.self, forKey: .line1)
+        self.line2 = try container.decodeIfPresent(String.self, forKey: .line2)
+        self.postalCode = try container.decode(String.self, forKey: .postalCode)
+        self.state = try container.decodeIfPresent(String.self, forKey: .state)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .city, .country, .line1, .line2, .postalCode, .state: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.city, forKey: .city)
+        try container.encodeIfPresent(self.country, forKey: .country)
+        try container.encodeIfPresent(self.line1, forKey: .line1)
+        try container.encodeIfPresent(self.line2, forKey: .line2)
+        try container.encodeIfPresent(self.postalCode, forKey: .postalCode)
+        try container.encodeIfPresent(self.state, forKey: .state)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CardUpdateParamsShippingAddressValidation: Sendable, Codable, Equatable, Hashable {
+    public var mode: IssuingCardShippingAddressValidationMode
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(mode: IssuingCardShippingAddressValidationMode, unknownFields: [String: JSONValue]? = nil) {
+        self.mode = mode
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case mode
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.mode = try container.decode(IssuingCardShippingAddressValidationMode.self, forKey: .mode)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .mode: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.mode, forKey: .mode)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CardUpdateParamsShippingCustoms: Sendable, Codable, Equatable, Hashable {
+    public var eoriNumber: String?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(eoriNumber: String? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.eoriNumber = eoriNumber
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case eoriNumber = "eori_number"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.eoriNumber = try container.decodeIfPresent(String.self, forKey: .eoriNumber)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .eoriNumber: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.eoriNumber, forKey: .eoriNumber)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CardUpdateParamsShipping: Sendable, Codable, Equatable, Hashable {
+    public var address: CardUpdateParamsShippingAddress
+    public var addressValidation: CardUpdateParamsShippingAddressValidation?
+    public var businessName: String?
+    public var customs: CardUpdateParamsShippingCustoms?
+    public var name: String
+    public var phoneNumber: String?
+    public var requireSignature: Bool?
+    public var service: IssuingCardShippingService?
+    public var type: IssuingCardShippingType?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(address: CardUpdateParamsShippingAddress, addressValidation: CardUpdateParamsShippingAddressValidation? = nil, businessName: String? = nil, customs: CardUpdateParamsShippingCustoms? = nil, name: String, phoneNumber: String? = nil, requireSignature: Bool? = nil, service: IssuingCardShippingService? = nil, type: IssuingCardShippingType? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.address = address
+        self.addressValidation = addressValidation
+        self.businessName = businessName
+        self.customs = customs
+        self.name = name
+        self.phoneNumber = phoneNumber
+        self.requireSignature = requireSignature
+        self.service = service
+        self.type = type
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case address
+        case addressValidation = "address_validation"
+        case businessName = "business_name"
+        case customs
+        case name
+        case phoneNumber = "phone_number"
+        case requireSignature = "require_signature"
+        case service
+        case type
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.address = try container.decode(CardUpdateParamsShippingAddress.self, forKey: .address)
+        self.addressValidation = try container.decodeIfPresent(CardUpdateParamsShippingAddressValidation.self, forKey: .addressValidation)
+        self.businessName = try container.decodeIfPresent(String.self, forKey: .businessName)
+        self.customs = try container.decodeIfPresent(CardUpdateParamsShippingCustoms.self, forKey: .customs)
+        self.name = try container.decode(String.self, forKey: .name)
+        self.phoneNumber = try container.decodeIfPresent(String.self, forKey: .phoneNumber)
+        self.requireSignature = try container.decodeIfPresent(Bool.self, forKey: .requireSignature)
+        self.service = try container.decodeIfPresent(IssuingCardShippingService.self, forKey: .service)
+        self.type = try container.decodeIfPresent(IssuingCardShippingType.self, forKey: .type)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .address, .addressValidation, .businessName, .customs, .name, .phoneNumber, .requireSignature, .service, .type: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.address, forKey: .address)
+        try container.encodeIfPresent(self.addressValidation, forKey: .addressValidation)
+        try container.encodeIfPresent(self.businessName, forKey: .businessName)
+        try container.encodeIfPresent(self.customs, forKey: .customs)
+        try container.encodeIfPresent(self.name, forKey: .name)
+        try container.encodeIfPresent(self.phoneNumber, forKey: .phoneNumber)
+        try container.encodeIfPresent(self.requireSignature, forKey: .requireSignature)
+        try container.encodeIfPresent(self.service, forKey: .service)
+        try container.encodeIfPresent(self.type, forKey: .type)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CardUpdateParamsSpendingControlsSpendingLimitsItem: Sendable, Codable, Equatable, Hashable {
+    public var amount: Int
+    public var categories: [IssuingCardAuthorizationControlsAllowedCategoriesItem]?
+    public var interval: IssuingCardSpendingLimitInterval
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(amount: Int, categories: [IssuingCardAuthorizationControlsAllowedCategoriesItem]? = nil, interval: IssuingCardSpendingLimitInterval, unknownFields: [String: JSONValue]? = nil) {
+        self.amount = amount
+        self.categories = categories
+        self.interval = interval
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case amount
+        case categories
+        case interval
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.amount = try container.decode(Int.self, forKey: .amount)
+        self.categories = try container.decodeIfPresent([IssuingCardAuthorizationControlsAllowedCategoriesItem].self, forKey: .categories)
+        self.interval = try container.decode(IssuingCardSpendingLimitInterval.self, forKey: .interval)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .amount, .categories, .interval: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.amount, forKey: .amount)
+        try container.encodeIfPresent(self.categories, forKey: .categories)
+        try container.encodeIfPresent(self.interval, forKey: .interval)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CardUpdateParamsSpendingControls: Sendable, Codable, Equatable, Hashable {
+    public var allowedCardPresences: [IssuingAuthorizationCardPresence]?
+    public var allowedCategories: [IssuingCardAuthorizationControlsAllowedCategoriesItem]?
+    public var allowedMerchantCountries: [String]?
+    public var blockedCardPresences: [IssuingAuthorizationCardPresence]?
+    public var blockedCategories: [IssuingCardAuthorizationControlsAllowedCategoriesItem]?
+    public var blockedMerchantCountries: [String]?
+    public var spendingLimits: [CardUpdateParamsSpendingControlsSpendingLimitsItem]?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(allowedCardPresences: [IssuingAuthorizationCardPresence]? = nil, allowedCategories: [IssuingCardAuthorizationControlsAllowedCategoriesItem]? = nil, allowedMerchantCountries: [String]? = nil, blockedCardPresences: [IssuingAuthorizationCardPresence]? = nil, blockedCategories: [IssuingCardAuthorizationControlsAllowedCategoriesItem]? = nil, blockedMerchantCountries: [String]? = nil, spendingLimits: [CardUpdateParamsSpendingControlsSpendingLimitsItem]? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.allowedCardPresences = allowedCardPresences
+        self.allowedCategories = allowedCategories
+        self.allowedMerchantCountries = allowedMerchantCountries
+        self.blockedCardPresences = blockedCardPresences
+        self.blockedCategories = blockedCategories
+        self.blockedMerchantCountries = blockedMerchantCountries
+        self.spendingLimits = spendingLimits
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case allowedCardPresences = "allowed_card_presences"
+        case allowedCategories = "allowed_categories"
+        case allowedMerchantCountries = "allowed_merchant_countries"
+        case blockedCardPresences = "blocked_card_presences"
+        case blockedCategories = "blocked_categories"
+        case blockedMerchantCountries = "blocked_merchant_countries"
+        case spendingLimits = "spending_limits"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.allowedCardPresences = try container.decodeIfPresent([IssuingAuthorizationCardPresence].self, forKey: .allowedCardPresences)
+        self.allowedCategories = try container.decodeIfPresent([IssuingCardAuthorizationControlsAllowedCategoriesItem].self, forKey: .allowedCategories)
+        self.allowedMerchantCountries = try container.decodeIfPresent([String].self, forKey: .allowedMerchantCountries)
+        self.blockedCardPresences = try container.decodeIfPresent([IssuingAuthorizationCardPresence].self, forKey: .blockedCardPresences)
+        self.blockedCategories = try container.decodeIfPresent([IssuingCardAuthorizationControlsAllowedCategoriesItem].self, forKey: .blockedCategories)
+        self.blockedMerchantCountries = try container.decodeIfPresent([String].self, forKey: .blockedMerchantCountries)
+        self.spendingLimits = try container.decodeIfPresent([CardUpdateParamsSpendingControlsSpendingLimitsItem].self, forKey: .spendingLimits)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .allowedCardPresences, .allowedCategories, .allowedMerchantCountries, .blockedCardPresences, .blockedCategories, .blockedMerchantCountries, .spendingLimits: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.allowedCardPresences, forKey: .allowedCardPresences)
+        try container.encodeIfPresent(self.allowedCategories, forKey: .allowedCategories)
+        try container.encodeIfPresent(self.allowedMerchantCountries, forKey: .allowedMerchantCountries)
+        try container.encodeIfPresent(self.blockedCardPresences, forKey: .blockedCardPresences)
+        try container.encodeIfPresent(self.blockedCategories, forKey: .blockedCategories)
+        try container.encodeIfPresent(self.blockedMerchantCountries, forKey: .blockedMerchantCountries)
+        try container.encodeIfPresent(self.spendingLimits, forKey: .spendingLimits)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
 public struct CardholderCreateParamsBillingAddress: Sendable, Codable, Equatable, Hashable {
     public var city: String
     public var country: String
@@ -14939,6 +15372,664 @@ public struct DisputeCreateParamsTreasury: Sendable, Codable, Equatable, Hashabl
     }
 }
 
+public struct IssuingDisputeListParamsCreatedVariant1: Sendable, Codable, Equatable, Hashable {
+    public var gt: Int?
+    public var gte: Int?
+    public var lt: Int?
+    public var lte: Int?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(gt: Int? = nil, gte: Int? = nil, lt: Int? = nil, lte: Int? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.gt = gt
+        self.gte = gte
+        self.lt = lt
+        self.lte = lte
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case gt
+        case gte
+        case lt
+        case lte
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.gt = try container.decodeIfPresent(Int.self, forKey: .gt)
+        self.gte = try container.decodeIfPresent(Int.self, forKey: .gte)
+        self.lt = try container.decodeIfPresent(Int.self, forKey: .lt)
+        self.lte = try container.decodeIfPresent(Int.self, forKey: .lte)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .gt, .gte, .lt, .lte: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.gt, forKey: .gt)
+        try container.encodeIfPresent(self.gte, forKey: .gte)
+        try container.encodeIfPresent(self.lt, forKey: .lt)
+        try container.encodeIfPresent(self.lte, forKey: .lte)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+/// Polymorphic union; unknown shapes are kept in `other` (lossless).
+public enum IssuingDisputeListParamsCreated: Sendable, Codable, Equatable, Hashable {
+    case issuingDisputeListParamsCreatedVariant1(IssuingDisputeListParamsCreatedVariant1)
+    case int(Int)
+    case other(JSONValue)
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        if let value = try? container.decode(IssuingDisputeListParamsCreatedVariant1.self) { self = .issuingDisputeListParamsCreatedVariant1(value); return }
+        if let value = try? container.decode(Int.self) { self = .int(value); return }
+        self = .other(try container.decode(JSONValue.self))
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        switch self {
+        case .issuingDisputeListParamsCreatedVariant1(let value): try container.encode(value)
+        case .int(let value): try container.encode(value)
+        case .other(let value): try container.encode(value)
+        }
+    }
+}
+
+public struct IssuingDisputeUpdateParamsEvidenceCanceled: Sendable, Codable, Equatable, Hashable {
+    public var additionalDocumentation: Clearable<String>?
+    public var canceledAt: Clearable<StripeTimestamp>?
+    public var cancellationPolicyProvided: Clearable<Bool>?
+    public var cancellationReason: Clearable<String>?
+    public var expectedAt: Clearable<StripeTimestamp>?
+    public var explanation: Clearable<String>?
+    public var productDescription: Clearable<String>?
+    public var productType: DisputeCreateParamsEvidenceCanceledProductType?
+    public var returnStatus: DisputeCreateParamsEvidenceCanceledReturnStatus?
+    public var returnedAt: Clearable<StripeTimestamp>?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(additionalDocumentation: Clearable<String>? = nil, canceledAt: Clearable<StripeTimestamp>? = nil, cancellationPolicyProvided: Clearable<Bool>? = nil, cancellationReason: Clearable<String>? = nil, expectedAt: Clearable<StripeTimestamp>? = nil, explanation: Clearable<String>? = nil, productDescription: Clearable<String>? = nil, productType: DisputeCreateParamsEvidenceCanceledProductType? = nil, returnStatus: DisputeCreateParamsEvidenceCanceledReturnStatus? = nil, returnedAt: Clearable<StripeTimestamp>? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.additionalDocumentation = additionalDocumentation
+        self.canceledAt = canceledAt
+        self.cancellationPolicyProvided = cancellationPolicyProvided
+        self.cancellationReason = cancellationReason
+        self.expectedAt = expectedAt
+        self.explanation = explanation
+        self.productDescription = productDescription
+        self.productType = productType
+        self.returnStatus = returnStatus
+        self.returnedAt = returnedAt
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case additionalDocumentation = "additional_documentation"
+        case canceledAt = "canceled_at"
+        case cancellationPolicyProvided = "cancellation_policy_provided"
+        case cancellationReason = "cancellation_reason"
+        case expectedAt = "expected_at"
+        case explanation
+        case productDescription = "product_description"
+        case productType = "product_type"
+        case returnStatus = "return_status"
+        case returnedAt = "returned_at"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.additionalDocumentation = try container.decodeIfPresent(Clearable<String>.self, forKey: .additionalDocumentation)
+        self.canceledAt = try container.decodeIfPresent(Clearable<StripeTimestamp>.self, forKey: .canceledAt)
+        self.cancellationPolicyProvided = try container.decodeIfPresent(Clearable<Bool>.self, forKey: .cancellationPolicyProvided)
+        self.cancellationReason = try container.decodeIfPresent(Clearable<String>.self, forKey: .cancellationReason)
+        self.expectedAt = try container.decodeIfPresent(Clearable<StripeTimestamp>.self, forKey: .expectedAt)
+        self.explanation = try container.decodeIfPresent(Clearable<String>.self, forKey: .explanation)
+        self.productDescription = try container.decodeIfPresent(Clearable<String>.self, forKey: .productDescription)
+        self.productType = try container.decodeIfPresent(DisputeCreateParamsEvidenceCanceledProductType.self, forKey: .productType)
+        self.returnStatus = try container.decodeIfPresent(DisputeCreateParamsEvidenceCanceledReturnStatus.self, forKey: .returnStatus)
+        self.returnedAt = try container.decodeIfPresent(Clearable<StripeTimestamp>.self, forKey: .returnedAt)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .additionalDocumentation, .canceledAt, .cancellationPolicyProvided, .cancellationReason, .expectedAt, .explanation, .productDescription, .productType, .returnStatus, .returnedAt: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.additionalDocumentation, forKey: .additionalDocumentation)
+        try container.encodeIfPresent(self.canceledAt, forKey: .canceledAt)
+        try container.encodeIfPresent(self.cancellationPolicyProvided, forKey: .cancellationPolicyProvided)
+        try container.encodeIfPresent(self.cancellationReason, forKey: .cancellationReason)
+        try container.encodeIfPresent(self.expectedAt, forKey: .expectedAt)
+        try container.encodeIfPresent(self.explanation, forKey: .explanation)
+        try container.encodeIfPresent(self.productDescription, forKey: .productDescription)
+        try container.encodeIfPresent(self.productType, forKey: .productType)
+        try container.encodeIfPresent(self.returnStatus, forKey: .returnStatus)
+        try container.encodeIfPresent(self.returnedAt, forKey: .returnedAt)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct IssuingDisputeUpdateParamsEvidenceDuplicate: Sendable, Codable, Equatable, Hashable {
+    public var additionalDocumentation: Clearable<String>?
+    public var cardStatement: Clearable<String>?
+    public var cashReceipt: Clearable<String>?
+    public var checkImage: Clearable<String>?
+    public var explanation: Clearable<String>?
+    public var originalTransaction: String?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(additionalDocumentation: Clearable<String>? = nil, cardStatement: Clearable<String>? = nil, cashReceipt: Clearable<String>? = nil, checkImage: Clearable<String>? = nil, explanation: Clearable<String>? = nil, originalTransaction: String? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.additionalDocumentation = additionalDocumentation
+        self.cardStatement = cardStatement
+        self.cashReceipt = cashReceipt
+        self.checkImage = checkImage
+        self.explanation = explanation
+        self.originalTransaction = originalTransaction
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case additionalDocumentation = "additional_documentation"
+        case cardStatement = "card_statement"
+        case cashReceipt = "cash_receipt"
+        case checkImage = "check_image"
+        case explanation
+        case originalTransaction = "original_transaction"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.additionalDocumentation = try container.decodeIfPresent(Clearable<String>.self, forKey: .additionalDocumentation)
+        self.cardStatement = try container.decodeIfPresent(Clearable<String>.self, forKey: .cardStatement)
+        self.cashReceipt = try container.decodeIfPresent(Clearable<String>.self, forKey: .cashReceipt)
+        self.checkImage = try container.decodeIfPresent(Clearable<String>.self, forKey: .checkImage)
+        self.explanation = try container.decodeIfPresent(Clearable<String>.self, forKey: .explanation)
+        self.originalTransaction = try container.decodeIfPresent(String.self, forKey: .originalTransaction)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .additionalDocumentation, .cardStatement, .cashReceipt, .checkImage, .explanation, .originalTransaction: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.additionalDocumentation, forKey: .additionalDocumentation)
+        try container.encodeIfPresent(self.cardStatement, forKey: .cardStatement)
+        try container.encodeIfPresent(self.cashReceipt, forKey: .cashReceipt)
+        try container.encodeIfPresent(self.checkImage, forKey: .checkImage)
+        try container.encodeIfPresent(self.explanation, forKey: .explanation)
+        try container.encodeIfPresent(self.originalTransaction, forKey: .originalTransaction)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct IssuingDisputeUpdateParamsEvidenceFraudulent: Sendable, Codable, Equatable, Hashable {
+    public var additionalDocumentation: Clearable<String>?
+    public var explanation: Clearable<String>?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(additionalDocumentation: Clearable<String>? = nil, explanation: Clearable<String>? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.additionalDocumentation = additionalDocumentation
+        self.explanation = explanation
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case additionalDocumentation = "additional_documentation"
+        case explanation
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.additionalDocumentation = try container.decodeIfPresent(Clearable<String>.self, forKey: .additionalDocumentation)
+        self.explanation = try container.decodeIfPresent(Clearable<String>.self, forKey: .explanation)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .additionalDocumentation, .explanation: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.additionalDocumentation, forKey: .additionalDocumentation)
+        try container.encodeIfPresent(self.explanation, forKey: .explanation)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct IssuingDisputeUpdateParamsEvidenceMerchandiseNotAsDescribed: Sendable, Codable, Equatable, Hashable {
+    public var additionalDocumentation: Clearable<String>?
+    public var explanation: Clearable<String>?
+    public var receivedAt: Clearable<StripeTimestamp>?
+    public var returnDescription: Clearable<String>?
+    public var returnStatus: DisputeCreateParamsEvidenceCanceledReturnStatus?
+    public var returnedAt: Clearable<StripeTimestamp>?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(additionalDocumentation: Clearable<String>? = nil, explanation: Clearable<String>? = nil, receivedAt: Clearable<StripeTimestamp>? = nil, returnDescription: Clearable<String>? = nil, returnStatus: DisputeCreateParamsEvidenceCanceledReturnStatus? = nil, returnedAt: Clearable<StripeTimestamp>? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.additionalDocumentation = additionalDocumentation
+        self.explanation = explanation
+        self.receivedAt = receivedAt
+        self.returnDescription = returnDescription
+        self.returnStatus = returnStatus
+        self.returnedAt = returnedAt
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case additionalDocumentation = "additional_documentation"
+        case explanation
+        case receivedAt = "received_at"
+        case returnDescription = "return_description"
+        case returnStatus = "return_status"
+        case returnedAt = "returned_at"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.additionalDocumentation = try container.decodeIfPresent(Clearable<String>.self, forKey: .additionalDocumentation)
+        self.explanation = try container.decodeIfPresent(Clearable<String>.self, forKey: .explanation)
+        self.receivedAt = try container.decodeIfPresent(Clearable<StripeTimestamp>.self, forKey: .receivedAt)
+        self.returnDescription = try container.decodeIfPresent(Clearable<String>.self, forKey: .returnDescription)
+        self.returnStatus = try container.decodeIfPresent(DisputeCreateParamsEvidenceCanceledReturnStatus.self, forKey: .returnStatus)
+        self.returnedAt = try container.decodeIfPresent(Clearable<StripeTimestamp>.self, forKey: .returnedAt)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .additionalDocumentation, .explanation, .receivedAt, .returnDescription, .returnStatus, .returnedAt: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.additionalDocumentation, forKey: .additionalDocumentation)
+        try container.encodeIfPresent(self.explanation, forKey: .explanation)
+        try container.encodeIfPresent(self.receivedAt, forKey: .receivedAt)
+        try container.encodeIfPresent(self.returnDescription, forKey: .returnDescription)
+        try container.encodeIfPresent(self.returnStatus, forKey: .returnStatus)
+        try container.encodeIfPresent(self.returnedAt, forKey: .returnedAt)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct IssuingDisputeUpdateParamsEvidenceNoValidAuthorization: Sendable, Codable, Equatable, Hashable {
+    public var additionalDocumentation: Clearable<String>?
+    public var explanation: Clearable<String>?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(additionalDocumentation: Clearable<String>? = nil, explanation: Clearable<String>? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.additionalDocumentation = additionalDocumentation
+        self.explanation = explanation
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case additionalDocumentation = "additional_documentation"
+        case explanation
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.additionalDocumentation = try container.decodeIfPresent(Clearable<String>.self, forKey: .additionalDocumentation)
+        self.explanation = try container.decodeIfPresent(Clearable<String>.self, forKey: .explanation)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .additionalDocumentation, .explanation: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.additionalDocumentation, forKey: .additionalDocumentation)
+        try container.encodeIfPresent(self.explanation, forKey: .explanation)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct IssuingDisputeUpdateParamsEvidenceNotReceived: Sendable, Codable, Equatable, Hashable {
+    public var additionalDocumentation: Clearable<String>?
+    public var expectedAt: Clearable<StripeTimestamp>?
+    public var explanation: Clearable<String>?
+    public var productDescription: Clearable<String>?
+    public var productType: DisputeCreateParamsEvidenceCanceledProductType?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(additionalDocumentation: Clearable<String>? = nil, expectedAt: Clearable<StripeTimestamp>? = nil, explanation: Clearable<String>? = nil, productDescription: Clearable<String>? = nil, productType: DisputeCreateParamsEvidenceCanceledProductType? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.additionalDocumentation = additionalDocumentation
+        self.expectedAt = expectedAt
+        self.explanation = explanation
+        self.productDescription = productDescription
+        self.productType = productType
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case additionalDocumentation = "additional_documentation"
+        case expectedAt = "expected_at"
+        case explanation
+        case productDescription = "product_description"
+        case productType = "product_type"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.additionalDocumentation = try container.decodeIfPresent(Clearable<String>.self, forKey: .additionalDocumentation)
+        self.expectedAt = try container.decodeIfPresent(Clearable<StripeTimestamp>.self, forKey: .expectedAt)
+        self.explanation = try container.decodeIfPresent(Clearable<String>.self, forKey: .explanation)
+        self.productDescription = try container.decodeIfPresent(Clearable<String>.self, forKey: .productDescription)
+        self.productType = try container.decodeIfPresent(DisputeCreateParamsEvidenceCanceledProductType.self, forKey: .productType)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .additionalDocumentation, .expectedAt, .explanation, .productDescription, .productType: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.additionalDocumentation, forKey: .additionalDocumentation)
+        try container.encodeIfPresent(self.expectedAt, forKey: .expectedAt)
+        try container.encodeIfPresent(self.explanation, forKey: .explanation)
+        try container.encodeIfPresent(self.productDescription, forKey: .productDescription)
+        try container.encodeIfPresent(self.productType, forKey: .productType)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct IssuingDisputeUpdateParamsEvidenceOther: Sendable, Codable, Equatable, Hashable {
+    public var additionalDocumentation: Clearable<String>?
+    public var explanation: Clearable<String>?
+    public var productDescription: Clearable<String>?
+    public var productType: DisputeCreateParamsEvidenceCanceledProductType?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(additionalDocumentation: Clearable<String>? = nil, explanation: Clearable<String>? = nil, productDescription: Clearable<String>? = nil, productType: DisputeCreateParamsEvidenceCanceledProductType? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.additionalDocumentation = additionalDocumentation
+        self.explanation = explanation
+        self.productDescription = productDescription
+        self.productType = productType
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case additionalDocumentation = "additional_documentation"
+        case explanation
+        case productDescription = "product_description"
+        case productType = "product_type"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.additionalDocumentation = try container.decodeIfPresent(Clearable<String>.self, forKey: .additionalDocumentation)
+        self.explanation = try container.decodeIfPresent(Clearable<String>.self, forKey: .explanation)
+        self.productDescription = try container.decodeIfPresent(Clearable<String>.self, forKey: .productDescription)
+        self.productType = try container.decodeIfPresent(DisputeCreateParamsEvidenceCanceledProductType.self, forKey: .productType)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .additionalDocumentation, .explanation, .productDescription, .productType: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.additionalDocumentation, forKey: .additionalDocumentation)
+        try container.encodeIfPresent(self.explanation, forKey: .explanation)
+        try container.encodeIfPresent(self.productDescription, forKey: .productDescription)
+        try container.encodeIfPresent(self.productType, forKey: .productType)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct IssuingDisputeUpdateParamsEvidenceServiceNotAsDescribed: Sendable, Codable, Equatable, Hashable {
+    public var additionalDocumentation: Clearable<String>?
+    public var canceledAt: Clearable<StripeTimestamp>?
+    public var cancellationReason: Clearable<String>?
+    public var explanation: Clearable<String>?
+    public var receivedAt: Clearable<StripeTimestamp>?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(additionalDocumentation: Clearable<String>? = nil, canceledAt: Clearable<StripeTimestamp>? = nil, cancellationReason: Clearable<String>? = nil, explanation: Clearable<String>? = nil, receivedAt: Clearable<StripeTimestamp>? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.additionalDocumentation = additionalDocumentation
+        self.canceledAt = canceledAt
+        self.cancellationReason = cancellationReason
+        self.explanation = explanation
+        self.receivedAt = receivedAt
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case additionalDocumentation = "additional_documentation"
+        case canceledAt = "canceled_at"
+        case cancellationReason = "cancellation_reason"
+        case explanation
+        case receivedAt = "received_at"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.additionalDocumentation = try container.decodeIfPresent(Clearable<String>.self, forKey: .additionalDocumentation)
+        self.canceledAt = try container.decodeIfPresent(Clearable<StripeTimestamp>.self, forKey: .canceledAt)
+        self.cancellationReason = try container.decodeIfPresent(Clearable<String>.self, forKey: .cancellationReason)
+        self.explanation = try container.decodeIfPresent(Clearable<String>.self, forKey: .explanation)
+        self.receivedAt = try container.decodeIfPresent(Clearable<StripeTimestamp>.self, forKey: .receivedAt)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .additionalDocumentation, .canceledAt, .cancellationReason, .explanation, .receivedAt: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.additionalDocumentation, forKey: .additionalDocumentation)
+        try container.encodeIfPresent(self.canceledAt, forKey: .canceledAt)
+        try container.encodeIfPresent(self.cancellationReason, forKey: .cancellationReason)
+        try container.encodeIfPresent(self.explanation, forKey: .explanation)
+        try container.encodeIfPresent(self.receivedAt, forKey: .receivedAt)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct IssuingDisputeUpdateParamsEvidence: Sendable, Codable, Equatable, Hashable {
+    public var canceled: Clearable<IssuingDisputeUpdateParamsEvidenceCanceled>?
+    public var duplicate: Clearable<IssuingDisputeUpdateParamsEvidenceDuplicate>?
+    public var fraudulent: Clearable<IssuingDisputeUpdateParamsEvidenceFraudulent>?
+    public var merchandiseNotAsDescribed: Clearable<IssuingDisputeUpdateParamsEvidenceMerchandiseNotAsDescribed>?
+    public var noValidAuthorization: Clearable<IssuingDisputeUpdateParamsEvidenceNoValidAuthorization>?
+    public var notReceived: Clearable<IssuingDisputeUpdateParamsEvidenceNotReceived>?
+    public var other: Clearable<IssuingDisputeUpdateParamsEvidenceOther>?
+    public var reason: IssuingDisputeEvidenceReason?
+    public var serviceNotAsDescribed: Clearable<IssuingDisputeUpdateParamsEvidenceServiceNotAsDescribed>?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(canceled: Clearable<IssuingDisputeUpdateParamsEvidenceCanceled>? = nil, duplicate: Clearable<IssuingDisputeUpdateParamsEvidenceDuplicate>? = nil, fraudulent: Clearable<IssuingDisputeUpdateParamsEvidenceFraudulent>? = nil, merchandiseNotAsDescribed: Clearable<IssuingDisputeUpdateParamsEvidenceMerchandiseNotAsDescribed>? = nil, noValidAuthorization: Clearable<IssuingDisputeUpdateParamsEvidenceNoValidAuthorization>? = nil, notReceived: Clearable<IssuingDisputeUpdateParamsEvidenceNotReceived>? = nil, other: Clearable<IssuingDisputeUpdateParamsEvidenceOther>? = nil, reason: IssuingDisputeEvidenceReason? = nil, serviceNotAsDescribed: Clearable<IssuingDisputeUpdateParamsEvidenceServiceNotAsDescribed>? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.canceled = canceled
+        self.duplicate = duplicate
+        self.fraudulent = fraudulent
+        self.merchandiseNotAsDescribed = merchandiseNotAsDescribed
+        self.noValidAuthorization = noValidAuthorization
+        self.notReceived = notReceived
+        self.other = other
+        self.reason = reason
+        self.serviceNotAsDescribed = serviceNotAsDescribed
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case canceled
+        case duplicate
+        case fraudulent
+        case merchandiseNotAsDescribed = "merchandise_not_as_described"
+        case noValidAuthorization = "no_valid_authorization"
+        case notReceived = "not_received"
+        case other
+        case reason
+        case serviceNotAsDescribed = "service_not_as_described"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.canceled = try container.decodeIfPresent(Clearable<IssuingDisputeUpdateParamsEvidenceCanceled>.self, forKey: .canceled)
+        self.duplicate = try container.decodeIfPresent(Clearable<IssuingDisputeUpdateParamsEvidenceDuplicate>.self, forKey: .duplicate)
+        self.fraudulent = try container.decodeIfPresent(Clearable<IssuingDisputeUpdateParamsEvidenceFraudulent>.self, forKey: .fraudulent)
+        self.merchandiseNotAsDescribed = try container.decodeIfPresent(Clearable<IssuingDisputeUpdateParamsEvidenceMerchandiseNotAsDescribed>.self, forKey: .merchandiseNotAsDescribed)
+        self.noValidAuthorization = try container.decodeIfPresent(Clearable<IssuingDisputeUpdateParamsEvidenceNoValidAuthorization>.self, forKey: .noValidAuthorization)
+        self.notReceived = try container.decodeIfPresent(Clearable<IssuingDisputeUpdateParamsEvidenceNotReceived>.self, forKey: .notReceived)
+        self.other = try container.decodeIfPresent(Clearable<IssuingDisputeUpdateParamsEvidenceOther>.self, forKey: .other)
+        self.reason = try container.decodeIfPresent(IssuingDisputeEvidenceReason.self, forKey: .reason)
+        self.serviceNotAsDescribed = try container.decodeIfPresent(Clearable<IssuingDisputeUpdateParamsEvidenceServiceNotAsDescribed>.self, forKey: .serviceNotAsDescribed)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .canceled, .duplicate, .fraudulent, .merchandiseNotAsDescribed, .noValidAuthorization, .notReceived, .other, .reason, .serviceNotAsDescribed: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.canceled, forKey: .canceled)
+        try container.encodeIfPresent(self.duplicate, forKey: .duplicate)
+        try container.encodeIfPresent(self.fraudulent, forKey: .fraudulent)
+        try container.encodeIfPresent(self.merchandiseNotAsDescribed, forKey: .merchandiseNotAsDescribed)
+        try container.encodeIfPresent(self.noValidAuthorization, forKey: .noValidAuthorization)
+        try container.encodeIfPresent(self.notReceived, forKey: .notReceived)
+        try container.encodeIfPresent(self.other, forKey: .other)
+        try container.encodeIfPresent(self.reason, forKey: .reason)
+        try container.encodeIfPresent(self.serviceNotAsDescribed, forKey: .serviceNotAsDescribed)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
 public struct PersonalizationDesignCreateParamsCarrierText: Sendable, Codable, Equatable, Hashable {
     public var footerBody: Clearable<String>?
     public var footerTitle: Clearable<String>?
@@ -16840,6 +17931,86 @@ public struct TransactionCreateUnlinkedRefundParamsPurchaseDetails: Sendable, Co
     }
 }
 
+public struct IssuingTransactionListParamsCreatedVariant1: Sendable, Codable, Equatable, Hashable {
+    public var gt: Int?
+    public var gte: Int?
+    public var lt: Int?
+    public var lte: Int?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(gt: Int? = nil, gte: Int? = nil, lt: Int? = nil, lte: Int? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.gt = gt
+        self.gte = gte
+        self.lt = lt
+        self.lte = lte
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case gt
+        case gte
+        case lt
+        case lte
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.gt = try container.decodeIfPresent(Int.self, forKey: .gt)
+        self.gte = try container.decodeIfPresent(Int.self, forKey: .gte)
+        self.lt = try container.decodeIfPresent(Int.self, forKey: .lt)
+        self.lte = try container.decodeIfPresent(Int.self, forKey: .lte)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .gt, .gte, .lt, .lte: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.gt, forKey: .gt)
+        try container.encodeIfPresent(self.gte, forKey: .gte)
+        try container.encodeIfPresent(self.lt, forKey: .lt)
+        try container.encodeIfPresent(self.lte, forKey: .lte)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+/// Polymorphic union; unknown shapes are kept in `other` (lossless).
+public enum IssuingTransactionListParamsCreated: Sendable, Codable, Equatable, Hashable {
+    case issuingTransactionListParamsCreatedVariant1(IssuingTransactionListParamsCreatedVariant1)
+    case int(Int)
+    case other(JSONValue)
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        if let value = try? container.decode(IssuingTransactionListParamsCreatedVariant1.self) { self = .issuingTransactionListParamsCreatedVariant1(value); return }
+        if let value = try? container.decode(Int.self) { self = .int(value); return }
+        self = .other(try container.decode(JSONValue.self))
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        switch self {
+        case .issuingTransactionListParamsCreatedVariant1(let value): try container.encode(value)
+        case .int(let value): try container.encode(value)
+        case .other(let value): try container.encode(value)
+        }
+    }
+}
+
 public struct AuthorizationCreateParams: Sendable, Encodable, Hashable {
     public var amount: Int?
     public var amountDetails: AuthorizationCreateParamsAmountDetails?
@@ -17420,6 +18591,55 @@ public struct CardRetrieveParams: Sendable, Encodable, Hashable {
     }
 }
 
+public struct CardUpdateParams: Sendable, Encodable, Hashable {
+    public var cancellationReason: CardUpdateParamsCancellationReason?
+    public var financialAccount: String?
+    public var metadata: Clearable<[String: String]>?
+    public var personalizationDesign: String?
+    public var pin: CardUpdateParamsPin?
+    public var shipping: CardUpdateParamsShipping?
+    public var spendingControls: CardUpdateParamsSpendingControls?
+    public var status: IssuingCardStatus?
+    public var card: String?
+
+    public init(cancellationReason: CardUpdateParamsCancellationReason? = nil, financialAccount: String? = nil, metadata: Clearable<[String: String]>? = nil, personalizationDesign: String? = nil, pin: CardUpdateParamsPin? = nil, shipping: CardUpdateParamsShipping? = nil, spendingControls: CardUpdateParamsSpendingControls? = nil, status: IssuingCardStatus? = nil, card: String? = nil) {
+        self.cancellationReason = cancellationReason
+        self.financialAccount = financialAccount
+        self.metadata = metadata
+        self.personalizationDesign = personalizationDesign
+        self.pin = pin
+        self.shipping = shipping
+        self.spendingControls = spendingControls
+        self.status = status
+        self.card = card
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case cancellationReason = "cancellation_reason"
+        case financialAccount = "financial_account"
+        case metadata
+        case personalizationDesign = "personalization_design"
+        case pin
+        case shipping
+        case spendingControls = "spending_controls"
+        case status
+        case card
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.cancellationReason, forKey: .cancellationReason)
+        try container.encodeIfPresent(self.financialAccount, forKey: .financialAccount)
+        try container.encodeIfPresent(self.metadata, forKey: .metadata)
+        try container.encodeIfPresent(self.personalizationDesign, forKey: .personalizationDesign)
+        try container.encodeIfPresent(self.pin, forKey: .pin)
+        try container.encodeIfPresent(self.shipping, forKey: .shipping)
+        try container.encodeIfPresent(self.spendingControls, forKey: .spendingControls)
+        try container.encodeIfPresent(self.status, forKey: .status)
+        try container.encodeIfPresent(self.card, forKey: .card)
+    }
+}
+
 public struct CardholderCreateParams: Sendable, Encodable, Hashable {
     public var billing: CardholderCreateParamsBilling
     public var company: CardholderCreateParamsCompany?
@@ -17641,6 +18861,89 @@ public struct DisputeSubmitParams: Sendable, Encodable, Hashable {
 
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.metadata, forKey: .metadata)
+        try container.encodeIfPresent(self.dispute, forKey: .dispute)
+    }
+}
+
+public struct IssuingDisputeListParams: Sendable, Encodable, Hashable, V1ListParams {
+    public var created: IssuingDisputeListParamsCreated?
+    public var endingBefore: String?
+    public var limit: Int?
+    public var startingAfter: String?
+    public var status: IssuingDisputeStatus?
+    public var transaction: String?
+
+    public init(created: IssuingDisputeListParamsCreated? = nil, endingBefore: String? = nil, limit: Int? = nil, startingAfter: String? = nil, status: IssuingDisputeStatus? = nil, transaction: String? = nil) {
+        self.created = created
+        self.endingBefore = endingBefore
+        self.limit = limit
+        self.startingAfter = startingAfter
+        self.status = status
+        self.transaction = transaction
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case created
+        case endingBefore = "ending_before"
+        case limit
+        case startingAfter = "starting_after"
+        case status
+        case transaction
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.created, forKey: .created)
+        try container.encodeIfPresent(self.endingBefore, forKey: .endingBefore)
+        try container.encodeIfPresent(self.limit, forKey: .limit)
+        try container.encodeIfPresent(self.startingAfter, forKey: .startingAfter)
+        try container.encodeIfPresent(self.status, forKey: .status)
+        try container.encodeIfPresent(self.transaction, forKey: .transaction)
+    }
+}
+
+public struct IssuingDisputeRetrieveParams: Sendable, Encodable, Hashable {
+    public var dispute: String?
+
+    public init(dispute: String? = nil) {
+        self.dispute = dispute
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case dispute
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.dispute, forKey: .dispute)
+    }
+}
+
+public struct IssuingDisputeUpdateParams: Sendable, Encodable, Hashable {
+    public var amount: Int?
+    public var evidence: IssuingDisputeUpdateParamsEvidence?
+    public var metadata: Clearable<[String: String]>?
+    public var dispute: String?
+
+    public init(amount: Int? = nil, evidence: IssuingDisputeUpdateParamsEvidence? = nil, metadata: Clearable<[String: String]>? = nil, dispute: String? = nil) {
+        self.amount = amount
+        self.evidence = evidence
+        self.metadata = metadata
+        self.dispute = dispute
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case amount
+        case evidence
+        case metadata
+        case dispute
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.amount, forKey: .amount)
+        try container.encodeIfPresent(self.evidence, forKey: .evidence)
         try container.encodeIfPresent(self.metadata, forKey: .metadata)
         try container.encodeIfPresent(self.dispute, forKey: .dispute)
     }
@@ -17936,7 +19239,7 @@ public struct TokenListParams: Sendable, Encodable, Hashable, V1ListParams {
     }
 }
 
-public struct TokenRetrieveParams: Sendable, Encodable, Hashable {
+public struct IssuingTokenRetrieveParams: Sendable, Encodable, Hashable {
     public var token: String?
 
     public init(token: String? = nil) {
@@ -18057,6 +19360,64 @@ public struct TransactionRefundParams: Sendable, Encodable, Hashable {
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encodeIfPresent(self.refundAmount, forKey: .refundAmount)
+        try container.encodeIfPresent(self.transaction, forKey: .transaction)
+    }
+}
+
+public struct IssuingTransactionListParams: Sendable, Encodable, Hashable, V1ListParams {
+    public var card: String?
+    public var cardholder: String?
+    public var created: IssuingTransactionListParamsCreated?
+    public var endingBefore: String?
+    public var limit: Int?
+    public var startingAfter: String?
+    public var type: IssuingTransactionType?
+
+    public init(card: String? = nil, cardholder: String? = nil, created: IssuingTransactionListParamsCreated? = nil, endingBefore: String? = nil, limit: Int? = nil, startingAfter: String? = nil, type: IssuingTransactionType? = nil) {
+        self.card = card
+        self.cardholder = cardholder
+        self.created = created
+        self.endingBefore = endingBefore
+        self.limit = limit
+        self.startingAfter = startingAfter
+        self.type = type
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case card
+        case cardholder
+        case created
+        case endingBefore = "ending_before"
+        case limit
+        case startingAfter = "starting_after"
+        case type
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.card, forKey: .card)
+        try container.encodeIfPresent(self.cardholder, forKey: .cardholder)
+        try container.encodeIfPresent(self.created, forKey: .created)
+        try container.encodeIfPresent(self.endingBefore, forKey: .endingBefore)
+        try container.encodeIfPresent(self.limit, forKey: .limit)
+        try container.encodeIfPresent(self.startingAfter, forKey: .startingAfter)
+        try container.encodeIfPresent(self.type, forKey: .type)
+    }
+}
+
+public struct IssuingTransactionRetrieveParams: Sendable, Encodable, Hashable {
+    public var transaction: String?
+
+    public init(transaction: String? = nil) {
+        self.transaction = transaction
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case transaction
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encodeIfPresent(self.transaction, forKey: .transaction)
     }
 }

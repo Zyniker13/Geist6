@@ -2,5 +2,5 @@ apiVersion: 2026-10-28.endive
 sourceRelease: v2600
 schemas: 2544
 operations: 660
-generatedTypes: 10768
+generatedTypes: 11416
 unknownSchemaShapes: 0

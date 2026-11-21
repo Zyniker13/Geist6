@@ -107,7 +107,7 @@ extension StripeClient: CustomersBackend {
             let result = try await listTaxIds(customer: customer)
             return result.data
         }
-        let result = try await listTaxIdsV1TaxIds()
+        let result = try await listTaxIds()
         return result.data
     }
 
@@ -115,7 +115,7 @@ extension StripeClient: CustomersBackend {
         if let customer {
             try await retrieveTaxId(customer: customer, id: id)
         } else {
-            try await retrieveTaxIdV1TaxIdsId(id: id)
+            try await retrieveTaxId(id: id)
         }
     }
 }

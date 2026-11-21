@@ -20938,7 +20938,7 @@ public struct AccountListParams: Sendable, Encodable, Hashable, V1ListParams {
     }
 }
 
-public struct AccountRetrieveParams: Sendable, Encodable, Hashable {
+public struct AccountsAccountRetrieveParams: Sendable, Encodable, Hashable {
     public var account: String?
 
     public init(account: String? = nil) {

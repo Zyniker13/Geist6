@@ -9,10 +9,11 @@ import StripeModels
 // Generated client methods for the v2 resources.
 extension StripeClient {
     /// create /v2/core/accounts (POST).
-    public func createAccount(expand: [String]? = nil, idempotencyKey: String? = nil) async throws -> V2CoreAccount {
+    public func createAccount(_ params: V2CoreAccountCreateParams, expand: [String]? = nil, idempotencyKey: String? = nil) async throws -> V2CoreAccount {
         try await self.request(
             method: "POST",
             path: "/v2/core/accounts",
+            params: params,
             expand: expand,
             idempotencyKey: idempotencyKey,
         )
@@ -30,38 +31,42 @@ extension StripeClient {
     }
 
     /// list /v2/core/accounts (GET).
-    public func listAccounts(expand: [String]? = nil) async throws -> AccountPage {
+    public func listV2CoreAccounts(_ params: V2CoreAccountListParams? = nil, expand: [String]? = nil) async throws -> AccountPage {
         try await self.request(
             method: "GET",
             path: "/v2/core/accounts",
+            params: params,
             expand: expand,
         )
     }
 
     /// retrieve /v2/core/accounts/{id} (GET).
-    public func retrieveAccount(id: String, expand: [String]? = nil) async throws -> V2CoreAccount {
+    public func retrieveAccount(id: String, _ params: V2CoreAccountRetrieveParams? = nil, expand: [String]? = nil) async throws -> V2CoreAccount {
         try await self.request(
             method: "GET",
             path: "/v2/core/accounts/\(Self.encodePathSegment(id))",
+            params: params,
             expand: expand,
         )
     }
 
     /// update /v2/core/accounts/{id} (POST).
-    public func updateAccount(id: String, expand: [String]? = nil, idempotencyKey: String? = nil) async throws -> V2CoreAccount {
+    public func updateAccount(id: String, _ params: V2CoreAccountUpdateParams, expand: [String]? = nil, idempotencyKey: String? = nil) async throws -> V2CoreAccount {
         try await self.request(
             method: "POST",
             path: "/v2/core/accounts/\(Self.encodePathSegment(id))",
+            params: params,
             expand: expand,
             idempotencyKey: idempotencyKey,
         )
     }
 
     /// create /v2/core/account_links (POST).
-    public func createAccountLink(expand: [String]? = nil, idempotencyKey: String? = nil) async throws -> V2CoreAccountLink {
+    public func createAccountLink(_ params: V2CoreAccountLinkCreateParams, expand: [String]? = nil, idempotencyKey: String? = nil) async throws -> V2CoreAccountLink {
         try await self.request(
             method: "POST",
             path: "/v2/core/account_links",
+            params: params,
             expand: expand,
             idempotencyKey: idempotencyKey,
         )
@@ -183,19 +188,21 @@ extension StripeClient {
     }
 
     /// list /v2/core/events (GET).
-    public func listEvents(expand: [String]? = nil) async throws -> EventPage {
+    public func listV2CoreEvents(_ params: V2CoreEventListParams? = nil, expand: [String]? = nil) async throws -> EventPage {
         try await self.request(
             method: "GET",
             path: "/v2/core/events",
+            params: params,
             expand: expand,
         )
     }
 
     /// retrieve /v2/core/events/{id} (GET).
-    public func retrieveEvent(id: String, expand: [String]? = nil) async throws -> V2CoreEvent {
+    public func retrieveEvent(id: String, _ params: V2CoreEventRetrieveParams? = nil, expand: [String]? = nil) async throws -> V2CoreEvent {
         try await self.request(
             method: "GET",
             path: "/v2/core/events/\(Self.encodePathSegment(id))",
+            params: params,
             expand: expand,
         )
     }
@@ -287,28 +294,31 @@ extension StripeClient {
     }
 
     /// list /v2/money_management/financial_accounts (GET).
-    public func listFinancialAccounts(expand: [String]? = nil) async throws -> FinancialAccountPage {
+    public func listV2MoneyManagementFinancialAccounts(_ params: V2MoneyManagementFinancialAccountListParams? = nil, expand: [String]? = nil) async throws -> FinancialAccountPage {
         try await self.request(
             method: "GET",
             path: "/v2/money_management/financial_accounts",
+            params: params,
             expand: expand,
         )
     }
 
     /// retrieve /v2/money_management/financial_accounts/{id} (GET).
-    public func retrieveFinancialAccount(id: String, expand: [String]? = nil) async throws -> V2MoneyManagementFinancialAccount {
+    public func retrieveFinancialAccount(id: String, _ params: V2MoneyManagementFinancialAccountRetrieveParams? = nil, expand: [String]? = nil) async throws -> V2MoneyManagementFinancialAccount {
         try await self.request(
             method: "GET",
             path: "/v2/money_management/financial_accounts/\(Self.encodePathSegment(id))",
+            params: params,
             expand: expand,
         )
     }
 
     /// update /v2/money_management/financial_accounts/{id} (POST).
-    public func updateFinancialAccount(id: String, expand: [String]? = nil, idempotencyKey: String? = nil) async throws -> V2MoneyManagementFinancialAccount {
+    public func updateFinancialAccount(id: String, _ params: V2MoneyManagementFinancialAccountUpdateParams, expand: [String]? = nil, idempotencyKey: String? = nil) async throws -> V2MoneyManagementFinancialAccount {
         try await self.request(
             method: "POST",
             path: "/v2/money_management/financial_accounts/\(Self.encodePathSegment(id))",
+            params: params,
             expand: expand,
             idempotencyKey: idempotencyKey,
         )
@@ -410,38 +420,42 @@ extension StripeClient {
     }
 
     /// create /v2/money_management/inbound_transfers (POST).
-    public func createInboundTransfer(expand: [String]? = nil, idempotencyKey: String? = nil) async throws -> V2MoneyManagementInboundTransfer {
+    public func createInboundTransfer(_ params: V2MoneyManagementInboundTransferCreateParams, expand: [String]? = nil, idempotencyKey: String? = nil) async throws -> V2MoneyManagementInboundTransfer {
         try await self.request(
             method: "POST",
             path: "/v2/money_management/inbound_transfers",
+            params: params,
             expand: expand,
             idempotencyKey: idempotencyKey,
         )
     }
 
     /// list /v2/money_management/inbound_transfers (GET).
-    public func listInboundTransfers(expand: [String]? = nil) async throws -> InboundTransferPage {
+    public func listV2MoneyManagementInboundTransfers(_ params: V2MoneyManagementInboundTransferListParams? = nil, expand: [String]? = nil) async throws -> InboundTransferPage {
         try await self.request(
             method: "GET",
             path: "/v2/money_management/inbound_transfers",
+            params: params,
             expand: expand,
         )
     }
 
     /// retrieve /v2/money_management/inbound_transfers/{id} (GET).
-    public func retrieveInboundTransfer(id: String, expand: [String]? = nil) async throws -> V2MoneyManagementInboundTransfer {
+    public func retrieveInboundTransfer(id: String, _ params: V2MoneyManagementInboundTransferRetrieveParams? = nil, expand: [String]? = nil) async throws -> V2MoneyManagementInboundTransfer {
         try await self.request(
             method: "GET",
             path: "/v2/money_management/inbound_transfers/\(Self.encodePathSegment(id))",
+            params: params,
             expand: expand,
         )
     }
 
     /// create /v2/billing/meter_events (POST).
-    public func createMeterEvent(expand: [String]? = nil, idempotencyKey: String? = nil) async throws -> V2BillingMeterEvent {
+    public func createMeterEvent(_ params: V2BillingMeterEventCreateParams, expand: [String]? = nil, idempotencyKey: String? = nil) async throws -> V2BillingMeterEvent {
         try await self.request(
             method: "POST",
             path: "/v2/billing/meter_events",
+            params: params,
             expand: expand,
             idempotencyKey: idempotencyKey,
         )
@@ -459,10 +473,11 @@ extension StripeClient {
     }
 
     /// create /v2/billing/meter_event_adjustments (POST).
-    public func createMeterEventAdjustment(expand: [String]? = nil, idempotencyKey: String? = nil) async throws -> V2BillingMeterEventAdjustment {
+    public func createMeterEventAdjustment(_ params: V2BillingMeterEventAdjustmentCreateParams, expand: [String]? = nil, idempotencyKey: String? = nil) async throws -> V2BillingMeterEventAdjustment {
         try await self.request(
             method: "POST",
             path: "/v2/billing/meter_event_adjustments",
+            params: params,
             expand: expand,
             idempotencyKey: idempotencyKey,
         )
@@ -479,39 +494,43 @@ extension StripeClient {
     }
 
     /// create /v2/money_management/outbound_payments (POST).
-    public func createOutboundPayment(expand: [String]? = nil, idempotencyKey: String? = nil) async throws -> V2MoneyManagementOutboundPayment {
+    public func createOutboundPayment(_ params: V2MoneyManagementOutboundPaymentCreateParams, expand: [String]? = nil, idempotencyKey: String? = nil) async throws -> V2MoneyManagementOutboundPayment {
         try await self.request(
             method: "POST",
             path: "/v2/money_management/outbound_payments",
+            params: params,
             expand: expand,
             idempotencyKey: idempotencyKey,
         )
     }
 
     /// custom /v2/money_management/outbound_payments/{id}/cancel (POST).
-    public func cancelOutboundPayment(id: String, expand: [String]? = nil, idempotencyKey: String? = nil) async throws -> V2MoneyManagementOutboundPayment {
+    public func cancelOutboundPayment(id: String, _ params: V2MoneyManagementOutboundPaymentCancelParams, expand: [String]? = nil, idempotencyKey: String? = nil) async throws -> V2MoneyManagementOutboundPayment {
         try await self.request(
             method: "POST",
             path: "/v2/money_management/outbound_payments/\(Self.encodePathSegment(id))/cancel",
+            params: params,
             expand: expand,
             idempotencyKey: idempotencyKey,
         )
     }
 
     /// list /v2/money_management/outbound_payments (GET).
-    public func listOutboundPayments(expand: [String]? = nil) async throws -> OutboundPaymentPage {
+    public func listV2MoneyManagementOutboundPayments(_ params: V2MoneyManagementOutboundPaymentListParams? = nil, expand: [String]? = nil) async throws -> OutboundPaymentPage {
         try await self.request(
             method: "GET",
             path: "/v2/money_management/outbound_payments",
+            params: params,
             expand: expand,
         )
     }
 
     /// retrieve /v2/money_management/outbound_payments/{id} (GET).
-    public func retrieveOutboundPayment(id: String, expand: [String]? = nil) async throws -> V2MoneyManagementOutboundPayment {
+    public func retrieveOutboundPayment(id: String, _ params: V2MoneyManagementOutboundPaymentRetrieveParams? = nil, expand: [String]? = nil) async throws -> V2MoneyManagementOutboundPayment {
         try await self.request(
             method: "GET",
             path: "/v2/money_management/outbound_payments/\(Self.encodePathSegment(id))",
+            params: params,
             expand: expand,
         )
     }
@@ -739,19 +758,21 @@ extension StripeClient {
     }
 
     /// list /v2/money_management/received_credits (GET).
-    public func listReceivedCredits(expand: [String]? = nil) async throws -> ReceivedCreditPage {
+    public func listV2MoneyManagementReceivedCredits(_ params: V2MoneyManagementReceivedCreditListParams? = nil, expand: [String]? = nil) async throws -> ReceivedCreditPage {
         try await self.request(
             method: "GET",
             path: "/v2/money_management/received_credits",
+            params: params,
             expand: expand,
         )
     }
 
     /// retrieve /v2/money_management/received_credits/{id} (GET).
-    public func retrieveReceivedCredit(id: String, expand: [String]? = nil) async throws -> V2MoneyManagementReceivedCredit {
+    public func retrieveReceivedCredit(id: String, _ params: V2MoneyManagementReceivedCreditRetrieveParams? = nil, expand: [String]? = nil) async throws -> V2MoneyManagementReceivedCredit {
         try await self.request(
             method: "GET",
             path: "/v2/money_management/received_credits/\(Self.encodePathSegment(id))",
+            params: params,
             expand: expand,
         )
     }
@@ -811,47 +832,52 @@ extension StripeClient {
     }
 
     /// list /v2/money_management/transactions (GET).
-    public func listTransactions(expand: [String]? = nil) async throws -> TransactionPage {
+    public func listV2MoneyManagementTransactions(_ params: V2MoneyManagementTransactionListParams? = nil, expand: [String]? = nil) async throws -> TransactionPage {
         try await self.request(
             method: "GET",
             path: "/v2/money_management/transactions",
+            params: params,
             expand: expand,
         )
     }
 
     /// retrieve /v2/money_management/transactions/{id} (GET).
-    public func retrieveTransaction(id: String, expand: [String]? = nil) async throws -> V2MoneyManagementTransaction {
+    public func retrieveTransaction(id: String, _ params: V2MoneyManagementTransactionRetrieveParams? = nil, expand: [String]? = nil) async throws -> V2MoneyManagementTransaction {
         try await self.request(
             method: "GET",
             path: "/v2/money_management/transactions/\(Self.encodePathSegment(id))",
+            params: params,
             expand: expand,
         )
     }
 
     /// update /v2/money_management/transactions/{id} (POST).
-    public func updateTransaction(id: String, expand: [String]? = nil, idempotencyKey: String? = nil) async throws -> V2MoneyManagementTransaction {
+    public func updateTransaction(id: String, _ params: V2MoneyManagementTransactionUpdateParams, expand: [String]? = nil, idempotencyKey: String? = nil) async throws -> V2MoneyManagementTransaction {
         try await self.request(
             method: "POST",
             path: "/v2/money_management/transactions/\(Self.encodePathSegment(id))",
+            params: params,
             expand: expand,
             idempotencyKey: idempotencyKey,
         )
     }
 
     /// list /v2/money_management/transaction_entries (GET).
-    public func listTransactionEntries(expand: [String]? = nil) async throws -> TransactionEntryPage {
+    public func listV2MoneyManagementTransactionEntries(_ params: V2MoneyManagementTransactionEntryListParams? = nil, expand: [String]? = nil) async throws -> TransactionEntryPage {
         try await self.request(
             method: "GET",
             path: "/v2/money_management/transaction_entries",
+            params: params,
             expand: expand,
         )
     }
 
     /// retrieve /v2/money_management/transaction_entries/{id} (GET).
-    public func retrieveTransactionEntry(id: String, expand: [String]? = nil) async throws -> V2MoneyManagementTransactionEntry {
+    public func retrieveTransactionEntry(id: String, _ params: V2MoneyManagementTransactionEntryRetrieveParams? = nil, expand: [String]? = nil) async throws -> V2MoneyManagementTransactionEntry {
         try await self.request(
             method: "GET",
             path: "/v2/money_management/transaction_entries/\(Self.encodePathSegment(id))",
+            params: params,
             expand: expand,
         )
     }

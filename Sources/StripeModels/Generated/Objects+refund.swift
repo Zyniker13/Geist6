@@ -1634,6 +1634,86 @@ public enum RefundCreateParamsOrigin: Sendable, Equatable, Hashable, LosslessEnu
     }
 }
 
+public struct RefundListParamsCreatedVariant1: Sendable, Codable, Equatable, Hashable {
+    public var gt: Int?
+    public var gte: Int?
+    public var lt: Int?
+    public var lte: Int?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(gt: Int? = nil, gte: Int? = nil, lt: Int? = nil, lte: Int? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.gt = gt
+        self.gte = gte
+        self.lt = lt
+        self.lte = lte
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case gt
+        case gte
+        case lt
+        case lte
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.gt = try container.decodeIfPresent(Int.self, forKey: .gt)
+        self.gte = try container.decodeIfPresent(Int.self, forKey: .gte)
+        self.lt = try container.decodeIfPresent(Int.self, forKey: .lt)
+        self.lte = try container.decodeIfPresent(Int.self, forKey: .lte)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .gt, .gte, .lt, .lte: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.gt, forKey: .gt)
+        try container.encodeIfPresent(self.gte, forKey: .gte)
+        try container.encodeIfPresent(self.lt, forKey: .lt)
+        try container.encodeIfPresent(self.lte, forKey: .lte)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+/// Polymorphic union; unknown shapes are kept in `other` (lossless).
+public enum RefundListParamsCreated: Sendable, Codable, Equatable, Hashable {
+    case refundListParamsCreatedVariant1(RefundListParamsCreatedVariant1)
+    case int(Int)
+    case other(JSONValue)
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        if let value = try? container.decode(RefundListParamsCreatedVariant1.self) { self = .refundListParamsCreatedVariant1(value); return }
+        if let value = try? container.decode(Int.self) { self = .int(value); return }
+        self = .other(try container.decode(JSONValue.self))
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        switch self {
+        case .refundListParamsCreatedVariant1(let value): try container.encode(value)
+        case .int(let value): try container.encode(value)
+        case .other(let value): try container.encode(value)
+        }
+    }
+}
+
 public struct RefundCreateParams: Sendable, Encodable, Hashable {
     public var amount: Int?
     public var charge: String?
@@ -1725,7 +1805,7 @@ public struct RefundExpireParams: Sendable, Encodable, Hashable {
     }
 }
 
-public struct RefundListParams: Sendable, Encodable, Hashable, V1ListParams {
+public struct ChargesRefundListParams: Sendable, Encodable, Hashable, V1ListParams {
     public var charge: String?
     public var endingBefore: String?
     public var limit: Int?
@@ -1754,7 +1834,44 @@ public struct RefundListParams: Sendable, Encodable, Hashable, V1ListParams {
     }
 }
 
-public struct RefundRetrieveParams: Sendable, Encodable, Hashable {
+public struct RefundListParams: Sendable, Encodable, Hashable, V1ListParams {
+    public var charge: String?
+    public var created: RefundListParamsCreated?
+    public var endingBefore: String?
+    public var limit: Int?
+    public var paymentIntent: String?
+    public var startingAfter: String?
+
+    public init(charge: String? = nil, created: RefundListParamsCreated? = nil, endingBefore: String? = nil, limit: Int? = nil, paymentIntent: String? = nil, startingAfter: String? = nil) {
+        self.charge = charge
+        self.created = created
+        self.endingBefore = endingBefore
+        self.limit = limit
+        self.paymentIntent = paymentIntent
+        self.startingAfter = startingAfter
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case charge
+        case created
+        case endingBefore = "ending_before"
+        case limit
+        case paymentIntent = "payment_intent"
+        case startingAfter = "starting_after"
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.charge, forKey: .charge)
+        try container.encodeIfPresent(self.created, forKey: .created)
+        try container.encodeIfPresent(self.endingBefore, forKey: .endingBefore)
+        try container.encodeIfPresent(self.limit, forKey: .limit)
+        try container.encodeIfPresent(self.paymentIntent, forKey: .paymentIntent)
+        try container.encodeIfPresent(self.startingAfter, forKey: .startingAfter)
+    }
+}
+
+public struct ChargesRefundRetrieveParams: Sendable, Encodable, Hashable {
     public var charge: String?
     public var refund: String?
 
@@ -1771,6 +1888,23 @@ public struct RefundRetrieveParams: Sendable, Encodable, Hashable {
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encodeIfPresent(self.charge, forKey: .charge)
+        try container.encodeIfPresent(self.refund, forKey: .refund)
+    }
+}
+
+public struct RefundRetrieveParams: Sendable, Encodable, Hashable {
+    public var refund: String?
+
+    public init(refund: String? = nil) {
+        self.refund = refund
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case refund
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encodeIfPresent(self.refund, forKey: .refund)
     }
 }

@@ -1137,6 +1137,86 @@ public struct ProductCreateParamsTaxDetails: Sendable, Codable, Equatable, Hasha
     }
 }
 
+public struct ProductListParamsCreatedVariant1: Sendable, Codable, Equatable, Hashable {
+    public var gt: Int?
+    public var gte: Int?
+    public var lt: Int?
+    public var lte: Int?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(gt: Int? = nil, gte: Int? = nil, lt: Int? = nil, lte: Int? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.gt = gt
+        self.gte = gte
+        self.lt = lt
+        self.lte = lte
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case gt
+        case gte
+        case lt
+        case lte
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.gt = try container.decodeIfPresent(Int.self, forKey: .gt)
+        self.gte = try container.decodeIfPresent(Int.self, forKey: .gte)
+        self.lt = try container.decodeIfPresent(Int.self, forKey: .lt)
+        self.lte = try container.decodeIfPresent(Int.self, forKey: .lte)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .gt, .gte, .lt, .lte: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.gt, forKey: .gt)
+        try container.encodeIfPresent(self.gte, forKey: .gte)
+        try container.encodeIfPresent(self.lt, forKey: .lt)
+        try container.encodeIfPresent(self.lte, forKey: .lte)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+/// Polymorphic union; unknown shapes are kept in `other` (lossless).
+public enum ProductListParamsCreated: Sendable, Codable, Equatable, Hashable {
+    case productListParamsCreatedVariant1(ProductListParamsCreatedVariant1)
+    case int(Int)
+    case other(JSONValue)
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        if let value = try? container.decode(ProductListParamsCreatedVariant1.self) { self = .productListParamsCreatedVariant1(value); return }
+        if let value = try? container.decode(Int.self) { self = .int(value); return }
+        self = .other(try container.decode(JSONValue.self))
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        switch self {
+        case .productListParamsCreatedVariant1(let value): try container.encode(value)
+        case .int(let value): try container.encode(value)
+        case .other(let value): try container.encode(value)
+        }
+    }
+}
+
 public struct ProductUpdateParamsMarketingFeaturesItem: Sendable, Codable, Equatable, Hashable {
     public var name: String
     /// Fields present in the payload that the pinned spec does not
@@ -1639,6 +1719,72 @@ public struct ProductSearchParams: Sendable, Encodable, Hashable {
 }
 
 public struct ProductDeleteParams: Sendable, Encodable, Hashable {
+    public var id: String?
+
+    public init(id: String? = nil) {
+        self.id = id
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case id
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.id, forKey: .id)
+    }
+}
+
+public struct ProductListParams: Sendable, Encodable, Hashable, V1ListParams {
+    public var active: Bool?
+    public var created: ProductListParamsCreated?
+    public var endingBefore: String?
+    public var ids: [String]?
+    public var limit: Int?
+    public var shippable: Bool?
+    public var startingAfter: String?
+    public var type: ProductType?
+    public var url: String?
+
+    public init(active: Bool? = nil, created: ProductListParamsCreated? = nil, endingBefore: String? = nil, ids: [String]? = nil, limit: Int? = nil, shippable: Bool? = nil, startingAfter: String? = nil, type: ProductType? = nil, url: String? = nil) {
+        self.active = active
+        self.created = created
+        self.endingBefore = endingBefore
+        self.ids = ids
+        self.limit = limit
+        self.shippable = shippable
+        self.startingAfter = startingAfter
+        self.type = type
+        self.url = url
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case active
+        case created
+        case endingBefore = "ending_before"
+        case ids
+        case limit
+        case shippable
+        case startingAfter = "starting_after"
+        case type
+        case url
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.active, forKey: .active)
+        try container.encodeIfPresent(self.created, forKey: .created)
+        try container.encodeIfPresent(self.endingBefore, forKey: .endingBefore)
+        try container.encodeIfPresent(self.ids, forKey: .ids)
+        try container.encodeIfPresent(self.limit, forKey: .limit)
+        try container.encodeIfPresent(self.shippable, forKey: .shippable)
+        try container.encodeIfPresent(self.startingAfter, forKey: .startingAfter)
+        try container.encodeIfPresent(self.type, forKey: .type)
+        try container.encodeIfPresent(self.url, forKey: .url)
+    }
+}
+
+public struct ProductRetrieveParams: Sendable, Encodable, Hashable {
     public var id: String?
 
     public init(id: String? = nil) {

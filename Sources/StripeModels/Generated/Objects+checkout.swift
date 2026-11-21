@@ -4837,6 +4837,7841 @@ public struct CheckoutWechatPayPaymentMethodOptions: Sendable, Codable, Equatabl
     }
 }
 
+public struct CheckoutSessionCreateParamsAdaptivePricing: Sendable, Codable, Equatable, Hashable {
+    public var enabled: Bool?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(enabled: Bool? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.enabled = enabled
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case enabled
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.enabled = try container.decodeIfPresent(Bool.self, forKey: .enabled)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .enabled: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.enabled, forKey: .enabled)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsAfterExpirationRecovery: Sendable, Codable, Equatable, Hashable {
+    public var allowPromotionCodes: Bool?
+    public var enabled: Bool
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(allowPromotionCodes: Bool? = nil, enabled: Bool, unknownFields: [String: JSONValue]? = nil) {
+        self.allowPromotionCodes = allowPromotionCodes
+        self.enabled = enabled
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case allowPromotionCodes = "allow_promotion_codes"
+        case enabled
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.allowPromotionCodes = try container.decodeIfPresent(Bool.self, forKey: .allowPromotionCodes)
+        self.enabled = try container.decode(Bool.self, forKey: .enabled)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .allowPromotionCodes, .enabled: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.allowPromotionCodes, forKey: .allowPromotionCodes)
+        try container.encodeIfPresent(self.enabled, forKey: .enabled)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsAfterExpiration: Sendable, Codable, Equatable, Hashable {
+    public var recovery: CheckoutSessionCreateParamsAfterExpirationRecovery?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(recovery: CheckoutSessionCreateParamsAfterExpirationRecovery? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.recovery = recovery
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case recovery
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.recovery = try container.decodeIfPresent(CheckoutSessionCreateParamsAfterExpirationRecovery.self, forKey: .recovery)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .recovery: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.recovery, forKey: .recovery)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+/// Lossless enum: values Stripe documents plus any value the API
+/// adds later, kept in `undocumented` instead of dropped.
+public enum CheckoutSessionCreateParamsAllowedPaymentMethodTypesItem: Sendable, Equatable, Hashable, LosslessEnum {
+    case acssDebit
+    case affirm
+    case afterpayClearpay
+    case alipay
+    case alma
+    case amazonPay
+    case auBecsDebit
+    case bacsDebit
+    case bancontact
+    case billie
+    case bizum
+    case blik
+    case boleto
+    case card
+    case cashapp
+    case crypto
+    case customerBalance
+    case eps
+    case fpx
+    case giropay
+    case grabpay
+    case ideal
+    case kakaoPay
+    case klarna
+    case konbini
+    case krCard
+    case link
+    case mbWay
+    case mobilepay
+    case multibanco
+    case naverPay
+    case nzBankAccount
+    case oxxo
+    case p24
+    case payByBank
+    case payco
+    case paynow
+    case paypal
+    case paypay
+    case payto
+    case pix
+    case promptpay
+    case revolutPay
+    case samsungPay
+    case satispay
+    case scalapay
+    case sepaDebit
+    case sequra
+    case sofort
+    case sunbit
+    case swish
+    case twint
+    case upi
+    case usBankAccount
+    case wechatPay
+    case zip
+    case undocumented(String)
+
+    public init(rawValue raw: String) {
+        switch raw {
+        case "acss_debit": self = .acssDebit
+        case "affirm": self = .affirm
+        case "afterpay_clearpay": self = .afterpayClearpay
+        case "alipay": self = .alipay
+        case "alma": self = .alma
+        case "amazon_pay": self = .amazonPay
+        case "au_becs_debit": self = .auBecsDebit
+        case "bacs_debit": self = .bacsDebit
+        case "bancontact": self = .bancontact
+        case "billie": self = .billie
+        case "bizum": self = .bizum
+        case "blik": self = .blik
+        case "boleto": self = .boleto
+        case "card": self = .card
+        case "cashapp": self = .cashapp
+        case "crypto": self = .crypto
+        case "customer_balance": self = .customerBalance
+        case "eps": self = .eps
+        case "fpx": self = .fpx
+        case "giropay": self = .giropay
+        case "grabpay": self = .grabpay
+        case "ideal": self = .ideal
+        case "kakao_pay": self = .kakaoPay
+        case "klarna": self = .klarna
+        case "konbini": self = .konbini
+        case "kr_card": self = .krCard
+        case "link": self = .link
+        case "mb_way": self = .mbWay
+        case "mobilepay": self = .mobilepay
+        case "multibanco": self = .multibanco
+        case "naver_pay": self = .naverPay
+        case "nz_bank_account": self = .nzBankAccount
+        case "oxxo": self = .oxxo
+        case "p24": self = .p24
+        case "pay_by_bank": self = .payByBank
+        case "payco": self = .payco
+        case "paynow": self = .paynow
+        case "paypal": self = .paypal
+        case "paypay": self = .paypay
+        case "payto": self = .payto
+        case "pix": self = .pix
+        case "promptpay": self = .promptpay
+        case "revolut_pay": self = .revolutPay
+        case "samsung_pay": self = .samsungPay
+        case "satispay": self = .satispay
+        case "scalapay": self = .scalapay
+        case "sepa_debit": self = .sepaDebit
+        case "sequra": self = .sequra
+        case "sofort": self = .sofort
+        case "sunbit": self = .sunbit
+        case "swish": self = .swish
+        case "twint": self = .twint
+        case "upi": self = .upi
+        case "us_bank_account": self = .usBankAccount
+        case "wechat_pay": self = .wechatPay
+        case "zip": self = .zip
+        default: self = .undocumented(raw)
+        }
+    }
+
+    public var rawValue: String {
+        switch self {
+        case .acssDebit: return "acss_debit"
+        case .affirm: return "affirm"
+        case .afterpayClearpay: return "afterpay_clearpay"
+        case .alipay: return "alipay"
+        case .alma: return "alma"
+        case .amazonPay: return "amazon_pay"
+        case .auBecsDebit: return "au_becs_debit"
+        case .bacsDebit: return "bacs_debit"
+        case .bancontact: return "bancontact"
+        case .billie: return "billie"
+        case .bizum: return "bizum"
+        case .blik: return "blik"
+        case .boleto: return "boleto"
+        case .card: return "card"
+        case .cashapp: return "cashapp"
+        case .crypto: return "crypto"
+        case .customerBalance: return "customer_balance"
+        case .eps: return "eps"
+        case .fpx: return "fpx"
+        case .giropay: return "giropay"
+        case .grabpay: return "grabpay"
+        case .ideal: return "ideal"
+        case .kakaoPay: return "kakao_pay"
+        case .klarna: return "klarna"
+        case .konbini: return "konbini"
+        case .krCard: return "kr_card"
+        case .link: return "link"
+        case .mbWay: return "mb_way"
+        case .mobilepay: return "mobilepay"
+        case .multibanco: return "multibanco"
+        case .naverPay: return "naver_pay"
+        case .nzBankAccount: return "nz_bank_account"
+        case .oxxo: return "oxxo"
+        case .p24: return "p24"
+        case .payByBank: return "pay_by_bank"
+        case .payco: return "payco"
+        case .paynow: return "paynow"
+        case .paypal: return "paypal"
+        case .paypay: return "paypay"
+        case .payto: return "payto"
+        case .pix: return "pix"
+        case .promptpay: return "promptpay"
+        case .revolutPay: return "revolut_pay"
+        case .samsungPay: return "samsung_pay"
+        case .satispay: return "satispay"
+        case .scalapay: return "scalapay"
+        case .sepaDebit: return "sepa_debit"
+        case .sequra: return "sequra"
+        case .sofort: return "sofort"
+        case .sunbit: return "sunbit"
+        case .swish: return "swish"
+        case .twint: return "twint"
+        case .upi: return "upi"
+        case .usBankAccount: return "us_bank_account"
+        case .wechatPay: return "wechat_pay"
+        case .zip: return "zip"
+        case .undocumented(let value): return value
+        }
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        self.init(rawValue: try container.decode(String.self))
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(rawValue)
+    }
+}
+
+public struct CheckoutSessionCreateParamsAutomaticTaxLiability: Sendable, Codable, Equatable, Hashable {
+    public var account: String?
+    public var type: ConnectAccountReferenceType
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(account: String? = nil, type: ConnectAccountReferenceType, unknownFields: [String: JSONValue]? = nil) {
+        self.account = account
+        self.type = type
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case account
+        case type
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.account = try container.decodeIfPresent(String.self, forKey: .account)
+        self.type = try container.decode(ConnectAccountReferenceType.self, forKey: .type)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .account, .type: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.account, forKey: .account)
+        try container.encodeIfPresent(self.type, forKey: .type)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsAutomaticTax: Sendable, Codable, Equatable, Hashable {
+    public var enabled: Bool
+    public var liability: CheckoutSessionCreateParamsAutomaticTaxLiability?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(enabled: Bool, liability: CheckoutSessionCreateParamsAutomaticTaxLiability? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.enabled = enabled
+        self.liability = liability
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case enabled
+        case liability
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.enabled = try container.decode(Bool.self, forKey: .enabled)
+        self.liability = try container.decodeIfPresent(CheckoutSessionCreateParamsAutomaticTaxLiability.self, forKey: .liability)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .enabled, .liability: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.enabled, forKey: .enabled)
+        try container.encodeIfPresent(self.liability, forKey: .liability)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+/// Lossless enum: values Stripe documents plus any value the API
+/// adds later, kept in `undocumented` instead of dropped.
+public enum CheckoutSessionCreateParamsBrandingSettingsBorderStyle: Sendable, Equatable, Hashable, LosslessEnum {
+    case anonymous
+    case pill
+    case rectangular
+    case rounded
+    case undocumented(String)
+
+    public init(rawValue raw: String) {
+        switch raw {
+        case "": self = .anonymous
+        case "pill": self = .pill
+        case "rectangular": self = .rectangular
+        case "rounded": self = .rounded
+        default: self = .undocumented(raw)
+        }
+    }
+
+    public var rawValue: String {
+        switch self {
+        case .anonymous: return ""
+        case .pill: return "pill"
+        case .rectangular: return "rectangular"
+        case .rounded: return "rounded"
+        case .undocumented(let value): return value
+        }
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        self.init(rawValue: try container.decode(String.self))
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(rawValue)
+    }
+}
+
+/// Lossless enum: values Stripe documents plus any value the API
+/// adds later, kept in `undocumented` instead of dropped.
+public enum CheckoutSessionCreateParamsBrandingSettingsFontFamily: Sendable, Equatable, Hashable, LosslessEnum {
+    case anonymous
+    case beVietnamPro
+    case bitter
+    case chakraPetch
+    case sDefault
+    case hahmlet
+    case inconsolata
+    case inter
+    case lato
+    case lora
+    case mPlus1Code
+    case montserrat
+    case notoSans
+    case notoSansJp
+    case notoSerif
+    case nunito
+    case openSans
+    case pridi
+    case ptSans
+    case ptSerif
+    case raleway
+    case roboto
+    case robotoSlab
+    case sourceSansPro
+    case titilliumWeb
+    case ubuntuMono
+    case zenMaruGothic
+    case undocumented(String)
+
+    public init(rawValue raw: String) {
+        switch raw {
+        case "": self = .anonymous
+        case "be_vietnam_pro": self = .beVietnamPro
+        case "bitter": self = .bitter
+        case "chakra_petch": self = .chakraPetch
+        case "default": self = .sDefault
+        case "hahmlet": self = .hahmlet
+        case "inconsolata": self = .inconsolata
+        case "inter": self = .inter
+        case "lato": self = .lato
+        case "lora": self = .lora
+        case "m_plus_1_code": self = .mPlus1Code
+        case "montserrat": self = .montserrat
+        case "noto_sans": self = .notoSans
+        case "noto_sans_jp": self = .notoSansJp
+        case "noto_serif": self = .notoSerif
+        case "nunito": self = .nunito
+        case "open_sans": self = .openSans
+        case "pridi": self = .pridi
+        case "pt_sans": self = .ptSans
+        case "pt_serif": self = .ptSerif
+        case "raleway": self = .raleway
+        case "roboto": self = .roboto
+        case "roboto_slab": self = .robotoSlab
+        case "source_sans_pro": self = .sourceSansPro
+        case "titillium_web": self = .titilliumWeb
+        case "ubuntu_mono": self = .ubuntuMono
+        case "zen_maru_gothic": self = .zenMaruGothic
+        default: self = .undocumented(raw)
+        }
+    }
+
+    public var rawValue: String {
+        switch self {
+        case .anonymous: return ""
+        case .beVietnamPro: return "be_vietnam_pro"
+        case .bitter: return "bitter"
+        case .chakraPetch: return "chakra_petch"
+        case .sDefault: return "default"
+        case .hahmlet: return "hahmlet"
+        case .inconsolata: return "inconsolata"
+        case .inter: return "inter"
+        case .lato: return "lato"
+        case .lora: return "lora"
+        case .mPlus1Code: return "m_plus_1_code"
+        case .montserrat: return "montserrat"
+        case .notoSans: return "noto_sans"
+        case .notoSansJp: return "noto_sans_jp"
+        case .notoSerif: return "noto_serif"
+        case .nunito: return "nunito"
+        case .openSans: return "open_sans"
+        case .pridi: return "pridi"
+        case .ptSans: return "pt_sans"
+        case .ptSerif: return "pt_serif"
+        case .raleway: return "raleway"
+        case .roboto: return "roboto"
+        case .robotoSlab: return "roboto_slab"
+        case .sourceSansPro: return "source_sans_pro"
+        case .titilliumWeb: return "titillium_web"
+        case .ubuntuMono: return "ubuntu_mono"
+        case .zenMaruGothic: return "zen_maru_gothic"
+        case .undocumented(let value): return value
+        }
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        self.init(rawValue: try container.decode(String.self))
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(rawValue)
+    }
+}
+
+public struct CheckoutSessionCreateParamsBrandingSettingsIcon: Sendable, Codable, Equatable, Hashable {
+    public var file: String?
+    public var type: PaymentPagesCheckoutSessionBrandingSettingsIconType
+    public var url: String?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(file: String? = nil, type: PaymentPagesCheckoutSessionBrandingSettingsIconType, url: String? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.file = file
+        self.type = type
+        self.url = url
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case file
+        case type
+        case url
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.file = try container.decodeIfPresent(String.self, forKey: .file)
+        self.type = try container.decode(PaymentPagesCheckoutSessionBrandingSettingsIconType.self, forKey: .type)
+        self.url = try container.decodeIfPresent(String.self, forKey: .url)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .file, .type, .url: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.file, forKey: .file)
+        try container.encodeIfPresent(self.type, forKey: .type)
+        try container.encodeIfPresent(self.url, forKey: .url)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsBrandingSettingsLogo: Sendable, Codable, Equatable, Hashable {
+    public var file: String?
+    public var type: PaymentPagesCheckoutSessionBrandingSettingsIconType
+    public var url: String?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(file: String? = nil, type: PaymentPagesCheckoutSessionBrandingSettingsIconType, url: String? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.file = file
+        self.type = type
+        self.url = url
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case file
+        case type
+        case url
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.file = try container.decodeIfPresent(String.self, forKey: .file)
+        self.type = try container.decode(PaymentPagesCheckoutSessionBrandingSettingsIconType.self, forKey: .type)
+        self.url = try container.decodeIfPresent(String.self, forKey: .url)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .file, .type, .url: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.file, forKey: .file)
+        try container.encodeIfPresent(self.type, forKey: .type)
+        try container.encodeIfPresent(self.url, forKey: .url)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsBrandingSettings: Sendable, Codable, Equatable, Hashable {
+    public var backgroundColor: Clearable<String>?
+    public var borderStyle: CheckoutSessionCreateParamsBrandingSettingsBorderStyle?
+    public var buttonColor: Clearable<String>?
+    public var displayName: String?
+    public var fontFamily: CheckoutSessionCreateParamsBrandingSettingsFontFamily?
+    public var icon: CheckoutSessionCreateParamsBrandingSettingsIcon?
+    public var logo: CheckoutSessionCreateParamsBrandingSettingsLogo?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(backgroundColor: Clearable<String>? = nil, borderStyle: CheckoutSessionCreateParamsBrandingSettingsBorderStyle? = nil, buttonColor: Clearable<String>? = nil, displayName: String? = nil, fontFamily: CheckoutSessionCreateParamsBrandingSettingsFontFamily? = nil, icon: CheckoutSessionCreateParamsBrandingSettingsIcon? = nil, logo: CheckoutSessionCreateParamsBrandingSettingsLogo? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.backgroundColor = backgroundColor
+        self.borderStyle = borderStyle
+        self.buttonColor = buttonColor
+        self.displayName = displayName
+        self.fontFamily = fontFamily
+        self.icon = icon
+        self.logo = logo
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case backgroundColor = "background_color"
+        case borderStyle = "border_style"
+        case buttonColor = "button_color"
+        case displayName = "display_name"
+        case fontFamily = "font_family"
+        case icon
+        case logo
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.backgroundColor = try container.decodeIfPresent(Clearable<String>.self, forKey: .backgroundColor)
+        self.borderStyle = try container.decodeIfPresent(CheckoutSessionCreateParamsBrandingSettingsBorderStyle.self, forKey: .borderStyle)
+        self.buttonColor = try container.decodeIfPresent(Clearable<String>.self, forKey: .buttonColor)
+        self.displayName = try container.decodeIfPresent(String.self, forKey: .displayName)
+        self.fontFamily = try container.decodeIfPresent(CheckoutSessionCreateParamsBrandingSettingsFontFamily.self, forKey: .fontFamily)
+        self.icon = try container.decodeIfPresent(CheckoutSessionCreateParamsBrandingSettingsIcon.self, forKey: .icon)
+        self.logo = try container.decodeIfPresent(CheckoutSessionCreateParamsBrandingSettingsLogo.self, forKey: .logo)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .backgroundColor, .borderStyle, .buttonColor, .displayName, .fontFamily, .icon, .logo: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.backgroundColor, forKey: .backgroundColor)
+        try container.encodeIfPresent(self.borderStyle, forKey: .borderStyle)
+        try container.encodeIfPresent(self.buttonColor, forKey: .buttonColor)
+        try container.encodeIfPresent(self.displayName, forKey: .displayName)
+        try container.encodeIfPresent(self.fontFamily, forKey: .fontFamily)
+        try container.encodeIfPresent(self.icon, forKey: .icon)
+        try container.encodeIfPresent(self.logo, forKey: .logo)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsConsentCollectionPaymentMethodReuseAgreement: Sendable, Codable, Equatable, Hashable {
+    public var position: PaymentLinksResourcePaymentMethodReuseAgreementPosition
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(position: PaymentLinksResourcePaymentMethodReuseAgreementPosition, unknownFields: [String: JSONValue]? = nil) {
+        self.position = position
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case position
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.position = try container.decode(PaymentLinksResourcePaymentMethodReuseAgreementPosition.self, forKey: .position)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .position: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.position, forKey: .position)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsConsentCollection: Sendable, Codable, Equatable, Hashable {
+    public var paymentMethodReuseAgreement: CheckoutSessionCreateParamsConsentCollectionPaymentMethodReuseAgreement?
+    public var promotions: PaymentLinksResourceConsentCollectionPromotions?
+    public var termsOfService: PaymentLinksResourceConsentCollectionTermsOfService?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(paymentMethodReuseAgreement: CheckoutSessionCreateParamsConsentCollectionPaymentMethodReuseAgreement? = nil, promotions: PaymentLinksResourceConsentCollectionPromotions? = nil, termsOfService: PaymentLinksResourceConsentCollectionTermsOfService? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.paymentMethodReuseAgreement = paymentMethodReuseAgreement
+        self.promotions = promotions
+        self.termsOfService = termsOfService
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case paymentMethodReuseAgreement = "payment_method_reuse_agreement"
+        case promotions
+        case termsOfService = "terms_of_service"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.paymentMethodReuseAgreement = try container.decodeIfPresent(CheckoutSessionCreateParamsConsentCollectionPaymentMethodReuseAgreement.self, forKey: .paymentMethodReuseAgreement)
+        self.promotions = try container.decodeIfPresent(PaymentLinksResourceConsentCollectionPromotions.self, forKey: .promotions)
+        self.termsOfService = try container.decodeIfPresent(PaymentLinksResourceConsentCollectionTermsOfService.self, forKey: .termsOfService)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .paymentMethodReuseAgreement, .promotions, .termsOfService: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.paymentMethodReuseAgreement, forKey: .paymentMethodReuseAgreement)
+        try container.encodeIfPresent(self.promotions, forKey: .promotions)
+        try container.encodeIfPresent(self.termsOfService, forKey: .termsOfService)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsCustomFieldsItemDropdownOptionsItem: Sendable, Codable, Equatable, Hashable {
+    public var label: String
+    public var value: String
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(label: String, value: String, unknownFields: [String: JSONValue]? = nil) {
+        self.label = label
+        self.value = value
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case label
+        case value
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.label = try container.decode(String.self, forKey: .label)
+        self.value = try container.decode(String.self, forKey: .value)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .label, .value: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.label, forKey: .label)
+        try container.encodeIfPresent(self.value, forKey: .value)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsCustomFieldsItemDropdown: Sendable, Codable, Equatable, Hashable {
+    public var defaultValue: String?
+    public var options: [CheckoutSessionCreateParamsCustomFieldsItemDropdownOptionsItem]
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(defaultValue: String? = nil, options: [CheckoutSessionCreateParamsCustomFieldsItemDropdownOptionsItem], unknownFields: [String: JSONValue]? = nil) {
+        self.defaultValue = defaultValue
+        self.options = options
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case defaultValue = "default_value"
+        case options
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.defaultValue = try container.decodeIfPresent(String.self, forKey: .defaultValue)
+        self.options = try container.decode([CheckoutSessionCreateParamsCustomFieldsItemDropdownOptionsItem].self, forKey: .options)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .defaultValue, .options: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.defaultValue, forKey: .defaultValue)
+        try container.encodeIfPresent(self.options, forKey: .options)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsCustomFieldsItemLabel: Sendable, Codable, Equatable, Hashable {
+    public var custom: String
+    public var type: PaymentLinksResourceCustomFieldsLabelType
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(custom: String, type: PaymentLinksResourceCustomFieldsLabelType, unknownFields: [String: JSONValue]? = nil) {
+        self.custom = custom
+        self.type = type
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case custom
+        case type
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.custom = try container.decode(String.self, forKey: .custom)
+        self.type = try container.decode(PaymentLinksResourceCustomFieldsLabelType.self, forKey: .type)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .custom, .type: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.custom, forKey: .custom)
+        try container.encodeIfPresent(self.type, forKey: .type)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsCustomFieldsItemNumeric: Sendable, Codable, Equatable, Hashable {
+    public var defaultValue: String?
+    public var maximumLength: Int?
+    public var minimumLength: Int?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(defaultValue: String? = nil, maximumLength: Int? = nil, minimumLength: Int? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.defaultValue = defaultValue
+        self.maximumLength = maximumLength
+        self.minimumLength = minimumLength
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case defaultValue = "default_value"
+        case maximumLength = "maximum_length"
+        case minimumLength = "minimum_length"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.defaultValue = try container.decodeIfPresent(String.self, forKey: .defaultValue)
+        self.maximumLength = try container.decodeIfPresent(Int.self, forKey: .maximumLength)
+        self.minimumLength = try container.decodeIfPresent(Int.self, forKey: .minimumLength)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .defaultValue, .maximumLength, .minimumLength: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.defaultValue, forKey: .defaultValue)
+        try container.encodeIfPresent(self.maximumLength, forKey: .maximumLength)
+        try container.encodeIfPresent(self.minimumLength, forKey: .minimumLength)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsCustomFieldsItemText: Sendable, Codable, Equatable, Hashable {
+    public var defaultValue: String?
+    public var maximumLength: Int?
+    public var minimumLength: Int?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(defaultValue: String? = nil, maximumLength: Int? = nil, minimumLength: Int? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.defaultValue = defaultValue
+        self.maximumLength = maximumLength
+        self.minimumLength = minimumLength
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case defaultValue = "default_value"
+        case maximumLength = "maximum_length"
+        case minimumLength = "minimum_length"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.defaultValue = try container.decodeIfPresent(String.self, forKey: .defaultValue)
+        self.maximumLength = try container.decodeIfPresent(Int.self, forKey: .maximumLength)
+        self.minimumLength = try container.decodeIfPresent(Int.self, forKey: .minimumLength)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .defaultValue, .maximumLength, .minimumLength: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.defaultValue, forKey: .defaultValue)
+        try container.encodeIfPresent(self.maximumLength, forKey: .maximumLength)
+        try container.encodeIfPresent(self.minimumLength, forKey: .minimumLength)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsCustomFieldsItem: Sendable, Codable, Equatable, Hashable {
+    public var dropdown: CheckoutSessionCreateParamsCustomFieldsItemDropdown?
+    public var key: String
+    public var label: CheckoutSessionCreateParamsCustomFieldsItemLabel
+    public var numeric: CheckoutSessionCreateParamsCustomFieldsItemNumeric?
+    public var optional: Bool?
+    public var text: CheckoutSessionCreateParamsCustomFieldsItemText?
+    public var type: PaymentLinksResourceCustomFieldsType
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(dropdown: CheckoutSessionCreateParamsCustomFieldsItemDropdown? = nil, key: String, label: CheckoutSessionCreateParamsCustomFieldsItemLabel, numeric: CheckoutSessionCreateParamsCustomFieldsItemNumeric? = nil, optional: Bool? = nil, text: CheckoutSessionCreateParamsCustomFieldsItemText? = nil, type: PaymentLinksResourceCustomFieldsType, unknownFields: [String: JSONValue]? = nil) {
+        self.dropdown = dropdown
+        self.key = key
+        self.label = label
+        self.numeric = numeric
+        self.optional = optional
+        self.text = text
+        self.type = type
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case dropdown
+        case key
+        case label
+        case numeric
+        case optional
+        case text
+        case type
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.dropdown = try container.decodeIfPresent(CheckoutSessionCreateParamsCustomFieldsItemDropdown.self, forKey: .dropdown)
+        self.key = try container.decode(String.self, forKey: .key)
+        self.label = try container.decode(CheckoutSessionCreateParamsCustomFieldsItemLabel.self, forKey: .label)
+        self.numeric = try container.decodeIfPresent(CheckoutSessionCreateParamsCustomFieldsItemNumeric.self, forKey: .numeric)
+        self.optional = try container.decodeIfPresent(Bool.self, forKey: .optional)
+        self.text = try container.decodeIfPresent(CheckoutSessionCreateParamsCustomFieldsItemText.self, forKey: .text)
+        self.type = try container.decode(PaymentLinksResourceCustomFieldsType.self, forKey: .type)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .dropdown, .key, .label, .numeric, .optional, .text, .type: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.dropdown, forKey: .dropdown)
+        try container.encodeIfPresent(self.key, forKey: .key)
+        try container.encodeIfPresent(self.label, forKey: .label)
+        try container.encodeIfPresent(self.numeric, forKey: .numeric)
+        try container.encodeIfPresent(self.optional, forKey: .optional)
+        try container.encodeIfPresent(self.text, forKey: .text)
+        try container.encodeIfPresent(self.type, forKey: .type)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsCustomTextAfterSubmit: Sendable, Codable, Equatable, Hashable {
+    public var message: String
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(message: String, unknownFields: [String: JSONValue]? = nil) {
+        self.message = message
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case message
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.message = try container.decode(String.self, forKey: .message)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .message: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.message, forKey: .message)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsCustomTextShippingAddress: Sendable, Codable, Equatable, Hashable {
+    public var message: String
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(message: String, unknownFields: [String: JSONValue]? = nil) {
+        self.message = message
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case message
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.message = try container.decode(String.self, forKey: .message)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .message: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.message, forKey: .message)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsCustomTextSubmit: Sendable, Codable, Equatable, Hashable {
+    public var message: String
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(message: String, unknownFields: [String: JSONValue]? = nil) {
+        self.message = message
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case message
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.message = try container.decode(String.self, forKey: .message)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .message: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.message, forKey: .message)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsCustomTextTermsOfServiceAcceptance: Sendable, Codable, Equatable, Hashable {
+    public var message: String
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(message: String, unknownFields: [String: JSONValue]? = nil) {
+        self.message = message
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case message
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.message = try container.decode(String.self, forKey: .message)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .message: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.message, forKey: .message)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsCustomText: Sendable, Codable, Equatable, Hashable {
+    public var afterSubmit: Clearable<CheckoutSessionCreateParamsCustomTextAfterSubmit>?
+    public var shippingAddress: Clearable<CheckoutSessionCreateParamsCustomTextShippingAddress>?
+    public var submit: Clearable<CheckoutSessionCreateParamsCustomTextSubmit>?
+    public var termsOfServiceAcceptance: Clearable<CheckoutSessionCreateParamsCustomTextTermsOfServiceAcceptance>?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(afterSubmit: Clearable<CheckoutSessionCreateParamsCustomTextAfterSubmit>? = nil, shippingAddress: Clearable<CheckoutSessionCreateParamsCustomTextShippingAddress>? = nil, submit: Clearable<CheckoutSessionCreateParamsCustomTextSubmit>? = nil, termsOfServiceAcceptance: Clearable<CheckoutSessionCreateParamsCustomTextTermsOfServiceAcceptance>? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.afterSubmit = afterSubmit
+        self.shippingAddress = shippingAddress
+        self.submit = submit
+        self.termsOfServiceAcceptance = termsOfServiceAcceptance
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case afterSubmit = "after_submit"
+        case shippingAddress = "shipping_address"
+        case submit
+        case termsOfServiceAcceptance = "terms_of_service_acceptance"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.afterSubmit = try container.decodeIfPresent(Clearable<CheckoutSessionCreateParamsCustomTextAfterSubmit>.self, forKey: .afterSubmit)
+        self.shippingAddress = try container.decodeIfPresent(Clearable<CheckoutSessionCreateParamsCustomTextShippingAddress>.self, forKey: .shippingAddress)
+        self.submit = try container.decodeIfPresent(Clearable<CheckoutSessionCreateParamsCustomTextSubmit>.self, forKey: .submit)
+        self.termsOfServiceAcceptance = try container.decodeIfPresent(Clearable<CheckoutSessionCreateParamsCustomTextTermsOfServiceAcceptance>.self, forKey: .termsOfServiceAcceptance)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .afterSubmit, .shippingAddress, .submit, .termsOfServiceAcceptance: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.afterSubmit, forKey: .afterSubmit)
+        try container.encodeIfPresent(self.shippingAddress, forKey: .shippingAddress)
+        try container.encodeIfPresent(self.submit, forKey: .submit)
+        try container.encodeIfPresent(self.termsOfServiceAcceptance, forKey: .termsOfServiceAcceptance)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsCustomerUpdate: Sendable, Codable, Equatable, Hashable {
+    public var address: CheckoutLinkWalletOptionsDisplay?
+    public var name: CheckoutLinkWalletOptionsDisplay?
+    public var shipping: CheckoutLinkWalletOptionsDisplay?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(address: CheckoutLinkWalletOptionsDisplay? = nil, name: CheckoutLinkWalletOptionsDisplay? = nil, shipping: CheckoutLinkWalletOptionsDisplay? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.address = address
+        self.name = name
+        self.shipping = shipping
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case address
+        case name
+        case shipping
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.address = try container.decodeIfPresent(CheckoutLinkWalletOptionsDisplay.self, forKey: .address)
+        self.name = try container.decodeIfPresent(CheckoutLinkWalletOptionsDisplay.self, forKey: .name)
+        self.shipping = try container.decodeIfPresent(CheckoutLinkWalletOptionsDisplay.self, forKey: .shipping)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .address, .name, .shipping: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.address, forKey: .address)
+        try container.encodeIfPresent(self.name, forKey: .name)
+        try container.encodeIfPresent(self.shipping, forKey: .shipping)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsDiscountsItem: Sendable, Codable, Equatable, Hashable {
+    public var coupon: String?
+    public var promotionCode: String?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(coupon: String? = nil, promotionCode: String? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.coupon = coupon
+        self.promotionCode = promotionCode
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case coupon
+        case promotionCode = "promotion_code"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.coupon = try container.decodeIfPresent(String.self, forKey: .coupon)
+        self.promotionCode = try container.decodeIfPresent(String.self, forKey: .promotionCode)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .coupon, .promotionCode: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.coupon, forKey: .coupon)
+        try container.encodeIfPresent(self.promotionCode, forKey: .promotionCode)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsInvoiceCreationInvoiceDataCustomFieldsItem: Sendable, Codable, Equatable, Hashable {
+    public var name: String
+    public var value: String
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(name: String, value: String, unknownFields: [String: JSONValue]? = nil) {
+        self.name = name
+        self.value = value
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case name
+        case value
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.name = try container.decode(String.self, forKey: .name)
+        self.value = try container.decode(String.self, forKey: .value)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .name, .value: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.name, forKey: .name)
+        try container.encodeIfPresent(self.value, forKey: .value)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsInvoiceCreationInvoiceDataIssuer: Sendable, Codable, Equatable, Hashable {
+    public var account: String?
+    public var type: ConnectAccountReferenceType
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(account: String? = nil, type: ConnectAccountReferenceType, unknownFields: [String: JSONValue]? = nil) {
+        self.account = account
+        self.type = type
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case account
+        case type
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.account = try container.decodeIfPresent(String.self, forKey: .account)
+        self.type = try container.decode(ConnectAccountReferenceType.self, forKey: .type)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .account, .type: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.account, forKey: .account)
+        try container.encodeIfPresent(self.type, forKey: .type)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+/// Lossless enum: values Stripe documents plus any value the API
+/// adds later, kept in `undocumented` instead of dropped.
+public enum CheckoutSessionCreateParamsInvoiceCreationInvoiceDataRenderingOptionsAmountTaxDisplay: Sendable, Equatable, Hashable, LosslessEnum {
+    case anonymous
+    case excludeTax
+    case includeInclusiveTax
+    case undocumented(String)
+
+    public init(rawValue raw: String) {
+        switch raw {
+        case "": self = .anonymous
+        case "exclude_tax": self = .excludeTax
+        case "include_inclusive_tax": self = .includeInclusiveTax
+        default: self = .undocumented(raw)
+        }
+    }
+
+    public var rawValue: String {
+        switch self {
+        case .anonymous: return ""
+        case .excludeTax: return "exclude_tax"
+        case .includeInclusiveTax: return "include_inclusive_tax"
+        case .undocumented(let value): return value
+        }
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        self.init(rawValue: try container.decode(String.self))
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(rawValue)
+    }
+}
+
+public struct CheckoutSessionCreateParamsInvoiceCreationInvoiceDataRenderingOptions: Sendable, Codable, Equatable, Hashable {
+    public var amountTaxDisplay: CheckoutSessionCreateParamsInvoiceCreationInvoiceDataRenderingOptionsAmountTaxDisplay?
+    public var template: String?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(amountTaxDisplay: CheckoutSessionCreateParamsInvoiceCreationInvoiceDataRenderingOptionsAmountTaxDisplay? = nil, template: String? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.amountTaxDisplay = amountTaxDisplay
+        self.template = template
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case amountTaxDisplay = "amount_tax_display"
+        case template
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.amountTaxDisplay = try container.decodeIfPresent(CheckoutSessionCreateParamsInvoiceCreationInvoiceDataRenderingOptionsAmountTaxDisplay.self, forKey: .amountTaxDisplay)
+        self.template = try container.decodeIfPresent(String.self, forKey: .template)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .amountTaxDisplay, .template: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.amountTaxDisplay, forKey: .amountTaxDisplay)
+        try container.encodeIfPresent(self.template, forKey: .template)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsInvoiceCreationInvoiceData: Sendable, Codable, Equatable, Hashable {
+    public var accountTaxIds: Clearable<[String]>?
+    public var customFields: Clearable<[CheckoutSessionCreateParamsInvoiceCreationInvoiceDataCustomFieldsItem]>?
+    public var description: String?
+    public var footer: String?
+    public var issuer: CheckoutSessionCreateParamsInvoiceCreationInvoiceDataIssuer?
+    public var metadata: [String: String]?
+    public var renderingOptions: Clearable<CheckoutSessionCreateParamsInvoiceCreationInvoiceDataRenderingOptions>?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(accountTaxIds: Clearable<[String]>? = nil, customFields: Clearable<[CheckoutSessionCreateParamsInvoiceCreationInvoiceDataCustomFieldsItem]>? = nil, description: String? = nil, footer: String? = nil, issuer: CheckoutSessionCreateParamsInvoiceCreationInvoiceDataIssuer? = nil, metadata: [String: String]? = nil, renderingOptions: Clearable<CheckoutSessionCreateParamsInvoiceCreationInvoiceDataRenderingOptions>? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.accountTaxIds = accountTaxIds
+        self.customFields = customFields
+        self.description = description
+        self.footer = footer
+        self.issuer = issuer
+        self.metadata = metadata
+        self.renderingOptions = renderingOptions
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case accountTaxIds = "account_tax_ids"
+        case customFields = "custom_fields"
+        case description
+        case footer
+        case issuer
+        case metadata
+        case renderingOptions = "rendering_options"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.accountTaxIds = try container.decodeIfPresent(Clearable<[String]>.self, forKey: .accountTaxIds)
+        self.customFields = try container.decodeIfPresent(Clearable<[CheckoutSessionCreateParamsInvoiceCreationInvoiceDataCustomFieldsItem]>.self, forKey: .customFields)
+        self.description = try container.decodeIfPresent(String.self, forKey: .description)
+        self.footer = try container.decodeIfPresent(String.self, forKey: .footer)
+        self.issuer = try container.decodeIfPresent(CheckoutSessionCreateParamsInvoiceCreationInvoiceDataIssuer.self, forKey: .issuer)
+        self.metadata = try container.decodeIfPresent([String: String].self, forKey: .metadata)
+        self.renderingOptions = try container.decodeIfPresent(Clearable<CheckoutSessionCreateParamsInvoiceCreationInvoiceDataRenderingOptions>.self, forKey: .renderingOptions)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .accountTaxIds, .customFields, .description, .footer, .issuer, .metadata, .renderingOptions: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.accountTaxIds, forKey: .accountTaxIds)
+        try container.encodeIfPresent(self.customFields, forKey: .customFields)
+        try container.encodeIfPresent(self.description, forKey: .description)
+        try container.encodeIfPresent(self.footer, forKey: .footer)
+        try container.encodeIfPresent(self.issuer, forKey: .issuer)
+        try container.encodeIfPresent(self.metadata, forKey: .metadata)
+        try container.encodeIfPresent(self.renderingOptions, forKey: .renderingOptions)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsInvoiceCreation: Sendable, Codable, Equatable, Hashable {
+    public var enabled: Bool
+    public var invoiceData: CheckoutSessionCreateParamsInvoiceCreationInvoiceData?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(enabled: Bool, invoiceData: CheckoutSessionCreateParamsInvoiceCreationInvoiceData? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.enabled = enabled
+        self.invoiceData = invoiceData
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case enabled
+        case invoiceData = "invoice_data"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.enabled = try container.decode(Bool.self, forKey: .enabled)
+        self.invoiceData = try container.decodeIfPresent(CheckoutSessionCreateParamsInvoiceCreationInvoiceData.self, forKey: .invoiceData)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .enabled, .invoiceData: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.enabled, forKey: .enabled)
+        try container.encodeIfPresent(self.invoiceData, forKey: .invoiceData)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsLineItemsItemAdjustableQuantity: Sendable, Codable, Equatable, Hashable {
+    public var enabled: Bool
+    public var maximum: Int?
+    public var minimum: Int?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(enabled: Bool, maximum: Int? = nil, minimum: Int? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.enabled = enabled
+        self.maximum = maximum
+        self.minimum = minimum
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case enabled
+        case maximum
+        case minimum
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.enabled = try container.decode(Bool.self, forKey: .enabled)
+        self.maximum = try container.decodeIfPresent(Int.self, forKey: .maximum)
+        self.minimum = try container.decodeIfPresent(Int.self, forKey: .minimum)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .enabled, .maximum, .minimum: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.enabled, forKey: .enabled)
+        try container.encodeIfPresent(self.maximum, forKey: .maximum)
+        try container.encodeIfPresent(self.minimum, forKey: .minimum)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsLineItemsItemPriceDataProductDataTaxDetails: Sendable, Codable, Equatable, Hashable {
+    public var performanceLocation: String?
+    public var taxCode: Clearable<String>?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(performanceLocation: String? = nil, taxCode: Clearable<String>? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.performanceLocation = performanceLocation
+        self.taxCode = taxCode
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case performanceLocation = "performance_location"
+        case taxCode = "tax_code"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.performanceLocation = try container.decodeIfPresent(String.self, forKey: .performanceLocation)
+        self.taxCode = try container.decodeIfPresent(Clearable<String>.self, forKey: .taxCode)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .performanceLocation, .taxCode: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.performanceLocation, forKey: .performanceLocation)
+        try container.encodeIfPresent(self.taxCode, forKey: .taxCode)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsLineItemsItemPriceDataProductData: Sendable, Codable, Equatable, Hashable {
+    public var description: String?
+    public var images: [String]?
+    public var metadata: [String: String]?
+    public var name: String
+    public var taxCode: String?
+    public var taxDetails: CheckoutSessionCreateParamsLineItemsItemPriceDataProductDataTaxDetails?
+    public var unitLabel: String?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(description: String? = nil, images: [String]? = nil, metadata: [String: String]? = nil, name: String, taxCode: String? = nil, taxDetails: CheckoutSessionCreateParamsLineItemsItemPriceDataProductDataTaxDetails? = nil, unitLabel: String? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.description = description
+        self.images = images
+        self.metadata = metadata
+        self.name = name
+        self.taxCode = taxCode
+        self.taxDetails = taxDetails
+        self.unitLabel = unitLabel
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case description
+        case images
+        case metadata
+        case name
+        case taxCode = "tax_code"
+        case taxDetails = "tax_details"
+        case unitLabel = "unit_label"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.description = try container.decodeIfPresent(String.self, forKey: .description)
+        self.images = try container.decodeIfPresent([String].self, forKey: .images)
+        self.metadata = try container.decodeIfPresent([String: String].self, forKey: .metadata)
+        self.name = try container.decode(String.self, forKey: .name)
+        self.taxCode = try container.decodeIfPresent(String.self, forKey: .taxCode)
+        self.taxDetails = try container.decodeIfPresent(CheckoutSessionCreateParamsLineItemsItemPriceDataProductDataTaxDetails.self, forKey: .taxDetails)
+        self.unitLabel = try container.decodeIfPresent(String.self, forKey: .unitLabel)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .description, .images, .metadata, .name, .taxCode, .taxDetails, .unitLabel: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.description, forKey: .description)
+        try container.encodeIfPresent(self.images, forKey: .images)
+        try container.encodeIfPresent(self.metadata, forKey: .metadata)
+        try container.encodeIfPresent(self.name, forKey: .name)
+        try container.encodeIfPresent(self.taxCode, forKey: .taxCode)
+        try container.encodeIfPresent(self.taxDetails, forKey: .taxDetails)
+        try container.encodeIfPresent(self.unitLabel, forKey: .unitLabel)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsLineItemsItemPriceDataRecurring: Sendable, Codable, Equatable, Hashable {
+    public var interval: PlanInterval
+    public var intervalCount: Int?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(interval: PlanInterval, intervalCount: Int? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.interval = interval
+        self.intervalCount = intervalCount
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case interval
+        case intervalCount = "interval_count"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.interval = try container.decode(PlanInterval.self, forKey: .interval)
+        self.intervalCount = try container.decodeIfPresent(Int.self, forKey: .intervalCount)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .interval, .intervalCount: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.interval, forKey: .interval)
+        try container.encodeIfPresent(self.intervalCount, forKey: .intervalCount)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsLineItemsItemPriceData: Sendable, Codable, Equatable, Hashable {
+    public var currency: String
+    public var product: String?
+    public var productData: CheckoutSessionCreateParamsLineItemsItemPriceDataProductData?
+    public var recurring: CheckoutSessionCreateParamsLineItemsItemPriceDataRecurring?
+    public var taxBehavior: CurrencyOptionTaxBehavior?
+    public var unitAmount: Int?
+    public var unitAmountDecimal: String?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(currency: String, product: String? = nil, productData: CheckoutSessionCreateParamsLineItemsItemPriceDataProductData? = nil, recurring: CheckoutSessionCreateParamsLineItemsItemPriceDataRecurring? = nil, taxBehavior: CurrencyOptionTaxBehavior? = nil, unitAmount: Int? = nil, unitAmountDecimal: String? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.currency = currency
+        self.product = product
+        self.productData = productData
+        self.recurring = recurring
+        self.taxBehavior = taxBehavior
+        self.unitAmount = unitAmount
+        self.unitAmountDecimal = unitAmountDecimal
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case currency
+        case product
+        case productData = "product_data"
+        case recurring
+        case taxBehavior = "tax_behavior"
+        case unitAmount = "unit_amount"
+        case unitAmountDecimal = "unit_amount_decimal"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.currency = try container.decode(String.self, forKey: .currency)
+        self.product = try container.decodeIfPresent(String.self, forKey: .product)
+        self.productData = try container.decodeIfPresent(CheckoutSessionCreateParamsLineItemsItemPriceDataProductData.self, forKey: .productData)
+        self.recurring = try container.decodeIfPresent(CheckoutSessionCreateParamsLineItemsItemPriceDataRecurring.self, forKey: .recurring)
+        self.taxBehavior = try container.decodeIfPresent(CurrencyOptionTaxBehavior.self, forKey: .taxBehavior)
+        self.unitAmount = try container.decodeIfPresent(Int.self, forKey: .unitAmount)
+        self.unitAmountDecimal = try container.decodeIfPresent(String.self, forKey: .unitAmountDecimal)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .currency, .product, .productData, .recurring, .taxBehavior, .unitAmount, .unitAmountDecimal: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.currency, forKey: .currency)
+        try container.encodeIfPresent(self.product, forKey: .product)
+        try container.encodeIfPresent(self.productData, forKey: .productData)
+        try container.encodeIfPresent(self.recurring, forKey: .recurring)
+        try container.encodeIfPresent(self.taxBehavior, forKey: .taxBehavior)
+        try container.encodeIfPresent(self.unitAmount, forKey: .unitAmount)
+        try container.encodeIfPresent(self.unitAmountDecimal, forKey: .unitAmountDecimal)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsLineItemsItem: Sendable, Codable, Equatable, Hashable {
+    public var adjustableQuantity: CheckoutSessionCreateParamsLineItemsItemAdjustableQuantity?
+    public var metadata: [String: String]?
+    public var price: String?
+    public var priceData: CheckoutSessionCreateParamsLineItemsItemPriceData?
+    public var quantity: Int?
+    public var taxRates: [String]?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(adjustableQuantity: CheckoutSessionCreateParamsLineItemsItemAdjustableQuantity? = nil, metadata: [String: String]? = nil, price: String? = nil, priceData: CheckoutSessionCreateParamsLineItemsItemPriceData? = nil, quantity: Int? = nil, taxRates: [String]? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.adjustableQuantity = adjustableQuantity
+        self.metadata = metadata
+        self.price = price
+        self.priceData = priceData
+        self.quantity = quantity
+        self.taxRates = taxRates
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case adjustableQuantity = "adjustable_quantity"
+        case metadata
+        case price
+        case priceData = "price_data"
+        case quantity
+        case taxRates = "tax_rates"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.adjustableQuantity = try container.decodeIfPresent(CheckoutSessionCreateParamsLineItemsItemAdjustableQuantity.self, forKey: .adjustableQuantity)
+        self.metadata = try container.decodeIfPresent([String: String].self, forKey: .metadata)
+        self.price = try container.decodeIfPresent(String.self, forKey: .price)
+        self.priceData = try container.decodeIfPresent(CheckoutSessionCreateParamsLineItemsItemPriceData.self, forKey: .priceData)
+        self.quantity = try container.decodeIfPresent(Int.self, forKey: .quantity)
+        self.taxRates = try container.decodeIfPresent([String].self, forKey: .taxRates)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .adjustableQuantity, .metadata, .price, .priceData, .quantity, .taxRates: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.adjustableQuantity, forKey: .adjustableQuantity)
+        try container.encodeIfPresent(self.metadata, forKey: .metadata)
+        try container.encodeIfPresent(self.price, forKey: .price)
+        try container.encodeIfPresent(self.priceData, forKey: .priceData)
+        try container.encodeIfPresent(self.quantity, forKey: .quantity)
+        try container.encodeIfPresent(self.taxRates, forKey: .taxRates)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsManagedPayments: Sendable, Codable, Equatable, Hashable {
+    public var enabled: Bool?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(enabled: Bool? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.enabled = enabled
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case enabled
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.enabled = try container.decodeIfPresent(Bool.self, forKey: .enabled)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .enabled: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.enabled, forKey: .enabled)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsNameCollectionBusiness: Sendable, Codable, Equatable, Hashable {
+    public var enabled: Bool
+    public var optional: Bool?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(enabled: Bool, optional: Bool? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.enabled = enabled
+        self.optional = optional
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case enabled
+        case optional
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.enabled = try container.decode(Bool.self, forKey: .enabled)
+        self.optional = try container.decodeIfPresent(Bool.self, forKey: .optional)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .enabled, .optional: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.enabled, forKey: .enabled)
+        try container.encodeIfPresent(self.optional, forKey: .optional)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsNameCollectionIndividual: Sendable, Codable, Equatable, Hashable {
+    public var enabled: Bool
+    public var optional: Bool?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(enabled: Bool, optional: Bool? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.enabled = enabled
+        self.optional = optional
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case enabled
+        case optional
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.enabled = try container.decode(Bool.self, forKey: .enabled)
+        self.optional = try container.decodeIfPresent(Bool.self, forKey: .optional)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .enabled, .optional: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.enabled, forKey: .enabled)
+        try container.encodeIfPresent(self.optional, forKey: .optional)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsNameCollection: Sendable, Codable, Equatable, Hashable {
+    public var business: CheckoutSessionCreateParamsNameCollectionBusiness?
+    public var individual: CheckoutSessionCreateParamsNameCollectionIndividual?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(business: CheckoutSessionCreateParamsNameCollectionBusiness? = nil, individual: CheckoutSessionCreateParamsNameCollectionIndividual? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.business = business
+        self.individual = individual
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case business
+        case individual
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.business = try container.decodeIfPresent(CheckoutSessionCreateParamsNameCollectionBusiness.self, forKey: .business)
+        self.individual = try container.decodeIfPresent(CheckoutSessionCreateParamsNameCollectionIndividual.self, forKey: .individual)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .business, .individual: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.business, forKey: .business)
+        try container.encodeIfPresent(self.individual, forKey: .individual)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsOptionalItemsItemAdjustableQuantity: Sendable, Codable, Equatable, Hashable {
+    public var enabled: Bool
+    public var maximum: Int?
+    public var minimum: Int?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(enabled: Bool, maximum: Int? = nil, minimum: Int? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.enabled = enabled
+        self.maximum = maximum
+        self.minimum = minimum
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case enabled
+        case maximum
+        case minimum
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.enabled = try container.decode(Bool.self, forKey: .enabled)
+        self.maximum = try container.decodeIfPresent(Int.self, forKey: .maximum)
+        self.minimum = try container.decodeIfPresent(Int.self, forKey: .minimum)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .enabled, .maximum, .minimum: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.enabled, forKey: .enabled)
+        try container.encodeIfPresent(self.maximum, forKey: .maximum)
+        try container.encodeIfPresent(self.minimum, forKey: .minimum)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsOptionalItemsItem: Sendable, Codable, Equatable, Hashable {
+    public var adjustableQuantity: CheckoutSessionCreateParamsOptionalItemsItemAdjustableQuantity?
+    public var price: String
+    public var quantity: Int
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(adjustableQuantity: CheckoutSessionCreateParamsOptionalItemsItemAdjustableQuantity? = nil, price: String, quantity: Int, unknownFields: [String: JSONValue]? = nil) {
+        self.adjustableQuantity = adjustableQuantity
+        self.price = price
+        self.quantity = quantity
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case adjustableQuantity = "adjustable_quantity"
+        case price
+        case quantity
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.adjustableQuantity = try container.decodeIfPresent(CheckoutSessionCreateParamsOptionalItemsItemAdjustableQuantity.self, forKey: .adjustableQuantity)
+        self.price = try container.decode(String.self, forKey: .price)
+        self.quantity = try container.decode(Int.self, forKey: .quantity)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .adjustableQuantity, .price, .quantity: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.adjustableQuantity, forKey: .adjustableQuantity)
+        try container.encodeIfPresent(self.price, forKey: .price)
+        try container.encodeIfPresent(self.quantity, forKey: .quantity)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsPaymentIntentDataShippingAddress: Sendable, Codable, Equatable, Hashable {
+    public var city: String?
+    public var country: String?
+    public var line1: String
+    public var line2: String?
+    public var postalCode: String?
+    public var state: String?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(city: String? = nil, country: String? = nil, line1: String, line2: String? = nil, postalCode: String? = nil, state: String? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.city = city
+        self.country = country
+        self.line1 = line1
+        self.line2 = line2
+        self.postalCode = postalCode
+        self.state = state
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case city
+        case country
+        case line1
+        case line2
+        case postalCode = "postal_code"
+        case state
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.city = try container.decodeIfPresent(String.self, forKey: .city)
+        self.country = try container.decodeIfPresent(String.self, forKey: .country)
+        self.line1 = try container.decode(String.self, forKey: .line1)
+        self.line2 = try container.decodeIfPresent(String.self, forKey: .line2)
+        self.postalCode = try container.decodeIfPresent(String.self, forKey: .postalCode)
+        self.state = try container.decodeIfPresent(String.self, forKey: .state)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .city, .country, .line1, .line2, .postalCode, .state: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.city, forKey: .city)
+        try container.encodeIfPresent(self.country, forKey: .country)
+        try container.encodeIfPresent(self.line1, forKey: .line1)
+        try container.encodeIfPresent(self.line2, forKey: .line2)
+        try container.encodeIfPresent(self.postalCode, forKey: .postalCode)
+        try container.encodeIfPresent(self.state, forKey: .state)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsPaymentIntentDataShipping: Sendable, Codable, Equatable, Hashable {
+    public var address: CheckoutSessionCreateParamsPaymentIntentDataShippingAddress
+    public var carrier: String?
+    public var name: String
+    public var phone: String?
+    public var trackingNumber: String?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(address: CheckoutSessionCreateParamsPaymentIntentDataShippingAddress, carrier: String? = nil, name: String, phone: String? = nil, trackingNumber: String? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.address = address
+        self.carrier = carrier
+        self.name = name
+        self.phone = phone
+        self.trackingNumber = trackingNumber
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case address
+        case carrier
+        case name
+        case phone
+        case trackingNumber = "tracking_number"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.address = try container.decode(CheckoutSessionCreateParamsPaymentIntentDataShippingAddress.self, forKey: .address)
+        self.carrier = try container.decodeIfPresent(String.self, forKey: .carrier)
+        self.name = try container.decode(String.self, forKey: .name)
+        self.phone = try container.decodeIfPresent(String.self, forKey: .phone)
+        self.trackingNumber = try container.decodeIfPresent(String.self, forKey: .trackingNumber)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .address, .carrier, .name, .phone, .trackingNumber: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.address, forKey: .address)
+        try container.encodeIfPresent(self.carrier, forKey: .carrier)
+        try container.encodeIfPresent(self.name, forKey: .name)
+        try container.encodeIfPresent(self.phone, forKey: .phone)
+        try container.encodeIfPresent(self.trackingNumber, forKey: .trackingNumber)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsPaymentIntentDataTransferData: Sendable, Codable, Equatable, Hashable {
+    public var amount: Int?
+    public var destination: String
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(amount: Int? = nil, destination: String, unknownFields: [String: JSONValue]? = nil) {
+        self.amount = amount
+        self.destination = destination
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case amount
+        case destination
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.amount = try container.decodeIfPresent(Int.self, forKey: .amount)
+        self.destination = try container.decode(String.self, forKey: .destination)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .amount, .destination: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.amount, forKey: .amount)
+        try container.encodeIfPresent(self.destination, forKey: .destination)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsPaymentIntentData: Sendable, Codable, Equatable, Hashable {
+    public var applicationFeeAmount: Int?
+    public var captureMethod: PaymentIntentCaptureMethod?
+    public var description: String?
+    public var metadata: [String: String]?
+    public var onBehalfOf: String?
+    public var receiptEmail: String?
+    public var setupFutureUsage: ConfirmationTokenSetupFutureUsage?
+    public var shipping: CheckoutSessionCreateParamsPaymentIntentDataShipping?
+    public var statementDescriptor: String?
+    public var statementDescriptorSuffix: String?
+    public var transferData: CheckoutSessionCreateParamsPaymentIntentDataTransferData?
+    public var transferGroup: String?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(applicationFeeAmount: Int? = nil, captureMethod: PaymentIntentCaptureMethod? = nil, description: String? = nil, metadata: [String: String]? = nil, onBehalfOf: String? = nil, receiptEmail: String? = nil, setupFutureUsage: ConfirmationTokenSetupFutureUsage? = nil, shipping: CheckoutSessionCreateParamsPaymentIntentDataShipping? = nil, statementDescriptor: String? = nil, statementDescriptorSuffix: String? = nil, transferData: CheckoutSessionCreateParamsPaymentIntentDataTransferData? = nil, transferGroup: String? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.applicationFeeAmount = applicationFeeAmount
+        self.captureMethod = captureMethod
+        self.description = description
+        self.metadata = metadata
+        self.onBehalfOf = onBehalfOf
+        self.receiptEmail = receiptEmail
+        self.setupFutureUsage = setupFutureUsage
+        self.shipping = shipping
+        self.statementDescriptor = statementDescriptor
+        self.statementDescriptorSuffix = statementDescriptorSuffix
+        self.transferData = transferData
+        self.transferGroup = transferGroup
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case applicationFeeAmount = "application_fee_amount"
+        case captureMethod = "capture_method"
+        case description
+        case metadata
+        case onBehalfOf = "on_behalf_of"
+        case receiptEmail = "receipt_email"
+        case setupFutureUsage = "setup_future_usage"
+        case shipping
+        case statementDescriptor = "statement_descriptor"
+        case statementDescriptorSuffix = "statement_descriptor_suffix"
+        case transferData = "transfer_data"
+        case transferGroup = "transfer_group"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.applicationFeeAmount = try container.decodeIfPresent(Int.self, forKey: .applicationFeeAmount)
+        self.captureMethod = try container.decodeIfPresent(PaymentIntentCaptureMethod.self, forKey: .captureMethod)
+        self.description = try container.decodeIfPresent(String.self, forKey: .description)
+        self.metadata = try container.decodeIfPresent([String: String].self, forKey: .metadata)
+        self.onBehalfOf = try container.decodeIfPresent(String.self, forKey: .onBehalfOf)
+        self.receiptEmail = try container.decodeIfPresent(String.self, forKey: .receiptEmail)
+        self.setupFutureUsage = try container.decodeIfPresent(ConfirmationTokenSetupFutureUsage.self, forKey: .setupFutureUsage)
+        self.shipping = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentIntentDataShipping.self, forKey: .shipping)
+        self.statementDescriptor = try container.decodeIfPresent(String.self, forKey: .statementDescriptor)
+        self.statementDescriptorSuffix = try container.decodeIfPresent(String.self, forKey: .statementDescriptorSuffix)
+        self.transferData = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentIntentDataTransferData.self, forKey: .transferData)
+        self.transferGroup = try container.decodeIfPresent(String.self, forKey: .transferGroup)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .applicationFeeAmount, .captureMethod, .description, .metadata, .onBehalfOf, .receiptEmail, .setupFutureUsage, .shipping, .statementDescriptor, .statementDescriptorSuffix, .transferData, .transferGroup: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.applicationFeeAmount, forKey: .applicationFeeAmount)
+        try container.encodeIfPresent(self.captureMethod, forKey: .captureMethod)
+        try container.encodeIfPresent(self.description, forKey: .description)
+        try container.encodeIfPresent(self.metadata, forKey: .metadata)
+        try container.encodeIfPresent(self.onBehalfOf, forKey: .onBehalfOf)
+        try container.encodeIfPresent(self.receiptEmail, forKey: .receiptEmail)
+        try container.encodeIfPresent(self.setupFutureUsage, forKey: .setupFutureUsage)
+        try container.encodeIfPresent(self.shipping, forKey: .shipping)
+        try container.encodeIfPresent(self.statementDescriptor, forKey: .statementDescriptor)
+        try container.encodeIfPresent(self.statementDescriptorSuffix, forKey: .statementDescriptorSuffix)
+        try container.encodeIfPresent(self.transferData, forKey: .transferData)
+        try container.encodeIfPresent(self.transferGroup, forKey: .transferGroup)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsPaymentMethodData: Sendable, Codable, Equatable, Hashable {
+    public var allowRedisplay: CardAllowRedisplay?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(allowRedisplay: CardAllowRedisplay? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.allowRedisplay = allowRedisplay
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case allowRedisplay = "allow_redisplay"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.allowRedisplay = try container.decodeIfPresent(CardAllowRedisplay.self, forKey: .allowRedisplay)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .allowRedisplay: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.allowRedisplay, forKey: .allowRedisplay)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsPaymentMethodOptionsAcssDebitMandateOptions: Sendable, Codable, Equatable, Hashable {
+    public var customMandateUrl: Clearable<String>?
+    public var defaultFor: [CheckoutAcssDebitMandateOptionsDefaultForItem]?
+    public var intervalDescription: String?
+    public var paymentSchedule: CheckoutAcssDebitMandateOptionsPaymentSchedule?
+    public var transactionType: CheckoutAcssDebitMandateOptionsTransactionType?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(customMandateUrl: Clearable<String>? = nil, defaultFor: [CheckoutAcssDebitMandateOptionsDefaultForItem]? = nil, intervalDescription: String? = nil, paymentSchedule: CheckoutAcssDebitMandateOptionsPaymentSchedule? = nil, transactionType: CheckoutAcssDebitMandateOptionsTransactionType? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.customMandateUrl = customMandateUrl
+        self.defaultFor = defaultFor
+        self.intervalDescription = intervalDescription
+        self.paymentSchedule = paymentSchedule
+        self.transactionType = transactionType
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case customMandateUrl = "custom_mandate_url"
+        case defaultFor = "default_for"
+        case intervalDescription = "interval_description"
+        case paymentSchedule = "payment_schedule"
+        case transactionType = "transaction_type"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.customMandateUrl = try container.decodeIfPresent(Clearable<String>.self, forKey: .customMandateUrl)
+        self.defaultFor = try container.decodeIfPresent([CheckoutAcssDebitMandateOptionsDefaultForItem].self, forKey: .defaultFor)
+        self.intervalDescription = try container.decodeIfPresent(String.self, forKey: .intervalDescription)
+        self.paymentSchedule = try container.decodeIfPresent(CheckoutAcssDebitMandateOptionsPaymentSchedule.self, forKey: .paymentSchedule)
+        self.transactionType = try container.decodeIfPresent(CheckoutAcssDebitMandateOptionsTransactionType.self, forKey: .transactionType)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .customMandateUrl, .defaultFor, .intervalDescription, .paymentSchedule, .transactionType: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.customMandateUrl, forKey: .customMandateUrl)
+        try container.encodeIfPresent(self.defaultFor, forKey: .defaultFor)
+        try container.encodeIfPresent(self.intervalDescription, forKey: .intervalDescription)
+        try container.encodeIfPresent(self.paymentSchedule, forKey: .paymentSchedule)
+        try container.encodeIfPresent(self.transactionType, forKey: .transactionType)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsPaymentMethodOptionsAcssDebit: Sendable, Codable, Equatable, Hashable {
+    public var currency: CheckoutAcssDebitPaymentMethodOptionsCurrency?
+    public var mandateOptions: CheckoutSessionCreateParamsPaymentMethodOptionsAcssDebitMandateOptions?
+    public var setupFutureUsage: CheckoutAcssDebitPaymentMethodOptionsSetupFutureUsage?
+    public var targetDate: String?
+    public var verificationMethod: CheckoutAcssDebitPaymentMethodOptionsVerificationMethod?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(currency: CheckoutAcssDebitPaymentMethodOptionsCurrency? = nil, mandateOptions: CheckoutSessionCreateParamsPaymentMethodOptionsAcssDebitMandateOptions? = nil, setupFutureUsage: CheckoutAcssDebitPaymentMethodOptionsSetupFutureUsage? = nil, targetDate: String? = nil, verificationMethod: CheckoutAcssDebitPaymentMethodOptionsVerificationMethod? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.currency = currency
+        self.mandateOptions = mandateOptions
+        self.setupFutureUsage = setupFutureUsage
+        self.targetDate = targetDate
+        self.verificationMethod = verificationMethod
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case currency
+        case mandateOptions = "mandate_options"
+        case setupFutureUsage = "setup_future_usage"
+        case targetDate = "target_date"
+        case verificationMethod = "verification_method"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.currency = try container.decodeIfPresent(CheckoutAcssDebitPaymentMethodOptionsCurrency.self, forKey: .currency)
+        self.mandateOptions = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsAcssDebitMandateOptions.self, forKey: .mandateOptions)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutAcssDebitPaymentMethodOptionsSetupFutureUsage.self, forKey: .setupFutureUsage)
+        self.targetDate = try container.decodeIfPresent(String.self, forKey: .targetDate)
+        self.verificationMethod = try container.decodeIfPresent(CheckoutAcssDebitPaymentMethodOptionsVerificationMethod.self, forKey: .verificationMethod)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .currency, .mandateOptions, .setupFutureUsage, .targetDate, .verificationMethod: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.currency, forKey: .currency)
+        try container.encodeIfPresent(self.mandateOptions, forKey: .mandateOptions)
+        try container.encodeIfPresent(self.setupFutureUsage, forKey: .setupFutureUsage)
+        try container.encodeIfPresent(self.targetDate, forKey: .targetDate)
+        try container.encodeIfPresent(self.verificationMethod, forKey: .verificationMethod)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsPaymentMethodOptionsAffirm: Sendable, Codable, Equatable, Hashable {
+    public var captureMethod: CheckoutAffirmPaymentMethodOptionsCaptureMethod?
+    public var setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(captureMethod: CheckoutAffirmPaymentMethodOptionsCaptureMethod? = nil, setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.captureMethod = captureMethod
+        self.setupFutureUsage = setupFutureUsage
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case captureMethod = "capture_method"
+        case setupFutureUsage = "setup_future_usage"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.captureMethod = try container.decodeIfPresent(CheckoutAffirmPaymentMethodOptionsCaptureMethod.self, forKey: .captureMethod)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutAffirmPaymentMethodOptionsSetupFutureUsage.self, forKey: .setupFutureUsage)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .captureMethod, .setupFutureUsage: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.captureMethod, forKey: .captureMethod)
+        try container.encodeIfPresent(self.setupFutureUsage, forKey: .setupFutureUsage)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsPaymentMethodOptionsAfterpayClearpay: Sendable, Codable, Equatable, Hashable {
+    public var captureMethod: CheckoutAffirmPaymentMethodOptionsCaptureMethod?
+    public var setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(captureMethod: CheckoutAffirmPaymentMethodOptionsCaptureMethod? = nil, setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.captureMethod = captureMethod
+        self.setupFutureUsage = setupFutureUsage
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case captureMethod = "capture_method"
+        case setupFutureUsage = "setup_future_usage"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.captureMethod = try container.decodeIfPresent(CheckoutAffirmPaymentMethodOptionsCaptureMethod.self, forKey: .captureMethod)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutAffirmPaymentMethodOptionsSetupFutureUsage.self, forKey: .setupFutureUsage)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .captureMethod, .setupFutureUsage: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.captureMethod, forKey: .captureMethod)
+        try container.encodeIfPresent(self.setupFutureUsage, forKey: .setupFutureUsage)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsPaymentMethodOptionsAlipay: Sendable, Codable, Equatable, Hashable {
+    public var setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.setupFutureUsage = setupFutureUsage
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case setupFutureUsage = "setup_future_usage"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutAffirmPaymentMethodOptionsSetupFutureUsage.self, forKey: .setupFutureUsage)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .setupFutureUsage: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.setupFutureUsage, forKey: .setupFutureUsage)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsPaymentMethodOptionsAlma: Sendable, Codable, Equatable, Hashable {
+    public var captureMethod: CheckoutAffirmPaymentMethodOptionsCaptureMethod?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(captureMethod: CheckoutAffirmPaymentMethodOptionsCaptureMethod? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.captureMethod = captureMethod
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case captureMethod = "capture_method"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.captureMethod = try container.decodeIfPresent(CheckoutAffirmPaymentMethodOptionsCaptureMethod.self, forKey: .captureMethod)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .captureMethod: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.captureMethod, forKey: .captureMethod)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsPaymentMethodOptionsAmazonPay: Sendable, Codable, Equatable, Hashable {
+    public var captureMethod: CheckoutAffirmPaymentMethodOptionsCaptureMethod?
+    public var setupFutureUsage: CheckoutAmazonPayPaymentMethodOptionsSetupFutureUsage?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(captureMethod: CheckoutAffirmPaymentMethodOptionsCaptureMethod? = nil, setupFutureUsage: CheckoutAmazonPayPaymentMethodOptionsSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.captureMethod = captureMethod
+        self.setupFutureUsage = setupFutureUsage
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case captureMethod = "capture_method"
+        case setupFutureUsage = "setup_future_usage"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.captureMethod = try container.decodeIfPresent(CheckoutAffirmPaymentMethodOptionsCaptureMethod.self, forKey: .captureMethod)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutAmazonPayPaymentMethodOptionsSetupFutureUsage.self, forKey: .setupFutureUsage)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .captureMethod, .setupFutureUsage: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.captureMethod, forKey: .captureMethod)
+        try container.encodeIfPresent(self.setupFutureUsage, forKey: .setupFutureUsage)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsPaymentMethodOptionsAuBecsDebit: Sendable, Codable, Equatable, Hashable {
+    public var setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage?
+    public var targetDate: String?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage? = nil, targetDate: String? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.setupFutureUsage = setupFutureUsage
+        self.targetDate = targetDate
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case setupFutureUsage = "setup_future_usage"
+        case targetDate = "target_date"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutAffirmPaymentMethodOptionsSetupFutureUsage.self, forKey: .setupFutureUsage)
+        self.targetDate = try container.decodeIfPresent(String.self, forKey: .targetDate)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .setupFutureUsage, .targetDate: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.setupFutureUsage, forKey: .setupFutureUsage)
+        try container.encodeIfPresent(self.targetDate, forKey: .targetDate)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsPaymentMethodOptionsBacsDebitMandateOptions: Sendable, Codable, Equatable, Hashable {
+    public var referencePrefix: Clearable<String>?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(referencePrefix: Clearable<String>? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.referencePrefix = referencePrefix
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case referencePrefix = "reference_prefix"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.referencePrefix = try container.decodeIfPresent(Clearable<String>.self, forKey: .referencePrefix)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .referencePrefix: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.referencePrefix, forKey: .referencePrefix)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsPaymentMethodOptionsBacsDebit: Sendable, Codable, Equatable, Hashable {
+    public var mandateOptions: CheckoutSessionCreateParamsPaymentMethodOptionsBacsDebitMandateOptions?
+    public var setupFutureUsage: CheckoutAcssDebitPaymentMethodOptionsSetupFutureUsage?
+    public var targetDate: String?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(mandateOptions: CheckoutSessionCreateParamsPaymentMethodOptionsBacsDebitMandateOptions? = nil, setupFutureUsage: CheckoutAcssDebitPaymentMethodOptionsSetupFutureUsage? = nil, targetDate: String? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.mandateOptions = mandateOptions
+        self.setupFutureUsage = setupFutureUsage
+        self.targetDate = targetDate
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case mandateOptions = "mandate_options"
+        case setupFutureUsage = "setup_future_usage"
+        case targetDate = "target_date"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.mandateOptions = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsBacsDebitMandateOptions.self, forKey: .mandateOptions)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutAcssDebitPaymentMethodOptionsSetupFutureUsage.self, forKey: .setupFutureUsage)
+        self.targetDate = try container.decodeIfPresent(String.self, forKey: .targetDate)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .mandateOptions, .setupFutureUsage, .targetDate: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.mandateOptions, forKey: .mandateOptions)
+        try container.encodeIfPresent(self.setupFutureUsage, forKey: .setupFutureUsage)
+        try container.encodeIfPresent(self.targetDate, forKey: .targetDate)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsPaymentMethodOptionsBancontact: Sendable, Codable, Equatable, Hashable {
+    public var setupFutureUsage: CheckoutAmazonPayPaymentMethodOptionsSetupFutureUsage?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(setupFutureUsage: CheckoutAmazonPayPaymentMethodOptionsSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.setupFutureUsage = setupFutureUsage
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case setupFutureUsage = "setup_future_usage"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutAmazonPayPaymentMethodOptionsSetupFutureUsage.self, forKey: .setupFutureUsage)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .setupFutureUsage: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.setupFutureUsage, forKey: .setupFutureUsage)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsPaymentMethodOptionsBillie: Sendable, Codable, Equatable, Hashable {
+    public var captureMethod: CheckoutAffirmPaymentMethodOptionsCaptureMethod?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(captureMethod: CheckoutAffirmPaymentMethodOptionsCaptureMethod? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.captureMethod = captureMethod
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case captureMethod = "capture_method"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.captureMethod = try container.decodeIfPresent(CheckoutAffirmPaymentMethodOptionsCaptureMethod.self, forKey: .captureMethod)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .captureMethod: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.captureMethod, forKey: .captureMethod)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsPaymentMethodOptionsBlikMandateOptions: Sendable, Codable, Equatable, Hashable {
+    public var expiresAt: StripeTimestamp?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(expiresAt: StripeTimestamp? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.expiresAt = expiresAt
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case expiresAt = "expires_at"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.expiresAt = try container.decodeIfPresent(StripeTimestamp.self, forKey: .expiresAt)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .expiresAt: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.expiresAt, forKey: .expiresAt)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+/// Lossless enum: values Stripe documents plus any value the API
+/// adds later, kept in `undocumented` instead of dropped.
+public enum CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage: Sendable, Equatable, Hashable, LosslessEnum {
+    case anonymous
+    case none
+    case offSession
+    case undocumented(String)
+
+    public init(rawValue raw: String) {
+        switch raw {
+        case "": self = .anonymous
+        case "none": self = .none
+        case "off_session": self = .offSession
+        default: self = .undocumented(raw)
+        }
+    }
+
+    public var rawValue: String {
+        switch self {
+        case .anonymous: return ""
+        case .none: return "none"
+        case .offSession: return "off_session"
+        case .undocumented(let value): return value
+        }
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        self.init(rawValue: try container.decode(String.self))
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(rawValue)
+    }
+}
+
+public struct CheckoutSessionCreateParamsPaymentMethodOptionsBlik: Sendable, Codable, Equatable, Hashable {
+    public var mandateOptions: CheckoutSessionCreateParamsPaymentMethodOptionsBlikMandateOptions?
+    public var setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(mandateOptions: CheckoutSessionCreateParamsPaymentMethodOptionsBlikMandateOptions? = nil, setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.mandateOptions = mandateOptions
+        self.setupFutureUsage = setupFutureUsage
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case mandateOptions = "mandate_options"
+        case setupFutureUsage = "setup_future_usage"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.mandateOptions = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsBlikMandateOptions.self, forKey: .mandateOptions)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage.self, forKey: .setupFutureUsage)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .mandateOptions, .setupFutureUsage: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.mandateOptions, forKey: .mandateOptions)
+        try container.encodeIfPresent(self.setupFutureUsage, forKey: .setupFutureUsage)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsPaymentMethodOptionsBoleto: Sendable, Codable, Equatable, Hashable {
+    public var expiresAfterDays: Int?
+    public var setupFutureUsage: CheckoutAcssDebitPaymentMethodOptionsSetupFutureUsage?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(expiresAfterDays: Int? = nil, setupFutureUsage: CheckoutAcssDebitPaymentMethodOptionsSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.expiresAfterDays = expiresAfterDays
+        self.setupFutureUsage = setupFutureUsage
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case expiresAfterDays = "expires_after_days"
+        case setupFutureUsage = "setup_future_usage"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.expiresAfterDays = try container.decodeIfPresent(Int.self, forKey: .expiresAfterDays)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutAcssDebitPaymentMethodOptionsSetupFutureUsage.self, forKey: .setupFutureUsage)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .expiresAfterDays, .setupFutureUsage: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.expiresAfterDays, forKey: .expiresAfterDays)
+        try container.encodeIfPresent(self.setupFutureUsage, forKey: .setupFutureUsage)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsPaymentMethodOptionsCardInstallments: Sendable, Codable, Equatable, Hashable {
+    public var enabled: Bool?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(enabled: Bool? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.enabled = enabled
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case enabled
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.enabled = try container.decodeIfPresent(Bool.self, forKey: .enabled)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .enabled: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.enabled, forKey: .enabled)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsPaymentMethodOptionsCardRestrictions: Sendable, Codable, Equatable, Hashable {
+    public var brandsBlocked: [PaymentLinksResourceCardRestrictionsBrandsBlockedItem]?
+    public var fundingTypesBlocked: [PaymentPagesPrivateCardPaymentMethodOptionsResourceRestrictionsFundingTypesBlockedItem]?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(brandsBlocked: [PaymentLinksResourceCardRestrictionsBrandsBlockedItem]? = nil, fundingTypesBlocked: [PaymentPagesPrivateCardPaymentMethodOptionsResourceRestrictionsFundingTypesBlockedItem]? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.brandsBlocked = brandsBlocked
+        self.fundingTypesBlocked = fundingTypesBlocked
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case brandsBlocked = "brands_blocked"
+        case fundingTypesBlocked = "funding_types_blocked"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.brandsBlocked = try container.decodeIfPresent([PaymentLinksResourceCardRestrictionsBrandsBlockedItem].self, forKey: .brandsBlocked)
+        self.fundingTypesBlocked = try container.decodeIfPresent([PaymentPagesPrivateCardPaymentMethodOptionsResourceRestrictionsFundingTypesBlockedItem].self, forKey: .fundingTypesBlocked)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .brandsBlocked, .fundingTypesBlocked: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.brandsBlocked, forKey: .brandsBlocked)
+        try container.encodeIfPresent(self.fundingTypesBlocked, forKey: .fundingTypesBlocked)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsPaymentMethodOptionsCard: Sendable, Codable, Equatable, Hashable {
+    public var captureMethod: CheckoutAffirmPaymentMethodOptionsCaptureMethod?
+    public var installments: CheckoutSessionCreateParamsPaymentMethodOptionsCardInstallments?
+    public var requestExtendedAuthorization: CheckoutCardPaymentMethodOptionsRequestExtendedAuthorization?
+    public var requestIncrementalAuthorization: CheckoutCardPaymentMethodOptionsRequestExtendedAuthorization?
+    public var requestMulticapture: CheckoutCardPaymentMethodOptionsRequestExtendedAuthorization?
+    public var requestOvercapture: CheckoutCardPaymentMethodOptionsRequestExtendedAuthorization?
+    public var requestThreeDSecure: CheckoutCardPaymentMethodOptionsRequestThreeDSecure?
+    public var restrictions: CheckoutSessionCreateParamsPaymentMethodOptionsCardRestrictions?
+    public var setupFutureUsage: ConfirmationTokenSetupFutureUsage?
+    public var statementDescriptorSuffixKana: String?
+    public var statementDescriptorSuffixKanji: String?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(captureMethod: CheckoutAffirmPaymentMethodOptionsCaptureMethod? = nil, installments: CheckoutSessionCreateParamsPaymentMethodOptionsCardInstallments? = nil, requestExtendedAuthorization: CheckoutCardPaymentMethodOptionsRequestExtendedAuthorization? = nil, requestIncrementalAuthorization: CheckoutCardPaymentMethodOptionsRequestExtendedAuthorization? = nil, requestMulticapture: CheckoutCardPaymentMethodOptionsRequestExtendedAuthorization? = nil, requestOvercapture: CheckoutCardPaymentMethodOptionsRequestExtendedAuthorization? = nil, requestThreeDSecure: CheckoutCardPaymentMethodOptionsRequestThreeDSecure? = nil, restrictions: CheckoutSessionCreateParamsPaymentMethodOptionsCardRestrictions? = nil, setupFutureUsage: ConfirmationTokenSetupFutureUsage? = nil, statementDescriptorSuffixKana: String? = nil, statementDescriptorSuffixKanji: String? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.captureMethod = captureMethod
+        self.installments = installments
+        self.requestExtendedAuthorization = requestExtendedAuthorization
+        self.requestIncrementalAuthorization = requestIncrementalAuthorization
+        self.requestMulticapture = requestMulticapture
+        self.requestOvercapture = requestOvercapture
+        self.requestThreeDSecure = requestThreeDSecure
+        self.restrictions = restrictions
+        self.setupFutureUsage = setupFutureUsage
+        self.statementDescriptorSuffixKana = statementDescriptorSuffixKana
+        self.statementDescriptorSuffixKanji = statementDescriptorSuffixKanji
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case captureMethod = "capture_method"
+        case installments
+        case requestExtendedAuthorization = "request_extended_authorization"
+        case requestIncrementalAuthorization = "request_incremental_authorization"
+        case requestMulticapture = "request_multicapture"
+        case requestOvercapture = "request_overcapture"
+        case requestThreeDSecure = "request_three_d_secure"
+        case restrictions
+        case setupFutureUsage = "setup_future_usage"
+        case statementDescriptorSuffixKana = "statement_descriptor_suffix_kana"
+        case statementDescriptorSuffixKanji = "statement_descriptor_suffix_kanji"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.captureMethod = try container.decodeIfPresent(CheckoutAffirmPaymentMethodOptionsCaptureMethod.self, forKey: .captureMethod)
+        self.installments = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsCardInstallments.self, forKey: .installments)
+        self.requestExtendedAuthorization = try container.decodeIfPresent(CheckoutCardPaymentMethodOptionsRequestExtendedAuthorization.self, forKey: .requestExtendedAuthorization)
+        self.requestIncrementalAuthorization = try container.decodeIfPresent(CheckoutCardPaymentMethodOptionsRequestExtendedAuthorization.self, forKey: .requestIncrementalAuthorization)
+        self.requestMulticapture = try container.decodeIfPresent(CheckoutCardPaymentMethodOptionsRequestExtendedAuthorization.self, forKey: .requestMulticapture)
+        self.requestOvercapture = try container.decodeIfPresent(CheckoutCardPaymentMethodOptionsRequestExtendedAuthorization.self, forKey: .requestOvercapture)
+        self.requestThreeDSecure = try container.decodeIfPresent(CheckoutCardPaymentMethodOptionsRequestThreeDSecure.self, forKey: .requestThreeDSecure)
+        self.restrictions = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsCardRestrictions.self, forKey: .restrictions)
+        self.setupFutureUsage = try container.decodeIfPresent(ConfirmationTokenSetupFutureUsage.self, forKey: .setupFutureUsage)
+        self.statementDescriptorSuffixKana = try container.decodeIfPresent(String.self, forKey: .statementDescriptorSuffixKana)
+        self.statementDescriptorSuffixKanji = try container.decodeIfPresent(String.self, forKey: .statementDescriptorSuffixKanji)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .captureMethod, .installments, .requestExtendedAuthorization, .requestIncrementalAuthorization, .requestMulticapture, .requestOvercapture, .requestThreeDSecure, .restrictions, .setupFutureUsage, .statementDescriptorSuffixKana, .statementDescriptorSuffixKanji: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.captureMethod, forKey: .captureMethod)
+        try container.encodeIfPresent(self.installments, forKey: .installments)
+        try container.encodeIfPresent(self.requestExtendedAuthorization, forKey: .requestExtendedAuthorization)
+        try container.encodeIfPresent(self.requestIncrementalAuthorization, forKey: .requestIncrementalAuthorization)
+        try container.encodeIfPresent(self.requestMulticapture, forKey: .requestMulticapture)
+        try container.encodeIfPresent(self.requestOvercapture, forKey: .requestOvercapture)
+        try container.encodeIfPresent(self.requestThreeDSecure, forKey: .requestThreeDSecure)
+        try container.encodeIfPresent(self.restrictions, forKey: .restrictions)
+        try container.encodeIfPresent(self.setupFutureUsage, forKey: .setupFutureUsage)
+        try container.encodeIfPresent(self.statementDescriptorSuffixKana, forKey: .statementDescriptorSuffixKana)
+        try container.encodeIfPresent(self.statementDescriptorSuffixKanji, forKey: .statementDescriptorSuffixKanji)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsPaymentMethodOptionsCashapp: Sendable, Codable, Equatable, Hashable {
+    public var captureMethod: CheckoutAffirmPaymentMethodOptionsCaptureMethod?
+    public var setupFutureUsage: CheckoutAcssDebitPaymentMethodOptionsSetupFutureUsage?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(captureMethod: CheckoutAffirmPaymentMethodOptionsCaptureMethod? = nil, setupFutureUsage: CheckoutAcssDebitPaymentMethodOptionsSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.captureMethod = captureMethod
+        self.setupFutureUsage = setupFutureUsage
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case captureMethod = "capture_method"
+        case setupFutureUsage = "setup_future_usage"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.captureMethod = try container.decodeIfPresent(CheckoutAffirmPaymentMethodOptionsCaptureMethod.self, forKey: .captureMethod)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutAcssDebitPaymentMethodOptionsSetupFutureUsage.self, forKey: .setupFutureUsage)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .captureMethod, .setupFutureUsage: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.captureMethod, forKey: .captureMethod)
+        try container.encodeIfPresent(self.setupFutureUsage, forKey: .setupFutureUsage)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsPaymentMethodOptionsCrypto: Sendable, Codable, Equatable, Hashable {
+    public var setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.setupFutureUsage = setupFutureUsage
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case setupFutureUsage = "setup_future_usage"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutAffirmPaymentMethodOptionsSetupFutureUsage.self, forKey: .setupFutureUsage)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .setupFutureUsage: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.setupFutureUsage, forKey: .setupFutureUsage)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsPaymentMethodOptionsCustomerBalanceBankTransferEuBankTransfer: Sendable, Codable, Equatable, Hashable {
+    public var country: String
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(country: String, unknownFields: [String: JSONValue]? = nil) {
+        self.country = country
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case country
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.country = try container.decode(String.self, forKey: .country)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .country: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.country, forKey: .country)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsPaymentMethodOptionsCustomerBalanceBankTransfer: Sendable, Codable, Equatable, Hashable {
+    public var euBankTransfer: CheckoutSessionCreateParamsPaymentMethodOptionsCustomerBalanceBankTransferEuBankTransfer?
+    public var requestedAddressTypes: [CheckoutCustomerBalanceBankTransferPaymentMethodOptionsRequestedAddressTypesItem]?
+    public var type: CheckoutCustomerBalanceBankTransferPaymentMethodOptionsType
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(euBankTransfer: CheckoutSessionCreateParamsPaymentMethodOptionsCustomerBalanceBankTransferEuBankTransfer? = nil, requestedAddressTypes: [CheckoutCustomerBalanceBankTransferPaymentMethodOptionsRequestedAddressTypesItem]? = nil, type: CheckoutCustomerBalanceBankTransferPaymentMethodOptionsType, unknownFields: [String: JSONValue]? = nil) {
+        self.euBankTransfer = euBankTransfer
+        self.requestedAddressTypes = requestedAddressTypes
+        self.type = type
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case euBankTransfer = "eu_bank_transfer"
+        case requestedAddressTypes = "requested_address_types"
+        case type
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.euBankTransfer = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsCustomerBalanceBankTransferEuBankTransfer.self, forKey: .euBankTransfer)
+        self.requestedAddressTypes = try container.decodeIfPresent([CheckoutCustomerBalanceBankTransferPaymentMethodOptionsRequestedAddressTypesItem].self, forKey: .requestedAddressTypes)
+        self.type = try container.decode(CheckoutCustomerBalanceBankTransferPaymentMethodOptionsType.self, forKey: .type)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .euBankTransfer, .requestedAddressTypes, .type: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.euBankTransfer, forKey: .euBankTransfer)
+        try container.encodeIfPresent(self.requestedAddressTypes, forKey: .requestedAddressTypes)
+        try container.encodeIfPresent(self.type, forKey: .type)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsPaymentMethodOptionsCustomerBalance: Sendable, Codable, Equatable, Hashable {
+    public var bankTransfer: CheckoutSessionCreateParamsPaymentMethodOptionsCustomerBalanceBankTransfer?
+    public var fundingType: CheckoutCustomerBalancePaymentMethodOptionsFundingType?
+    public var setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(bankTransfer: CheckoutSessionCreateParamsPaymentMethodOptionsCustomerBalanceBankTransfer? = nil, fundingType: CheckoutCustomerBalancePaymentMethodOptionsFundingType? = nil, setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.bankTransfer = bankTransfer
+        self.fundingType = fundingType
+        self.setupFutureUsage = setupFutureUsage
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case bankTransfer = "bank_transfer"
+        case fundingType = "funding_type"
+        case setupFutureUsage = "setup_future_usage"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.bankTransfer = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsCustomerBalanceBankTransfer.self, forKey: .bankTransfer)
+        self.fundingType = try container.decodeIfPresent(CheckoutCustomerBalancePaymentMethodOptionsFundingType.self, forKey: .fundingType)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutAffirmPaymentMethodOptionsSetupFutureUsage.self, forKey: .setupFutureUsage)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .bankTransfer, .fundingType, .setupFutureUsage: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.bankTransfer, forKey: .bankTransfer)
+        try container.encodeIfPresent(self.fundingType, forKey: .fundingType)
+        try container.encodeIfPresent(self.setupFutureUsage, forKey: .setupFutureUsage)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsPaymentMethodOptionsDemoPay: Sendable, Codable, Equatable, Hashable {
+    public var setupFutureUsage: CheckoutAmazonPayPaymentMethodOptionsSetupFutureUsage?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(setupFutureUsage: CheckoutAmazonPayPaymentMethodOptionsSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.setupFutureUsage = setupFutureUsage
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case setupFutureUsage = "setup_future_usage"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutAmazonPayPaymentMethodOptionsSetupFutureUsage.self, forKey: .setupFutureUsage)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .setupFutureUsage: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.setupFutureUsage, forKey: .setupFutureUsage)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsPaymentMethodOptionsEps: Sendable, Codable, Equatable, Hashable {
+    public var setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.setupFutureUsage = setupFutureUsage
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case setupFutureUsage = "setup_future_usage"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutAffirmPaymentMethodOptionsSetupFutureUsage.self, forKey: .setupFutureUsage)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .setupFutureUsage: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.setupFutureUsage, forKey: .setupFutureUsage)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsPaymentMethodOptionsFpx: Sendable, Codable, Equatable, Hashable {
+    public var setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.setupFutureUsage = setupFutureUsage
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case setupFutureUsage = "setup_future_usage"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutAffirmPaymentMethodOptionsSetupFutureUsage.self, forKey: .setupFutureUsage)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .setupFutureUsage: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.setupFutureUsage, forKey: .setupFutureUsage)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsPaymentMethodOptionsGiropay: Sendable, Codable, Equatable, Hashable {
+    public var setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.setupFutureUsage = setupFutureUsage
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case setupFutureUsage = "setup_future_usage"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutAffirmPaymentMethodOptionsSetupFutureUsage.self, forKey: .setupFutureUsage)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .setupFutureUsage: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.setupFutureUsage, forKey: .setupFutureUsage)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsPaymentMethodOptionsGrabpay: Sendable, Codable, Equatable, Hashable {
+    public var setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.setupFutureUsage = setupFutureUsage
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case setupFutureUsage = "setup_future_usage"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutAffirmPaymentMethodOptionsSetupFutureUsage.self, forKey: .setupFutureUsage)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .setupFutureUsage: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.setupFutureUsage, forKey: .setupFutureUsage)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsPaymentMethodOptionsIdeal: Sendable, Codable, Equatable, Hashable {
+    public var setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.setupFutureUsage = setupFutureUsage
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case setupFutureUsage = "setup_future_usage"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutAffirmPaymentMethodOptionsSetupFutureUsage.self, forKey: .setupFutureUsage)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .setupFutureUsage: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.setupFutureUsage, forKey: .setupFutureUsage)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsPaymentMethodOptionsKakaoPay: Sendable, Codable, Equatable, Hashable {
+    public var captureMethod: CheckoutAffirmPaymentMethodOptionsCaptureMethod?
+    public var setupFutureUsage: CheckoutAmazonPayPaymentMethodOptionsSetupFutureUsage?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(captureMethod: CheckoutAffirmPaymentMethodOptionsCaptureMethod? = nil, setupFutureUsage: CheckoutAmazonPayPaymentMethodOptionsSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.captureMethod = captureMethod
+        self.setupFutureUsage = setupFutureUsage
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case captureMethod = "capture_method"
+        case setupFutureUsage = "setup_future_usage"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.captureMethod = try container.decodeIfPresent(CheckoutAffirmPaymentMethodOptionsCaptureMethod.self, forKey: .captureMethod)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutAmazonPayPaymentMethodOptionsSetupFutureUsage.self, forKey: .setupFutureUsage)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .captureMethod, .setupFutureUsage: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.captureMethod, forKey: .captureMethod)
+        try container.encodeIfPresent(self.setupFutureUsage, forKey: .setupFutureUsage)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsPaymentMethodOptionsKlarnaSubscriptionsItemNextBilling: Sendable, Codable, Equatable, Hashable {
+    public var amount: Int
+    public var date: String
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(amount: Int, date: String, unknownFields: [String: JSONValue]? = nil) {
+        self.amount = amount
+        self.date = date
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case amount
+        case date
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.amount = try container.decode(Int.self, forKey: .amount)
+        self.date = try container.decode(String.self, forKey: .date)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .amount, .date: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.amount, forKey: .amount)
+        try container.encodeIfPresent(self.date, forKey: .date)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsPaymentMethodOptionsKlarnaSubscriptionsItem: Sendable, Codable, Equatable, Hashable {
+    public var interval: PlanInterval
+    public var intervalCount: Int?
+    public var name: String?
+    public var nextBilling: CheckoutSessionCreateParamsPaymentMethodOptionsKlarnaSubscriptionsItemNextBilling
+    public var reference: String
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(interval: PlanInterval, intervalCount: Int? = nil, name: String? = nil, nextBilling: CheckoutSessionCreateParamsPaymentMethodOptionsKlarnaSubscriptionsItemNextBilling, reference: String, unknownFields: [String: JSONValue]? = nil) {
+        self.interval = interval
+        self.intervalCount = intervalCount
+        self.name = name
+        self.nextBilling = nextBilling
+        self.reference = reference
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case interval
+        case intervalCount = "interval_count"
+        case name
+        case nextBilling = "next_billing"
+        case reference
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.interval = try container.decode(PlanInterval.self, forKey: .interval)
+        self.intervalCount = try container.decodeIfPresent(Int.self, forKey: .intervalCount)
+        self.name = try container.decodeIfPresent(String.self, forKey: .name)
+        self.nextBilling = try container.decode(CheckoutSessionCreateParamsPaymentMethodOptionsKlarnaSubscriptionsItemNextBilling.self, forKey: .nextBilling)
+        self.reference = try container.decode(String.self, forKey: .reference)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .interval, .intervalCount, .name, .nextBilling, .reference: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.interval, forKey: .interval)
+        try container.encodeIfPresent(self.intervalCount, forKey: .intervalCount)
+        try container.encodeIfPresent(self.name, forKey: .name)
+        try container.encodeIfPresent(self.nextBilling, forKey: .nextBilling)
+        try container.encodeIfPresent(self.reference, forKey: .reference)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsPaymentMethodOptionsKlarna: Sendable, Codable, Equatable, Hashable {
+    public var captureMethod: CheckoutAffirmPaymentMethodOptionsCaptureMethod?
+    public var setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage?
+    public var subscriptions: Clearable<[CheckoutSessionCreateParamsPaymentMethodOptionsKlarnaSubscriptionsItem]>?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(captureMethod: CheckoutAffirmPaymentMethodOptionsCaptureMethod? = nil, setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage? = nil, subscriptions: Clearable<[CheckoutSessionCreateParamsPaymentMethodOptionsKlarnaSubscriptionsItem]>? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.captureMethod = captureMethod
+        self.setupFutureUsage = setupFutureUsage
+        self.subscriptions = subscriptions
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case captureMethod = "capture_method"
+        case setupFutureUsage = "setup_future_usage"
+        case subscriptions
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.captureMethod = try container.decodeIfPresent(CheckoutAffirmPaymentMethodOptionsCaptureMethod.self, forKey: .captureMethod)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutAffirmPaymentMethodOptionsSetupFutureUsage.self, forKey: .setupFutureUsage)
+        self.subscriptions = try container.decodeIfPresent(Clearable<[CheckoutSessionCreateParamsPaymentMethodOptionsKlarnaSubscriptionsItem]>.self, forKey: .subscriptions)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .captureMethod, .setupFutureUsage, .subscriptions: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.captureMethod, forKey: .captureMethod)
+        try container.encodeIfPresent(self.setupFutureUsage, forKey: .setupFutureUsage)
+        try container.encodeIfPresent(self.subscriptions, forKey: .subscriptions)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsPaymentMethodOptionsKonbini: Sendable, Codable, Equatable, Hashable {
+    public var expiresAfterDays: Int?
+    public var setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(expiresAfterDays: Int? = nil, setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.expiresAfterDays = expiresAfterDays
+        self.setupFutureUsage = setupFutureUsage
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case expiresAfterDays = "expires_after_days"
+        case setupFutureUsage = "setup_future_usage"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.expiresAfterDays = try container.decodeIfPresent(Int.self, forKey: .expiresAfterDays)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutAffirmPaymentMethodOptionsSetupFutureUsage.self, forKey: .setupFutureUsage)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .expiresAfterDays, .setupFutureUsage: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.expiresAfterDays, forKey: .expiresAfterDays)
+        try container.encodeIfPresent(self.setupFutureUsage, forKey: .setupFutureUsage)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsPaymentMethodOptionsKrCard: Sendable, Codable, Equatable, Hashable {
+    public var captureMethod: CheckoutAffirmPaymentMethodOptionsCaptureMethod?
+    public var setupFutureUsage: CheckoutAmazonPayPaymentMethodOptionsSetupFutureUsage?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(captureMethod: CheckoutAffirmPaymentMethodOptionsCaptureMethod? = nil, setupFutureUsage: CheckoutAmazonPayPaymentMethodOptionsSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.captureMethod = captureMethod
+        self.setupFutureUsage = setupFutureUsage
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case captureMethod = "capture_method"
+        case setupFutureUsage = "setup_future_usage"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.captureMethod = try container.decodeIfPresent(CheckoutAffirmPaymentMethodOptionsCaptureMethod.self, forKey: .captureMethod)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutAmazonPayPaymentMethodOptionsSetupFutureUsage.self, forKey: .setupFutureUsage)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .captureMethod, .setupFutureUsage: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.captureMethod, forKey: .captureMethod)
+        try container.encodeIfPresent(self.setupFutureUsage, forKey: .setupFutureUsage)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsPaymentMethodOptionsLink: Sendable, Codable, Equatable, Hashable {
+    public var captureMethod: CheckoutAffirmPaymentMethodOptionsCaptureMethod?
+    public var setupFutureUsage: CheckoutAmazonPayPaymentMethodOptionsSetupFutureUsage?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(captureMethod: CheckoutAffirmPaymentMethodOptionsCaptureMethod? = nil, setupFutureUsage: CheckoutAmazonPayPaymentMethodOptionsSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.captureMethod = captureMethod
+        self.setupFutureUsage = setupFutureUsage
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case captureMethod = "capture_method"
+        case setupFutureUsage = "setup_future_usage"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.captureMethod = try container.decodeIfPresent(CheckoutAffirmPaymentMethodOptionsCaptureMethod.self, forKey: .captureMethod)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutAmazonPayPaymentMethodOptionsSetupFutureUsage.self, forKey: .setupFutureUsage)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .captureMethod, .setupFutureUsage: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.captureMethod, forKey: .captureMethod)
+        try container.encodeIfPresent(self.setupFutureUsage, forKey: .setupFutureUsage)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsPaymentMethodOptionsMobilepay: Sendable, Codable, Equatable, Hashable {
+    public var captureMethod: CheckoutAffirmPaymentMethodOptionsCaptureMethod?
+    public var setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(captureMethod: CheckoutAffirmPaymentMethodOptionsCaptureMethod? = nil, setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.captureMethod = captureMethod
+        self.setupFutureUsage = setupFutureUsage
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case captureMethod = "capture_method"
+        case setupFutureUsage = "setup_future_usage"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.captureMethod = try container.decodeIfPresent(CheckoutAffirmPaymentMethodOptionsCaptureMethod.self, forKey: .captureMethod)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutAffirmPaymentMethodOptionsSetupFutureUsage.self, forKey: .setupFutureUsage)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .captureMethod, .setupFutureUsage: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.captureMethod, forKey: .captureMethod)
+        try container.encodeIfPresent(self.setupFutureUsage, forKey: .setupFutureUsage)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsPaymentMethodOptionsMultibanco: Sendable, Codable, Equatable, Hashable {
+    public var setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.setupFutureUsage = setupFutureUsage
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case setupFutureUsage = "setup_future_usage"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutAffirmPaymentMethodOptionsSetupFutureUsage.self, forKey: .setupFutureUsage)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .setupFutureUsage: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.setupFutureUsage, forKey: .setupFutureUsage)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsPaymentMethodOptionsNaverPay: Sendable, Codable, Equatable, Hashable {
+    public var captureMethod: CheckoutAffirmPaymentMethodOptionsCaptureMethod?
+    public var setupFutureUsage: CheckoutAmazonPayPaymentMethodOptionsSetupFutureUsage?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(captureMethod: CheckoutAffirmPaymentMethodOptionsCaptureMethod? = nil, setupFutureUsage: CheckoutAmazonPayPaymentMethodOptionsSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.captureMethod = captureMethod
+        self.setupFutureUsage = setupFutureUsage
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case captureMethod = "capture_method"
+        case setupFutureUsage = "setup_future_usage"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.captureMethod = try container.decodeIfPresent(CheckoutAffirmPaymentMethodOptionsCaptureMethod.self, forKey: .captureMethod)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutAmazonPayPaymentMethodOptionsSetupFutureUsage.self, forKey: .setupFutureUsage)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .captureMethod, .setupFutureUsage: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.captureMethod, forKey: .captureMethod)
+        try container.encodeIfPresent(self.setupFutureUsage, forKey: .setupFutureUsage)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsPaymentMethodOptionsOxxo: Sendable, Codable, Equatable, Hashable {
+    public var expiresAfterDays: Int?
+    public var setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(expiresAfterDays: Int? = nil, setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.expiresAfterDays = expiresAfterDays
+        self.setupFutureUsage = setupFutureUsage
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case expiresAfterDays = "expires_after_days"
+        case setupFutureUsage = "setup_future_usage"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.expiresAfterDays = try container.decodeIfPresent(Int.self, forKey: .expiresAfterDays)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutAffirmPaymentMethodOptionsSetupFutureUsage.self, forKey: .setupFutureUsage)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .expiresAfterDays, .setupFutureUsage: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.expiresAfterDays, forKey: .expiresAfterDays)
+        try container.encodeIfPresent(self.setupFutureUsage, forKey: .setupFutureUsage)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsPaymentMethodOptionsP24: Sendable, Codable, Equatable, Hashable {
+    public var setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage?
+    public var tosShownAndAccepted: Bool?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage? = nil, tosShownAndAccepted: Bool? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.setupFutureUsage = setupFutureUsage
+        self.tosShownAndAccepted = tosShownAndAccepted
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case setupFutureUsage = "setup_future_usage"
+        case tosShownAndAccepted = "tos_shown_and_accepted"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutAffirmPaymentMethodOptionsSetupFutureUsage.self, forKey: .setupFutureUsage)
+        self.tosShownAndAccepted = try container.decodeIfPresent(Bool.self, forKey: .tosShownAndAccepted)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .setupFutureUsage, .tosShownAndAccepted: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.setupFutureUsage, forKey: .setupFutureUsage)
+        try container.encodeIfPresent(self.tosShownAndAccepted, forKey: .tosShownAndAccepted)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsPaymentMethodOptionsPayByBank: Sendable, Codable, Equatable, Hashable {
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(unknownFields: [String: JSONValue]? = nil) {
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: CodingKey {
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsPaymentMethodOptionsPayco: Sendable, Codable, Equatable, Hashable {
+    public var captureMethod: CheckoutAffirmPaymentMethodOptionsCaptureMethod?
+    public var setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(captureMethod: CheckoutAffirmPaymentMethodOptionsCaptureMethod? = nil, setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.captureMethod = captureMethod
+        self.setupFutureUsage = setupFutureUsage
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case captureMethod = "capture_method"
+        case setupFutureUsage = "setup_future_usage"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.captureMethod = try container.decodeIfPresent(CheckoutAffirmPaymentMethodOptionsCaptureMethod.self, forKey: .captureMethod)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutAffirmPaymentMethodOptionsSetupFutureUsage.self, forKey: .setupFutureUsage)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .captureMethod, .setupFutureUsage: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.captureMethod, forKey: .captureMethod)
+        try container.encodeIfPresent(self.setupFutureUsage, forKey: .setupFutureUsage)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsPaymentMethodOptionsPaynow: Sendable, Codable, Equatable, Hashable {
+    public var setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.setupFutureUsage = setupFutureUsage
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case setupFutureUsage = "setup_future_usage"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutAffirmPaymentMethodOptionsSetupFutureUsage.self, forKey: .setupFutureUsage)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .setupFutureUsage: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.setupFutureUsage, forKey: .setupFutureUsage)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+/// Lossless enum: values Stripe documents plus any value the API
+/// adds later, kept in `undocumented` instead of dropped.
+public enum CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod: Sendable, Equatable, Hashable, LosslessEnum {
+    case anonymous
+    case manual
+    case undocumented(String)
+
+    public init(rawValue raw: String) {
+        switch raw {
+        case "": self = .anonymous
+        case "manual": self = .manual
+        default: self = .undocumented(raw)
+        }
+    }
+
+    public var rawValue: String {
+        switch self {
+        case .anonymous: return ""
+        case .manual: return "manual"
+        case .undocumented(let value): return value
+        }
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        self.init(rawValue: try container.decode(String.self))
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(rawValue)
+    }
+}
+
+/// Lossless enum: values Stripe documents plus any value the API
+/// adds later, kept in `undocumented` instead of dropped.
+public enum CheckoutSessionCreateParamsPaymentMethodOptionsPaypalPreferredLocale: Sendable, Equatable, Hashable, LosslessEnum {
+    case csCZ
+    case daDK
+    case deAT
+    case deDE
+    case deLU
+    case elGR
+    case enGB
+    case enUS
+    case esES
+    case fiFI
+    case frBE
+    case frFR
+    case frLU
+    case huHU
+    case itIT
+    case nlBE
+    case nlNL
+    case plPL
+    case ptPT
+    case skSK
+    case svSE
+    case undocumented(String)
+
+    public init(rawValue raw: String) {
+        switch raw {
+        case "cs-CZ": self = .csCZ
+        case "da-DK": self = .daDK
+        case "de-AT": self = .deAT
+        case "de-DE": self = .deDE
+        case "de-LU": self = .deLU
+        case "el-GR": self = .elGR
+        case "en-GB": self = .enGB
+        case "en-US": self = .enUS
+        case "es-ES": self = .esES
+        case "fi-FI": self = .fiFI
+        case "fr-BE": self = .frBE
+        case "fr-FR": self = .frFR
+        case "fr-LU": self = .frLU
+        case "hu-HU": self = .huHU
+        case "it-IT": self = .itIT
+        case "nl-BE": self = .nlBE
+        case "nl-NL": self = .nlNL
+        case "pl-PL": self = .plPL
+        case "pt-PT": self = .ptPT
+        case "sk-SK": self = .skSK
+        case "sv-SE": self = .svSE
+        default: self = .undocumented(raw)
+        }
+    }
+
+    public var rawValue: String {
+        switch self {
+        case .csCZ: return "cs-CZ"
+        case .daDK: return "da-DK"
+        case .deAT: return "de-AT"
+        case .deDE: return "de-DE"
+        case .deLU: return "de-LU"
+        case .elGR: return "el-GR"
+        case .enGB: return "en-GB"
+        case .enUS: return "en-US"
+        case .esES: return "es-ES"
+        case .fiFI: return "fi-FI"
+        case .frBE: return "fr-BE"
+        case .frFR: return "fr-FR"
+        case .frLU: return "fr-LU"
+        case .huHU: return "hu-HU"
+        case .itIT: return "it-IT"
+        case .nlBE: return "nl-BE"
+        case .nlNL: return "nl-NL"
+        case .plPL: return "pl-PL"
+        case .ptPT: return "pt-PT"
+        case .skSK: return "sk-SK"
+        case .svSE: return "sv-SE"
+        case .undocumented(let value): return value
+        }
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        self.init(rawValue: try container.decode(String.self))
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(rawValue)
+    }
+}
+
+public struct CheckoutSessionCreateParamsPaymentMethodOptionsPaypal: Sendable, Codable, Equatable, Hashable {
+    public var captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod?
+    public var preferredLocale: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalPreferredLocale?
+    public var reference: String?
+    public var riskCorrelationId: String?
+    public var setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod? = nil, preferredLocale: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalPreferredLocale? = nil, reference: String? = nil, riskCorrelationId: String? = nil, setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.captureMethod = captureMethod
+        self.preferredLocale = preferredLocale
+        self.reference = reference
+        self.riskCorrelationId = riskCorrelationId
+        self.setupFutureUsage = setupFutureUsage
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case captureMethod = "capture_method"
+        case preferredLocale = "preferred_locale"
+        case reference
+        case riskCorrelationId = "risk_correlation_id"
+        case setupFutureUsage = "setup_future_usage"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.captureMethod = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod.self, forKey: .captureMethod)
+        self.preferredLocale = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsPaypalPreferredLocale.self, forKey: .preferredLocale)
+        self.reference = try container.decodeIfPresent(String.self, forKey: .reference)
+        self.riskCorrelationId = try container.decodeIfPresent(String.self, forKey: .riskCorrelationId)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage.self, forKey: .setupFutureUsage)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .captureMethod, .preferredLocale, .reference, .riskCorrelationId, .setupFutureUsage: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.captureMethod, forKey: .captureMethod)
+        try container.encodeIfPresent(self.preferredLocale, forKey: .preferredLocale)
+        try container.encodeIfPresent(self.reference, forKey: .reference)
+        try container.encodeIfPresent(self.riskCorrelationId, forKey: .riskCorrelationId)
+        try container.encodeIfPresent(self.setupFutureUsage, forKey: .setupFutureUsage)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+/// Lossless enum: values Stripe documents plus any value the API
+/// adds later, kept in `undocumented` instead of dropped.
+public enum CheckoutSessionCreateParamsPaymentMethodOptionsPaytoMandateOptionsAmountType: Sendable, Equatable, Hashable, LosslessEnum {
+    case anonymous
+    case fixed
+    case maximum
+    case undocumented(String)
+
+    public init(rawValue raw: String) {
+        switch raw {
+        case "": self = .anonymous
+        case "fixed": self = .fixed
+        case "maximum": self = .maximum
+        default: self = .undocumented(raw)
+        }
+    }
+
+    public var rawValue: String {
+        switch self {
+        case .anonymous: return ""
+        case .fixed: return "fixed"
+        case .maximum: return "maximum"
+        case .undocumented(let value): return value
+        }
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        self.init(rawValue: try container.decode(String.self))
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(rawValue)
+    }
+}
+
+/// Lossless enum: values Stripe documents plus any value the API
+/// adds later, kept in `undocumented` instead of dropped.
+public enum CheckoutSessionCreateParamsPaymentMethodOptionsPaytoMandateOptionsPaymentSchedule: Sendable, Equatable, Hashable, LosslessEnum {
+    case anonymous
+    case adhoc
+    case annual
+    case daily
+    case fortnightly
+    case monthly
+    case quarterly
+    case semiAnnual
+    case weekly
+    case undocumented(String)
+
+    public init(rawValue raw: String) {
+        switch raw {
+        case "": self = .anonymous
+        case "adhoc": self = .adhoc
+        case "annual": self = .annual
+        case "daily": self = .daily
+        case "fortnightly": self = .fortnightly
+        case "monthly": self = .monthly
+        case "quarterly": self = .quarterly
+        case "semi_annual": self = .semiAnnual
+        case "weekly": self = .weekly
+        default: self = .undocumented(raw)
+        }
+    }
+
+    public var rawValue: String {
+        switch self {
+        case .anonymous: return ""
+        case .adhoc: return "adhoc"
+        case .annual: return "annual"
+        case .daily: return "daily"
+        case .fortnightly: return "fortnightly"
+        case .monthly: return "monthly"
+        case .quarterly: return "quarterly"
+        case .semiAnnual: return "semi_annual"
+        case .weekly: return "weekly"
+        case .undocumented(let value): return value
+        }
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        self.init(rawValue: try container.decode(String.self))
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(rawValue)
+    }
+}
+
+/// Lossless enum: values Stripe documents plus any value the API
+/// adds later, kept in `undocumented` instead of dropped.
+public enum CheckoutSessionCreateParamsPaymentMethodOptionsPaytoMandateOptionsPurpose: Sendable, Equatable, Hashable, LosslessEnum {
+    case anonymous
+    case dependantSupport
+    case government
+    case loan
+    case mortgage
+    case other
+    case pension
+    case personal
+    case retail
+    case salary
+    case tax
+    case utility
+    case undocumented(String)
+
+    public init(rawValue raw: String) {
+        switch raw {
+        case "": self = .anonymous
+        case "dependant_support": self = .dependantSupport
+        case "government": self = .government
+        case "loan": self = .loan
+        case "mortgage": self = .mortgage
+        case "other": self = .other
+        case "pension": self = .pension
+        case "personal": self = .personal
+        case "retail": self = .retail
+        case "salary": self = .salary
+        case "tax": self = .tax
+        case "utility": self = .utility
+        default: self = .undocumented(raw)
+        }
+    }
+
+    public var rawValue: String {
+        switch self {
+        case .anonymous: return ""
+        case .dependantSupport: return "dependant_support"
+        case .government: return "government"
+        case .loan: return "loan"
+        case .mortgage: return "mortgage"
+        case .other: return "other"
+        case .pension: return "pension"
+        case .personal: return "personal"
+        case .retail: return "retail"
+        case .salary: return "salary"
+        case .tax: return "tax"
+        case .utility: return "utility"
+        case .undocumented(let value): return value
+        }
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        self.init(rawValue: try container.decode(String.self))
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(rawValue)
+    }
+}
+
+public struct CheckoutSessionCreateParamsPaymentMethodOptionsPaytoMandateOptions: Sendable, Codable, Equatable, Hashable {
+    public var amount: Clearable<Int>?
+    public var amountType: CheckoutSessionCreateParamsPaymentMethodOptionsPaytoMandateOptionsAmountType?
+    public var endDate: Clearable<String>?
+    public var paymentSchedule: CheckoutSessionCreateParamsPaymentMethodOptionsPaytoMandateOptionsPaymentSchedule?
+    public var paymentsPerPeriod: Clearable<Int>?
+    public var purpose: CheckoutSessionCreateParamsPaymentMethodOptionsPaytoMandateOptionsPurpose?
+    public var startDate: Clearable<String>?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(amount: Clearable<Int>? = nil, amountType: CheckoutSessionCreateParamsPaymentMethodOptionsPaytoMandateOptionsAmountType? = nil, endDate: Clearable<String>? = nil, paymentSchedule: CheckoutSessionCreateParamsPaymentMethodOptionsPaytoMandateOptionsPaymentSchedule? = nil, paymentsPerPeriod: Clearable<Int>? = nil, purpose: CheckoutSessionCreateParamsPaymentMethodOptionsPaytoMandateOptionsPurpose? = nil, startDate: Clearable<String>? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.amount = amount
+        self.amountType = amountType
+        self.endDate = endDate
+        self.paymentSchedule = paymentSchedule
+        self.paymentsPerPeriod = paymentsPerPeriod
+        self.purpose = purpose
+        self.startDate = startDate
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case amount
+        case amountType = "amount_type"
+        case endDate = "end_date"
+        case paymentSchedule = "payment_schedule"
+        case paymentsPerPeriod = "payments_per_period"
+        case purpose
+        case startDate = "start_date"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.amount = try container.decodeIfPresent(Clearable<Int>.self, forKey: .amount)
+        self.amountType = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsPaytoMandateOptionsAmountType.self, forKey: .amountType)
+        self.endDate = try container.decodeIfPresent(Clearable<String>.self, forKey: .endDate)
+        self.paymentSchedule = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsPaytoMandateOptionsPaymentSchedule.self, forKey: .paymentSchedule)
+        self.paymentsPerPeriod = try container.decodeIfPresent(Clearable<Int>.self, forKey: .paymentsPerPeriod)
+        self.purpose = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsPaytoMandateOptionsPurpose.self, forKey: .purpose)
+        self.startDate = try container.decodeIfPresent(Clearable<String>.self, forKey: .startDate)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .amount, .amountType, .endDate, .paymentSchedule, .paymentsPerPeriod, .purpose, .startDate: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.amount, forKey: .amount)
+        try container.encodeIfPresent(self.amountType, forKey: .amountType)
+        try container.encodeIfPresent(self.endDate, forKey: .endDate)
+        try container.encodeIfPresent(self.paymentSchedule, forKey: .paymentSchedule)
+        try container.encodeIfPresent(self.paymentsPerPeriod, forKey: .paymentsPerPeriod)
+        try container.encodeIfPresent(self.purpose, forKey: .purpose)
+        try container.encodeIfPresent(self.startDate, forKey: .startDate)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsPaymentMethodOptionsPayto: Sendable, Codable, Equatable, Hashable {
+    public var mandateOptions: CheckoutSessionCreateParamsPaymentMethodOptionsPaytoMandateOptions?
+    public var setupFutureUsage: CheckoutAmazonPayPaymentMethodOptionsSetupFutureUsage?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(mandateOptions: CheckoutSessionCreateParamsPaymentMethodOptionsPaytoMandateOptions? = nil, setupFutureUsage: CheckoutAmazonPayPaymentMethodOptionsSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.mandateOptions = mandateOptions
+        self.setupFutureUsage = setupFutureUsage
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case mandateOptions = "mandate_options"
+        case setupFutureUsage = "setup_future_usage"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.mandateOptions = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsPaytoMandateOptions.self, forKey: .mandateOptions)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutAmazonPayPaymentMethodOptionsSetupFutureUsage.self, forKey: .setupFutureUsage)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .mandateOptions, .setupFutureUsage: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.mandateOptions, forKey: .mandateOptions)
+        try container.encodeIfPresent(self.setupFutureUsage, forKey: .setupFutureUsage)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsPaymentMethodOptionsPixMandateOptions: Sendable, Codable, Equatable, Hashable {
+    public var amount: Int?
+    public var amountIncludesIof: CheckoutPixPaymentMethodOptionsAmountIncludesIof?
+    public var amountType: InvoiceMandateOptionsCardAmountType?
+    public var currency: String?
+    public var endDate: String?
+    public var paymentSchedule: MandatePixPaymentSchedule?
+    public var reference: String?
+    public var startDate: String?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(amount: Int? = nil, amountIncludesIof: CheckoutPixPaymentMethodOptionsAmountIncludesIof? = nil, amountType: InvoiceMandateOptionsCardAmountType? = nil, currency: String? = nil, endDate: String? = nil, paymentSchedule: MandatePixPaymentSchedule? = nil, reference: String? = nil, startDate: String? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.amount = amount
+        self.amountIncludesIof = amountIncludesIof
+        self.amountType = amountType
+        self.currency = currency
+        self.endDate = endDate
+        self.paymentSchedule = paymentSchedule
+        self.reference = reference
+        self.startDate = startDate
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case amount
+        case amountIncludesIof = "amount_includes_iof"
+        case amountType = "amount_type"
+        case currency
+        case endDate = "end_date"
+        case paymentSchedule = "payment_schedule"
+        case reference
+        case startDate = "start_date"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.amount = try container.decodeIfPresent(Int.self, forKey: .amount)
+        self.amountIncludesIof = try container.decodeIfPresent(CheckoutPixPaymentMethodOptionsAmountIncludesIof.self, forKey: .amountIncludesIof)
+        self.amountType = try container.decodeIfPresent(InvoiceMandateOptionsCardAmountType.self, forKey: .amountType)
+        self.currency = try container.decodeIfPresent(String.self, forKey: .currency)
+        self.endDate = try container.decodeIfPresent(String.self, forKey: .endDate)
+        self.paymentSchedule = try container.decodeIfPresent(MandatePixPaymentSchedule.self, forKey: .paymentSchedule)
+        self.reference = try container.decodeIfPresent(String.self, forKey: .reference)
+        self.startDate = try container.decodeIfPresent(String.self, forKey: .startDate)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .amount, .amountIncludesIof, .amountType, .currency, .endDate, .paymentSchedule, .reference, .startDate: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.amount, forKey: .amount)
+        try container.encodeIfPresent(self.amountIncludesIof, forKey: .amountIncludesIof)
+        try container.encodeIfPresent(self.amountType, forKey: .amountType)
+        try container.encodeIfPresent(self.currency, forKey: .currency)
+        try container.encodeIfPresent(self.endDate, forKey: .endDate)
+        try container.encodeIfPresent(self.paymentSchedule, forKey: .paymentSchedule)
+        try container.encodeIfPresent(self.reference, forKey: .reference)
+        try container.encodeIfPresent(self.startDate, forKey: .startDate)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsPaymentMethodOptionsPix: Sendable, Codable, Equatable, Hashable {
+    public var amountIncludesIof: CheckoutPixPaymentMethodOptionsAmountIncludesIof?
+    public var expiresAfterSeconds: Int?
+    public var mandateOptions: CheckoutSessionCreateParamsPaymentMethodOptionsPixMandateOptions?
+    public var setupFutureUsage: CheckoutAmazonPayPaymentMethodOptionsSetupFutureUsage?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(amountIncludesIof: CheckoutPixPaymentMethodOptionsAmountIncludesIof? = nil, expiresAfterSeconds: Int? = nil, mandateOptions: CheckoutSessionCreateParamsPaymentMethodOptionsPixMandateOptions? = nil, setupFutureUsage: CheckoutAmazonPayPaymentMethodOptionsSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.amountIncludesIof = amountIncludesIof
+        self.expiresAfterSeconds = expiresAfterSeconds
+        self.mandateOptions = mandateOptions
+        self.setupFutureUsage = setupFutureUsage
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case amountIncludesIof = "amount_includes_iof"
+        case expiresAfterSeconds = "expires_after_seconds"
+        case mandateOptions = "mandate_options"
+        case setupFutureUsage = "setup_future_usage"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.amountIncludesIof = try container.decodeIfPresent(CheckoutPixPaymentMethodOptionsAmountIncludesIof.self, forKey: .amountIncludesIof)
+        self.expiresAfterSeconds = try container.decodeIfPresent(Int.self, forKey: .expiresAfterSeconds)
+        self.mandateOptions = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsPixMandateOptions.self, forKey: .mandateOptions)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutAmazonPayPaymentMethodOptionsSetupFutureUsage.self, forKey: .setupFutureUsage)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .amountIncludesIof, .expiresAfterSeconds, .mandateOptions, .setupFutureUsage: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.amountIncludesIof, forKey: .amountIncludesIof)
+        try container.encodeIfPresent(self.expiresAfterSeconds, forKey: .expiresAfterSeconds)
+        try container.encodeIfPresent(self.mandateOptions, forKey: .mandateOptions)
+        try container.encodeIfPresent(self.setupFutureUsage, forKey: .setupFutureUsage)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsPaymentMethodOptionsRevolutPay: Sendable, Codable, Equatable, Hashable {
+    public var captureMethod: CheckoutAffirmPaymentMethodOptionsCaptureMethod?
+    public var setupFutureUsage: CheckoutAmazonPayPaymentMethodOptionsSetupFutureUsage?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(captureMethod: CheckoutAffirmPaymentMethodOptionsCaptureMethod? = nil, setupFutureUsage: CheckoutAmazonPayPaymentMethodOptionsSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.captureMethod = captureMethod
+        self.setupFutureUsage = setupFutureUsage
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case captureMethod = "capture_method"
+        case setupFutureUsage = "setup_future_usage"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.captureMethod = try container.decodeIfPresent(CheckoutAffirmPaymentMethodOptionsCaptureMethod.self, forKey: .captureMethod)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutAmazonPayPaymentMethodOptionsSetupFutureUsage.self, forKey: .setupFutureUsage)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .captureMethod, .setupFutureUsage: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.captureMethod, forKey: .captureMethod)
+        try container.encodeIfPresent(self.setupFutureUsage, forKey: .setupFutureUsage)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsPaymentMethodOptionsSamsungPay: Sendable, Codable, Equatable, Hashable {
+    public var captureMethod: CheckoutAffirmPaymentMethodOptionsCaptureMethod?
+    public var setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(captureMethod: CheckoutAffirmPaymentMethodOptionsCaptureMethod? = nil, setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.captureMethod = captureMethod
+        self.setupFutureUsage = setupFutureUsage
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case captureMethod = "capture_method"
+        case setupFutureUsage = "setup_future_usage"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.captureMethod = try container.decodeIfPresent(CheckoutAffirmPaymentMethodOptionsCaptureMethod.self, forKey: .captureMethod)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutAffirmPaymentMethodOptionsSetupFutureUsage.self, forKey: .setupFutureUsage)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .captureMethod, .setupFutureUsage: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.captureMethod, forKey: .captureMethod)
+        try container.encodeIfPresent(self.setupFutureUsage, forKey: .setupFutureUsage)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsPaymentMethodOptionsSatispay: Sendable, Codable, Equatable, Hashable {
+    public var captureMethod: CheckoutAffirmPaymentMethodOptionsCaptureMethod?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(captureMethod: CheckoutAffirmPaymentMethodOptionsCaptureMethod? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.captureMethod = captureMethod
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case captureMethod = "capture_method"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.captureMethod = try container.decodeIfPresent(CheckoutAffirmPaymentMethodOptionsCaptureMethod.self, forKey: .captureMethod)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .captureMethod: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.captureMethod, forKey: .captureMethod)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsPaymentMethodOptionsScalapay: Sendable, Codable, Equatable, Hashable {
+    public var captureMethod: CheckoutAffirmPaymentMethodOptionsCaptureMethod?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(captureMethod: CheckoutAffirmPaymentMethodOptionsCaptureMethod? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.captureMethod = captureMethod
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case captureMethod = "capture_method"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.captureMethod = try container.decodeIfPresent(CheckoutAffirmPaymentMethodOptionsCaptureMethod.self, forKey: .captureMethod)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .captureMethod: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.captureMethod, forKey: .captureMethod)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsPaymentMethodOptionsSepaDebitMandateOptions: Sendable, Codable, Equatable, Hashable {
+    public var referencePrefix: Clearable<String>?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(referencePrefix: Clearable<String>? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.referencePrefix = referencePrefix
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case referencePrefix = "reference_prefix"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.referencePrefix = try container.decodeIfPresent(Clearable<String>.self, forKey: .referencePrefix)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .referencePrefix: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.referencePrefix, forKey: .referencePrefix)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsPaymentMethodOptionsSepaDebit: Sendable, Codable, Equatable, Hashable {
+    public var mandateOptions: CheckoutSessionCreateParamsPaymentMethodOptionsSepaDebitMandateOptions?
+    public var setupFutureUsage: CheckoutAcssDebitPaymentMethodOptionsSetupFutureUsage?
+    public var targetDate: String?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(mandateOptions: CheckoutSessionCreateParamsPaymentMethodOptionsSepaDebitMandateOptions? = nil, setupFutureUsage: CheckoutAcssDebitPaymentMethodOptionsSetupFutureUsage? = nil, targetDate: String? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.mandateOptions = mandateOptions
+        self.setupFutureUsage = setupFutureUsage
+        self.targetDate = targetDate
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case mandateOptions = "mandate_options"
+        case setupFutureUsage = "setup_future_usage"
+        case targetDate = "target_date"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.mandateOptions = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsSepaDebitMandateOptions.self, forKey: .mandateOptions)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutAcssDebitPaymentMethodOptionsSetupFutureUsage.self, forKey: .setupFutureUsage)
+        self.targetDate = try container.decodeIfPresent(String.self, forKey: .targetDate)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .mandateOptions, .setupFutureUsage, .targetDate: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.mandateOptions, forKey: .mandateOptions)
+        try container.encodeIfPresent(self.setupFutureUsage, forKey: .setupFutureUsage)
+        try container.encodeIfPresent(self.targetDate, forKey: .targetDate)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsPaymentMethodOptionsSequra: Sendable, Codable, Equatable, Hashable {
+    public var captureMethod: CheckoutAffirmPaymentMethodOptionsCaptureMethod?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(captureMethod: CheckoutAffirmPaymentMethodOptionsCaptureMethod? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.captureMethod = captureMethod
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case captureMethod = "capture_method"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.captureMethod = try container.decodeIfPresent(CheckoutAffirmPaymentMethodOptionsCaptureMethod.self, forKey: .captureMethod)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .captureMethod: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.captureMethod, forKey: .captureMethod)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsPaymentMethodOptionsSofort: Sendable, Codable, Equatable, Hashable {
+    public var setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.setupFutureUsage = setupFutureUsage
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case setupFutureUsage = "setup_future_usage"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutAffirmPaymentMethodOptionsSetupFutureUsage.self, forKey: .setupFutureUsage)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .setupFutureUsage: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.setupFutureUsage, forKey: .setupFutureUsage)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsPaymentMethodOptionsSunbit: Sendable, Codable, Equatable, Hashable {
+    public var captureMethod: CheckoutAffirmPaymentMethodOptionsCaptureMethod?
+    public var setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(captureMethod: CheckoutAffirmPaymentMethodOptionsCaptureMethod? = nil, setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.captureMethod = captureMethod
+        self.setupFutureUsage = setupFutureUsage
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case captureMethod = "capture_method"
+        case setupFutureUsage = "setup_future_usage"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.captureMethod = try container.decodeIfPresent(CheckoutAffirmPaymentMethodOptionsCaptureMethod.self, forKey: .captureMethod)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutAffirmPaymentMethodOptionsSetupFutureUsage.self, forKey: .setupFutureUsage)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .captureMethod, .setupFutureUsage: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.captureMethod, forKey: .captureMethod)
+        try container.encodeIfPresent(self.setupFutureUsage, forKey: .setupFutureUsage)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsPaymentMethodOptionsSwish: Sendable, Codable, Equatable, Hashable {
+    public var reference: String?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(reference: String? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.reference = reference
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case reference
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.reference = try container.decodeIfPresent(String.self, forKey: .reference)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .reference: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.reference, forKey: .reference)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsPaymentMethodOptionsTwint: Sendable, Codable, Equatable, Hashable {
+    public var setupFutureUsage: CheckoutAmazonPayPaymentMethodOptionsSetupFutureUsage?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(setupFutureUsage: CheckoutAmazonPayPaymentMethodOptionsSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.setupFutureUsage = setupFutureUsage
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case setupFutureUsage = "setup_future_usage"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutAmazonPayPaymentMethodOptionsSetupFutureUsage.self, forKey: .setupFutureUsage)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .setupFutureUsage: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.setupFutureUsage, forKey: .setupFutureUsage)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsPaymentMethodOptionsUpiMandateOptions: Sendable, Codable, Equatable, Hashable {
+    public var amount: Int?
+    public var amountType: InvoiceMandateOptionsCardAmountType?
+    public var description: String?
+    public var endDate: StripeTimestamp?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(amount: Int? = nil, amountType: InvoiceMandateOptionsCardAmountType? = nil, description: String? = nil, endDate: StripeTimestamp? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.amount = amount
+        self.amountType = amountType
+        self.description = description
+        self.endDate = endDate
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case amount
+        case amountType = "amount_type"
+        case description
+        case endDate = "end_date"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.amount = try container.decodeIfPresent(Int.self, forKey: .amount)
+        self.amountType = try container.decodeIfPresent(InvoiceMandateOptionsCardAmountType.self, forKey: .amountType)
+        self.description = try container.decodeIfPresent(String.self, forKey: .description)
+        self.endDate = try container.decodeIfPresent(StripeTimestamp.self, forKey: .endDate)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .amount, .amountType, .description, .endDate: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.amount, forKey: .amount)
+        try container.encodeIfPresent(self.amountType, forKey: .amountType)
+        try container.encodeIfPresent(self.description, forKey: .description)
+        try container.encodeIfPresent(self.endDate, forKey: .endDate)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+/// Lossless enum: values Stripe documents plus any value the API
+/// adds later, kept in `undocumented` instead of dropped.
+public enum CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage: Sendable, Equatable, Hashable, LosslessEnum {
+    case anonymous
+    case none
+    case offSession
+    case onSession
+    case undocumented(String)
+
+    public init(rawValue raw: String) {
+        switch raw {
+        case "": self = .anonymous
+        case "none": self = .none
+        case "off_session": self = .offSession
+        case "on_session": self = .onSession
+        default: self = .undocumented(raw)
+        }
+    }
+
+    public var rawValue: String {
+        switch self {
+        case .anonymous: return ""
+        case .none: return "none"
+        case .offSession: return "off_session"
+        case .onSession: return "on_session"
+        case .undocumented(let value): return value
+        }
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        self.init(rawValue: try container.decode(String.self))
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(rawValue)
+    }
+}
+
+public struct CheckoutSessionCreateParamsPaymentMethodOptionsUpi: Sendable, Codable, Equatable, Hashable {
+    public var mandateOptions: CheckoutSessionCreateParamsPaymentMethodOptionsUpiMandateOptions?
+    public var setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(mandateOptions: CheckoutSessionCreateParamsPaymentMethodOptionsUpiMandateOptions? = nil, setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.mandateOptions = mandateOptions
+        self.setupFutureUsage = setupFutureUsage
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case mandateOptions = "mandate_options"
+        case setupFutureUsage = "setup_future_usage"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.mandateOptions = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsUpiMandateOptions.self, forKey: .mandateOptions)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage.self, forKey: .setupFutureUsage)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .mandateOptions, .setupFutureUsage: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.mandateOptions, forKey: .mandateOptions)
+        try container.encodeIfPresent(self.setupFutureUsage, forKey: .setupFutureUsage)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsPaymentMethodOptionsUsBankAccountFinancialConnections: Sendable, Codable, Equatable, Hashable {
+    public var permissions: [CheckoutFinancialConnectionsPaymentMethodOptionsPermissionsItem]?
+    public var prefetch: [CheckoutFinancialConnectionsPaymentMethodOptionsPrefetchItem]?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(permissions: [CheckoutFinancialConnectionsPaymentMethodOptionsPermissionsItem]? = nil, prefetch: [CheckoutFinancialConnectionsPaymentMethodOptionsPrefetchItem]? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.permissions = permissions
+        self.prefetch = prefetch
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case permissions
+        case prefetch
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.permissions = try container.decodeIfPresent([CheckoutFinancialConnectionsPaymentMethodOptionsPermissionsItem].self, forKey: .permissions)
+        self.prefetch = try container.decodeIfPresent([CheckoutFinancialConnectionsPaymentMethodOptionsPrefetchItem].self, forKey: .prefetch)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .permissions, .prefetch: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.permissions, forKey: .permissions)
+        try container.encodeIfPresent(self.prefetch, forKey: .prefetch)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsPaymentMethodOptionsUsBankAccount: Sendable, Codable, Equatable, Hashable {
+    public var financialConnections: CheckoutSessionCreateParamsPaymentMethodOptionsUsBankAccountFinancialConnections?
+    public var setupFutureUsage: CheckoutAcssDebitPaymentMethodOptionsSetupFutureUsage?
+    public var targetDate: String?
+    public var verificationMethod: CheckoutUsBankAccountPaymentMethodOptionsVerificationMethod?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(financialConnections: CheckoutSessionCreateParamsPaymentMethodOptionsUsBankAccountFinancialConnections? = nil, setupFutureUsage: CheckoutAcssDebitPaymentMethodOptionsSetupFutureUsage? = nil, targetDate: String? = nil, verificationMethod: CheckoutUsBankAccountPaymentMethodOptionsVerificationMethod? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.financialConnections = financialConnections
+        self.setupFutureUsage = setupFutureUsage
+        self.targetDate = targetDate
+        self.verificationMethod = verificationMethod
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case financialConnections = "financial_connections"
+        case setupFutureUsage = "setup_future_usage"
+        case targetDate = "target_date"
+        case verificationMethod = "verification_method"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.financialConnections = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsUsBankAccountFinancialConnections.self, forKey: .financialConnections)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutAcssDebitPaymentMethodOptionsSetupFutureUsage.self, forKey: .setupFutureUsage)
+        self.targetDate = try container.decodeIfPresent(String.self, forKey: .targetDate)
+        self.verificationMethod = try container.decodeIfPresent(CheckoutUsBankAccountPaymentMethodOptionsVerificationMethod.self, forKey: .verificationMethod)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .financialConnections, .setupFutureUsage, .targetDate, .verificationMethod: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.financialConnections, forKey: .financialConnections)
+        try container.encodeIfPresent(self.setupFutureUsage, forKey: .setupFutureUsage)
+        try container.encodeIfPresent(self.targetDate, forKey: .targetDate)
+        try container.encodeIfPresent(self.verificationMethod, forKey: .verificationMethod)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsPaymentMethodOptionsWechatPay: Sendable, Codable, Equatable, Hashable {
+    public var appId: String?
+    public var client: CheckoutWechatPayPaymentMethodOptionsClient
+    public var setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(appId: String? = nil, client: CheckoutWechatPayPaymentMethodOptionsClient, setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.appId = appId
+        self.client = client
+        self.setupFutureUsage = setupFutureUsage
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case appId = "app_id"
+        case client
+        case setupFutureUsage = "setup_future_usage"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.appId = try container.decodeIfPresent(String.self, forKey: .appId)
+        self.client = try container.decode(CheckoutWechatPayPaymentMethodOptionsClient.self, forKey: .client)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutAffirmPaymentMethodOptionsSetupFutureUsage.self, forKey: .setupFutureUsage)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .appId, .client, .setupFutureUsage: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.appId, forKey: .appId)
+        try container.encodeIfPresent(self.client, forKey: .client)
+        try container.encodeIfPresent(self.setupFutureUsage, forKey: .setupFutureUsage)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsPaymentMethodOptions: Sendable, Codable, Equatable, Hashable {
+    public var acssDebit: CheckoutSessionCreateParamsPaymentMethodOptionsAcssDebit?
+    public var affirm: CheckoutSessionCreateParamsPaymentMethodOptionsAffirm?
+    public var afterpayClearpay: CheckoutSessionCreateParamsPaymentMethodOptionsAfterpayClearpay?
+    public var alipay: CheckoutSessionCreateParamsPaymentMethodOptionsAlipay?
+    public var alma: CheckoutSessionCreateParamsPaymentMethodOptionsAlma?
+    public var amazonPay: CheckoutSessionCreateParamsPaymentMethodOptionsAmazonPay?
+    public var auBecsDebit: CheckoutSessionCreateParamsPaymentMethodOptionsAuBecsDebit?
+    public var bacsDebit: CheckoutSessionCreateParamsPaymentMethodOptionsBacsDebit?
+    public var bancontact: CheckoutSessionCreateParamsPaymentMethodOptionsBancontact?
+    public var billie: CheckoutSessionCreateParamsPaymentMethodOptionsBillie?
+    public var blik: CheckoutSessionCreateParamsPaymentMethodOptionsBlik?
+    public var boleto: CheckoutSessionCreateParamsPaymentMethodOptionsBoleto?
+    public var card: CheckoutSessionCreateParamsPaymentMethodOptionsCard?
+    public var cashapp: CheckoutSessionCreateParamsPaymentMethodOptionsCashapp?
+    public var crypto: CheckoutSessionCreateParamsPaymentMethodOptionsCrypto?
+    public var customerBalance: CheckoutSessionCreateParamsPaymentMethodOptionsCustomerBalance?
+    public var demoPay: CheckoutSessionCreateParamsPaymentMethodOptionsDemoPay?
+    public var eps: CheckoutSessionCreateParamsPaymentMethodOptionsEps?
+    public var fpx: CheckoutSessionCreateParamsPaymentMethodOptionsFpx?
+    public var giropay: CheckoutSessionCreateParamsPaymentMethodOptionsGiropay?
+    public var grabpay: CheckoutSessionCreateParamsPaymentMethodOptionsGrabpay?
+    public var ideal: CheckoutSessionCreateParamsPaymentMethodOptionsIdeal?
+    public var kakaoPay: CheckoutSessionCreateParamsPaymentMethodOptionsKakaoPay?
+    public var klarna: CheckoutSessionCreateParamsPaymentMethodOptionsKlarna?
+    public var konbini: CheckoutSessionCreateParamsPaymentMethodOptionsKonbini?
+    public var krCard: CheckoutSessionCreateParamsPaymentMethodOptionsKrCard?
+    public var link: CheckoutSessionCreateParamsPaymentMethodOptionsLink?
+    public var mobilepay: CheckoutSessionCreateParamsPaymentMethodOptionsMobilepay?
+    public var multibanco: CheckoutSessionCreateParamsPaymentMethodOptionsMultibanco?
+    public var naverPay: CheckoutSessionCreateParamsPaymentMethodOptionsNaverPay?
+    public var oxxo: CheckoutSessionCreateParamsPaymentMethodOptionsOxxo?
+    public var p24: CheckoutSessionCreateParamsPaymentMethodOptionsP24?
+    public var payByBank: CheckoutSessionCreateParamsPaymentMethodOptionsPayByBank?
+    public var payco: CheckoutSessionCreateParamsPaymentMethodOptionsPayco?
+    public var paynow: CheckoutSessionCreateParamsPaymentMethodOptionsPaynow?
+    public var paypal: CheckoutSessionCreateParamsPaymentMethodOptionsPaypal?
+    public var payto: CheckoutSessionCreateParamsPaymentMethodOptionsPayto?
+    public var pix: CheckoutSessionCreateParamsPaymentMethodOptionsPix?
+    public var revolutPay: CheckoutSessionCreateParamsPaymentMethodOptionsRevolutPay?
+    public var samsungPay: CheckoutSessionCreateParamsPaymentMethodOptionsSamsungPay?
+    public var satispay: CheckoutSessionCreateParamsPaymentMethodOptionsSatispay?
+    public var scalapay: CheckoutSessionCreateParamsPaymentMethodOptionsScalapay?
+    public var sepaDebit: CheckoutSessionCreateParamsPaymentMethodOptionsSepaDebit?
+    public var sequra: CheckoutSessionCreateParamsPaymentMethodOptionsSequra?
+    public var sofort: CheckoutSessionCreateParamsPaymentMethodOptionsSofort?
+    public var sunbit: CheckoutSessionCreateParamsPaymentMethodOptionsSunbit?
+    public var swish: CheckoutSessionCreateParamsPaymentMethodOptionsSwish?
+    public var twint: CheckoutSessionCreateParamsPaymentMethodOptionsTwint?
+    public var upi: CheckoutSessionCreateParamsPaymentMethodOptionsUpi?
+    public var usBankAccount: CheckoutSessionCreateParamsPaymentMethodOptionsUsBankAccount?
+    public var wechatPay: CheckoutSessionCreateParamsPaymentMethodOptionsWechatPay?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(acssDebit: CheckoutSessionCreateParamsPaymentMethodOptionsAcssDebit? = nil, affirm: CheckoutSessionCreateParamsPaymentMethodOptionsAffirm? = nil, afterpayClearpay: CheckoutSessionCreateParamsPaymentMethodOptionsAfterpayClearpay? = nil, alipay: CheckoutSessionCreateParamsPaymentMethodOptionsAlipay? = nil, alma: CheckoutSessionCreateParamsPaymentMethodOptionsAlma? = nil, amazonPay: CheckoutSessionCreateParamsPaymentMethodOptionsAmazonPay? = nil, auBecsDebit: CheckoutSessionCreateParamsPaymentMethodOptionsAuBecsDebit? = nil, bacsDebit: CheckoutSessionCreateParamsPaymentMethodOptionsBacsDebit? = nil, bancontact: CheckoutSessionCreateParamsPaymentMethodOptionsBancontact? = nil, billie: CheckoutSessionCreateParamsPaymentMethodOptionsBillie? = nil, blik: CheckoutSessionCreateParamsPaymentMethodOptionsBlik? = nil, boleto: CheckoutSessionCreateParamsPaymentMethodOptionsBoleto? = nil, card: CheckoutSessionCreateParamsPaymentMethodOptionsCard? = nil, cashapp: CheckoutSessionCreateParamsPaymentMethodOptionsCashapp? = nil, crypto: CheckoutSessionCreateParamsPaymentMethodOptionsCrypto? = nil, customerBalance: CheckoutSessionCreateParamsPaymentMethodOptionsCustomerBalance? = nil, demoPay: CheckoutSessionCreateParamsPaymentMethodOptionsDemoPay? = nil, eps: CheckoutSessionCreateParamsPaymentMethodOptionsEps? = nil, fpx: CheckoutSessionCreateParamsPaymentMethodOptionsFpx? = nil, giropay: CheckoutSessionCreateParamsPaymentMethodOptionsGiropay? = nil, grabpay: CheckoutSessionCreateParamsPaymentMethodOptionsGrabpay? = nil, ideal: CheckoutSessionCreateParamsPaymentMethodOptionsIdeal? = nil, kakaoPay: CheckoutSessionCreateParamsPaymentMethodOptionsKakaoPay? = nil, klarna: CheckoutSessionCreateParamsPaymentMethodOptionsKlarna? = nil, konbini: CheckoutSessionCreateParamsPaymentMethodOptionsKonbini? = nil, krCard: CheckoutSessionCreateParamsPaymentMethodOptionsKrCard? = nil, link: CheckoutSessionCreateParamsPaymentMethodOptionsLink? = nil, mobilepay: CheckoutSessionCreateParamsPaymentMethodOptionsMobilepay? = nil, multibanco: CheckoutSessionCreateParamsPaymentMethodOptionsMultibanco? = nil, naverPay: CheckoutSessionCreateParamsPaymentMethodOptionsNaverPay? = nil, oxxo: CheckoutSessionCreateParamsPaymentMethodOptionsOxxo? = nil, p24: CheckoutSessionCreateParamsPaymentMethodOptionsP24? = nil, payByBank: CheckoutSessionCreateParamsPaymentMethodOptionsPayByBank? = nil, payco: CheckoutSessionCreateParamsPaymentMethodOptionsPayco? = nil, paynow: CheckoutSessionCreateParamsPaymentMethodOptionsPaynow? = nil, paypal: CheckoutSessionCreateParamsPaymentMethodOptionsPaypal? = nil, payto: CheckoutSessionCreateParamsPaymentMethodOptionsPayto? = nil, pix: CheckoutSessionCreateParamsPaymentMethodOptionsPix? = nil, revolutPay: CheckoutSessionCreateParamsPaymentMethodOptionsRevolutPay? = nil, samsungPay: CheckoutSessionCreateParamsPaymentMethodOptionsSamsungPay? = nil, satispay: CheckoutSessionCreateParamsPaymentMethodOptionsSatispay? = nil, scalapay: CheckoutSessionCreateParamsPaymentMethodOptionsScalapay? = nil, sepaDebit: CheckoutSessionCreateParamsPaymentMethodOptionsSepaDebit? = nil, sequra: CheckoutSessionCreateParamsPaymentMethodOptionsSequra? = nil, sofort: CheckoutSessionCreateParamsPaymentMethodOptionsSofort? = nil, sunbit: CheckoutSessionCreateParamsPaymentMethodOptionsSunbit? = nil, swish: CheckoutSessionCreateParamsPaymentMethodOptionsSwish? = nil, twint: CheckoutSessionCreateParamsPaymentMethodOptionsTwint? = nil, upi: CheckoutSessionCreateParamsPaymentMethodOptionsUpi? = nil, usBankAccount: CheckoutSessionCreateParamsPaymentMethodOptionsUsBankAccount? = nil, wechatPay: CheckoutSessionCreateParamsPaymentMethodOptionsWechatPay? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.acssDebit = acssDebit
+        self.affirm = affirm
+        self.afterpayClearpay = afterpayClearpay
+        self.alipay = alipay
+        self.alma = alma
+        self.amazonPay = amazonPay
+        self.auBecsDebit = auBecsDebit
+        self.bacsDebit = bacsDebit
+        self.bancontact = bancontact
+        self.billie = billie
+        self.blik = blik
+        self.boleto = boleto
+        self.card = card
+        self.cashapp = cashapp
+        self.crypto = crypto
+        self.customerBalance = customerBalance
+        self.demoPay = demoPay
+        self.eps = eps
+        self.fpx = fpx
+        self.giropay = giropay
+        self.grabpay = grabpay
+        self.ideal = ideal
+        self.kakaoPay = kakaoPay
+        self.klarna = klarna
+        self.konbini = konbini
+        self.krCard = krCard
+        self.link = link
+        self.mobilepay = mobilepay
+        self.multibanco = multibanco
+        self.naverPay = naverPay
+        self.oxxo = oxxo
+        self.p24 = p24
+        self.payByBank = payByBank
+        self.payco = payco
+        self.paynow = paynow
+        self.paypal = paypal
+        self.payto = payto
+        self.pix = pix
+        self.revolutPay = revolutPay
+        self.samsungPay = samsungPay
+        self.satispay = satispay
+        self.scalapay = scalapay
+        self.sepaDebit = sepaDebit
+        self.sequra = sequra
+        self.sofort = sofort
+        self.sunbit = sunbit
+        self.swish = swish
+        self.twint = twint
+        self.upi = upi
+        self.usBankAccount = usBankAccount
+        self.wechatPay = wechatPay
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case acssDebit = "acss_debit"
+        case affirm
+        case afterpayClearpay = "afterpay_clearpay"
+        case alipay
+        case alma
+        case amazonPay = "amazon_pay"
+        case auBecsDebit = "au_becs_debit"
+        case bacsDebit = "bacs_debit"
+        case bancontact
+        case billie
+        case blik
+        case boleto
+        case card
+        case cashapp
+        case crypto
+        case customerBalance = "customer_balance"
+        case demoPay = "demo_pay"
+        case eps
+        case fpx
+        case giropay
+        case grabpay
+        case ideal
+        case kakaoPay = "kakao_pay"
+        case klarna
+        case konbini
+        case krCard = "kr_card"
+        case link
+        case mobilepay
+        case multibanco
+        case naverPay = "naver_pay"
+        case oxxo
+        case p24
+        case payByBank = "pay_by_bank"
+        case payco
+        case paynow
+        case paypal
+        case payto
+        case pix
+        case revolutPay = "revolut_pay"
+        case samsungPay = "samsung_pay"
+        case satispay
+        case scalapay
+        case sepaDebit = "sepa_debit"
+        case sequra
+        case sofort
+        case sunbit
+        case swish
+        case twint
+        case upi
+        case usBankAccount = "us_bank_account"
+        case wechatPay = "wechat_pay"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.acssDebit = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsAcssDebit.self, forKey: .acssDebit)
+        self.affirm = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsAffirm.self, forKey: .affirm)
+        self.afterpayClearpay = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsAfterpayClearpay.self, forKey: .afterpayClearpay)
+        self.alipay = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsAlipay.self, forKey: .alipay)
+        self.alma = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsAlma.self, forKey: .alma)
+        self.amazonPay = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsAmazonPay.self, forKey: .amazonPay)
+        self.auBecsDebit = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsAuBecsDebit.self, forKey: .auBecsDebit)
+        self.bacsDebit = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsBacsDebit.self, forKey: .bacsDebit)
+        self.bancontact = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsBancontact.self, forKey: .bancontact)
+        self.billie = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsBillie.self, forKey: .billie)
+        self.blik = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsBlik.self, forKey: .blik)
+        self.boleto = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsBoleto.self, forKey: .boleto)
+        self.card = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsCard.self, forKey: .card)
+        self.cashapp = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsCashapp.self, forKey: .cashapp)
+        self.crypto = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsCrypto.self, forKey: .crypto)
+        self.customerBalance = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsCustomerBalance.self, forKey: .customerBalance)
+        self.demoPay = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsDemoPay.self, forKey: .demoPay)
+        self.eps = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsEps.self, forKey: .eps)
+        self.fpx = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsFpx.self, forKey: .fpx)
+        self.giropay = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsGiropay.self, forKey: .giropay)
+        self.grabpay = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsGrabpay.self, forKey: .grabpay)
+        self.ideal = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsIdeal.self, forKey: .ideal)
+        self.kakaoPay = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsKakaoPay.self, forKey: .kakaoPay)
+        self.klarna = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsKlarna.self, forKey: .klarna)
+        self.konbini = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsKonbini.self, forKey: .konbini)
+        self.krCard = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsKrCard.self, forKey: .krCard)
+        self.link = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsLink.self, forKey: .link)
+        self.mobilepay = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsMobilepay.self, forKey: .mobilepay)
+        self.multibanco = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsMultibanco.self, forKey: .multibanco)
+        self.naverPay = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsNaverPay.self, forKey: .naverPay)
+        self.oxxo = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsOxxo.self, forKey: .oxxo)
+        self.p24 = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsP24.self, forKey: .p24)
+        self.payByBank = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsPayByBank.self, forKey: .payByBank)
+        self.payco = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsPayco.self, forKey: .payco)
+        self.paynow = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsPaynow.self, forKey: .paynow)
+        self.paypal = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsPaypal.self, forKey: .paypal)
+        self.payto = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsPayto.self, forKey: .payto)
+        self.pix = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsPix.self, forKey: .pix)
+        self.revolutPay = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsRevolutPay.self, forKey: .revolutPay)
+        self.samsungPay = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsSamsungPay.self, forKey: .samsungPay)
+        self.satispay = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsSatispay.self, forKey: .satispay)
+        self.scalapay = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsScalapay.self, forKey: .scalapay)
+        self.sepaDebit = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsSepaDebit.self, forKey: .sepaDebit)
+        self.sequra = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsSequra.self, forKey: .sequra)
+        self.sofort = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsSofort.self, forKey: .sofort)
+        self.sunbit = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsSunbit.self, forKey: .sunbit)
+        self.swish = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsSwish.self, forKey: .swish)
+        self.twint = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsTwint.self, forKey: .twint)
+        self.upi = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsUpi.self, forKey: .upi)
+        self.usBankAccount = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsUsBankAccount.self, forKey: .usBankAccount)
+        self.wechatPay = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsWechatPay.self, forKey: .wechatPay)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .acssDebit, .affirm, .afterpayClearpay, .alipay, .alma, .amazonPay, .auBecsDebit, .bacsDebit, .bancontact, .billie, .blik, .boleto, .card, .cashapp, .crypto, .customerBalance, .demoPay, .eps, .fpx, .giropay, .grabpay, .ideal, .kakaoPay, .klarna, .konbini, .krCard, .link, .mobilepay, .multibanco, .naverPay, .oxxo, .p24, .payByBank, .payco, .paynow, .paypal, .payto, .pix, .revolutPay, .samsungPay, .satispay, .scalapay, .sepaDebit, .sequra, .sofort, .sunbit, .swish, .twint, .upi, .usBankAccount, .wechatPay: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.acssDebit, forKey: .acssDebit)
+        try container.encodeIfPresent(self.affirm, forKey: .affirm)
+        try container.encodeIfPresent(self.afterpayClearpay, forKey: .afterpayClearpay)
+        try container.encodeIfPresent(self.alipay, forKey: .alipay)
+        try container.encodeIfPresent(self.alma, forKey: .alma)
+        try container.encodeIfPresent(self.amazonPay, forKey: .amazonPay)
+        try container.encodeIfPresent(self.auBecsDebit, forKey: .auBecsDebit)
+        try container.encodeIfPresent(self.bacsDebit, forKey: .bacsDebit)
+        try container.encodeIfPresent(self.bancontact, forKey: .bancontact)
+        try container.encodeIfPresent(self.billie, forKey: .billie)
+        try container.encodeIfPresent(self.blik, forKey: .blik)
+        try container.encodeIfPresent(self.boleto, forKey: .boleto)
+        try container.encodeIfPresent(self.card, forKey: .card)
+        try container.encodeIfPresent(self.cashapp, forKey: .cashapp)
+        try container.encodeIfPresent(self.crypto, forKey: .crypto)
+        try container.encodeIfPresent(self.customerBalance, forKey: .customerBalance)
+        try container.encodeIfPresent(self.demoPay, forKey: .demoPay)
+        try container.encodeIfPresent(self.eps, forKey: .eps)
+        try container.encodeIfPresent(self.fpx, forKey: .fpx)
+        try container.encodeIfPresent(self.giropay, forKey: .giropay)
+        try container.encodeIfPresent(self.grabpay, forKey: .grabpay)
+        try container.encodeIfPresent(self.ideal, forKey: .ideal)
+        try container.encodeIfPresent(self.kakaoPay, forKey: .kakaoPay)
+        try container.encodeIfPresent(self.klarna, forKey: .klarna)
+        try container.encodeIfPresent(self.konbini, forKey: .konbini)
+        try container.encodeIfPresent(self.krCard, forKey: .krCard)
+        try container.encodeIfPresent(self.link, forKey: .link)
+        try container.encodeIfPresent(self.mobilepay, forKey: .mobilepay)
+        try container.encodeIfPresent(self.multibanco, forKey: .multibanco)
+        try container.encodeIfPresent(self.naverPay, forKey: .naverPay)
+        try container.encodeIfPresent(self.oxxo, forKey: .oxxo)
+        try container.encodeIfPresent(self.p24, forKey: .p24)
+        try container.encodeIfPresent(self.payByBank, forKey: .payByBank)
+        try container.encodeIfPresent(self.payco, forKey: .payco)
+        try container.encodeIfPresent(self.paynow, forKey: .paynow)
+        try container.encodeIfPresent(self.paypal, forKey: .paypal)
+        try container.encodeIfPresent(self.payto, forKey: .payto)
+        try container.encodeIfPresent(self.pix, forKey: .pix)
+        try container.encodeIfPresent(self.revolutPay, forKey: .revolutPay)
+        try container.encodeIfPresent(self.samsungPay, forKey: .samsungPay)
+        try container.encodeIfPresent(self.satispay, forKey: .satispay)
+        try container.encodeIfPresent(self.scalapay, forKey: .scalapay)
+        try container.encodeIfPresent(self.sepaDebit, forKey: .sepaDebit)
+        try container.encodeIfPresent(self.sequra, forKey: .sequra)
+        try container.encodeIfPresent(self.sofort, forKey: .sofort)
+        try container.encodeIfPresent(self.sunbit, forKey: .sunbit)
+        try container.encodeIfPresent(self.swish, forKey: .swish)
+        try container.encodeIfPresent(self.twint, forKey: .twint)
+        try container.encodeIfPresent(self.upi, forKey: .upi)
+        try container.encodeIfPresent(self.usBankAccount, forKey: .usBankAccount)
+        try container.encodeIfPresent(self.wechatPay, forKey: .wechatPay)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsPermissions: Sendable, Codable, Equatable, Hashable {
+    public var updateShippingDetails: PaymentPagesCheckoutSessionPermissionsUpdateShippingDetails?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(updateShippingDetails: PaymentPagesCheckoutSessionPermissionsUpdateShippingDetails? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.updateShippingDetails = updateShippingDetails
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case updateShippingDetails = "update_shipping_details"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.updateShippingDetails = try container.decodeIfPresent(PaymentPagesCheckoutSessionPermissionsUpdateShippingDetails.self, forKey: .updateShippingDetails)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .updateShippingDetails: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.updateShippingDetails, forKey: .updateShippingDetails)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsPhoneNumberCollection: Sendable, Codable, Equatable, Hashable {
+    public var enabled: Bool
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(enabled: Bool, unknownFields: [String: JSONValue]? = nil) {
+        self.enabled = enabled
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case enabled
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.enabled = try container.decode(Bool.self, forKey: .enabled)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .enabled: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.enabled, forKey: .enabled)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsSavedPaymentMethodOptions: Sendable, Codable, Equatable, Hashable {
+    public var allowRedisplayFilters: [CardAllowRedisplay]?
+    public var paymentMethodRemove: BalanceSettingsResourcePayoutsStatus?
+    public var paymentMethodSave: BalanceSettingsResourcePayoutsStatus?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(allowRedisplayFilters: [CardAllowRedisplay]? = nil, paymentMethodRemove: BalanceSettingsResourcePayoutsStatus? = nil, paymentMethodSave: BalanceSettingsResourcePayoutsStatus? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.allowRedisplayFilters = allowRedisplayFilters
+        self.paymentMethodRemove = paymentMethodRemove
+        self.paymentMethodSave = paymentMethodSave
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case allowRedisplayFilters = "allow_redisplay_filters"
+        case paymentMethodRemove = "payment_method_remove"
+        case paymentMethodSave = "payment_method_save"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.allowRedisplayFilters = try container.decodeIfPresent([CardAllowRedisplay].self, forKey: .allowRedisplayFilters)
+        self.paymentMethodRemove = try container.decodeIfPresent(BalanceSettingsResourcePayoutsStatus.self, forKey: .paymentMethodRemove)
+        self.paymentMethodSave = try container.decodeIfPresent(BalanceSettingsResourcePayoutsStatus.self, forKey: .paymentMethodSave)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .allowRedisplayFilters, .paymentMethodRemove, .paymentMethodSave: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.allowRedisplayFilters, forKey: .allowRedisplayFilters)
+        try container.encodeIfPresent(self.paymentMethodRemove, forKey: .paymentMethodRemove)
+        try container.encodeIfPresent(self.paymentMethodSave, forKey: .paymentMethodSave)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsSetupIntentData: Sendable, Codable, Equatable, Hashable {
+    public var description: String?
+    public var metadata: [String: String]?
+    public var onBehalfOf: String?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(description: String? = nil, metadata: [String: String]? = nil, onBehalfOf: String? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.description = description
+        self.metadata = metadata
+        self.onBehalfOf = onBehalfOf
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case description
+        case metadata
+        case onBehalfOf = "on_behalf_of"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.description = try container.decodeIfPresent(String.self, forKey: .description)
+        self.metadata = try container.decodeIfPresent([String: String].self, forKey: .metadata)
+        self.onBehalfOf = try container.decodeIfPresent(String.self, forKey: .onBehalfOf)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .description, .metadata, .onBehalfOf: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.description, forKey: .description)
+        try container.encodeIfPresent(self.metadata, forKey: .metadata)
+        try container.encodeIfPresent(self.onBehalfOf, forKey: .onBehalfOf)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsShippingAddressCollection: Sendable, Codable, Equatable, Hashable {
+    public var allowedCountries: [PaymentLinksResourceShippingAddressCollectionAllowedCountriesItem]
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(allowedCountries: [PaymentLinksResourceShippingAddressCollectionAllowedCountriesItem], unknownFields: [String: JSONValue]? = nil) {
+        self.allowedCountries = allowedCountries
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case allowedCountries = "allowed_countries"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.allowedCountries = try container.decode([PaymentLinksResourceShippingAddressCollectionAllowedCountriesItem].self, forKey: .allowedCountries)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .allowedCountries: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.allowedCountries, forKey: .allowedCountries)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsShippingOptionsItemShippingRateDataDeliveryEstimateMaximum: Sendable, Codable, Equatable, Hashable {
+    public var unit: ShippingRateDeliveryEstimateBoundUnit
+    public var value: Int
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(unit: ShippingRateDeliveryEstimateBoundUnit, value: Int, unknownFields: [String: JSONValue]? = nil) {
+        self.unit = unit
+        self.value = value
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case unit
+        case value
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.unit = try container.decode(ShippingRateDeliveryEstimateBoundUnit.self, forKey: .unit)
+        self.value = try container.decode(Int.self, forKey: .value)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .unit, .value: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.unit, forKey: .unit)
+        try container.encodeIfPresent(self.value, forKey: .value)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsShippingOptionsItemShippingRateDataDeliveryEstimateMinimum: Sendable, Codable, Equatable, Hashable {
+    public var unit: ShippingRateDeliveryEstimateBoundUnit
+    public var value: Int
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(unit: ShippingRateDeliveryEstimateBoundUnit, value: Int, unknownFields: [String: JSONValue]? = nil) {
+        self.unit = unit
+        self.value = value
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case unit
+        case value
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.unit = try container.decode(ShippingRateDeliveryEstimateBoundUnit.self, forKey: .unit)
+        self.value = try container.decode(Int.self, forKey: .value)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .unit, .value: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.unit, forKey: .unit)
+        try container.encodeIfPresent(self.value, forKey: .value)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsShippingOptionsItemShippingRateDataDeliveryEstimate: Sendable, Codable, Equatable, Hashable {
+    public var maximum: CheckoutSessionCreateParamsShippingOptionsItemShippingRateDataDeliveryEstimateMaximum?
+    public var minimum: CheckoutSessionCreateParamsShippingOptionsItemShippingRateDataDeliveryEstimateMinimum?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(maximum: CheckoutSessionCreateParamsShippingOptionsItemShippingRateDataDeliveryEstimateMaximum? = nil, minimum: CheckoutSessionCreateParamsShippingOptionsItemShippingRateDataDeliveryEstimateMinimum? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.maximum = maximum
+        self.minimum = minimum
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case maximum
+        case minimum
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.maximum = try container.decodeIfPresent(CheckoutSessionCreateParamsShippingOptionsItemShippingRateDataDeliveryEstimateMaximum.self, forKey: .maximum)
+        self.minimum = try container.decodeIfPresent(CheckoutSessionCreateParamsShippingOptionsItemShippingRateDataDeliveryEstimateMinimum.self, forKey: .minimum)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .maximum, .minimum: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.maximum, forKey: .maximum)
+        try container.encodeIfPresent(self.minimum, forKey: .minimum)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsShippingOptionsItemShippingRateDataFixedAmount: Sendable, Codable, Equatable, Hashable {
+    public var amount: Int
+    public var currency: String
+    public var currencyOptions: [String: JSONValue]?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(amount: Int, currency: String, currencyOptions: [String: JSONValue]? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.amount = amount
+        self.currency = currency
+        self.currencyOptions = currencyOptions
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case amount
+        case currency
+        case currencyOptions = "currency_options"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.amount = try container.decode(Int.self, forKey: .amount)
+        self.currency = try container.decode(String.self, forKey: .currency)
+        self.currencyOptions = try container.decodeIfPresent([String: JSONValue].self, forKey: .currencyOptions)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .amount, .currency, .currencyOptions: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.amount, forKey: .amount)
+        try container.encodeIfPresent(self.currency, forKey: .currency)
+        try container.encodeIfPresent(self.currencyOptions, forKey: .currencyOptions)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsShippingOptionsItemShippingRateData: Sendable, Codable, Equatable, Hashable {
+    public var deliveryEstimate: CheckoutSessionCreateParamsShippingOptionsItemShippingRateDataDeliveryEstimate?
+    public var displayName: String
+    public var fixedAmount: CheckoutSessionCreateParamsShippingOptionsItemShippingRateDataFixedAmount?
+    public var metadata: [String: String]?
+    public var taxBehavior: CurrencyOptionTaxBehavior?
+    public var taxCode: String?
+    public var type: ShippingRateType?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(deliveryEstimate: CheckoutSessionCreateParamsShippingOptionsItemShippingRateDataDeliveryEstimate? = nil, displayName: String, fixedAmount: CheckoutSessionCreateParamsShippingOptionsItemShippingRateDataFixedAmount? = nil, metadata: [String: String]? = nil, taxBehavior: CurrencyOptionTaxBehavior? = nil, taxCode: String? = nil, type: ShippingRateType? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.deliveryEstimate = deliveryEstimate
+        self.displayName = displayName
+        self.fixedAmount = fixedAmount
+        self.metadata = metadata
+        self.taxBehavior = taxBehavior
+        self.taxCode = taxCode
+        self.type = type
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case deliveryEstimate = "delivery_estimate"
+        case displayName = "display_name"
+        case fixedAmount = "fixed_amount"
+        case metadata
+        case taxBehavior = "tax_behavior"
+        case taxCode = "tax_code"
+        case type
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.deliveryEstimate = try container.decodeIfPresent(CheckoutSessionCreateParamsShippingOptionsItemShippingRateDataDeliveryEstimate.self, forKey: .deliveryEstimate)
+        self.displayName = try container.decode(String.self, forKey: .displayName)
+        self.fixedAmount = try container.decodeIfPresent(CheckoutSessionCreateParamsShippingOptionsItemShippingRateDataFixedAmount.self, forKey: .fixedAmount)
+        self.metadata = try container.decodeIfPresent([String: String].self, forKey: .metadata)
+        self.taxBehavior = try container.decodeIfPresent(CurrencyOptionTaxBehavior.self, forKey: .taxBehavior)
+        self.taxCode = try container.decodeIfPresent(String.self, forKey: .taxCode)
+        self.type = try container.decodeIfPresent(ShippingRateType.self, forKey: .type)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .deliveryEstimate, .displayName, .fixedAmount, .metadata, .taxBehavior, .taxCode, .type: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.deliveryEstimate, forKey: .deliveryEstimate)
+        try container.encodeIfPresent(self.displayName, forKey: .displayName)
+        try container.encodeIfPresent(self.fixedAmount, forKey: .fixedAmount)
+        try container.encodeIfPresent(self.metadata, forKey: .metadata)
+        try container.encodeIfPresent(self.taxBehavior, forKey: .taxBehavior)
+        try container.encodeIfPresent(self.taxCode, forKey: .taxCode)
+        try container.encodeIfPresent(self.type, forKey: .type)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsShippingOptionsItem: Sendable, Codable, Equatable, Hashable {
+    public var shippingRate: String?
+    public var shippingRateData: CheckoutSessionCreateParamsShippingOptionsItemShippingRateData?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(shippingRate: String? = nil, shippingRateData: CheckoutSessionCreateParamsShippingOptionsItemShippingRateData? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.shippingRate = shippingRate
+        self.shippingRateData = shippingRateData
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case shippingRate = "shipping_rate"
+        case shippingRateData = "shipping_rate_data"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.shippingRate = try container.decodeIfPresent(String.self, forKey: .shippingRate)
+        self.shippingRateData = try container.decodeIfPresent(CheckoutSessionCreateParamsShippingOptionsItemShippingRateData.self, forKey: .shippingRateData)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .shippingRate, .shippingRateData: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.shippingRate, forKey: .shippingRate)
+        try container.encodeIfPresent(self.shippingRateData, forKey: .shippingRateData)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsSubscriptionDataBillingCycleAnchorConfig: Sendable, Codable, Equatable, Hashable {
+    public var dayOfMonth: Int
+    public var hour: Int?
+    public var minute: Int?
+    public var month: Int?
+    public var second: Int?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(dayOfMonth: Int, hour: Int? = nil, minute: Int? = nil, month: Int? = nil, second: Int? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.dayOfMonth = dayOfMonth
+        self.hour = hour
+        self.minute = minute
+        self.month = month
+        self.second = second
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case dayOfMonth = "day_of_month"
+        case hour
+        case minute
+        case month
+        case second
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.dayOfMonth = try container.decode(Int.self, forKey: .dayOfMonth)
+        self.hour = try container.decodeIfPresent(Int.self, forKey: .hour)
+        self.minute = try container.decodeIfPresent(Int.self, forKey: .minute)
+        self.month = try container.decodeIfPresent(Int.self, forKey: .month)
+        self.second = try container.decodeIfPresent(Int.self, forKey: .second)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .dayOfMonth, .hour, .minute, .month, .second: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.dayOfMonth, forKey: .dayOfMonth)
+        try container.encodeIfPresent(self.hour, forKey: .hour)
+        try container.encodeIfPresent(self.minute, forKey: .minute)
+        try container.encodeIfPresent(self.month, forKey: .month)
+        try container.encodeIfPresent(self.second, forKey: .second)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsSubscriptionDataBillingModeFlexible: Sendable, Codable, Equatable, Hashable {
+    public var prorationDiscounts: SubscriptionsResourceBillingModeFlexibleProrationDiscounts?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(prorationDiscounts: SubscriptionsResourceBillingModeFlexibleProrationDiscounts? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.prorationDiscounts = prorationDiscounts
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case prorationDiscounts = "proration_discounts"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.prorationDiscounts = try container.decodeIfPresent(SubscriptionsResourceBillingModeFlexibleProrationDiscounts.self, forKey: .prorationDiscounts)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .prorationDiscounts: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.prorationDiscounts, forKey: .prorationDiscounts)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsSubscriptionDataBillingMode: Sendable, Codable, Equatable, Hashable {
+    public var flexible: CheckoutSessionCreateParamsSubscriptionDataBillingModeFlexible?
+    public var type: QuotesResourceSubscriptionDataBillingModeType
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(flexible: CheckoutSessionCreateParamsSubscriptionDataBillingModeFlexible? = nil, type: QuotesResourceSubscriptionDataBillingModeType, unknownFields: [String: JSONValue]? = nil) {
+        self.flexible = flexible
+        self.type = type
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case flexible
+        case type
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.flexible = try container.decodeIfPresent(CheckoutSessionCreateParamsSubscriptionDataBillingModeFlexible.self, forKey: .flexible)
+        self.type = try container.decode(QuotesResourceSubscriptionDataBillingModeType.self, forKey: .type)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .flexible, .type: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.flexible, forKey: .flexible)
+        try container.encodeIfPresent(self.type, forKey: .type)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsSubscriptionDataInvoiceSettingsCustomFieldsItem: Sendable, Codable, Equatable, Hashable {
+    public var name: String
+    public var value: String
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(name: String, value: String, unknownFields: [String: JSONValue]? = nil) {
+        self.name = name
+        self.value = value
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case name
+        case value
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.name = try container.decode(String.self, forKey: .name)
+        self.value = try container.decode(String.self, forKey: .value)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .name, .value: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.name, forKey: .name)
+        try container.encodeIfPresent(self.value, forKey: .value)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsSubscriptionDataInvoiceSettingsIssuer: Sendable, Codable, Equatable, Hashable {
+    public var account: String?
+    public var type: ConnectAccountReferenceType
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(account: String? = nil, type: ConnectAccountReferenceType, unknownFields: [String: JSONValue]? = nil) {
+        self.account = account
+        self.type = type
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case account
+        case type
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.account = try container.decodeIfPresent(String.self, forKey: .account)
+        self.type = try container.decode(ConnectAccountReferenceType.self, forKey: .type)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .account, .type: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.account, forKey: .account)
+        try container.encodeIfPresent(self.type, forKey: .type)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsSubscriptionDataInvoiceSettings: Sendable, Codable, Equatable, Hashable {
+    public var accountTaxIds: Clearable<[String]>?
+    public var customFields: Clearable<[CheckoutSessionCreateParamsSubscriptionDataInvoiceSettingsCustomFieldsItem]>?
+    public var description: String?
+    public var footer: String?
+    public var issuer: CheckoutSessionCreateParamsSubscriptionDataInvoiceSettingsIssuer?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(accountTaxIds: Clearable<[String]>? = nil, customFields: Clearable<[CheckoutSessionCreateParamsSubscriptionDataInvoiceSettingsCustomFieldsItem]>? = nil, description: String? = nil, footer: String? = nil, issuer: CheckoutSessionCreateParamsSubscriptionDataInvoiceSettingsIssuer? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.accountTaxIds = accountTaxIds
+        self.customFields = customFields
+        self.description = description
+        self.footer = footer
+        self.issuer = issuer
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case accountTaxIds = "account_tax_ids"
+        case customFields = "custom_fields"
+        case description
+        case footer
+        case issuer
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.accountTaxIds = try container.decodeIfPresent(Clearable<[String]>.self, forKey: .accountTaxIds)
+        self.customFields = try container.decodeIfPresent(Clearable<[CheckoutSessionCreateParamsSubscriptionDataInvoiceSettingsCustomFieldsItem]>.self, forKey: .customFields)
+        self.description = try container.decodeIfPresent(String.self, forKey: .description)
+        self.footer = try container.decodeIfPresent(String.self, forKey: .footer)
+        self.issuer = try container.decodeIfPresent(CheckoutSessionCreateParamsSubscriptionDataInvoiceSettingsIssuer.self, forKey: .issuer)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .accountTaxIds, .customFields, .description, .footer, .issuer: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.accountTaxIds, forKey: .accountTaxIds)
+        try container.encodeIfPresent(self.customFields, forKey: .customFields)
+        try container.encodeIfPresent(self.description, forKey: .description)
+        try container.encodeIfPresent(self.footer, forKey: .footer)
+        try container.encodeIfPresent(self.issuer, forKey: .issuer)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsSubscriptionDataPendingInvoiceItemInterval: Sendable, Codable, Equatable, Hashable {
+    public var interval: PlanInterval
+    public var intervalCount: Int?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(interval: PlanInterval, intervalCount: Int? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.interval = interval
+        self.intervalCount = intervalCount
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case interval
+        case intervalCount = "interval_count"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.interval = try container.decode(PlanInterval.self, forKey: .interval)
+        self.intervalCount = try container.decodeIfPresent(Int.self, forKey: .intervalCount)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .interval, .intervalCount: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.interval, forKey: .interval)
+        try container.encodeIfPresent(self.intervalCount, forKey: .intervalCount)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+/// Lossless enum: values Stripe documents plus any value the API
+/// adds later, kept in `undocumented` instead of dropped.
+public enum CheckoutSessionCreateParamsSubscriptionDataProrationBehavior: Sendable, Equatable, Hashable, LosslessEnum {
+    case createProrations
+    case none
+    case undocumented(String)
+
+    public init(rawValue raw: String) {
+        switch raw {
+        case "create_prorations": self = .createProrations
+        case "none": self = .none
+        default: self = .undocumented(raw)
+        }
+    }
+
+    public var rawValue: String {
+        switch self {
+        case .createProrations: return "create_prorations"
+        case .none: return "none"
+        case .undocumented(let value): return value
+        }
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        self.init(rawValue: try container.decode(String.self))
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(rawValue)
+    }
+}
+
+public struct CheckoutSessionCreateParamsSubscriptionDataTransferData: Sendable, Codable, Equatable, Hashable {
+    public var amountPercent: Decimal?
+    public var destination: String
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(amountPercent: Decimal? = nil, destination: String, unknownFields: [String: JSONValue]? = nil) {
+        self.amountPercent = amountPercent
+        self.destination = destination
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case amountPercent = "amount_percent"
+        case destination
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.amountPercent = try container.decodeIfPresent(Decimal.self, forKey: .amountPercent)
+        self.destination = try container.decode(String.self, forKey: .destination)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .amountPercent, .destination: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.amountPercent, forKey: .amountPercent)
+        try container.encodeIfPresent(self.destination, forKey: .destination)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsSubscriptionDataTrialSettingsEndBehavior: Sendable, Codable, Equatable, Hashable {
+    public var missingPaymentMethod: SubscriptionsResourceTrialSettingsEndBehaviorMissingPaymentMethod
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(missingPaymentMethod: SubscriptionsResourceTrialSettingsEndBehaviorMissingPaymentMethod, unknownFields: [String: JSONValue]? = nil) {
+        self.missingPaymentMethod = missingPaymentMethod
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case missingPaymentMethod = "missing_payment_method"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.missingPaymentMethod = try container.decode(SubscriptionsResourceTrialSettingsEndBehaviorMissingPaymentMethod.self, forKey: .missingPaymentMethod)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .missingPaymentMethod: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.missingPaymentMethod, forKey: .missingPaymentMethod)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsSubscriptionDataTrialSettings: Sendable, Codable, Equatable, Hashable {
+    public var endBehavior: CheckoutSessionCreateParamsSubscriptionDataTrialSettingsEndBehavior
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(endBehavior: CheckoutSessionCreateParamsSubscriptionDataTrialSettingsEndBehavior, unknownFields: [String: JSONValue]? = nil) {
+        self.endBehavior = endBehavior
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case endBehavior = "end_behavior"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.endBehavior = try container.decode(CheckoutSessionCreateParamsSubscriptionDataTrialSettingsEndBehavior.self, forKey: .endBehavior)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .endBehavior: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.endBehavior, forKey: .endBehavior)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsSubscriptionData: Sendable, Codable, Equatable, Hashable {
+    public var applicationFeePercent: Decimal?
+    public var billingCycleAnchor: StripeTimestamp?
+    public var billingCycleAnchorConfig: CheckoutSessionCreateParamsSubscriptionDataBillingCycleAnchorConfig?
+    public var billingMode: CheckoutSessionCreateParamsSubscriptionDataBillingMode?
+    public var defaultTaxRates: [String]?
+    public var description: String?
+    public var invoiceSettings: CheckoutSessionCreateParamsSubscriptionDataInvoiceSettings?
+    public var metadata: [String: String]?
+    public var onBehalfOf: String?
+    public var pendingInvoiceItemInterval: CheckoutSessionCreateParamsSubscriptionDataPendingInvoiceItemInterval?
+    public var prorationBehavior: CheckoutSessionCreateParamsSubscriptionDataProrationBehavior?
+    public var transferData: CheckoutSessionCreateParamsSubscriptionDataTransferData?
+    public var trialEnd: StripeTimestamp?
+    public var trialPeriodDays: Int?
+    public var trialSettings: CheckoutSessionCreateParamsSubscriptionDataTrialSettings?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(applicationFeePercent: Decimal? = nil, billingCycleAnchor: StripeTimestamp? = nil, billingCycleAnchorConfig: CheckoutSessionCreateParamsSubscriptionDataBillingCycleAnchorConfig? = nil, billingMode: CheckoutSessionCreateParamsSubscriptionDataBillingMode? = nil, defaultTaxRates: [String]? = nil, description: String? = nil, invoiceSettings: CheckoutSessionCreateParamsSubscriptionDataInvoiceSettings? = nil, metadata: [String: String]? = nil, onBehalfOf: String? = nil, pendingInvoiceItemInterval: CheckoutSessionCreateParamsSubscriptionDataPendingInvoiceItemInterval? = nil, prorationBehavior: CheckoutSessionCreateParamsSubscriptionDataProrationBehavior? = nil, transferData: CheckoutSessionCreateParamsSubscriptionDataTransferData? = nil, trialEnd: StripeTimestamp? = nil, trialPeriodDays: Int? = nil, trialSettings: CheckoutSessionCreateParamsSubscriptionDataTrialSettings? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.applicationFeePercent = applicationFeePercent
+        self.billingCycleAnchor = billingCycleAnchor
+        self.billingCycleAnchorConfig = billingCycleAnchorConfig
+        self.billingMode = billingMode
+        self.defaultTaxRates = defaultTaxRates
+        self.description = description
+        self.invoiceSettings = invoiceSettings
+        self.metadata = metadata
+        self.onBehalfOf = onBehalfOf
+        self.pendingInvoiceItemInterval = pendingInvoiceItemInterval
+        self.prorationBehavior = prorationBehavior
+        self.transferData = transferData
+        self.trialEnd = trialEnd
+        self.trialPeriodDays = trialPeriodDays
+        self.trialSettings = trialSettings
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case applicationFeePercent = "application_fee_percent"
+        case billingCycleAnchor = "billing_cycle_anchor"
+        case billingCycleAnchorConfig = "billing_cycle_anchor_config"
+        case billingMode = "billing_mode"
+        case defaultTaxRates = "default_tax_rates"
+        case description
+        case invoiceSettings = "invoice_settings"
+        case metadata
+        case onBehalfOf = "on_behalf_of"
+        case pendingInvoiceItemInterval = "pending_invoice_item_interval"
+        case prorationBehavior = "proration_behavior"
+        case transferData = "transfer_data"
+        case trialEnd = "trial_end"
+        case trialPeriodDays = "trial_period_days"
+        case trialSettings = "trial_settings"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.applicationFeePercent = try container.decodeIfPresent(Decimal.self, forKey: .applicationFeePercent)
+        self.billingCycleAnchor = try container.decodeIfPresent(StripeTimestamp.self, forKey: .billingCycleAnchor)
+        self.billingCycleAnchorConfig = try container.decodeIfPresent(CheckoutSessionCreateParamsSubscriptionDataBillingCycleAnchorConfig.self, forKey: .billingCycleAnchorConfig)
+        self.billingMode = try container.decodeIfPresent(CheckoutSessionCreateParamsSubscriptionDataBillingMode.self, forKey: .billingMode)
+        self.defaultTaxRates = try container.decodeIfPresent([String].self, forKey: .defaultTaxRates)
+        self.description = try container.decodeIfPresent(String.self, forKey: .description)
+        self.invoiceSettings = try container.decodeIfPresent(CheckoutSessionCreateParamsSubscriptionDataInvoiceSettings.self, forKey: .invoiceSettings)
+        self.metadata = try container.decodeIfPresent([String: String].self, forKey: .metadata)
+        self.onBehalfOf = try container.decodeIfPresent(String.self, forKey: .onBehalfOf)
+        self.pendingInvoiceItemInterval = try container.decodeIfPresent(CheckoutSessionCreateParamsSubscriptionDataPendingInvoiceItemInterval.self, forKey: .pendingInvoiceItemInterval)
+        self.prorationBehavior = try container.decodeIfPresent(CheckoutSessionCreateParamsSubscriptionDataProrationBehavior.self, forKey: .prorationBehavior)
+        self.transferData = try container.decodeIfPresent(CheckoutSessionCreateParamsSubscriptionDataTransferData.self, forKey: .transferData)
+        self.trialEnd = try container.decodeIfPresent(StripeTimestamp.self, forKey: .trialEnd)
+        self.trialPeriodDays = try container.decodeIfPresent(Int.self, forKey: .trialPeriodDays)
+        self.trialSettings = try container.decodeIfPresent(CheckoutSessionCreateParamsSubscriptionDataTrialSettings.self, forKey: .trialSettings)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .applicationFeePercent, .billingCycleAnchor, .billingCycleAnchorConfig, .billingMode, .defaultTaxRates, .description, .invoiceSettings, .metadata, .onBehalfOf, .pendingInvoiceItemInterval, .prorationBehavior, .transferData, .trialEnd, .trialPeriodDays, .trialSettings: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.applicationFeePercent, forKey: .applicationFeePercent)
+        try container.encodeIfPresent(self.billingCycleAnchor, forKey: .billingCycleAnchor)
+        try container.encodeIfPresent(self.billingCycleAnchorConfig, forKey: .billingCycleAnchorConfig)
+        try container.encodeIfPresent(self.billingMode, forKey: .billingMode)
+        try container.encodeIfPresent(self.defaultTaxRates, forKey: .defaultTaxRates)
+        try container.encodeIfPresent(self.description, forKey: .description)
+        try container.encodeIfPresent(self.invoiceSettings, forKey: .invoiceSettings)
+        try container.encodeIfPresent(self.metadata, forKey: .metadata)
+        try container.encodeIfPresent(self.onBehalfOf, forKey: .onBehalfOf)
+        try container.encodeIfPresent(self.pendingInvoiceItemInterval, forKey: .pendingInvoiceItemInterval)
+        try container.encodeIfPresent(self.prorationBehavior, forKey: .prorationBehavior)
+        try container.encodeIfPresent(self.transferData, forKey: .transferData)
+        try container.encodeIfPresent(self.trialEnd, forKey: .trialEnd)
+        try container.encodeIfPresent(self.trialPeriodDays, forKey: .trialPeriodDays)
+        try container.encodeIfPresent(self.trialSettings, forKey: .trialSettings)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsTaxIdCollection: Sendable, Codable, Equatable, Hashable {
+    public var enabled: Bool
+    public var required: PaymentLinksResourceTaxIdCollectionRequired?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(enabled: Bool, required: PaymentLinksResourceTaxIdCollectionRequired? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.enabled = enabled
+        self.required = required
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case enabled
+        case required
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.enabled = try container.decode(Bool.self, forKey: .enabled)
+        self.required = try container.decodeIfPresent(PaymentLinksResourceTaxIdCollectionRequired.self, forKey: .required)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .enabled, .required: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.enabled, forKey: .enabled)
+        try container.encodeIfPresent(self.required, forKey: .required)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsWalletOptionsLink: Sendable, Codable, Equatable, Hashable {
+    public var display: CheckoutLinkWalletOptionsDisplay?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(display: CheckoutLinkWalletOptionsDisplay? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.display = display
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case display
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.display = try container.decodeIfPresent(CheckoutLinkWalletOptionsDisplay.self, forKey: .display)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .display: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.display, forKey: .display)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
+public struct CheckoutSessionCreateParamsWalletOptions: Sendable, Codable, Equatable, Hashable {
+    public var link: CheckoutSessionCreateParamsWalletOptionsLink?
+    /// Fields present in the payload that the pinned spec does not
+    /// describe. Kept so decoding never drops data (lossless decoding).
+    public var unknownFields: [String: JSONValue]?
+
+    public init(link: CheckoutSessionCreateParamsWalletOptionsLink? = nil, unknownFields: [String: JSONValue]? = nil) {
+        self.link = link
+        self.unknownFields = unknownFields
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case link
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.link = try container.decodeIfPresent(CheckoutSessionCreateParamsWalletOptionsLink.self, forKey: .link)
+        var captured: [String: JSONValue] = [:]
+        for key in container.allKeys {
+            switch key {
+            case .link: continue
+            default: break
+            }
+            captured[key.stringValue] = try? container.decode(JSONValue.self, forKey: key)
+        }
+        self.unknownFields = captured.isEmpty ? nil : captured
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.link, forKey: .link)
+        if let unknownFields = unknownFields {
+            for (key, value) in unknownFields {
+                if let codingKey = CodingKeys(stringValue: key) {
+                    try? container.encode(value, forKey: codingKey)
+                }
+            }
+        }
+    }
+}
+
 public struct SessionListParamsCreatedVariant1: Sendable, Codable, Equatable, Hashable {
     public var gt: Int?
     public var gte: Int?
@@ -5885,6 +13720,219 @@ public struct SessionUpdateParamsShippingOptionsItem: Sendable, Codable, Equatab
                 }
             }
         }
+    }
+}
+
+public struct CheckoutSessionCreateParams: Sendable, Encodable, Hashable {
+    public var adaptivePricing: CheckoutSessionCreateParamsAdaptivePricing?
+    public var afterExpiration: CheckoutSessionCreateParamsAfterExpiration?
+    public var allowPromotionCodes: Bool?
+    public var allowedPaymentMethodTypes: [CheckoutSessionCreateParamsAllowedPaymentMethodTypesItem]?
+    public var automaticTax: CheckoutSessionCreateParamsAutomaticTax?
+    public var billingAddressCollection: CheckoutSessionBillingAddressCollection?
+    public var brandingSettings: CheckoutSessionCreateParamsBrandingSettings?
+    public var cancelUrl: String?
+    public var clientReferenceId: String?
+    public var consentCollection: CheckoutSessionCreateParamsConsentCollection?
+    public var currency: String?
+    public var customFields: [CheckoutSessionCreateParamsCustomFieldsItem]?
+    public var customText: CheckoutSessionCreateParamsCustomText?
+    public var customer: String?
+    public var customerAccount: String?
+    public var customerCreation: CheckoutSessionCustomerCreation?
+    public var customerEmail: String?
+    public var customerUpdate: CheckoutSessionCreateParamsCustomerUpdate?
+    public var discounts: [CheckoutSessionCreateParamsDiscountsItem]?
+    public var excludedPaymentMethodTypes: [PaymentIntentExcludedPaymentMethodTypesItem]?
+    public var expiresAt: StripeTimestamp?
+    public var integrationIdentifier: String?
+    public var invoiceCreation: CheckoutSessionCreateParamsInvoiceCreation?
+    public var lineItems: [CheckoutSessionCreateParamsLineItemsItem]?
+    public var locale: CheckoutSessionLocale?
+    public var managedPayments: CheckoutSessionCreateParamsManagedPayments?
+    public var metadata: [String: String]?
+    public var mode: CheckoutSessionMode?
+    public var nameCollection: CheckoutSessionCreateParamsNameCollection?
+    public var optionalItems: [CheckoutSessionCreateParamsOptionalItemsItem]?
+    public var originContext: CheckoutSessionOriginContext?
+    public var paymentIntentData: CheckoutSessionCreateParamsPaymentIntentData?
+    public var paymentMethodCollection: CheckoutSessionCustomerCreation?
+    public var paymentMethodConfiguration: String?
+    public var paymentMethodData: CheckoutSessionCreateParamsPaymentMethodData?
+    public var paymentMethodOptions: CheckoutSessionCreateParamsPaymentMethodOptions?
+    public var permissions: CheckoutSessionCreateParamsPermissions?
+    public var phoneNumberCollection: CheckoutSessionCreateParamsPhoneNumberCollection?
+    public var redirectOnCompletion: CheckoutSessionRedirectOnCompletion?
+    public var returnUrl: String?
+    public var savedPaymentMethodOptions: CheckoutSessionCreateParamsSavedPaymentMethodOptions?
+    public var setupIntentData: CheckoutSessionCreateParamsSetupIntentData?
+    public var shippingAddressCollection: CheckoutSessionCreateParamsShippingAddressCollection?
+    public var shippingOptions: [CheckoutSessionCreateParamsShippingOptionsItem]?
+    public var submitType: CheckoutSessionSubmitType?
+    public var subscriptionData: CheckoutSessionCreateParamsSubscriptionData?
+    public var successUrl: String?
+    public var taxIdCollection: CheckoutSessionCreateParamsTaxIdCollection?
+    public var uiMode: CheckoutSessionUiMode?
+    public var walletOptions: CheckoutSessionCreateParamsWalletOptions?
+
+    public init(adaptivePricing: CheckoutSessionCreateParamsAdaptivePricing? = nil, afterExpiration: CheckoutSessionCreateParamsAfterExpiration? = nil, allowPromotionCodes: Bool? = nil, allowedPaymentMethodTypes: [CheckoutSessionCreateParamsAllowedPaymentMethodTypesItem]? = nil, automaticTax: CheckoutSessionCreateParamsAutomaticTax? = nil, billingAddressCollection: CheckoutSessionBillingAddressCollection? = nil, brandingSettings: CheckoutSessionCreateParamsBrandingSettings? = nil, cancelUrl: String? = nil, clientReferenceId: String? = nil, consentCollection: CheckoutSessionCreateParamsConsentCollection? = nil, currency: String? = nil, customFields: [CheckoutSessionCreateParamsCustomFieldsItem]? = nil, customText: CheckoutSessionCreateParamsCustomText? = nil, customer: String? = nil, customerAccount: String? = nil, customerCreation: CheckoutSessionCustomerCreation? = nil, customerEmail: String? = nil, customerUpdate: CheckoutSessionCreateParamsCustomerUpdate? = nil, discounts: [CheckoutSessionCreateParamsDiscountsItem]? = nil, excludedPaymentMethodTypes: [PaymentIntentExcludedPaymentMethodTypesItem]? = nil, expiresAt: StripeTimestamp? = nil, integrationIdentifier: String? = nil, invoiceCreation: CheckoutSessionCreateParamsInvoiceCreation? = nil, lineItems: [CheckoutSessionCreateParamsLineItemsItem]? = nil, locale: CheckoutSessionLocale? = nil, managedPayments: CheckoutSessionCreateParamsManagedPayments? = nil, metadata: [String: String]? = nil, mode: CheckoutSessionMode? = nil, nameCollection: CheckoutSessionCreateParamsNameCollection? = nil, optionalItems: [CheckoutSessionCreateParamsOptionalItemsItem]? = nil, originContext: CheckoutSessionOriginContext? = nil, paymentIntentData: CheckoutSessionCreateParamsPaymentIntentData? = nil, paymentMethodCollection: CheckoutSessionCustomerCreation? = nil, paymentMethodConfiguration: String? = nil, paymentMethodData: CheckoutSessionCreateParamsPaymentMethodData? = nil, paymentMethodOptions: CheckoutSessionCreateParamsPaymentMethodOptions? = nil, permissions: CheckoutSessionCreateParamsPermissions? = nil, phoneNumberCollection: CheckoutSessionCreateParamsPhoneNumberCollection? = nil, redirectOnCompletion: CheckoutSessionRedirectOnCompletion? = nil, returnUrl: String? = nil, savedPaymentMethodOptions: CheckoutSessionCreateParamsSavedPaymentMethodOptions? = nil, setupIntentData: CheckoutSessionCreateParamsSetupIntentData? = nil, shippingAddressCollection: CheckoutSessionCreateParamsShippingAddressCollection? = nil, shippingOptions: [CheckoutSessionCreateParamsShippingOptionsItem]? = nil, submitType: CheckoutSessionSubmitType? = nil, subscriptionData: CheckoutSessionCreateParamsSubscriptionData? = nil, successUrl: String? = nil, taxIdCollection: CheckoutSessionCreateParamsTaxIdCollection? = nil, uiMode: CheckoutSessionUiMode? = nil, walletOptions: CheckoutSessionCreateParamsWalletOptions? = nil) {
+        self.adaptivePricing = adaptivePricing
+        self.afterExpiration = afterExpiration
+        self.allowPromotionCodes = allowPromotionCodes
+        self.allowedPaymentMethodTypes = allowedPaymentMethodTypes
+        self.automaticTax = automaticTax
+        self.billingAddressCollection = billingAddressCollection
+        self.brandingSettings = brandingSettings
+        self.cancelUrl = cancelUrl
+        self.clientReferenceId = clientReferenceId
+        self.consentCollection = consentCollection
+        self.currency = currency
+        self.customFields = customFields
+        self.customText = customText
+        self.customer = customer
+        self.customerAccount = customerAccount
+        self.customerCreation = customerCreation
+        self.customerEmail = customerEmail
+        self.customerUpdate = customerUpdate
+        self.discounts = discounts
+        self.excludedPaymentMethodTypes = excludedPaymentMethodTypes
+        self.expiresAt = expiresAt
+        self.integrationIdentifier = integrationIdentifier
+        self.invoiceCreation = invoiceCreation
+        self.lineItems = lineItems
+        self.locale = locale
+        self.managedPayments = managedPayments
+        self.metadata = metadata
+        self.mode = mode
+        self.nameCollection = nameCollection
+        self.optionalItems = optionalItems
+        self.originContext = originContext
+        self.paymentIntentData = paymentIntentData
+        self.paymentMethodCollection = paymentMethodCollection
+        self.paymentMethodConfiguration = paymentMethodConfiguration
+        self.paymentMethodData = paymentMethodData
+        self.paymentMethodOptions = paymentMethodOptions
+        self.permissions = permissions
+        self.phoneNumberCollection = phoneNumberCollection
+        self.redirectOnCompletion = redirectOnCompletion
+        self.returnUrl = returnUrl
+        self.savedPaymentMethodOptions = savedPaymentMethodOptions
+        self.setupIntentData = setupIntentData
+        self.shippingAddressCollection = shippingAddressCollection
+        self.shippingOptions = shippingOptions
+        self.submitType = submitType
+        self.subscriptionData = subscriptionData
+        self.successUrl = successUrl
+        self.taxIdCollection = taxIdCollection
+        self.uiMode = uiMode
+        self.walletOptions = walletOptions
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case adaptivePricing = "adaptive_pricing"
+        case afterExpiration = "after_expiration"
+        case allowPromotionCodes = "allow_promotion_codes"
+        case allowedPaymentMethodTypes = "allowed_payment_method_types"
+        case automaticTax = "automatic_tax"
+        case billingAddressCollection = "billing_address_collection"
+        case brandingSettings = "branding_settings"
+        case cancelUrl = "cancel_url"
+        case clientReferenceId = "client_reference_id"
+        case consentCollection = "consent_collection"
+        case currency
+        case customFields = "custom_fields"
+        case customText = "custom_text"
+        case customer
+        case customerAccount = "customer_account"
+        case customerCreation = "customer_creation"
+        case customerEmail = "customer_email"
+        case customerUpdate = "customer_update"
+        case discounts
+        case excludedPaymentMethodTypes = "excluded_payment_method_types"
+        case expiresAt = "expires_at"
+        case integrationIdentifier = "integration_identifier"
+        case invoiceCreation = "invoice_creation"
+        case lineItems = "line_items"
+        case locale
+        case managedPayments = "managed_payments"
+        case metadata
+        case mode
+        case nameCollection = "name_collection"
+        case optionalItems = "optional_items"
+        case originContext = "origin_context"
+        case paymentIntentData = "payment_intent_data"
+        case paymentMethodCollection = "payment_method_collection"
+        case paymentMethodConfiguration = "payment_method_configuration"
+        case paymentMethodData = "payment_method_data"
+        case paymentMethodOptions = "payment_method_options"
+        case permissions
+        case phoneNumberCollection = "phone_number_collection"
+        case redirectOnCompletion = "redirect_on_completion"
+        case returnUrl = "return_url"
+        case savedPaymentMethodOptions = "saved_payment_method_options"
+        case setupIntentData = "setup_intent_data"
+        case shippingAddressCollection = "shipping_address_collection"
+        case shippingOptions = "shipping_options"
+        case submitType = "submit_type"
+        case subscriptionData = "subscription_data"
+        case successUrl = "success_url"
+        case taxIdCollection = "tax_id_collection"
+        case uiMode = "ui_mode"
+        case walletOptions = "wallet_options"
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(self.adaptivePricing, forKey: .adaptivePricing)
+        try container.encodeIfPresent(self.afterExpiration, forKey: .afterExpiration)
+        try container.encodeIfPresent(self.allowPromotionCodes, forKey: .allowPromotionCodes)
+        try container.encodeIfPresent(self.allowedPaymentMethodTypes, forKey: .allowedPaymentMethodTypes)
+        try container.encodeIfPresent(self.automaticTax, forKey: .automaticTax)
+        try container.encodeIfPresent(self.billingAddressCollection, forKey: .billingAddressCollection)
+        try container.encodeIfPresent(self.brandingSettings, forKey: .brandingSettings)
+        try container.encodeIfPresent(self.cancelUrl, forKey: .cancelUrl)
+        try container.encodeIfPresent(self.clientReferenceId, forKey: .clientReferenceId)
+        try container.encodeIfPresent(self.consentCollection, forKey: .consentCollection)
+        try container.encodeIfPresent(self.currency, forKey: .currency)
+        try container.encodeIfPresent(self.customFields, forKey: .customFields)
+        try container.encodeIfPresent(self.customText, forKey: .customText)
+        try container.encodeIfPresent(self.customer, forKey: .customer)
+        try container.encodeIfPresent(self.customerAccount, forKey: .customerAccount)
+        try container.encodeIfPresent(self.customerCreation, forKey: .customerCreation)
+        try container.encodeIfPresent(self.customerEmail, forKey: .customerEmail)
+        try container.encodeIfPresent(self.customerUpdate, forKey: .customerUpdate)
+        try container.encodeIfPresent(self.discounts, forKey: .discounts)
+        try container.encodeIfPresent(self.excludedPaymentMethodTypes, forKey: .excludedPaymentMethodTypes)
+        try container.encodeIfPresent(self.expiresAt, forKey: .expiresAt)
+        try container.encodeIfPresent(self.integrationIdentifier, forKey: .integrationIdentifier)
+        try container.encodeIfPresent(self.invoiceCreation, forKey: .invoiceCreation)
+        try container.encodeIfPresent(self.lineItems, forKey: .lineItems)
+        try container.encodeIfPresent(self.locale, forKey: .locale)
+        try container.encodeIfPresent(self.managedPayments, forKey: .managedPayments)
+        try container.encodeIfPresent(self.metadata, forKey: .metadata)
+        try container.encodeIfPresent(self.mode, forKey: .mode)
+        try container.encodeIfPresent(self.nameCollection, forKey: .nameCollection)
+        try container.encodeIfPresent(self.optionalItems, forKey: .optionalItems)
+        try container.encodeIfPresent(self.originContext, forKey: .originContext)
+        try container.encodeIfPresent(self.paymentIntentData, forKey: .paymentIntentData)
+        try container.encodeIfPresent(self.paymentMethodCollection, forKey: .paymentMethodCollection)
+        try container.encodeIfPresent(self.paymentMethodConfiguration, forKey: .paymentMethodConfiguration)
+        try container.encodeIfPresent(self.paymentMethodData, forKey: .paymentMethodData)
+        try container.encodeIfPresent(self.paymentMethodOptions, forKey: .paymentMethodOptions)
+        try container.encodeIfPresent(self.permissions, forKey: .permissions)
+        try container.encodeIfPresent(self.phoneNumberCollection, forKey: .phoneNumberCollection)
+        try container.encodeIfPresent(self.redirectOnCompletion, forKey: .redirectOnCompletion)
+        try container.encodeIfPresent(self.returnUrl, forKey: .returnUrl)
+        try container.encodeIfPresent(self.savedPaymentMethodOptions, forKey: .savedPaymentMethodOptions)
+        try container.encodeIfPresent(self.setupIntentData, forKey: .setupIntentData)
+        try container.encodeIfPresent(self.shippingAddressCollection, forKey: .shippingAddressCollection)
+        try container.encodeIfPresent(self.shippingOptions, forKey: .shippingOptions)
+        try container.encodeIfPresent(self.submitType, forKey: .submitType)
+        try container.encodeIfPresent(self.subscriptionData, forKey: .subscriptionData)
+        try container.encodeIfPresent(self.successUrl, forKey: .successUrl)
+        try container.encodeIfPresent(self.taxIdCollection, forKey: .taxIdCollection)
+        try container.encodeIfPresent(self.uiMode, forKey: .uiMode)
+        try container.encodeIfPresent(self.walletOptions, forKey: .walletOptions)
     }
 }
 

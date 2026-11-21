@@ -5644,7 +5644,7 @@ public struct InvoiceCreateParamsRenderingPdf: Sendable, Codable, Equatable, Has
 }
 
 public struct InvoiceCreateParamsRendering: Sendable, Codable, Equatable, Hashable {
-    public var amountTaxDisplay: CustomerCreateParamsInvoiceSettingsRenderingOptionsAmountTaxDisplay?
+    public var amountTaxDisplay: CheckoutSessionCreateParamsInvoiceCreationInvoiceDataRenderingOptionsAmountTaxDisplay?
     public var pdf: InvoiceCreateParamsRenderingPdf?
     public var template: String?
     public var templateVersion: Clearable<Int>?
@@ -5652,7 +5652,7 @@ public struct InvoiceCreateParamsRendering: Sendable, Codable, Equatable, Hashab
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(amountTaxDisplay: CustomerCreateParamsInvoiceSettingsRenderingOptionsAmountTaxDisplay? = nil, pdf: InvoiceCreateParamsRenderingPdf? = nil, template: String? = nil, templateVersion: Clearable<Int>? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(amountTaxDisplay: CheckoutSessionCreateParamsInvoiceCreationInvoiceDataRenderingOptionsAmountTaxDisplay? = nil, pdf: InvoiceCreateParamsRenderingPdf? = nil, template: String? = nil, templateVersion: Clearable<Int>? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.amountTaxDisplay = amountTaxDisplay
         self.pdf = pdf
         self.template = template
@@ -5669,7 +5669,7 @@ public struct InvoiceCreateParamsRendering: Sendable, Codable, Equatable, Hashab
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.amountTaxDisplay = try container.decodeIfPresent(CustomerCreateParamsInvoiceSettingsRenderingOptionsAmountTaxDisplay.self, forKey: .amountTaxDisplay)
+        self.amountTaxDisplay = try container.decodeIfPresent(CheckoutSessionCreateParamsInvoiceCreationInvoiceDataRenderingOptionsAmountTaxDisplay.self, forKey: .amountTaxDisplay)
         self.pdf = try container.decodeIfPresent(InvoiceCreateParamsRenderingPdf.self, forKey: .pdf)
         self.template = try container.decodeIfPresent(String.self, forKey: .template)
         self.templateVersion = try container.decodeIfPresent(Clearable<Int>.self, forKey: .templateVersion)
@@ -13079,7 +13079,7 @@ public struct InvoiceUpdateParamsRenderingPdf: Sendable, Codable, Equatable, Has
 }
 
 public struct InvoiceUpdateParamsRendering: Sendable, Codable, Equatable, Hashable {
-    public var amountTaxDisplay: CustomerCreateParamsInvoiceSettingsRenderingOptionsAmountTaxDisplay?
+    public var amountTaxDisplay: CheckoutSessionCreateParamsInvoiceCreationInvoiceDataRenderingOptionsAmountTaxDisplay?
     public var pdf: InvoiceUpdateParamsRenderingPdf?
     public var template: String?
     public var templateVersion: Clearable<Int>?
@@ -13087,7 +13087,7 @@ public struct InvoiceUpdateParamsRendering: Sendable, Codable, Equatable, Hashab
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(amountTaxDisplay: CustomerCreateParamsInvoiceSettingsRenderingOptionsAmountTaxDisplay? = nil, pdf: InvoiceUpdateParamsRenderingPdf? = nil, template: String? = nil, templateVersion: Clearable<Int>? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(amountTaxDisplay: CheckoutSessionCreateParamsInvoiceCreationInvoiceDataRenderingOptionsAmountTaxDisplay? = nil, pdf: InvoiceUpdateParamsRenderingPdf? = nil, template: String? = nil, templateVersion: Clearable<Int>? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.amountTaxDisplay = amountTaxDisplay
         self.pdf = pdf
         self.template = template
@@ -13104,7 +13104,7 @@ public struct InvoiceUpdateParamsRendering: Sendable, Codable, Equatable, Hashab
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.amountTaxDisplay = try container.decodeIfPresent(CustomerCreateParamsInvoiceSettingsRenderingOptionsAmountTaxDisplay.self, forKey: .amountTaxDisplay)
+        self.amountTaxDisplay = try container.decodeIfPresent(CheckoutSessionCreateParamsInvoiceCreationInvoiceDataRenderingOptionsAmountTaxDisplay.self, forKey: .amountTaxDisplay)
         self.pdf = try container.decodeIfPresent(InvoiceUpdateParamsRenderingPdf.self, forKey: .pdf)
         self.template = try container.decodeIfPresent(String.self, forKey: .template)
         self.templateVersion = try container.decodeIfPresent(Clearable<Int>.self, forKey: .templateVersion)

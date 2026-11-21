@@ -3727,51 +3727,14 @@ public struct CustomerCreateParamsInvoiceSettingsCustomFieldsItem: Sendable, Cod
     }
 }
 
-/// Lossless enum: values Stripe documents plus any value the API
-/// adds later, kept in `undocumented` instead of dropped.
-public enum CustomerCreateParamsInvoiceSettingsRenderingOptionsAmountTaxDisplay: Sendable, Equatable, Hashable, LosslessEnum {
-    case anonymous
-    case excludeTax
-    case includeInclusiveTax
-    case undocumented(String)
-
-    public init(rawValue raw: String) {
-        switch raw {
-        case "": self = .anonymous
-        case "exclude_tax": self = .excludeTax
-        case "include_inclusive_tax": self = .includeInclusiveTax
-        default: self = .undocumented(raw)
-        }
-    }
-
-    public var rawValue: String {
-        switch self {
-        case .anonymous: return ""
-        case .excludeTax: return "exclude_tax"
-        case .includeInclusiveTax: return "include_inclusive_tax"
-        case .undocumented(let value): return value
-        }
-    }
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        try container.encode(rawValue)
-    }
-}
-
 public struct CustomerCreateParamsInvoiceSettingsRenderingOptions: Sendable, Codable, Equatable, Hashable {
-    public var amountTaxDisplay: CustomerCreateParamsInvoiceSettingsRenderingOptionsAmountTaxDisplay?
+    public var amountTaxDisplay: CheckoutSessionCreateParamsInvoiceCreationInvoiceDataRenderingOptionsAmountTaxDisplay?
     public var template: String?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(amountTaxDisplay: CustomerCreateParamsInvoiceSettingsRenderingOptionsAmountTaxDisplay? = nil, template: String? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(amountTaxDisplay: CheckoutSessionCreateParamsInvoiceCreationInvoiceDataRenderingOptionsAmountTaxDisplay? = nil, template: String? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.amountTaxDisplay = amountTaxDisplay
         self.template = template
         self.unknownFields = unknownFields
@@ -3784,7 +3747,7 @@ public struct CustomerCreateParamsInvoiceSettingsRenderingOptions: Sendable, Cod
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.amountTaxDisplay = try container.decodeIfPresent(CustomerCreateParamsInvoiceSettingsRenderingOptionsAmountTaxDisplay.self, forKey: .amountTaxDisplay)
+        self.amountTaxDisplay = try container.decodeIfPresent(CheckoutSessionCreateParamsInvoiceCreationInvoiceDataRenderingOptionsAmountTaxDisplay.self, forKey: .amountTaxDisplay)
         self.template = try container.decodeIfPresent(String.self, forKey: .template)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
@@ -5308,13 +5271,13 @@ public struct CustomerUpdateParamsInvoiceSettingsCustomFieldsItem: Sendable, Cod
 }
 
 public struct CustomerUpdateParamsInvoiceSettingsRenderingOptions: Sendable, Codable, Equatable, Hashable {
-    public var amountTaxDisplay: CustomerCreateParamsInvoiceSettingsRenderingOptionsAmountTaxDisplay?
+    public var amountTaxDisplay: CheckoutSessionCreateParamsInvoiceCreationInvoiceDataRenderingOptionsAmountTaxDisplay?
     public var template: String?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(amountTaxDisplay: CustomerCreateParamsInvoiceSettingsRenderingOptionsAmountTaxDisplay? = nil, template: String? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(amountTaxDisplay: CheckoutSessionCreateParamsInvoiceCreationInvoiceDataRenderingOptionsAmountTaxDisplay? = nil, template: String? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.amountTaxDisplay = amountTaxDisplay
         self.template = template
         self.unknownFields = unknownFields
@@ -5327,7 +5290,7 @@ public struct CustomerUpdateParamsInvoiceSettingsRenderingOptions: Sendable, Cod
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.amountTaxDisplay = try container.decodeIfPresent(CustomerCreateParamsInvoiceSettingsRenderingOptionsAmountTaxDisplay.self, forKey: .amountTaxDisplay)
+        self.amountTaxDisplay = try container.decodeIfPresent(CheckoutSessionCreateParamsInvoiceCreationInvoiceDataRenderingOptionsAmountTaxDisplay.self, forKey: .amountTaxDisplay)
         self.template = try container.decodeIfPresent(String.self, forKey: .template)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {

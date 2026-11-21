@@ -32573,56 +32573,16 @@ public struct PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitMandateOptio
     }
 }
 
-/// Lossless enum: values Stripe documents plus any value the API
-/// adds later, kept in `undocumented` instead of dropped.
-public enum PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage: Sendable, Equatable, Hashable, LosslessEnum {
-    case anonymous
-    case none
-    case offSession
-    case onSession
-    case undocumented(String)
-
-    public init(rawValue raw: String) {
-        switch raw {
-        case "": self = .anonymous
-        case "none": self = .none
-        case "off_session": self = .offSession
-        case "on_session": self = .onSession
-        default: self = .undocumented(raw)
-        }
-    }
-
-    public var rawValue: String {
-        switch self {
-        case .anonymous: return ""
-        case .none: return "none"
-        case .offSession: return "off_session"
-        case .onSession: return "on_session"
-        case .undocumented(let value): return value
-        }
-    }
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        try container.encode(rawValue)
-    }
-}
-
 public struct PaymentIntentCreateParamsPaymentMethodOptionsAcssDebit: Sendable, Codable, Equatable, Hashable {
     public var mandateOptions: PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitMandateOptions?
-    public var setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage?
+    public var setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage?
     public var targetDate: String?
     public var verificationMethod: CheckoutAcssDebitPaymentMethodOptionsVerificationMethod?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(mandateOptions: PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitMandateOptions? = nil, setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage? = nil, targetDate: String? = nil, verificationMethod: CheckoutAcssDebitPaymentMethodOptionsVerificationMethod? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(mandateOptions: PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitMandateOptions? = nil, setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage? = nil, targetDate: String? = nil, verificationMethod: CheckoutAcssDebitPaymentMethodOptionsVerificationMethod? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.mandateOptions = mandateOptions
         self.setupFutureUsage = setupFutureUsage
         self.targetDate = targetDate
@@ -32640,7 +32600,7 @@ public struct PaymentIntentCreateParamsPaymentMethodOptionsAcssDebit: Sendable, 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.mandateOptions = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitMandateOptions.self, forKey: .mandateOptions)
-        self.setupFutureUsage = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage.self, forKey: .setupFutureUsage)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage.self, forKey: .setupFutureUsage)
         self.targetDate = try container.decodeIfPresent(String.self, forKey: .targetDate)
         self.verificationMethod = try container.decodeIfPresent(CheckoutAcssDebitPaymentMethodOptionsVerificationMethod.self, forKey: .verificationMethod)
         var captured: [String: JSONValue] = [:]
@@ -32670,49 +32630,15 @@ public struct PaymentIntentCreateParamsPaymentMethodOptionsAcssDebit: Sendable, 
     }
 }
 
-/// Lossless enum: values Stripe documents plus any value the API
-/// adds later, kept in `undocumented` instead of dropped.
-public enum PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod: Sendable, Equatable, Hashable, LosslessEnum {
-    case anonymous
-    case manual
-    case undocumented(String)
-
-    public init(rawValue raw: String) {
-        switch raw {
-        case "": self = .anonymous
-        case "manual": self = .manual
-        default: self = .undocumented(raw)
-        }
-    }
-
-    public var rawValue: String {
-        switch self {
-        case .anonymous: return ""
-        case .manual: return "manual"
-        case .undocumented(let value): return value
-        }
-    }
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        try container.encode(rawValue)
-    }
-}
-
 public struct PaymentIntentCreateParamsPaymentMethodOptionsAffirm: Sendable, Codable, Equatable, Hashable {
-    public var captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod?
+    public var captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod?
     public var preferredLocale: String?
     public var setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod? = nil, preferredLocale: String? = nil, setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod? = nil, preferredLocale: String? = nil, setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.captureMethod = captureMethod
         self.preferredLocale = preferredLocale
         self.setupFutureUsage = setupFutureUsage
@@ -32727,7 +32653,7 @@ public struct PaymentIntentCreateParamsPaymentMethodOptionsAffirm: Sendable, Cod
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.captureMethod = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod.self, forKey: .captureMethod)
+        self.captureMethod = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod.self, forKey: .captureMethod)
         self.preferredLocale = try container.decodeIfPresent(String.self, forKey: .preferredLocale)
         self.setupFutureUsage = try container.decodeIfPresent(CheckoutAffirmPaymentMethodOptionsSetupFutureUsage.self, forKey: .setupFutureUsage)
         var captured: [String: JSONValue] = [:]
@@ -32757,14 +32683,14 @@ public struct PaymentIntentCreateParamsPaymentMethodOptionsAffirm: Sendable, Cod
 }
 
 public struct PaymentIntentCreateParamsPaymentMethodOptionsAfterpayClearpay: Sendable, Codable, Equatable, Hashable {
-    public var captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod?
+    public var captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod?
     public var reference: String?
     public var setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod? = nil, reference: String? = nil, setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod? = nil, reference: String? = nil, setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.captureMethod = captureMethod
         self.reference = reference
         self.setupFutureUsage = setupFutureUsage
@@ -32779,7 +32705,7 @@ public struct PaymentIntentCreateParamsPaymentMethodOptionsAfterpayClearpay: Sen
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.captureMethod = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod.self, forKey: .captureMethod)
+        self.captureMethod = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod.self, forKey: .captureMethod)
         self.reference = try container.decodeIfPresent(String.self, forKey: .reference)
         self.setupFutureUsage = try container.decodeIfPresent(CheckoutAffirmPaymentMethodOptionsSetupFutureUsage.self, forKey: .setupFutureUsage)
         var captured: [String: JSONValue] = [:]
@@ -32808,50 +32734,13 @@ public struct PaymentIntentCreateParamsPaymentMethodOptionsAfterpayClearpay: Sen
     }
 }
 
-/// Lossless enum: values Stripe documents plus any value the API
-/// adds later, kept in `undocumented` instead of dropped.
-public enum PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage: Sendable, Equatable, Hashable, LosslessEnum {
-    case anonymous
-    case none
-    case offSession
-    case undocumented(String)
-
-    public init(rawValue raw: String) {
-        switch raw {
-        case "": self = .anonymous
-        case "none": self = .none
-        case "off_session": self = .offSession
-        default: self = .undocumented(raw)
-        }
-    }
-
-    public var rawValue: String {
-        switch self {
-        case .anonymous: return ""
-        case .none: return "none"
-        case .offSession: return "off_session"
-        case .undocumented(let value): return value
-        }
-    }
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        try container.encode(rawValue)
-    }
-}
-
 public struct PaymentIntentCreateParamsPaymentMethodOptionsAlipay: Sendable, Codable, Equatable, Hashable {
-    public var setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage?
+    public var setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.setupFutureUsage = setupFutureUsage
         self.unknownFields = unknownFields
     }
@@ -32862,7 +32751,7 @@ public struct PaymentIntentCreateParamsPaymentMethodOptionsAlipay: Sendable, Cod
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.setupFutureUsage = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage.self, forKey: .setupFutureUsage)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage.self, forKey: .setupFutureUsage)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -32888,12 +32777,12 @@ public struct PaymentIntentCreateParamsPaymentMethodOptionsAlipay: Sendable, Cod
 }
 
 public struct PaymentIntentCreateParamsPaymentMethodOptionsAlma: Sendable, Codable, Equatable, Hashable {
-    public var captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod?
+    public var captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.captureMethod = captureMethod
         self.unknownFields = unknownFields
     }
@@ -32904,7 +32793,7 @@ public struct PaymentIntentCreateParamsPaymentMethodOptionsAlma: Sendable, Codab
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.captureMethod = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod.self, forKey: .captureMethod)
+        self.captureMethod = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod.self, forKey: .captureMethod)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -32930,13 +32819,13 @@ public struct PaymentIntentCreateParamsPaymentMethodOptionsAlma: Sendable, Codab
 }
 
 public struct PaymentIntentCreateParamsPaymentMethodOptionsAmazonPay: Sendable, Codable, Equatable, Hashable {
-    public var captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod?
-    public var setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage?
+    public var captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod?
+    public var setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod? = nil, setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod? = nil, setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.captureMethod = captureMethod
         self.setupFutureUsage = setupFutureUsage
         self.unknownFields = unknownFields
@@ -32949,8 +32838,8 @@ public struct PaymentIntentCreateParamsPaymentMethodOptionsAmazonPay: Sendable, 
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.captureMethod = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod.self, forKey: .captureMethod)
-        self.setupFutureUsage = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage.self, forKey: .setupFutureUsage)
+        self.captureMethod = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod.self, forKey: .captureMethod)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage.self, forKey: .setupFutureUsage)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -32977,13 +32866,13 @@ public struct PaymentIntentCreateParamsPaymentMethodOptionsAmazonPay: Sendable, 
 }
 
 public struct PaymentIntentCreateParamsPaymentMethodOptionsAuBecsDebit: Sendable, Codable, Equatable, Hashable {
-    public var setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage?
+    public var setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage?
     public var targetDate: String?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage? = nil, targetDate: String? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage? = nil, targetDate: String? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.setupFutureUsage = setupFutureUsage
         self.targetDate = targetDate
         self.unknownFields = unknownFields
@@ -32996,7 +32885,7 @@ public struct PaymentIntentCreateParamsPaymentMethodOptionsAuBecsDebit: Sendable
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.setupFutureUsage = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage.self, forKey: .setupFutureUsage)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage.self, forKey: .setupFutureUsage)
         self.targetDate = try container.decodeIfPresent(String.self, forKey: .targetDate)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
@@ -33067,13 +32956,13 @@ public struct PaymentIntentCreateParamsPaymentMethodOptionsBacsDebitMandateOptio
 
 public struct PaymentIntentCreateParamsPaymentMethodOptionsBacsDebit: Sendable, Codable, Equatable, Hashable {
     public var mandateOptions: PaymentIntentCreateParamsPaymentMethodOptionsBacsDebitMandateOptions?
-    public var setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage?
+    public var setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage?
     public var targetDate: String?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(mandateOptions: PaymentIntentCreateParamsPaymentMethodOptionsBacsDebitMandateOptions? = nil, setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage? = nil, targetDate: String? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(mandateOptions: PaymentIntentCreateParamsPaymentMethodOptionsBacsDebitMandateOptions? = nil, setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage? = nil, targetDate: String? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.mandateOptions = mandateOptions
         self.setupFutureUsage = setupFutureUsage
         self.targetDate = targetDate
@@ -33089,7 +32978,7 @@ public struct PaymentIntentCreateParamsPaymentMethodOptionsBacsDebit: Sendable, 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.mandateOptions = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsBacsDebitMandateOptions.self, forKey: .mandateOptions)
-        self.setupFutureUsage = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage.self, forKey: .setupFutureUsage)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage.self, forKey: .setupFutureUsage)
         self.targetDate = try container.decodeIfPresent(String.self, forKey: .targetDate)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
@@ -33119,12 +33008,12 @@ public struct PaymentIntentCreateParamsPaymentMethodOptionsBacsDebit: Sendable, 
 
 public struct PaymentIntentCreateParamsPaymentMethodOptionsBancontact: Sendable, Codable, Equatable, Hashable {
     public var preferredLanguage: InvoicePaymentMethodOptionsBancontactPreferredLanguage?
-    public var setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage?
+    public var setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(preferredLanguage: InvoicePaymentMethodOptionsBancontactPreferredLanguage? = nil, setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(preferredLanguage: InvoicePaymentMethodOptionsBancontactPreferredLanguage? = nil, setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.preferredLanguage = preferredLanguage
         self.setupFutureUsage = setupFutureUsage
         self.unknownFields = unknownFields
@@ -33138,7 +33027,7 @@ public struct PaymentIntentCreateParamsPaymentMethodOptionsBancontact: Sendable,
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.preferredLanguage = try container.decodeIfPresent(InvoicePaymentMethodOptionsBancontactPreferredLanguage.self, forKey: .preferredLanguage)
-        self.setupFutureUsage = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage.self, forKey: .setupFutureUsage)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage.self, forKey: .setupFutureUsage)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -33294,14 +33183,14 @@ public struct PaymentIntentCreateParamsPaymentMethodOptionsBillieCompanyDetails:
 }
 
 public struct PaymentIntentCreateParamsPaymentMethodOptionsBillie: Sendable, Codable, Equatable, Hashable {
-    public var captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod?
+    public var captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod?
     public var companyDetails: Clearable<PaymentIntentCreateParamsPaymentMethodOptionsBillieCompanyDetails>?
     public var reference: String?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod? = nil, companyDetails: Clearable<PaymentIntentCreateParamsPaymentMethodOptionsBillieCompanyDetails>? = nil, reference: String? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod? = nil, companyDetails: Clearable<PaymentIntentCreateParamsPaymentMethodOptionsBillieCompanyDetails>? = nil, reference: String? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.captureMethod = captureMethod
         self.companyDetails = companyDetails
         self.reference = reference
@@ -33316,7 +33205,7 @@ public struct PaymentIntentCreateParamsPaymentMethodOptionsBillie: Sendable, Cod
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.captureMethod = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod.self, forKey: .captureMethod)
+        self.captureMethod = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod.self, forKey: .captureMethod)
         self.companyDetails = try container.decodeIfPresent(Clearable<PaymentIntentCreateParamsPaymentMethodOptionsBillieCompanyDetails>.self, forKey: .companyDetails)
         self.reference = try container.decodeIfPresent(String.self, forKey: .reference)
         var captured: [String: JSONValue] = [:]
@@ -33426,12 +33315,12 @@ public struct PaymentIntentCreateParamsPaymentMethodOptionsBlikMandateOptions: S
 public struct PaymentIntentCreateParamsPaymentMethodOptionsBlik: Sendable, Codable, Equatable, Hashable {
     public var code: String?
     public var mandateOptions: PaymentIntentCreateParamsPaymentMethodOptionsBlikMandateOptions?
-    public var setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage?
+    public var setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(code: String? = nil, mandateOptions: PaymentIntentCreateParamsPaymentMethodOptionsBlikMandateOptions? = nil, setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(code: String? = nil, mandateOptions: PaymentIntentCreateParamsPaymentMethodOptionsBlikMandateOptions? = nil, setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.code = code
         self.mandateOptions = mandateOptions
         self.setupFutureUsage = setupFutureUsage
@@ -33448,7 +33337,7 @@ public struct PaymentIntentCreateParamsPaymentMethodOptionsBlik: Sendable, Codab
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.code = try container.decodeIfPresent(String.self, forKey: .code)
         self.mandateOptions = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsBlikMandateOptions.self, forKey: .mandateOptions)
-        self.setupFutureUsage = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage.self, forKey: .setupFutureUsage)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage.self, forKey: .setupFutureUsage)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -33477,12 +33366,12 @@ public struct PaymentIntentCreateParamsPaymentMethodOptionsBlik: Sendable, Codab
 
 public struct PaymentIntentCreateParamsPaymentMethodOptionsBoleto: Sendable, Codable, Equatable, Hashable {
     public var expiresAfterDays: Int?
-    public var setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage?
+    public var setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(expiresAfterDays: Int? = nil, setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(expiresAfterDays: Int? = nil, setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.expiresAfterDays = expiresAfterDays
         self.setupFutureUsage = setupFutureUsage
         self.unknownFields = unknownFields
@@ -33496,7 +33385,7 @@ public struct PaymentIntentCreateParamsPaymentMethodOptionsBoleto: Sendable, Cod
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.expiresAfterDays = try container.decodeIfPresent(Int.self, forKey: .expiresAfterDays)
-        self.setupFutureUsage = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage.self, forKey: .setupFutureUsage)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage.self, forKey: .setupFutureUsage)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -33970,7 +33859,7 @@ public struct PaymentIntentCreateParamsPaymentMethodOptionsCardThreeDSecure: Sen
 }
 
 public struct PaymentIntentCreateParamsPaymentMethodOptionsCard: Sendable, Codable, Equatable, Hashable {
-    public var captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod?
+    public var captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod?
     public var cvcToken: String?
     public var installments: PaymentIntentCreateParamsPaymentMethodOptionsCardInstallments?
     public var mandateOptions: PaymentIntentCreateParamsPaymentMethodOptionsCardMandateOptions?
@@ -33983,7 +33872,7 @@ public struct PaymentIntentCreateParamsPaymentMethodOptionsCard: Sendable, Codab
     public var requestThreeDSecure: CheckoutCardPaymentMethodOptionsRequestThreeDSecure?
     public var requireCvcRecollection: Bool?
     public var setupCredentialUsage: PaymentIntentPaymentMethodOptionsCardSetupCredentialUsage?
-    public var setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage?
+    public var setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage?
     public var statementDescriptorSuffixKana: Clearable<String>?
     public var statementDescriptorSuffixKanji: Clearable<String>?
     public var storedCredentialUsage: PaymentIntentPaymentMethodOptionsCardSetupCredentialUsage?
@@ -33992,7 +33881,7 @@ public struct PaymentIntentCreateParamsPaymentMethodOptionsCard: Sendable, Codab
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod? = nil, cvcToken: String? = nil, installments: PaymentIntentCreateParamsPaymentMethodOptionsCardInstallments? = nil, mandateOptions: PaymentIntentCreateParamsPaymentMethodOptionsCardMandateOptions? = nil, moto: Bool? = nil, network: PaymentIntentPaymentMethodOptionsCardNetwork? = nil, requestExtendedAuthorization: CheckoutCardPaymentMethodOptionsRequestExtendedAuthorization? = nil, requestIncrementalAuthorization: CheckoutCardPaymentMethodOptionsRequestExtendedAuthorization? = nil, requestMulticapture: CheckoutCardPaymentMethodOptionsRequestExtendedAuthorization? = nil, requestOvercapture: CheckoutCardPaymentMethodOptionsRequestExtendedAuthorization? = nil, requestThreeDSecure: CheckoutCardPaymentMethodOptionsRequestThreeDSecure? = nil, requireCvcRecollection: Bool? = nil, setupCredentialUsage: PaymentIntentPaymentMethodOptionsCardSetupCredentialUsage? = nil, setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage? = nil, statementDescriptorSuffixKana: Clearable<String>? = nil, statementDescriptorSuffixKanji: Clearable<String>? = nil, storedCredentialUsage: PaymentIntentPaymentMethodOptionsCardSetupCredentialUsage? = nil, threeDSecure: PaymentIntentCreateParamsPaymentMethodOptionsCardThreeDSecure? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod? = nil, cvcToken: String? = nil, installments: PaymentIntentCreateParamsPaymentMethodOptionsCardInstallments? = nil, mandateOptions: PaymentIntentCreateParamsPaymentMethodOptionsCardMandateOptions? = nil, moto: Bool? = nil, network: PaymentIntentPaymentMethodOptionsCardNetwork? = nil, requestExtendedAuthorization: CheckoutCardPaymentMethodOptionsRequestExtendedAuthorization? = nil, requestIncrementalAuthorization: CheckoutCardPaymentMethodOptionsRequestExtendedAuthorization? = nil, requestMulticapture: CheckoutCardPaymentMethodOptionsRequestExtendedAuthorization? = nil, requestOvercapture: CheckoutCardPaymentMethodOptionsRequestExtendedAuthorization? = nil, requestThreeDSecure: CheckoutCardPaymentMethodOptionsRequestThreeDSecure? = nil, requireCvcRecollection: Bool? = nil, setupCredentialUsage: PaymentIntentPaymentMethodOptionsCardSetupCredentialUsage? = nil, setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage? = nil, statementDescriptorSuffixKana: Clearable<String>? = nil, statementDescriptorSuffixKanji: Clearable<String>? = nil, storedCredentialUsage: PaymentIntentPaymentMethodOptionsCardSetupCredentialUsage? = nil, threeDSecure: PaymentIntentCreateParamsPaymentMethodOptionsCardThreeDSecure? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.captureMethod = captureMethod
         self.cvcToken = cvcToken
         self.installments = installments
@@ -34037,7 +33926,7 @@ public struct PaymentIntentCreateParamsPaymentMethodOptionsCard: Sendable, Codab
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.captureMethod = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod.self, forKey: .captureMethod)
+        self.captureMethod = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod.self, forKey: .captureMethod)
         self.cvcToken = try container.decodeIfPresent(String.self, forKey: .cvcToken)
         self.installments = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsCardInstallments.self, forKey: .installments)
         self.mandateOptions = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsCardMandateOptions.self, forKey: .mandateOptions)
@@ -34050,7 +33939,7 @@ public struct PaymentIntentCreateParamsPaymentMethodOptionsCard: Sendable, Codab
         self.requestThreeDSecure = try container.decodeIfPresent(CheckoutCardPaymentMethodOptionsRequestThreeDSecure.self, forKey: .requestThreeDSecure)
         self.requireCvcRecollection = try container.decodeIfPresent(Bool.self, forKey: .requireCvcRecollection)
         self.setupCredentialUsage = try container.decodeIfPresent(PaymentIntentPaymentMethodOptionsCardSetupCredentialUsage.self, forKey: .setupCredentialUsage)
-        self.setupFutureUsage = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage.self, forKey: .setupFutureUsage)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage.self, forKey: .setupFutureUsage)
         self.statementDescriptorSuffixKana = try container.decodeIfPresent(Clearable<String>.self, forKey: .statementDescriptorSuffixKana)
         self.statementDescriptorSuffixKanji = try container.decodeIfPresent(Clearable<String>.self, forKey: .statementDescriptorSuffixKanji)
         self.storedCredentialUsage = try container.decodeIfPresent(PaymentIntentPaymentMethodOptionsCardSetupCredentialUsage.self, forKey: .storedCredentialUsage)
@@ -34196,13 +34085,13 @@ public struct PaymentIntentCreateParamsPaymentMethodOptionsCardPresent: Sendable
 }
 
 public struct PaymentIntentCreateParamsPaymentMethodOptionsCashapp: Sendable, Codable, Equatable, Hashable {
-    public var captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod?
-    public var setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage?
+    public var captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod?
+    public var setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod? = nil, setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod? = nil, setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.captureMethod = captureMethod
         self.setupFutureUsage = setupFutureUsage
         self.unknownFields = unknownFields
@@ -34215,8 +34104,8 @@ public struct PaymentIntentCreateParamsPaymentMethodOptionsCashapp: Sendable, Co
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.captureMethod = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod.self, forKey: .captureMethod)
-        self.setupFutureUsage = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage.self, forKey: .setupFutureUsage)
+        self.captureMethod = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod.self, forKey: .captureMethod)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage.self, forKey: .setupFutureUsage)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -34599,12 +34488,12 @@ public struct PaymentIntentCreateParamsPaymentMethodOptionsGrabpay: Sendable, Co
 }
 
 public struct PaymentIntentCreateParamsPaymentMethodOptionsIdeal: Sendable, Codable, Equatable, Hashable {
-    public var setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage?
+    public var setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.setupFutureUsage = setupFutureUsage
         self.unknownFields = unknownFields
     }
@@ -34615,7 +34504,7 @@ public struct PaymentIntentCreateParamsPaymentMethodOptionsIdeal: Sendable, Coda
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.setupFutureUsage = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage.self, forKey: .setupFutureUsage)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage.self, forKey: .setupFutureUsage)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -34677,13 +34566,13 @@ public struct PaymentIntentCreateParamsPaymentMethodOptionsInteracPresent: Senda
 }
 
 public struct PaymentIntentCreateParamsPaymentMethodOptionsKakaoPay: Sendable, Codable, Equatable, Hashable {
-    public var captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod?
-    public var setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage?
+    public var captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod?
+    public var setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod? = nil, setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod? = nil, setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.captureMethod = captureMethod
         self.setupFutureUsage = setupFutureUsage
         self.unknownFields = unknownFields
@@ -34696,8 +34585,8 @@ public struct PaymentIntentCreateParamsPaymentMethodOptionsKakaoPay: Sendable, C
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.captureMethod = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod.self, forKey: .captureMethod)
-        self.setupFutureUsage = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage.self, forKey: .setupFutureUsage)
+        self.captureMethod = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod.self, forKey: .captureMethod)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage.self, forKey: .setupFutureUsage)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -35061,7 +34950,7 @@ public struct PaymentIntentCreateParamsPaymentMethodOptionsKlarnaSubscriptionsIt
 }
 
 public struct PaymentIntentCreateParamsPaymentMethodOptionsKlarna: Sendable, Codable, Equatable, Hashable {
-    public var captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod?
+    public var captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod?
     public var onDemand: PaymentIntentCreateParamsPaymentMethodOptionsKlarnaOnDemand?
     public var preferredLocale: PaymentIntentCreateParamsPaymentMethodOptionsKlarnaPreferredLocale?
     public var setupFutureUsage: CheckoutAcssDebitPaymentMethodOptionsSetupFutureUsage?
@@ -35070,7 +34959,7 @@ public struct PaymentIntentCreateParamsPaymentMethodOptionsKlarna: Sendable, Cod
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod? = nil, onDemand: PaymentIntentCreateParamsPaymentMethodOptionsKlarnaOnDemand? = nil, preferredLocale: PaymentIntentCreateParamsPaymentMethodOptionsKlarnaPreferredLocale? = nil, setupFutureUsage: CheckoutAcssDebitPaymentMethodOptionsSetupFutureUsage? = nil, subscriptions: Clearable<[PaymentIntentCreateParamsPaymentMethodOptionsKlarnaSubscriptionsItem]>? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod? = nil, onDemand: PaymentIntentCreateParamsPaymentMethodOptionsKlarnaOnDemand? = nil, preferredLocale: PaymentIntentCreateParamsPaymentMethodOptionsKlarnaPreferredLocale? = nil, setupFutureUsage: CheckoutAcssDebitPaymentMethodOptionsSetupFutureUsage? = nil, subscriptions: Clearable<[PaymentIntentCreateParamsPaymentMethodOptionsKlarnaSubscriptionsItem]>? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.captureMethod = captureMethod
         self.onDemand = onDemand
         self.preferredLocale = preferredLocale
@@ -35089,7 +34978,7 @@ public struct PaymentIntentCreateParamsPaymentMethodOptionsKlarna: Sendable, Cod
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.captureMethod = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod.self, forKey: .captureMethod)
+        self.captureMethod = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod.self, forKey: .captureMethod)
         self.onDemand = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsKlarnaOnDemand.self, forKey: .onDemand)
         self.preferredLocale = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsKlarnaPreferredLocale.self, forKey: .preferredLocale)
         self.setupFutureUsage = try container.decodeIfPresent(CheckoutAcssDebitPaymentMethodOptionsSetupFutureUsage.self, forKey: .setupFutureUsage)
@@ -35185,13 +35074,13 @@ public struct PaymentIntentCreateParamsPaymentMethodOptionsKonbini: Sendable, Co
 }
 
 public struct PaymentIntentCreateParamsPaymentMethodOptionsKrCard: Sendable, Codable, Equatable, Hashable {
-    public var captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod?
-    public var setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage?
+    public var captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod?
+    public var setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod? = nil, setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod? = nil, setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.captureMethod = captureMethod
         self.setupFutureUsage = setupFutureUsage
         self.unknownFields = unknownFields
@@ -35204,8 +35093,8 @@ public struct PaymentIntentCreateParamsPaymentMethodOptionsKrCard: Sendable, Cod
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.captureMethod = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod.self, forKey: .captureMethod)
-        self.setupFutureUsage = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage.self, forKey: .setupFutureUsage)
+        self.captureMethod = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod.self, forKey: .captureMethod)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage.self, forKey: .setupFutureUsage)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -35232,14 +35121,14 @@ public struct PaymentIntentCreateParamsPaymentMethodOptionsKrCard: Sendable, Cod
 }
 
 public struct PaymentIntentCreateParamsPaymentMethodOptionsLink: Sendable, Codable, Equatable, Hashable {
-    public var captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod?
+    public var captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod?
     public var persistentToken: String?
-    public var setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage?
+    public var setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod? = nil, persistentToken: String? = nil, setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod? = nil, persistentToken: String? = nil, setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.captureMethod = captureMethod
         self.persistentToken = persistentToken
         self.setupFutureUsage = setupFutureUsage
@@ -35254,9 +35143,9 @@ public struct PaymentIntentCreateParamsPaymentMethodOptionsLink: Sendable, Codab
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.captureMethod = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod.self, forKey: .captureMethod)
+        self.captureMethod = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod.self, forKey: .captureMethod)
         self.persistentToken = try container.decodeIfPresent(String.self, forKey: .persistentToken)
-        self.setupFutureUsage = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage.self, forKey: .setupFutureUsage)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage.self, forKey: .setupFutureUsage)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -35326,13 +35215,13 @@ public struct PaymentIntentCreateParamsPaymentMethodOptionsMbWay: Sendable, Coda
 }
 
 public struct PaymentIntentCreateParamsPaymentMethodOptionsMobilepay: Sendable, Codable, Equatable, Hashable {
-    public var captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod?
+    public var captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod?
     public var setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod? = nil, setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod? = nil, setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.captureMethod = captureMethod
         self.setupFutureUsage = setupFutureUsage
         self.unknownFields = unknownFields
@@ -35345,7 +35234,7 @@ public struct PaymentIntentCreateParamsPaymentMethodOptionsMobilepay: Sendable, 
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.captureMethod = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod.self, forKey: .captureMethod)
+        self.captureMethod = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod.self, forKey: .captureMethod)
         self.setupFutureUsage = try container.decodeIfPresent(CheckoutAffirmPaymentMethodOptionsSetupFutureUsage.self, forKey: .setupFutureUsage)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
@@ -35415,13 +35304,13 @@ public struct PaymentIntentCreateParamsPaymentMethodOptionsMultibanco: Sendable,
 }
 
 public struct PaymentIntentCreateParamsPaymentMethodOptionsNaverPay: Sendable, Codable, Equatable, Hashable {
-    public var captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod?
-    public var setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage?
+    public var captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod?
+    public var setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod? = nil, setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod? = nil, setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.captureMethod = captureMethod
         self.setupFutureUsage = setupFutureUsage
         self.unknownFields = unknownFields
@@ -35434,8 +35323,8 @@ public struct PaymentIntentCreateParamsPaymentMethodOptionsNaverPay: Sendable, C
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.captureMethod = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod.self, forKey: .captureMethod)
-        self.setupFutureUsage = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage.self, forKey: .setupFutureUsage)
+        self.captureMethod = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod.self, forKey: .captureMethod)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage.self, forKey: .setupFutureUsage)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -35462,13 +35351,13 @@ public struct PaymentIntentCreateParamsPaymentMethodOptionsNaverPay: Sendable, C
 }
 
 public struct PaymentIntentCreateParamsPaymentMethodOptionsNzBankAccount: Sendable, Codable, Equatable, Hashable {
-    public var setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage?
+    public var setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage?
     public var targetDate: String?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage? = nil, targetDate: String? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage? = nil, targetDate: String? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.setupFutureUsage = setupFutureUsage
         self.targetDate = targetDate
         self.unknownFields = unknownFields
@@ -35481,7 +35370,7 @@ public struct PaymentIntentCreateParamsPaymentMethodOptionsNzBankAccount: Sendab
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.setupFutureUsage = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage.self, forKey: .setupFutureUsage)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage.self, forKey: .setupFutureUsage)
         self.targetDate = try container.decodeIfPresent(String.self, forKey: .targetDate)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
@@ -35639,13 +35528,13 @@ public struct PaymentIntentCreateParamsPaymentMethodOptionsPayByBank: Sendable, 
 }
 
 public struct PaymentIntentCreateParamsPaymentMethodOptionsPayco: Sendable, Codable, Equatable, Hashable {
-    public var captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod?
+    public var captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod?
     public var setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod? = nil, setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod? = nil, setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.captureMethod = captureMethod
         self.setupFutureUsage = setupFutureUsage
         self.unknownFields = unknownFields
@@ -35658,7 +35547,7 @@ public struct PaymentIntentCreateParamsPaymentMethodOptionsPayco: Sendable, Coda
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.captureMethod = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod.self, forKey: .captureMethod)
+        self.captureMethod = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod.self, forKey: .captureMethod)
         self.setupFutureUsage = try container.decodeIfPresent(CheckoutAffirmPaymentMethodOptionsSetupFutureUsage.self, forKey: .setupFutureUsage)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
@@ -35727,108 +35616,17 @@ public struct PaymentIntentCreateParamsPaymentMethodOptionsPaynow: Sendable, Cod
     }
 }
 
-/// Lossless enum: values Stripe documents plus any value the API
-/// adds later, kept in `undocumented` instead of dropped.
-public enum PaymentIntentCreateParamsPaymentMethodOptionsPaypalPreferredLocale: Sendable, Equatable, Hashable, LosslessEnum {
-    case csCZ
-    case daDK
-    case deAT
-    case deDE
-    case deLU
-    case elGR
-    case enGB
-    case enUS
-    case esES
-    case fiFI
-    case frBE
-    case frFR
-    case frLU
-    case huHU
-    case itIT
-    case nlBE
-    case nlNL
-    case plPL
-    case ptPT
-    case skSK
-    case svSE
-    case undocumented(String)
-
-    public init(rawValue raw: String) {
-        switch raw {
-        case "cs-CZ": self = .csCZ
-        case "da-DK": self = .daDK
-        case "de-AT": self = .deAT
-        case "de-DE": self = .deDE
-        case "de-LU": self = .deLU
-        case "el-GR": self = .elGR
-        case "en-GB": self = .enGB
-        case "en-US": self = .enUS
-        case "es-ES": self = .esES
-        case "fi-FI": self = .fiFI
-        case "fr-BE": self = .frBE
-        case "fr-FR": self = .frFR
-        case "fr-LU": self = .frLU
-        case "hu-HU": self = .huHU
-        case "it-IT": self = .itIT
-        case "nl-BE": self = .nlBE
-        case "nl-NL": self = .nlNL
-        case "pl-PL": self = .plPL
-        case "pt-PT": self = .ptPT
-        case "sk-SK": self = .skSK
-        case "sv-SE": self = .svSE
-        default: self = .undocumented(raw)
-        }
-    }
-
-    public var rawValue: String {
-        switch self {
-        case .csCZ: return "cs-CZ"
-        case .daDK: return "da-DK"
-        case .deAT: return "de-AT"
-        case .deDE: return "de-DE"
-        case .deLU: return "de-LU"
-        case .elGR: return "el-GR"
-        case .enGB: return "en-GB"
-        case .enUS: return "en-US"
-        case .esES: return "es-ES"
-        case .fiFI: return "fi-FI"
-        case .frBE: return "fr-BE"
-        case .frFR: return "fr-FR"
-        case .frLU: return "fr-LU"
-        case .huHU: return "hu-HU"
-        case .itIT: return "it-IT"
-        case .nlBE: return "nl-BE"
-        case .nlNL: return "nl-NL"
-        case .plPL: return "pl-PL"
-        case .ptPT: return "pt-PT"
-        case .skSK: return "sk-SK"
-        case .svSE: return "sv-SE"
-        case .undocumented(let value): return value
-        }
-    }
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        try container.encode(rawValue)
-    }
-}
-
 public struct PaymentIntentCreateParamsPaymentMethodOptionsPaypal: Sendable, Codable, Equatable, Hashable {
-    public var captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod?
-    public var preferredLocale: PaymentIntentCreateParamsPaymentMethodOptionsPaypalPreferredLocale?
+    public var captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod?
+    public var preferredLocale: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalPreferredLocale?
     public var reference: String?
     public var riskCorrelationId: String?
-    public var setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage?
+    public var setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod? = nil, preferredLocale: PaymentIntentCreateParamsPaymentMethodOptionsPaypalPreferredLocale? = nil, reference: String? = nil, riskCorrelationId: String? = nil, setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod? = nil, preferredLocale: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalPreferredLocale? = nil, reference: String? = nil, riskCorrelationId: String? = nil, setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.captureMethod = captureMethod
         self.preferredLocale = preferredLocale
         self.reference = reference
@@ -35847,11 +35645,11 @@ public struct PaymentIntentCreateParamsPaymentMethodOptionsPaypal: Sendable, Cod
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.captureMethod = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod.self, forKey: .captureMethod)
-        self.preferredLocale = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsPaypalPreferredLocale.self, forKey: .preferredLocale)
+        self.captureMethod = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod.self, forKey: .captureMethod)
+        self.preferredLocale = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsPaypalPreferredLocale.self, forKey: .preferredLocale)
         self.reference = try container.decodeIfPresent(String.self, forKey: .reference)
         self.riskCorrelationId = try container.decodeIfPresent(String.self, forKey: .riskCorrelationId)
-        self.setupFutureUsage = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage.self, forKey: .setupFutureUsage)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage.self, forKey: .setupFutureUsage)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -35916,174 +35714,18 @@ public struct PaymentIntentCreateParamsPaymentMethodOptionsPaypay: Sendable, Cod
     }
 }
 
-/// Lossless enum: values Stripe documents plus any value the API
-/// adds later, kept in `undocumented` instead of dropped.
-public enum PaymentIntentCreateParamsPaymentMethodOptionsPaytoMandateOptionsAmountType: Sendable, Equatable, Hashable, LosslessEnum {
-    case anonymous
-    case fixed
-    case maximum
-    case undocumented(String)
-
-    public init(rawValue raw: String) {
-        switch raw {
-        case "": self = .anonymous
-        case "fixed": self = .fixed
-        case "maximum": self = .maximum
-        default: self = .undocumented(raw)
-        }
-    }
-
-    public var rawValue: String {
-        switch self {
-        case .anonymous: return ""
-        case .fixed: return "fixed"
-        case .maximum: return "maximum"
-        case .undocumented(let value): return value
-        }
-    }
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        try container.encode(rawValue)
-    }
-}
-
-/// Lossless enum: values Stripe documents plus any value the API
-/// adds later, kept in `undocumented` instead of dropped.
-public enum PaymentIntentCreateParamsPaymentMethodOptionsPaytoMandateOptionsPaymentSchedule: Sendable, Equatable, Hashable, LosslessEnum {
-    case anonymous
-    case adhoc
-    case annual
-    case daily
-    case fortnightly
-    case monthly
-    case quarterly
-    case semiAnnual
-    case weekly
-    case undocumented(String)
-
-    public init(rawValue raw: String) {
-        switch raw {
-        case "": self = .anonymous
-        case "adhoc": self = .adhoc
-        case "annual": self = .annual
-        case "daily": self = .daily
-        case "fortnightly": self = .fortnightly
-        case "monthly": self = .monthly
-        case "quarterly": self = .quarterly
-        case "semi_annual": self = .semiAnnual
-        case "weekly": self = .weekly
-        default: self = .undocumented(raw)
-        }
-    }
-
-    public var rawValue: String {
-        switch self {
-        case .anonymous: return ""
-        case .adhoc: return "adhoc"
-        case .annual: return "annual"
-        case .daily: return "daily"
-        case .fortnightly: return "fortnightly"
-        case .monthly: return "monthly"
-        case .quarterly: return "quarterly"
-        case .semiAnnual: return "semi_annual"
-        case .weekly: return "weekly"
-        case .undocumented(let value): return value
-        }
-    }
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        try container.encode(rawValue)
-    }
-}
-
-/// Lossless enum: values Stripe documents plus any value the API
-/// adds later, kept in `undocumented` instead of dropped.
-public enum PaymentIntentCreateParamsPaymentMethodOptionsPaytoMandateOptionsPurpose: Sendable, Equatable, Hashable, LosslessEnum {
-    case anonymous
-    case dependantSupport
-    case government
-    case loan
-    case mortgage
-    case other
-    case pension
-    case personal
-    case retail
-    case salary
-    case tax
-    case utility
-    case undocumented(String)
-
-    public init(rawValue raw: String) {
-        switch raw {
-        case "": self = .anonymous
-        case "dependant_support": self = .dependantSupport
-        case "government": self = .government
-        case "loan": self = .loan
-        case "mortgage": self = .mortgage
-        case "other": self = .other
-        case "pension": self = .pension
-        case "personal": self = .personal
-        case "retail": self = .retail
-        case "salary": self = .salary
-        case "tax": self = .tax
-        case "utility": self = .utility
-        default: self = .undocumented(raw)
-        }
-    }
-
-    public var rawValue: String {
-        switch self {
-        case .anonymous: return ""
-        case .dependantSupport: return "dependant_support"
-        case .government: return "government"
-        case .loan: return "loan"
-        case .mortgage: return "mortgage"
-        case .other: return "other"
-        case .pension: return "pension"
-        case .personal: return "personal"
-        case .retail: return "retail"
-        case .salary: return "salary"
-        case .tax: return "tax"
-        case .utility: return "utility"
-        case .undocumented(let value): return value
-        }
-    }
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        try container.encode(rawValue)
-    }
-}
-
 public struct PaymentIntentCreateParamsPaymentMethodOptionsPaytoMandateOptions: Sendable, Codable, Equatable, Hashable {
     public var amount: Clearable<Int>?
-    public var amountType: PaymentIntentCreateParamsPaymentMethodOptionsPaytoMandateOptionsAmountType?
+    public var amountType: CheckoutSessionCreateParamsPaymentMethodOptionsPaytoMandateOptionsAmountType?
     public var endDate: Clearable<String>?
-    public var paymentSchedule: PaymentIntentCreateParamsPaymentMethodOptionsPaytoMandateOptionsPaymentSchedule?
+    public var paymentSchedule: CheckoutSessionCreateParamsPaymentMethodOptionsPaytoMandateOptionsPaymentSchedule?
     public var paymentsPerPeriod: Clearable<Int>?
-    public var purpose: PaymentIntentCreateParamsPaymentMethodOptionsPaytoMandateOptionsPurpose?
+    public var purpose: CheckoutSessionCreateParamsPaymentMethodOptionsPaytoMandateOptionsPurpose?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(amount: Clearable<Int>? = nil, amountType: PaymentIntentCreateParamsPaymentMethodOptionsPaytoMandateOptionsAmountType? = nil, endDate: Clearable<String>? = nil, paymentSchedule: PaymentIntentCreateParamsPaymentMethodOptionsPaytoMandateOptionsPaymentSchedule? = nil, paymentsPerPeriod: Clearable<Int>? = nil, purpose: PaymentIntentCreateParamsPaymentMethodOptionsPaytoMandateOptionsPurpose? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(amount: Clearable<Int>? = nil, amountType: CheckoutSessionCreateParamsPaymentMethodOptionsPaytoMandateOptionsAmountType? = nil, endDate: Clearable<String>? = nil, paymentSchedule: CheckoutSessionCreateParamsPaymentMethodOptionsPaytoMandateOptionsPaymentSchedule? = nil, paymentsPerPeriod: Clearable<Int>? = nil, purpose: CheckoutSessionCreateParamsPaymentMethodOptionsPaytoMandateOptionsPurpose? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.amount = amount
         self.amountType = amountType
         self.endDate = endDate
@@ -36105,11 +35747,11 @@ public struct PaymentIntentCreateParamsPaymentMethodOptionsPaytoMandateOptions: 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.amount = try container.decodeIfPresent(Clearable<Int>.self, forKey: .amount)
-        self.amountType = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsPaytoMandateOptionsAmountType.self, forKey: .amountType)
+        self.amountType = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsPaytoMandateOptionsAmountType.self, forKey: .amountType)
         self.endDate = try container.decodeIfPresent(Clearable<String>.self, forKey: .endDate)
-        self.paymentSchedule = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsPaytoMandateOptionsPaymentSchedule.self, forKey: .paymentSchedule)
+        self.paymentSchedule = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsPaytoMandateOptionsPaymentSchedule.self, forKey: .paymentSchedule)
         self.paymentsPerPeriod = try container.decodeIfPresent(Clearable<Int>.self, forKey: .paymentsPerPeriod)
-        self.purpose = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsPaytoMandateOptionsPurpose.self, forKey: .purpose)
+        self.purpose = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsPaytoMandateOptionsPurpose.self, forKey: .purpose)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -36141,12 +35783,12 @@ public struct PaymentIntentCreateParamsPaymentMethodOptionsPaytoMandateOptions: 
 
 public struct PaymentIntentCreateParamsPaymentMethodOptionsPayto: Sendable, Codable, Equatable, Hashable {
     public var mandateOptions: PaymentIntentCreateParamsPaymentMethodOptionsPaytoMandateOptions?
-    public var setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage?
+    public var setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(mandateOptions: PaymentIntentCreateParamsPaymentMethodOptionsPaytoMandateOptions? = nil, setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(mandateOptions: PaymentIntentCreateParamsPaymentMethodOptionsPaytoMandateOptions? = nil, setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.mandateOptions = mandateOptions
         self.setupFutureUsage = setupFutureUsage
         self.unknownFields = unknownFields
@@ -36160,7 +35802,7 @@ public struct PaymentIntentCreateParamsPaymentMethodOptionsPayto: Sendable, Coda
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.mandateOptions = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsPaytoMandateOptions.self, forKey: .mandateOptions)
-        self.setupFutureUsage = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage.self, forKey: .setupFutureUsage)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage.self, forKey: .setupFutureUsage)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -36368,13 +36010,13 @@ public struct PaymentIntentCreateParamsPaymentMethodOptionsPromptpay: Sendable, 
 }
 
 public struct PaymentIntentCreateParamsPaymentMethodOptionsRevolutPay: Sendable, Codable, Equatable, Hashable {
-    public var captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod?
-    public var setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage?
+    public var captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod?
+    public var setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod? = nil, setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod? = nil, setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.captureMethod = captureMethod
         self.setupFutureUsage = setupFutureUsage
         self.unknownFields = unknownFields
@@ -36387,8 +36029,8 @@ public struct PaymentIntentCreateParamsPaymentMethodOptionsRevolutPay: Sendable,
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.captureMethod = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod.self, forKey: .captureMethod)
-        self.setupFutureUsage = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage.self, forKey: .setupFutureUsage)
+        self.captureMethod = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod.self, forKey: .captureMethod)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage.self, forKey: .setupFutureUsage)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -36415,13 +36057,13 @@ public struct PaymentIntentCreateParamsPaymentMethodOptionsRevolutPay: Sendable,
 }
 
 public struct PaymentIntentCreateParamsPaymentMethodOptionsSamsungPay: Sendable, Codable, Equatable, Hashable {
-    public var captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod?
+    public var captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod?
     public var setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod? = nil, setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod? = nil, setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.captureMethod = captureMethod
         self.setupFutureUsage = setupFutureUsage
         self.unknownFields = unknownFields
@@ -36434,7 +36076,7 @@ public struct PaymentIntentCreateParamsPaymentMethodOptionsSamsungPay: Sendable,
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.captureMethod = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod.self, forKey: .captureMethod)
+        self.captureMethod = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod.self, forKey: .captureMethod)
         self.setupFutureUsage = try container.decodeIfPresent(CheckoutAffirmPaymentMethodOptionsSetupFutureUsage.self, forKey: .setupFutureUsage)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
@@ -36462,13 +36104,13 @@ public struct PaymentIntentCreateParamsPaymentMethodOptionsSamsungPay: Sendable,
 }
 
 public struct PaymentIntentCreateParamsPaymentMethodOptionsSatispay: Sendable, Codable, Equatable, Hashable {
-    public var captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod?
-    public var setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage?
+    public var captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod?
+    public var setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod? = nil, setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod? = nil, setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.captureMethod = captureMethod
         self.setupFutureUsage = setupFutureUsage
         self.unknownFields = unknownFields
@@ -36481,8 +36123,8 @@ public struct PaymentIntentCreateParamsPaymentMethodOptionsSatispay: Sendable, C
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.captureMethod = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod.self, forKey: .captureMethod)
-        self.setupFutureUsage = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage.self, forKey: .setupFutureUsage)
+        self.captureMethod = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod.self, forKey: .captureMethod)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage.self, forKey: .setupFutureUsage)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -36509,12 +36151,12 @@ public struct PaymentIntentCreateParamsPaymentMethodOptionsSatispay: Sendable, C
 }
 
 public struct PaymentIntentCreateParamsPaymentMethodOptionsScalapay: Sendable, Codable, Equatable, Hashable {
-    public var captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod?
+    public var captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.captureMethod = captureMethod
         self.unknownFields = unknownFields
     }
@@ -36525,7 +36167,7 @@ public struct PaymentIntentCreateParamsPaymentMethodOptionsScalapay: Sendable, C
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.captureMethod = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod.self, forKey: .captureMethod)
+        self.captureMethod = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod.self, forKey: .captureMethod)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -36594,13 +36236,13 @@ public struct PaymentIntentCreateParamsPaymentMethodOptionsSepaDebitMandateOptio
 
 public struct PaymentIntentCreateParamsPaymentMethodOptionsSepaDebit: Sendable, Codable, Equatable, Hashable {
     public var mandateOptions: PaymentIntentCreateParamsPaymentMethodOptionsSepaDebitMandateOptions?
-    public var setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage?
+    public var setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage?
     public var targetDate: String?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(mandateOptions: PaymentIntentCreateParamsPaymentMethodOptionsSepaDebitMandateOptions? = nil, setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage? = nil, targetDate: String? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(mandateOptions: PaymentIntentCreateParamsPaymentMethodOptionsSepaDebitMandateOptions? = nil, setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage? = nil, targetDate: String? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.mandateOptions = mandateOptions
         self.setupFutureUsage = setupFutureUsage
         self.targetDate = targetDate
@@ -36616,7 +36258,7 @@ public struct PaymentIntentCreateParamsPaymentMethodOptionsSepaDebit: Sendable, 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.mandateOptions = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsSepaDebitMandateOptions.self, forKey: .mandateOptions)
-        self.setupFutureUsage = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage.self, forKey: .setupFutureUsage)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage.self, forKey: .setupFutureUsage)
         self.targetDate = try container.decodeIfPresent(String.self, forKey: .targetDate)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
@@ -36645,13 +36287,13 @@ public struct PaymentIntentCreateParamsPaymentMethodOptionsSepaDebit: Sendable, 
 }
 
 public struct PaymentIntentCreateParamsPaymentMethodOptionsSequra: Sendable, Codable, Equatable, Hashable {
-    public var captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod?
+    public var captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod?
     public var setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod? = nil, setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod? = nil, setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.captureMethod = captureMethod
         self.setupFutureUsage = setupFutureUsage
         self.unknownFields = unknownFields
@@ -36664,7 +36306,7 @@ public struct PaymentIntentCreateParamsPaymentMethodOptionsSequra: Sendable, Cod
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.captureMethod = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod.self, forKey: .captureMethod)
+        self.captureMethod = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod.self, forKey: .captureMethod)
         self.setupFutureUsage = try container.decodeIfPresent(CheckoutAffirmPaymentMethodOptionsSetupFutureUsage.self, forKey: .setupFutureUsage)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
@@ -36745,12 +36387,12 @@ public enum PaymentIntentCreateParamsPaymentMethodOptionsSofortPreferredLanguage
 
 public struct PaymentIntentCreateParamsPaymentMethodOptionsSofort: Sendable, Codable, Equatable, Hashable {
     public var preferredLanguage: PaymentIntentCreateParamsPaymentMethodOptionsSofortPreferredLanguage?
-    public var setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage?
+    public var setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(preferredLanguage: PaymentIntentCreateParamsPaymentMethodOptionsSofortPreferredLanguage? = nil, setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(preferredLanguage: PaymentIntentCreateParamsPaymentMethodOptionsSofortPreferredLanguage? = nil, setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.preferredLanguage = preferredLanguage
         self.setupFutureUsage = setupFutureUsage
         self.unknownFields = unknownFields
@@ -36764,7 +36406,7 @@ public struct PaymentIntentCreateParamsPaymentMethodOptionsSofort: Sendable, Cod
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.preferredLanguage = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsSofortPreferredLanguage.self, forKey: .preferredLanguage)
-        self.setupFutureUsage = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage.self, forKey: .setupFutureUsage)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage.self, forKey: .setupFutureUsage)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -36791,13 +36433,13 @@ public struct PaymentIntentCreateParamsPaymentMethodOptionsSofort: Sendable, Cod
 }
 
 public struct PaymentIntentCreateParamsPaymentMethodOptionsSunbit: Sendable, Codable, Equatable, Hashable {
-    public var captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod?
+    public var captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod?
     public var setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod? = nil, setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod? = nil, setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.captureMethod = captureMethod
         self.setupFutureUsage = setupFutureUsage
         self.unknownFields = unknownFields
@@ -36810,7 +36452,7 @@ public struct PaymentIntentCreateParamsPaymentMethodOptionsSunbit: Sendable, Cod
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.captureMethod = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod.self, forKey: .captureMethod)
+        self.captureMethod = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod.self, forKey: .captureMethod)
         self.setupFutureUsage = try container.decodeIfPresent(CheckoutAffirmPaymentMethodOptionsSetupFutureUsage.self, forKey: .setupFutureUsage)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
@@ -36985,12 +36627,12 @@ public struct PaymentIntentCreateParamsPaymentMethodOptionsUpiMandateOptions: Se
 
 public struct PaymentIntentCreateParamsPaymentMethodOptionsUpi: Sendable, Codable, Equatable, Hashable {
     public var mandateOptions: PaymentIntentCreateParamsPaymentMethodOptionsUpiMandateOptions?
-    public var setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage?
+    public var setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(mandateOptions: PaymentIntentCreateParamsPaymentMethodOptionsUpiMandateOptions? = nil, setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(mandateOptions: PaymentIntentCreateParamsPaymentMethodOptionsUpiMandateOptions? = nil, setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.mandateOptions = mandateOptions
         self.setupFutureUsage = setupFutureUsage
         self.unknownFields = unknownFields
@@ -37004,7 +36646,7 @@ public struct PaymentIntentCreateParamsPaymentMethodOptionsUpi: Sendable, Codabl
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.mandateOptions = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsUpiMandateOptions.self, forKey: .mandateOptions)
-        self.setupFutureUsage = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage.self, forKey: .setupFutureUsage)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage.self, forKey: .setupFutureUsage)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -37294,7 +36936,7 @@ public struct PaymentIntentCreateParamsPaymentMethodOptionsUsBankAccount: Sendab
     public var financialConnections: PaymentIntentCreateParamsPaymentMethodOptionsUsBankAccountFinancialConnections?
     public var mandateOptions: PaymentIntentCreateParamsPaymentMethodOptionsUsBankAccountMandateOptions?
     public var networks: PaymentIntentCreateParamsPaymentMethodOptionsUsBankAccountNetworks?
-    public var setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage?
+    public var setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage?
     public var targetDate: String?
     public var transactionPurpose: PaymentIntentCreateParamsPaymentMethodOptionsUsBankAccountTransactionPurpose?
     public var verificationMethod: CheckoutAcssDebitPaymentMethodOptionsVerificationMethod?
@@ -37302,7 +36944,7 @@ public struct PaymentIntentCreateParamsPaymentMethodOptionsUsBankAccount: Sendab
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(financialConnections: PaymentIntentCreateParamsPaymentMethodOptionsUsBankAccountFinancialConnections? = nil, mandateOptions: PaymentIntentCreateParamsPaymentMethodOptionsUsBankAccountMandateOptions? = nil, networks: PaymentIntentCreateParamsPaymentMethodOptionsUsBankAccountNetworks? = nil, setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage? = nil, targetDate: String? = nil, transactionPurpose: PaymentIntentCreateParamsPaymentMethodOptionsUsBankAccountTransactionPurpose? = nil, verificationMethod: CheckoutAcssDebitPaymentMethodOptionsVerificationMethod? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(financialConnections: PaymentIntentCreateParamsPaymentMethodOptionsUsBankAccountFinancialConnections? = nil, mandateOptions: PaymentIntentCreateParamsPaymentMethodOptionsUsBankAccountMandateOptions? = nil, networks: PaymentIntentCreateParamsPaymentMethodOptionsUsBankAccountNetworks? = nil, setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage? = nil, targetDate: String? = nil, transactionPurpose: PaymentIntentCreateParamsPaymentMethodOptionsUsBankAccountTransactionPurpose? = nil, verificationMethod: CheckoutAcssDebitPaymentMethodOptionsVerificationMethod? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.financialConnections = financialConnections
         self.mandateOptions = mandateOptions
         self.networks = networks
@@ -37328,7 +36970,7 @@ public struct PaymentIntentCreateParamsPaymentMethodOptionsUsBankAccount: Sendab
         self.financialConnections = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsUsBankAccountFinancialConnections.self, forKey: .financialConnections)
         self.mandateOptions = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsUsBankAccountMandateOptions.self, forKey: .mandateOptions)
         self.networks = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsUsBankAccountNetworks.self, forKey: .networks)
-        self.setupFutureUsage = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage.self, forKey: .setupFutureUsage)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage.self, forKey: .setupFutureUsage)
         self.targetDate = try container.decodeIfPresent(String.self, forKey: .targetDate)
         self.transactionPurpose = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsUsBankAccountTransactionPurpose.self, forKey: .transactionPurpose)
         self.verificationMethod = try container.decodeIfPresent(CheckoutAcssDebitPaymentMethodOptionsVerificationMethod.self, forKey: .verificationMethod)
@@ -42817,14 +42459,14 @@ public struct PaymentIntentConfirmParamsPaymentMethodOptionsAcssDebitMandateOpti
 
 public struct PaymentIntentConfirmParamsPaymentMethodOptionsAcssDebit: Sendable, Codable, Equatable, Hashable {
     public var mandateOptions: PaymentIntentConfirmParamsPaymentMethodOptionsAcssDebitMandateOptions?
-    public var setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage?
+    public var setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage?
     public var targetDate: String?
     public var verificationMethod: CheckoutAcssDebitPaymentMethodOptionsVerificationMethod?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(mandateOptions: PaymentIntentConfirmParamsPaymentMethodOptionsAcssDebitMandateOptions? = nil, setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage? = nil, targetDate: String? = nil, verificationMethod: CheckoutAcssDebitPaymentMethodOptionsVerificationMethod? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(mandateOptions: PaymentIntentConfirmParamsPaymentMethodOptionsAcssDebitMandateOptions? = nil, setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage? = nil, targetDate: String? = nil, verificationMethod: CheckoutAcssDebitPaymentMethodOptionsVerificationMethod? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.mandateOptions = mandateOptions
         self.setupFutureUsage = setupFutureUsage
         self.targetDate = targetDate
@@ -42842,7 +42484,7 @@ public struct PaymentIntentConfirmParamsPaymentMethodOptionsAcssDebit: Sendable,
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.mandateOptions = try container.decodeIfPresent(PaymentIntentConfirmParamsPaymentMethodOptionsAcssDebitMandateOptions.self, forKey: .mandateOptions)
-        self.setupFutureUsage = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage.self, forKey: .setupFutureUsage)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage.self, forKey: .setupFutureUsage)
         self.targetDate = try container.decodeIfPresent(String.self, forKey: .targetDate)
         self.verificationMethod = try container.decodeIfPresent(CheckoutAcssDebitPaymentMethodOptionsVerificationMethod.self, forKey: .verificationMethod)
         var captured: [String: JSONValue] = [:]
@@ -42873,14 +42515,14 @@ public struct PaymentIntentConfirmParamsPaymentMethodOptionsAcssDebit: Sendable,
 }
 
 public struct PaymentIntentConfirmParamsPaymentMethodOptionsAffirm: Sendable, Codable, Equatable, Hashable {
-    public var captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod?
+    public var captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod?
     public var preferredLocale: String?
     public var setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod? = nil, preferredLocale: String? = nil, setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod? = nil, preferredLocale: String? = nil, setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.captureMethod = captureMethod
         self.preferredLocale = preferredLocale
         self.setupFutureUsage = setupFutureUsage
@@ -42895,7 +42537,7 @@ public struct PaymentIntentConfirmParamsPaymentMethodOptionsAffirm: Sendable, Co
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.captureMethod = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod.self, forKey: .captureMethod)
+        self.captureMethod = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod.self, forKey: .captureMethod)
         self.preferredLocale = try container.decodeIfPresent(String.self, forKey: .preferredLocale)
         self.setupFutureUsage = try container.decodeIfPresent(CheckoutAffirmPaymentMethodOptionsSetupFutureUsage.self, forKey: .setupFutureUsage)
         var captured: [String: JSONValue] = [:]
@@ -42925,14 +42567,14 @@ public struct PaymentIntentConfirmParamsPaymentMethodOptionsAffirm: Sendable, Co
 }
 
 public struct PaymentIntentConfirmParamsPaymentMethodOptionsAfterpayClearpay: Sendable, Codable, Equatable, Hashable {
-    public var captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod?
+    public var captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod?
     public var reference: String?
     public var setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod? = nil, reference: String? = nil, setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod? = nil, reference: String? = nil, setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.captureMethod = captureMethod
         self.reference = reference
         self.setupFutureUsage = setupFutureUsage
@@ -42947,7 +42589,7 @@ public struct PaymentIntentConfirmParamsPaymentMethodOptionsAfterpayClearpay: Se
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.captureMethod = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod.self, forKey: .captureMethod)
+        self.captureMethod = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod.self, forKey: .captureMethod)
         self.reference = try container.decodeIfPresent(String.self, forKey: .reference)
         self.setupFutureUsage = try container.decodeIfPresent(CheckoutAffirmPaymentMethodOptionsSetupFutureUsage.self, forKey: .setupFutureUsage)
         var captured: [String: JSONValue] = [:]
@@ -42977,12 +42619,12 @@ public struct PaymentIntentConfirmParamsPaymentMethodOptionsAfterpayClearpay: Se
 }
 
 public struct PaymentIntentConfirmParamsPaymentMethodOptionsAlipay: Sendable, Codable, Equatable, Hashable {
-    public var setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage?
+    public var setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.setupFutureUsage = setupFutureUsage
         self.unknownFields = unknownFields
     }
@@ -42993,7 +42635,7 @@ public struct PaymentIntentConfirmParamsPaymentMethodOptionsAlipay: Sendable, Co
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.setupFutureUsage = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage.self, forKey: .setupFutureUsage)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage.self, forKey: .setupFutureUsage)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -43019,12 +42661,12 @@ public struct PaymentIntentConfirmParamsPaymentMethodOptionsAlipay: Sendable, Co
 }
 
 public struct PaymentIntentConfirmParamsPaymentMethodOptionsAlma: Sendable, Codable, Equatable, Hashable {
-    public var captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod?
+    public var captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.captureMethod = captureMethod
         self.unknownFields = unknownFields
     }
@@ -43035,7 +42677,7 @@ public struct PaymentIntentConfirmParamsPaymentMethodOptionsAlma: Sendable, Coda
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.captureMethod = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod.self, forKey: .captureMethod)
+        self.captureMethod = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod.self, forKey: .captureMethod)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -43061,13 +42703,13 @@ public struct PaymentIntentConfirmParamsPaymentMethodOptionsAlma: Sendable, Coda
 }
 
 public struct PaymentIntentConfirmParamsPaymentMethodOptionsAmazonPay: Sendable, Codable, Equatable, Hashable {
-    public var captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod?
-    public var setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage?
+    public var captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod?
+    public var setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod? = nil, setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod? = nil, setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.captureMethod = captureMethod
         self.setupFutureUsage = setupFutureUsage
         self.unknownFields = unknownFields
@@ -43080,8 +42722,8 @@ public struct PaymentIntentConfirmParamsPaymentMethodOptionsAmazonPay: Sendable,
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.captureMethod = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod.self, forKey: .captureMethod)
-        self.setupFutureUsage = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage.self, forKey: .setupFutureUsage)
+        self.captureMethod = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod.self, forKey: .captureMethod)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage.self, forKey: .setupFutureUsage)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -43108,13 +42750,13 @@ public struct PaymentIntentConfirmParamsPaymentMethodOptionsAmazonPay: Sendable,
 }
 
 public struct PaymentIntentConfirmParamsPaymentMethodOptionsAuBecsDebit: Sendable, Codable, Equatable, Hashable {
-    public var setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage?
+    public var setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage?
     public var targetDate: String?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage? = nil, targetDate: String? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage? = nil, targetDate: String? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.setupFutureUsage = setupFutureUsage
         self.targetDate = targetDate
         self.unknownFields = unknownFields
@@ -43127,7 +42769,7 @@ public struct PaymentIntentConfirmParamsPaymentMethodOptionsAuBecsDebit: Sendabl
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.setupFutureUsage = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage.self, forKey: .setupFutureUsage)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage.self, forKey: .setupFutureUsage)
         self.targetDate = try container.decodeIfPresent(String.self, forKey: .targetDate)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
@@ -43198,13 +42840,13 @@ public struct PaymentIntentConfirmParamsPaymentMethodOptionsBacsDebitMandateOpti
 
 public struct PaymentIntentConfirmParamsPaymentMethodOptionsBacsDebit: Sendable, Codable, Equatable, Hashable {
     public var mandateOptions: PaymentIntentConfirmParamsPaymentMethodOptionsBacsDebitMandateOptions?
-    public var setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage?
+    public var setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage?
     public var targetDate: String?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(mandateOptions: PaymentIntentConfirmParamsPaymentMethodOptionsBacsDebitMandateOptions? = nil, setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage? = nil, targetDate: String? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(mandateOptions: PaymentIntentConfirmParamsPaymentMethodOptionsBacsDebitMandateOptions? = nil, setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage? = nil, targetDate: String? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.mandateOptions = mandateOptions
         self.setupFutureUsage = setupFutureUsage
         self.targetDate = targetDate
@@ -43220,7 +42862,7 @@ public struct PaymentIntentConfirmParamsPaymentMethodOptionsBacsDebit: Sendable,
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.mandateOptions = try container.decodeIfPresent(PaymentIntentConfirmParamsPaymentMethodOptionsBacsDebitMandateOptions.self, forKey: .mandateOptions)
-        self.setupFutureUsage = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage.self, forKey: .setupFutureUsage)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage.self, forKey: .setupFutureUsage)
         self.targetDate = try container.decodeIfPresent(String.self, forKey: .targetDate)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
@@ -43250,12 +42892,12 @@ public struct PaymentIntentConfirmParamsPaymentMethodOptionsBacsDebit: Sendable,
 
 public struct PaymentIntentConfirmParamsPaymentMethodOptionsBancontact: Sendable, Codable, Equatable, Hashable {
     public var preferredLanguage: InvoicePaymentMethodOptionsBancontactPreferredLanguage?
-    public var setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage?
+    public var setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(preferredLanguage: InvoicePaymentMethodOptionsBancontactPreferredLanguage? = nil, setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(preferredLanguage: InvoicePaymentMethodOptionsBancontactPreferredLanguage? = nil, setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.preferredLanguage = preferredLanguage
         self.setupFutureUsage = setupFutureUsage
         self.unknownFields = unknownFields
@@ -43269,7 +42911,7 @@ public struct PaymentIntentConfirmParamsPaymentMethodOptionsBancontact: Sendable
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.preferredLanguage = try container.decodeIfPresent(InvoicePaymentMethodOptionsBancontactPreferredLanguage.self, forKey: .preferredLanguage)
-        self.setupFutureUsage = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage.self, forKey: .setupFutureUsage)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage.self, forKey: .setupFutureUsage)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -43425,14 +43067,14 @@ public struct PaymentIntentConfirmParamsPaymentMethodOptionsBillieCompanyDetails
 }
 
 public struct PaymentIntentConfirmParamsPaymentMethodOptionsBillie: Sendable, Codable, Equatable, Hashable {
-    public var captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod?
+    public var captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod?
     public var companyDetails: Clearable<PaymentIntentConfirmParamsPaymentMethodOptionsBillieCompanyDetails>?
     public var reference: String?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod? = nil, companyDetails: Clearable<PaymentIntentConfirmParamsPaymentMethodOptionsBillieCompanyDetails>? = nil, reference: String? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod? = nil, companyDetails: Clearable<PaymentIntentConfirmParamsPaymentMethodOptionsBillieCompanyDetails>? = nil, reference: String? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.captureMethod = captureMethod
         self.companyDetails = companyDetails
         self.reference = reference
@@ -43447,7 +43089,7 @@ public struct PaymentIntentConfirmParamsPaymentMethodOptionsBillie: Sendable, Co
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.captureMethod = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod.self, forKey: .captureMethod)
+        self.captureMethod = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod.self, forKey: .captureMethod)
         self.companyDetails = try container.decodeIfPresent(Clearable<PaymentIntentConfirmParamsPaymentMethodOptionsBillieCompanyDetails>.self, forKey: .companyDetails)
         self.reference = try container.decodeIfPresent(String.self, forKey: .reference)
         var captured: [String: JSONValue] = [:]
@@ -43557,12 +43199,12 @@ public struct PaymentIntentConfirmParamsPaymentMethodOptionsBlikMandateOptions: 
 public struct PaymentIntentConfirmParamsPaymentMethodOptionsBlik: Sendable, Codable, Equatable, Hashable {
     public var code: String?
     public var mandateOptions: PaymentIntentConfirmParamsPaymentMethodOptionsBlikMandateOptions?
-    public var setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage?
+    public var setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(code: String? = nil, mandateOptions: PaymentIntentConfirmParamsPaymentMethodOptionsBlikMandateOptions? = nil, setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(code: String? = nil, mandateOptions: PaymentIntentConfirmParamsPaymentMethodOptionsBlikMandateOptions? = nil, setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.code = code
         self.mandateOptions = mandateOptions
         self.setupFutureUsage = setupFutureUsage
@@ -43579,7 +43221,7 @@ public struct PaymentIntentConfirmParamsPaymentMethodOptionsBlik: Sendable, Coda
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.code = try container.decodeIfPresent(String.self, forKey: .code)
         self.mandateOptions = try container.decodeIfPresent(PaymentIntentConfirmParamsPaymentMethodOptionsBlikMandateOptions.self, forKey: .mandateOptions)
-        self.setupFutureUsage = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage.self, forKey: .setupFutureUsage)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage.self, forKey: .setupFutureUsage)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -43608,12 +43250,12 @@ public struct PaymentIntentConfirmParamsPaymentMethodOptionsBlik: Sendable, Coda
 
 public struct PaymentIntentConfirmParamsPaymentMethodOptionsBoleto: Sendable, Codable, Equatable, Hashable {
     public var expiresAfterDays: Int?
-    public var setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage?
+    public var setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(expiresAfterDays: Int? = nil, setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(expiresAfterDays: Int? = nil, setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.expiresAfterDays = expiresAfterDays
         self.setupFutureUsage = setupFutureUsage
         self.unknownFields = unknownFields
@@ -43627,7 +43269,7 @@ public struct PaymentIntentConfirmParamsPaymentMethodOptionsBoleto: Sendable, Co
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.expiresAfterDays = try container.decodeIfPresent(Int.self, forKey: .expiresAfterDays)
-        self.setupFutureUsage = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage.self, forKey: .setupFutureUsage)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage.self, forKey: .setupFutureUsage)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -44006,7 +43648,7 @@ public struct PaymentIntentConfirmParamsPaymentMethodOptionsCardThreeDSecure: Se
 }
 
 public struct PaymentIntentConfirmParamsPaymentMethodOptionsCard: Sendable, Codable, Equatable, Hashable {
-    public var captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod?
+    public var captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod?
     public var cvcToken: String?
     public var installments: PaymentIntentConfirmParamsPaymentMethodOptionsCardInstallments?
     public var mandateOptions: PaymentIntentConfirmParamsPaymentMethodOptionsCardMandateOptions?
@@ -44019,7 +43661,7 @@ public struct PaymentIntentConfirmParamsPaymentMethodOptionsCard: Sendable, Coda
     public var requestThreeDSecure: CheckoutCardPaymentMethodOptionsRequestThreeDSecure?
     public var requireCvcRecollection: Bool?
     public var setupCredentialUsage: PaymentIntentPaymentMethodOptionsCardSetupCredentialUsage?
-    public var setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage?
+    public var setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage?
     public var statementDescriptorSuffixKana: Clearable<String>?
     public var statementDescriptorSuffixKanji: Clearable<String>?
     public var storedCredentialUsage: PaymentIntentPaymentMethodOptionsCardSetupCredentialUsage?
@@ -44028,7 +43670,7 @@ public struct PaymentIntentConfirmParamsPaymentMethodOptionsCard: Sendable, Coda
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod? = nil, cvcToken: String? = nil, installments: PaymentIntentConfirmParamsPaymentMethodOptionsCardInstallments? = nil, mandateOptions: PaymentIntentConfirmParamsPaymentMethodOptionsCardMandateOptions? = nil, moto: Bool? = nil, network: PaymentIntentPaymentMethodOptionsCardNetwork? = nil, requestExtendedAuthorization: CheckoutCardPaymentMethodOptionsRequestExtendedAuthorization? = nil, requestIncrementalAuthorization: CheckoutCardPaymentMethodOptionsRequestExtendedAuthorization? = nil, requestMulticapture: CheckoutCardPaymentMethodOptionsRequestExtendedAuthorization? = nil, requestOvercapture: CheckoutCardPaymentMethodOptionsRequestExtendedAuthorization? = nil, requestThreeDSecure: CheckoutCardPaymentMethodOptionsRequestThreeDSecure? = nil, requireCvcRecollection: Bool? = nil, setupCredentialUsage: PaymentIntentPaymentMethodOptionsCardSetupCredentialUsage? = nil, setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage? = nil, statementDescriptorSuffixKana: Clearable<String>? = nil, statementDescriptorSuffixKanji: Clearable<String>? = nil, storedCredentialUsage: PaymentIntentPaymentMethodOptionsCardSetupCredentialUsage? = nil, threeDSecure: PaymentIntentConfirmParamsPaymentMethodOptionsCardThreeDSecure? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod? = nil, cvcToken: String? = nil, installments: PaymentIntentConfirmParamsPaymentMethodOptionsCardInstallments? = nil, mandateOptions: PaymentIntentConfirmParamsPaymentMethodOptionsCardMandateOptions? = nil, moto: Bool? = nil, network: PaymentIntentPaymentMethodOptionsCardNetwork? = nil, requestExtendedAuthorization: CheckoutCardPaymentMethodOptionsRequestExtendedAuthorization? = nil, requestIncrementalAuthorization: CheckoutCardPaymentMethodOptionsRequestExtendedAuthorization? = nil, requestMulticapture: CheckoutCardPaymentMethodOptionsRequestExtendedAuthorization? = nil, requestOvercapture: CheckoutCardPaymentMethodOptionsRequestExtendedAuthorization? = nil, requestThreeDSecure: CheckoutCardPaymentMethodOptionsRequestThreeDSecure? = nil, requireCvcRecollection: Bool? = nil, setupCredentialUsage: PaymentIntentPaymentMethodOptionsCardSetupCredentialUsage? = nil, setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage? = nil, statementDescriptorSuffixKana: Clearable<String>? = nil, statementDescriptorSuffixKanji: Clearable<String>? = nil, storedCredentialUsage: PaymentIntentPaymentMethodOptionsCardSetupCredentialUsage? = nil, threeDSecure: PaymentIntentConfirmParamsPaymentMethodOptionsCardThreeDSecure? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.captureMethod = captureMethod
         self.cvcToken = cvcToken
         self.installments = installments
@@ -44073,7 +43715,7 @@ public struct PaymentIntentConfirmParamsPaymentMethodOptionsCard: Sendable, Coda
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.captureMethod = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod.self, forKey: .captureMethod)
+        self.captureMethod = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod.self, forKey: .captureMethod)
         self.cvcToken = try container.decodeIfPresent(String.self, forKey: .cvcToken)
         self.installments = try container.decodeIfPresent(PaymentIntentConfirmParamsPaymentMethodOptionsCardInstallments.self, forKey: .installments)
         self.mandateOptions = try container.decodeIfPresent(PaymentIntentConfirmParamsPaymentMethodOptionsCardMandateOptions.self, forKey: .mandateOptions)
@@ -44086,7 +43728,7 @@ public struct PaymentIntentConfirmParamsPaymentMethodOptionsCard: Sendable, Coda
         self.requestThreeDSecure = try container.decodeIfPresent(CheckoutCardPaymentMethodOptionsRequestThreeDSecure.self, forKey: .requestThreeDSecure)
         self.requireCvcRecollection = try container.decodeIfPresent(Bool.self, forKey: .requireCvcRecollection)
         self.setupCredentialUsage = try container.decodeIfPresent(PaymentIntentPaymentMethodOptionsCardSetupCredentialUsage.self, forKey: .setupCredentialUsage)
-        self.setupFutureUsage = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage.self, forKey: .setupFutureUsage)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage.self, forKey: .setupFutureUsage)
         self.statementDescriptorSuffixKana = try container.decodeIfPresent(Clearable<String>.self, forKey: .statementDescriptorSuffixKana)
         self.statementDescriptorSuffixKanji = try container.decodeIfPresent(Clearable<String>.self, forKey: .statementDescriptorSuffixKanji)
         self.storedCredentialUsage = try container.decodeIfPresent(PaymentIntentPaymentMethodOptionsCardSetupCredentialUsage.self, forKey: .storedCredentialUsage)
@@ -44232,13 +43874,13 @@ public struct PaymentIntentConfirmParamsPaymentMethodOptionsCardPresent: Sendabl
 }
 
 public struct PaymentIntentConfirmParamsPaymentMethodOptionsCashapp: Sendable, Codable, Equatable, Hashable {
-    public var captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod?
-    public var setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage?
+    public var captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod?
+    public var setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod? = nil, setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod? = nil, setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.captureMethod = captureMethod
         self.setupFutureUsage = setupFutureUsage
         self.unknownFields = unknownFields
@@ -44251,8 +43893,8 @@ public struct PaymentIntentConfirmParamsPaymentMethodOptionsCashapp: Sendable, C
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.captureMethod = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod.self, forKey: .captureMethod)
-        self.setupFutureUsage = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage.self, forKey: .setupFutureUsage)
+        self.captureMethod = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod.self, forKey: .captureMethod)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage.self, forKey: .setupFutureUsage)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -44635,12 +44277,12 @@ public struct PaymentIntentConfirmParamsPaymentMethodOptionsGrabpay: Sendable, C
 }
 
 public struct PaymentIntentConfirmParamsPaymentMethodOptionsIdeal: Sendable, Codable, Equatable, Hashable {
-    public var setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage?
+    public var setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.setupFutureUsage = setupFutureUsage
         self.unknownFields = unknownFields
     }
@@ -44651,7 +44293,7 @@ public struct PaymentIntentConfirmParamsPaymentMethodOptionsIdeal: Sendable, Cod
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.setupFutureUsage = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage.self, forKey: .setupFutureUsage)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage.self, forKey: .setupFutureUsage)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -44713,13 +44355,13 @@ public struct PaymentIntentConfirmParamsPaymentMethodOptionsInteracPresent: Send
 }
 
 public struct PaymentIntentConfirmParamsPaymentMethodOptionsKakaoPay: Sendable, Codable, Equatable, Hashable {
-    public var captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod?
-    public var setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage?
+    public var captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod?
+    public var setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod? = nil, setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod? = nil, setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.captureMethod = captureMethod
         self.setupFutureUsage = setupFutureUsage
         self.unknownFields = unknownFields
@@ -44732,8 +44374,8 @@ public struct PaymentIntentConfirmParamsPaymentMethodOptionsKakaoPay: Sendable, 
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.captureMethod = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod.self, forKey: .captureMethod)
-        self.setupFutureUsage = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage.self, forKey: .setupFutureUsage)
+        self.captureMethod = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod.self, forKey: .captureMethod)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage.self, forKey: .setupFutureUsage)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -44931,7 +44573,7 @@ public struct PaymentIntentConfirmParamsPaymentMethodOptionsKlarnaSubscriptionsI
 }
 
 public struct PaymentIntentConfirmParamsPaymentMethodOptionsKlarna: Sendable, Codable, Equatable, Hashable {
-    public var captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod?
+    public var captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod?
     public var onDemand: PaymentIntentConfirmParamsPaymentMethodOptionsKlarnaOnDemand?
     public var preferredLocale: PaymentIntentCreateParamsPaymentMethodOptionsKlarnaPreferredLocale?
     public var setupFutureUsage: CheckoutAcssDebitPaymentMethodOptionsSetupFutureUsage?
@@ -44940,7 +44582,7 @@ public struct PaymentIntentConfirmParamsPaymentMethodOptionsKlarna: Sendable, Co
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod? = nil, onDemand: PaymentIntentConfirmParamsPaymentMethodOptionsKlarnaOnDemand? = nil, preferredLocale: PaymentIntentCreateParamsPaymentMethodOptionsKlarnaPreferredLocale? = nil, setupFutureUsage: CheckoutAcssDebitPaymentMethodOptionsSetupFutureUsage? = nil, subscriptions: Clearable<[PaymentIntentConfirmParamsPaymentMethodOptionsKlarnaSubscriptionsItem]>? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod? = nil, onDemand: PaymentIntentConfirmParamsPaymentMethodOptionsKlarnaOnDemand? = nil, preferredLocale: PaymentIntentCreateParamsPaymentMethodOptionsKlarnaPreferredLocale? = nil, setupFutureUsage: CheckoutAcssDebitPaymentMethodOptionsSetupFutureUsage? = nil, subscriptions: Clearable<[PaymentIntentConfirmParamsPaymentMethodOptionsKlarnaSubscriptionsItem]>? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.captureMethod = captureMethod
         self.onDemand = onDemand
         self.preferredLocale = preferredLocale
@@ -44959,7 +44601,7 @@ public struct PaymentIntentConfirmParamsPaymentMethodOptionsKlarna: Sendable, Co
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.captureMethod = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod.self, forKey: .captureMethod)
+        self.captureMethod = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod.self, forKey: .captureMethod)
         self.onDemand = try container.decodeIfPresent(PaymentIntentConfirmParamsPaymentMethodOptionsKlarnaOnDemand.self, forKey: .onDemand)
         self.preferredLocale = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsKlarnaPreferredLocale.self, forKey: .preferredLocale)
         self.setupFutureUsage = try container.decodeIfPresent(CheckoutAcssDebitPaymentMethodOptionsSetupFutureUsage.self, forKey: .setupFutureUsage)
@@ -45055,13 +44697,13 @@ public struct PaymentIntentConfirmParamsPaymentMethodOptionsKonbini: Sendable, C
 }
 
 public struct PaymentIntentConfirmParamsPaymentMethodOptionsKrCard: Sendable, Codable, Equatable, Hashable {
-    public var captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod?
-    public var setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage?
+    public var captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod?
+    public var setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod? = nil, setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod? = nil, setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.captureMethod = captureMethod
         self.setupFutureUsage = setupFutureUsage
         self.unknownFields = unknownFields
@@ -45074,8 +44716,8 @@ public struct PaymentIntentConfirmParamsPaymentMethodOptionsKrCard: Sendable, Co
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.captureMethod = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod.self, forKey: .captureMethod)
-        self.setupFutureUsage = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage.self, forKey: .setupFutureUsage)
+        self.captureMethod = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod.self, forKey: .captureMethod)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage.self, forKey: .setupFutureUsage)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -45102,14 +44744,14 @@ public struct PaymentIntentConfirmParamsPaymentMethodOptionsKrCard: Sendable, Co
 }
 
 public struct PaymentIntentConfirmParamsPaymentMethodOptionsLink: Sendable, Codable, Equatable, Hashable {
-    public var captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod?
+    public var captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod?
     public var persistentToken: String?
-    public var setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage?
+    public var setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod? = nil, persistentToken: String? = nil, setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod? = nil, persistentToken: String? = nil, setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.captureMethod = captureMethod
         self.persistentToken = persistentToken
         self.setupFutureUsage = setupFutureUsage
@@ -45124,9 +44766,9 @@ public struct PaymentIntentConfirmParamsPaymentMethodOptionsLink: Sendable, Coda
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.captureMethod = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod.self, forKey: .captureMethod)
+        self.captureMethod = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod.self, forKey: .captureMethod)
         self.persistentToken = try container.decodeIfPresent(String.self, forKey: .persistentToken)
-        self.setupFutureUsage = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage.self, forKey: .setupFutureUsage)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage.self, forKey: .setupFutureUsage)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -45196,13 +44838,13 @@ public struct PaymentIntentConfirmParamsPaymentMethodOptionsMbWay: Sendable, Cod
 }
 
 public struct PaymentIntentConfirmParamsPaymentMethodOptionsMobilepay: Sendable, Codable, Equatable, Hashable {
-    public var captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod?
+    public var captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod?
     public var setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod? = nil, setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod? = nil, setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.captureMethod = captureMethod
         self.setupFutureUsage = setupFutureUsage
         self.unknownFields = unknownFields
@@ -45215,7 +44857,7 @@ public struct PaymentIntentConfirmParamsPaymentMethodOptionsMobilepay: Sendable,
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.captureMethod = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod.self, forKey: .captureMethod)
+        self.captureMethod = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod.self, forKey: .captureMethod)
         self.setupFutureUsage = try container.decodeIfPresent(CheckoutAffirmPaymentMethodOptionsSetupFutureUsage.self, forKey: .setupFutureUsage)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
@@ -45285,13 +44927,13 @@ public struct PaymentIntentConfirmParamsPaymentMethodOptionsMultibanco: Sendable
 }
 
 public struct PaymentIntentConfirmParamsPaymentMethodOptionsNaverPay: Sendable, Codable, Equatable, Hashable {
-    public var captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod?
-    public var setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage?
+    public var captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod?
+    public var setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod? = nil, setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod? = nil, setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.captureMethod = captureMethod
         self.setupFutureUsage = setupFutureUsage
         self.unknownFields = unknownFields
@@ -45304,8 +44946,8 @@ public struct PaymentIntentConfirmParamsPaymentMethodOptionsNaverPay: Sendable, 
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.captureMethod = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod.self, forKey: .captureMethod)
-        self.setupFutureUsage = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage.self, forKey: .setupFutureUsage)
+        self.captureMethod = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod.self, forKey: .captureMethod)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage.self, forKey: .setupFutureUsage)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -45332,13 +44974,13 @@ public struct PaymentIntentConfirmParamsPaymentMethodOptionsNaverPay: Sendable, 
 }
 
 public struct PaymentIntentConfirmParamsPaymentMethodOptionsNzBankAccount: Sendable, Codable, Equatable, Hashable {
-    public var setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage?
+    public var setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage?
     public var targetDate: String?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage? = nil, targetDate: String? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage? = nil, targetDate: String? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.setupFutureUsage = setupFutureUsage
         self.targetDate = targetDate
         self.unknownFields = unknownFields
@@ -45351,7 +44993,7 @@ public struct PaymentIntentConfirmParamsPaymentMethodOptionsNzBankAccount: Senda
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.setupFutureUsage = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage.self, forKey: .setupFutureUsage)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage.self, forKey: .setupFutureUsage)
         self.targetDate = try container.decodeIfPresent(String.self, forKey: .targetDate)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
@@ -45509,13 +45151,13 @@ public struct PaymentIntentConfirmParamsPaymentMethodOptionsPayByBank: Sendable,
 }
 
 public struct PaymentIntentConfirmParamsPaymentMethodOptionsPayco: Sendable, Codable, Equatable, Hashable {
-    public var captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod?
+    public var captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod?
     public var setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod? = nil, setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod? = nil, setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.captureMethod = captureMethod
         self.setupFutureUsage = setupFutureUsage
         self.unknownFields = unknownFields
@@ -45528,7 +45170,7 @@ public struct PaymentIntentConfirmParamsPaymentMethodOptionsPayco: Sendable, Cod
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.captureMethod = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod.self, forKey: .captureMethod)
+        self.captureMethod = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod.self, forKey: .captureMethod)
         self.setupFutureUsage = try container.decodeIfPresent(CheckoutAffirmPaymentMethodOptionsSetupFutureUsage.self, forKey: .setupFutureUsage)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
@@ -45598,16 +45240,16 @@ public struct PaymentIntentConfirmParamsPaymentMethodOptionsPaynow: Sendable, Co
 }
 
 public struct PaymentIntentConfirmParamsPaymentMethodOptionsPaypal: Sendable, Codable, Equatable, Hashable {
-    public var captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod?
-    public var preferredLocale: PaymentIntentCreateParamsPaymentMethodOptionsPaypalPreferredLocale?
+    public var captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod?
+    public var preferredLocale: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalPreferredLocale?
     public var reference: String?
     public var riskCorrelationId: String?
-    public var setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage?
+    public var setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod? = nil, preferredLocale: PaymentIntentCreateParamsPaymentMethodOptionsPaypalPreferredLocale? = nil, reference: String? = nil, riskCorrelationId: String? = nil, setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod? = nil, preferredLocale: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalPreferredLocale? = nil, reference: String? = nil, riskCorrelationId: String? = nil, setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.captureMethod = captureMethod
         self.preferredLocale = preferredLocale
         self.reference = reference
@@ -45626,11 +45268,11 @@ public struct PaymentIntentConfirmParamsPaymentMethodOptionsPaypal: Sendable, Co
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.captureMethod = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod.self, forKey: .captureMethod)
-        self.preferredLocale = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsPaypalPreferredLocale.self, forKey: .preferredLocale)
+        self.captureMethod = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod.self, forKey: .captureMethod)
+        self.preferredLocale = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsPaypalPreferredLocale.self, forKey: .preferredLocale)
         self.reference = try container.decodeIfPresent(String.self, forKey: .reference)
         self.riskCorrelationId = try container.decodeIfPresent(String.self, forKey: .riskCorrelationId)
-        self.setupFutureUsage = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage.self, forKey: .setupFutureUsage)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage.self, forKey: .setupFutureUsage)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -45697,16 +45339,16 @@ public struct PaymentIntentConfirmParamsPaymentMethodOptionsPaypay: Sendable, Co
 
 public struct PaymentIntentConfirmParamsPaymentMethodOptionsPaytoMandateOptions: Sendable, Codable, Equatable, Hashable {
     public var amount: Clearable<Int>?
-    public var amountType: PaymentIntentCreateParamsPaymentMethodOptionsPaytoMandateOptionsAmountType?
+    public var amountType: CheckoutSessionCreateParamsPaymentMethodOptionsPaytoMandateOptionsAmountType?
     public var endDate: Clearable<String>?
-    public var paymentSchedule: PaymentIntentCreateParamsPaymentMethodOptionsPaytoMandateOptionsPaymentSchedule?
+    public var paymentSchedule: CheckoutSessionCreateParamsPaymentMethodOptionsPaytoMandateOptionsPaymentSchedule?
     public var paymentsPerPeriod: Clearable<Int>?
-    public var purpose: PaymentIntentCreateParamsPaymentMethodOptionsPaytoMandateOptionsPurpose?
+    public var purpose: CheckoutSessionCreateParamsPaymentMethodOptionsPaytoMandateOptionsPurpose?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(amount: Clearable<Int>? = nil, amountType: PaymentIntentCreateParamsPaymentMethodOptionsPaytoMandateOptionsAmountType? = nil, endDate: Clearable<String>? = nil, paymentSchedule: PaymentIntentCreateParamsPaymentMethodOptionsPaytoMandateOptionsPaymentSchedule? = nil, paymentsPerPeriod: Clearable<Int>? = nil, purpose: PaymentIntentCreateParamsPaymentMethodOptionsPaytoMandateOptionsPurpose? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(amount: Clearable<Int>? = nil, amountType: CheckoutSessionCreateParamsPaymentMethodOptionsPaytoMandateOptionsAmountType? = nil, endDate: Clearable<String>? = nil, paymentSchedule: CheckoutSessionCreateParamsPaymentMethodOptionsPaytoMandateOptionsPaymentSchedule? = nil, paymentsPerPeriod: Clearable<Int>? = nil, purpose: CheckoutSessionCreateParamsPaymentMethodOptionsPaytoMandateOptionsPurpose? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.amount = amount
         self.amountType = amountType
         self.endDate = endDate
@@ -45728,11 +45370,11 @@ public struct PaymentIntentConfirmParamsPaymentMethodOptionsPaytoMandateOptions:
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.amount = try container.decodeIfPresent(Clearable<Int>.self, forKey: .amount)
-        self.amountType = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsPaytoMandateOptionsAmountType.self, forKey: .amountType)
+        self.amountType = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsPaytoMandateOptionsAmountType.self, forKey: .amountType)
         self.endDate = try container.decodeIfPresent(Clearable<String>.self, forKey: .endDate)
-        self.paymentSchedule = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsPaytoMandateOptionsPaymentSchedule.self, forKey: .paymentSchedule)
+        self.paymentSchedule = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsPaytoMandateOptionsPaymentSchedule.self, forKey: .paymentSchedule)
         self.paymentsPerPeriod = try container.decodeIfPresent(Clearable<Int>.self, forKey: .paymentsPerPeriod)
-        self.purpose = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsPaytoMandateOptionsPurpose.self, forKey: .purpose)
+        self.purpose = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsPaytoMandateOptionsPurpose.self, forKey: .purpose)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -45764,12 +45406,12 @@ public struct PaymentIntentConfirmParamsPaymentMethodOptionsPaytoMandateOptions:
 
 public struct PaymentIntentConfirmParamsPaymentMethodOptionsPayto: Sendable, Codable, Equatable, Hashable {
     public var mandateOptions: PaymentIntentConfirmParamsPaymentMethodOptionsPaytoMandateOptions?
-    public var setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage?
+    public var setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(mandateOptions: PaymentIntentConfirmParamsPaymentMethodOptionsPaytoMandateOptions? = nil, setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(mandateOptions: PaymentIntentConfirmParamsPaymentMethodOptionsPaytoMandateOptions? = nil, setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.mandateOptions = mandateOptions
         self.setupFutureUsage = setupFutureUsage
         self.unknownFields = unknownFields
@@ -45783,7 +45425,7 @@ public struct PaymentIntentConfirmParamsPaymentMethodOptionsPayto: Sendable, Cod
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.mandateOptions = try container.decodeIfPresent(PaymentIntentConfirmParamsPaymentMethodOptionsPaytoMandateOptions.self, forKey: .mandateOptions)
-        self.setupFutureUsage = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage.self, forKey: .setupFutureUsage)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage.self, forKey: .setupFutureUsage)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -45991,13 +45633,13 @@ public struct PaymentIntentConfirmParamsPaymentMethodOptionsPromptpay: Sendable,
 }
 
 public struct PaymentIntentConfirmParamsPaymentMethodOptionsRevolutPay: Sendable, Codable, Equatable, Hashable {
-    public var captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod?
-    public var setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage?
+    public var captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod?
+    public var setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod? = nil, setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod? = nil, setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.captureMethod = captureMethod
         self.setupFutureUsage = setupFutureUsage
         self.unknownFields = unknownFields
@@ -46010,8 +45652,8 @@ public struct PaymentIntentConfirmParamsPaymentMethodOptionsRevolutPay: Sendable
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.captureMethod = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod.self, forKey: .captureMethod)
-        self.setupFutureUsage = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage.self, forKey: .setupFutureUsage)
+        self.captureMethod = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod.self, forKey: .captureMethod)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage.self, forKey: .setupFutureUsage)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -46038,13 +45680,13 @@ public struct PaymentIntentConfirmParamsPaymentMethodOptionsRevolutPay: Sendable
 }
 
 public struct PaymentIntentConfirmParamsPaymentMethodOptionsSamsungPay: Sendable, Codable, Equatable, Hashable {
-    public var captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod?
+    public var captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod?
     public var setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod? = nil, setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod? = nil, setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.captureMethod = captureMethod
         self.setupFutureUsage = setupFutureUsage
         self.unknownFields = unknownFields
@@ -46057,7 +45699,7 @@ public struct PaymentIntentConfirmParamsPaymentMethodOptionsSamsungPay: Sendable
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.captureMethod = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod.self, forKey: .captureMethod)
+        self.captureMethod = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod.self, forKey: .captureMethod)
         self.setupFutureUsage = try container.decodeIfPresent(CheckoutAffirmPaymentMethodOptionsSetupFutureUsage.self, forKey: .setupFutureUsage)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
@@ -46085,13 +45727,13 @@ public struct PaymentIntentConfirmParamsPaymentMethodOptionsSamsungPay: Sendable
 }
 
 public struct PaymentIntentConfirmParamsPaymentMethodOptionsSatispay: Sendable, Codable, Equatable, Hashable {
-    public var captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod?
-    public var setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage?
+    public var captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod?
+    public var setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod? = nil, setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod? = nil, setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.captureMethod = captureMethod
         self.setupFutureUsage = setupFutureUsage
         self.unknownFields = unknownFields
@@ -46104,8 +45746,8 @@ public struct PaymentIntentConfirmParamsPaymentMethodOptionsSatispay: Sendable, 
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.captureMethod = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod.self, forKey: .captureMethod)
-        self.setupFutureUsage = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage.self, forKey: .setupFutureUsage)
+        self.captureMethod = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod.self, forKey: .captureMethod)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage.self, forKey: .setupFutureUsage)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -46132,12 +45774,12 @@ public struct PaymentIntentConfirmParamsPaymentMethodOptionsSatispay: Sendable, 
 }
 
 public struct PaymentIntentConfirmParamsPaymentMethodOptionsScalapay: Sendable, Codable, Equatable, Hashable {
-    public var captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod?
+    public var captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.captureMethod = captureMethod
         self.unknownFields = unknownFields
     }
@@ -46148,7 +45790,7 @@ public struct PaymentIntentConfirmParamsPaymentMethodOptionsScalapay: Sendable, 
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.captureMethod = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod.self, forKey: .captureMethod)
+        self.captureMethod = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod.self, forKey: .captureMethod)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -46217,13 +45859,13 @@ public struct PaymentIntentConfirmParamsPaymentMethodOptionsSepaDebitMandateOpti
 
 public struct PaymentIntentConfirmParamsPaymentMethodOptionsSepaDebit: Sendable, Codable, Equatable, Hashable {
     public var mandateOptions: PaymentIntentConfirmParamsPaymentMethodOptionsSepaDebitMandateOptions?
-    public var setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage?
+    public var setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage?
     public var targetDate: String?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(mandateOptions: PaymentIntentConfirmParamsPaymentMethodOptionsSepaDebitMandateOptions? = nil, setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage? = nil, targetDate: String? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(mandateOptions: PaymentIntentConfirmParamsPaymentMethodOptionsSepaDebitMandateOptions? = nil, setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage? = nil, targetDate: String? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.mandateOptions = mandateOptions
         self.setupFutureUsage = setupFutureUsage
         self.targetDate = targetDate
@@ -46239,7 +45881,7 @@ public struct PaymentIntentConfirmParamsPaymentMethodOptionsSepaDebit: Sendable,
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.mandateOptions = try container.decodeIfPresent(PaymentIntentConfirmParamsPaymentMethodOptionsSepaDebitMandateOptions.self, forKey: .mandateOptions)
-        self.setupFutureUsage = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage.self, forKey: .setupFutureUsage)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage.self, forKey: .setupFutureUsage)
         self.targetDate = try container.decodeIfPresent(String.self, forKey: .targetDate)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
@@ -46268,13 +45910,13 @@ public struct PaymentIntentConfirmParamsPaymentMethodOptionsSepaDebit: Sendable,
 }
 
 public struct PaymentIntentConfirmParamsPaymentMethodOptionsSequra: Sendable, Codable, Equatable, Hashable {
-    public var captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod?
+    public var captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod?
     public var setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod? = nil, setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod? = nil, setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.captureMethod = captureMethod
         self.setupFutureUsage = setupFutureUsage
         self.unknownFields = unknownFields
@@ -46287,7 +45929,7 @@ public struct PaymentIntentConfirmParamsPaymentMethodOptionsSequra: Sendable, Co
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.captureMethod = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod.self, forKey: .captureMethod)
+        self.captureMethod = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod.self, forKey: .captureMethod)
         self.setupFutureUsage = try container.decodeIfPresent(CheckoutAffirmPaymentMethodOptionsSetupFutureUsage.self, forKey: .setupFutureUsage)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
@@ -46316,12 +45958,12 @@ public struct PaymentIntentConfirmParamsPaymentMethodOptionsSequra: Sendable, Co
 
 public struct PaymentIntentConfirmParamsPaymentMethodOptionsSofort: Sendable, Codable, Equatable, Hashable {
     public var preferredLanguage: PaymentIntentCreateParamsPaymentMethodOptionsSofortPreferredLanguage?
-    public var setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage?
+    public var setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(preferredLanguage: PaymentIntentCreateParamsPaymentMethodOptionsSofortPreferredLanguage? = nil, setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(preferredLanguage: PaymentIntentCreateParamsPaymentMethodOptionsSofortPreferredLanguage? = nil, setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.preferredLanguage = preferredLanguage
         self.setupFutureUsage = setupFutureUsage
         self.unknownFields = unknownFields
@@ -46335,7 +45977,7 @@ public struct PaymentIntentConfirmParamsPaymentMethodOptionsSofort: Sendable, Co
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.preferredLanguage = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsSofortPreferredLanguage.self, forKey: .preferredLanguage)
-        self.setupFutureUsage = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage.self, forKey: .setupFutureUsage)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage.self, forKey: .setupFutureUsage)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -46362,13 +46004,13 @@ public struct PaymentIntentConfirmParamsPaymentMethodOptionsSofort: Sendable, Co
 }
 
 public struct PaymentIntentConfirmParamsPaymentMethodOptionsSunbit: Sendable, Codable, Equatable, Hashable {
-    public var captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod?
+    public var captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod?
     public var setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod? = nil, setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod? = nil, setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.captureMethod = captureMethod
         self.setupFutureUsage = setupFutureUsage
         self.unknownFields = unknownFields
@@ -46381,7 +46023,7 @@ public struct PaymentIntentConfirmParamsPaymentMethodOptionsSunbit: Sendable, Co
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.captureMethod = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod.self, forKey: .captureMethod)
+        self.captureMethod = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod.self, forKey: .captureMethod)
         self.setupFutureUsage = try container.decodeIfPresent(CheckoutAffirmPaymentMethodOptionsSetupFutureUsage.self, forKey: .setupFutureUsage)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
@@ -46556,12 +46198,12 @@ public struct PaymentIntentConfirmParamsPaymentMethodOptionsUpiMandateOptions: S
 
 public struct PaymentIntentConfirmParamsPaymentMethodOptionsUpi: Sendable, Codable, Equatable, Hashable {
     public var mandateOptions: PaymentIntentConfirmParamsPaymentMethodOptionsUpiMandateOptions?
-    public var setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage?
+    public var setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(mandateOptions: PaymentIntentConfirmParamsPaymentMethodOptionsUpiMandateOptions? = nil, setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(mandateOptions: PaymentIntentConfirmParamsPaymentMethodOptionsUpiMandateOptions? = nil, setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.mandateOptions = mandateOptions
         self.setupFutureUsage = setupFutureUsage
         self.unknownFields = unknownFields
@@ -46575,7 +46217,7 @@ public struct PaymentIntentConfirmParamsPaymentMethodOptionsUpi: Sendable, Codab
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.mandateOptions = try container.decodeIfPresent(PaymentIntentConfirmParamsPaymentMethodOptionsUpiMandateOptions.self, forKey: .mandateOptions)
-        self.setupFutureUsage = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage.self, forKey: .setupFutureUsage)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage.self, forKey: .setupFutureUsage)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -46788,7 +46430,7 @@ public struct PaymentIntentConfirmParamsPaymentMethodOptionsUsBankAccount: Senda
     public var financialConnections: PaymentIntentConfirmParamsPaymentMethodOptionsUsBankAccountFinancialConnections?
     public var mandateOptions: PaymentIntentConfirmParamsPaymentMethodOptionsUsBankAccountMandateOptions?
     public var networks: PaymentIntentConfirmParamsPaymentMethodOptionsUsBankAccountNetworks?
-    public var setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage?
+    public var setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage?
     public var targetDate: String?
     public var transactionPurpose: PaymentIntentCreateParamsPaymentMethodOptionsUsBankAccountTransactionPurpose?
     public var verificationMethod: CheckoutAcssDebitPaymentMethodOptionsVerificationMethod?
@@ -46796,7 +46438,7 @@ public struct PaymentIntentConfirmParamsPaymentMethodOptionsUsBankAccount: Senda
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(financialConnections: PaymentIntentConfirmParamsPaymentMethodOptionsUsBankAccountFinancialConnections? = nil, mandateOptions: PaymentIntentConfirmParamsPaymentMethodOptionsUsBankAccountMandateOptions? = nil, networks: PaymentIntentConfirmParamsPaymentMethodOptionsUsBankAccountNetworks? = nil, setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage? = nil, targetDate: String? = nil, transactionPurpose: PaymentIntentCreateParamsPaymentMethodOptionsUsBankAccountTransactionPurpose? = nil, verificationMethod: CheckoutAcssDebitPaymentMethodOptionsVerificationMethod? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(financialConnections: PaymentIntentConfirmParamsPaymentMethodOptionsUsBankAccountFinancialConnections? = nil, mandateOptions: PaymentIntentConfirmParamsPaymentMethodOptionsUsBankAccountMandateOptions? = nil, networks: PaymentIntentConfirmParamsPaymentMethodOptionsUsBankAccountNetworks? = nil, setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage? = nil, targetDate: String? = nil, transactionPurpose: PaymentIntentCreateParamsPaymentMethodOptionsUsBankAccountTransactionPurpose? = nil, verificationMethod: CheckoutAcssDebitPaymentMethodOptionsVerificationMethod? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.financialConnections = financialConnections
         self.mandateOptions = mandateOptions
         self.networks = networks
@@ -46822,7 +46464,7 @@ public struct PaymentIntentConfirmParamsPaymentMethodOptionsUsBankAccount: Senda
         self.financialConnections = try container.decodeIfPresent(PaymentIntentConfirmParamsPaymentMethodOptionsUsBankAccountFinancialConnections.self, forKey: .financialConnections)
         self.mandateOptions = try container.decodeIfPresent(PaymentIntentConfirmParamsPaymentMethodOptionsUsBankAccountMandateOptions.self, forKey: .mandateOptions)
         self.networks = try container.decodeIfPresent(PaymentIntentConfirmParamsPaymentMethodOptionsUsBankAccountNetworks.self, forKey: .networks)
-        self.setupFutureUsage = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage.self, forKey: .setupFutureUsage)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage.self, forKey: .setupFutureUsage)
         self.targetDate = try container.decodeIfPresent(String.self, forKey: .targetDate)
         self.transactionPurpose = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsUsBankAccountTransactionPurpose.self, forKey: .transactionPurpose)
         self.verificationMethod = try container.decodeIfPresent(CheckoutAcssDebitPaymentMethodOptionsVerificationMethod.self, forKey: .verificationMethod)
@@ -51844,14 +51486,14 @@ public struct PaymentIntentUpdateParamsPaymentMethodOptionsAcssDebitMandateOptio
 
 public struct PaymentIntentUpdateParamsPaymentMethodOptionsAcssDebit: Sendable, Codable, Equatable, Hashable {
     public var mandateOptions: PaymentIntentUpdateParamsPaymentMethodOptionsAcssDebitMandateOptions?
-    public var setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage?
+    public var setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage?
     public var targetDate: String?
     public var verificationMethod: CheckoutAcssDebitPaymentMethodOptionsVerificationMethod?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(mandateOptions: PaymentIntentUpdateParamsPaymentMethodOptionsAcssDebitMandateOptions? = nil, setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage? = nil, targetDate: String? = nil, verificationMethod: CheckoutAcssDebitPaymentMethodOptionsVerificationMethod? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(mandateOptions: PaymentIntentUpdateParamsPaymentMethodOptionsAcssDebitMandateOptions? = nil, setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage? = nil, targetDate: String? = nil, verificationMethod: CheckoutAcssDebitPaymentMethodOptionsVerificationMethod? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.mandateOptions = mandateOptions
         self.setupFutureUsage = setupFutureUsage
         self.targetDate = targetDate
@@ -51869,7 +51511,7 @@ public struct PaymentIntentUpdateParamsPaymentMethodOptionsAcssDebit: Sendable, 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.mandateOptions = try container.decodeIfPresent(PaymentIntentUpdateParamsPaymentMethodOptionsAcssDebitMandateOptions.self, forKey: .mandateOptions)
-        self.setupFutureUsage = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage.self, forKey: .setupFutureUsage)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage.self, forKey: .setupFutureUsage)
         self.targetDate = try container.decodeIfPresent(String.self, forKey: .targetDate)
         self.verificationMethod = try container.decodeIfPresent(CheckoutAcssDebitPaymentMethodOptionsVerificationMethod.self, forKey: .verificationMethod)
         var captured: [String: JSONValue] = [:]
@@ -51900,14 +51542,14 @@ public struct PaymentIntentUpdateParamsPaymentMethodOptionsAcssDebit: Sendable, 
 }
 
 public struct PaymentIntentUpdateParamsPaymentMethodOptionsAffirm: Sendable, Codable, Equatable, Hashable {
-    public var captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod?
+    public var captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod?
     public var preferredLocale: String?
     public var setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod? = nil, preferredLocale: String? = nil, setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod? = nil, preferredLocale: String? = nil, setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.captureMethod = captureMethod
         self.preferredLocale = preferredLocale
         self.setupFutureUsage = setupFutureUsage
@@ -51922,7 +51564,7 @@ public struct PaymentIntentUpdateParamsPaymentMethodOptionsAffirm: Sendable, Cod
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.captureMethod = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod.self, forKey: .captureMethod)
+        self.captureMethod = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod.self, forKey: .captureMethod)
         self.preferredLocale = try container.decodeIfPresent(String.self, forKey: .preferredLocale)
         self.setupFutureUsage = try container.decodeIfPresent(CheckoutAffirmPaymentMethodOptionsSetupFutureUsage.self, forKey: .setupFutureUsage)
         var captured: [String: JSONValue] = [:]
@@ -51952,14 +51594,14 @@ public struct PaymentIntentUpdateParamsPaymentMethodOptionsAffirm: Sendable, Cod
 }
 
 public struct PaymentIntentUpdateParamsPaymentMethodOptionsAfterpayClearpay: Sendable, Codable, Equatable, Hashable {
-    public var captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod?
+    public var captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod?
     public var reference: String?
     public var setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod? = nil, reference: String? = nil, setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod? = nil, reference: String? = nil, setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.captureMethod = captureMethod
         self.reference = reference
         self.setupFutureUsage = setupFutureUsage
@@ -51974,7 +51616,7 @@ public struct PaymentIntentUpdateParamsPaymentMethodOptionsAfterpayClearpay: Sen
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.captureMethod = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod.self, forKey: .captureMethod)
+        self.captureMethod = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod.self, forKey: .captureMethod)
         self.reference = try container.decodeIfPresent(String.self, forKey: .reference)
         self.setupFutureUsage = try container.decodeIfPresent(CheckoutAffirmPaymentMethodOptionsSetupFutureUsage.self, forKey: .setupFutureUsage)
         var captured: [String: JSONValue] = [:]
@@ -52004,12 +51646,12 @@ public struct PaymentIntentUpdateParamsPaymentMethodOptionsAfterpayClearpay: Sen
 }
 
 public struct PaymentIntentUpdateParamsPaymentMethodOptionsAlipay: Sendable, Codable, Equatable, Hashable {
-    public var setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage?
+    public var setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.setupFutureUsage = setupFutureUsage
         self.unknownFields = unknownFields
     }
@@ -52020,7 +51662,7 @@ public struct PaymentIntentUpdateParamsPaymentMethodOptionsAlipay: Sendable, Cod
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.setupFutureUsage = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage.self, forKey: .setupFutureUsage)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage.self, forKey: .setupFutureUsage)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -52046,12 +51688,12 @@ public struct PaymentIntentUpdateParamsPaymentMethodOptionsAlipay: Sendable, Cod
 }
 
 public struct PaymentIntentUpdateParamsPaymentMethodOptionsAlma: Sendable, Codable, Equatable, Hashable {
-    public var captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod?
+    public var captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.captureMethod = captureMethod
         self.unknownFields = unknownFields
     }
@@ -52062,7 +51704,7 @@ public struct PaymentIntentUpdateParamsPaymentMethodOptionsAlma: Sendable, Codab
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.captureMethod = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod.self, forKey: .captureMethod)
+        self.captureMethod = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod.self, forKey: .captureMethod)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -52088,13 +51730,13 @@ public struct PaymentIntentUpdateParamsPaymentMethodOptionsAlma: Sendable, Codab
 }
 
 public struct PaymentIntentUpdateParamsPaymentMethodOptionsAmazonPay: Sendable, Codable, Equatable, Hashable {
-    public var captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod?
-    public var setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage?
+    public var captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod?
+    public var setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod? = nil, setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod? = nil, setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.captureMethod = captureMethod
         self.setupFutureUsage = setupFutureUsage
         self.unknownFields = unknownFields
@@ -52107,8 +51749,8 @@ public struct PaymentIntentUpdateParamsPaymentMethodOptionsAmazonPay: Sendable, 
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.captureMethod = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod.self, forKey: .captureMethod)
-        self.setupFutureUsage = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage.self, forKey: .setupFutureUsage)
+        self.captureMethod = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod.self, forKey: .captureMethod)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage.self, forKey: .setupFutureUsage)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -52135,13 +51777,13 @@ public struct PaymentIntentUpdateParamsPaymentMethodOptionsAmazonPay: Sendable, 
 }
 
 public struct PaymentIntentUpdateParamsPaymentMethodOptionsAuBecsDebit: Sendable, Codable, Equatable, Hashable {
-    public var setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage?
+    public var setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage?
     public var targetDate: String?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage? = nil, targetDate: String? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage? = nil, targetDate: String? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.setupFutureUsage = setupFutureUsage
         self.targetDate = targetDate
         self.unknownFields = unknownFields
@@ -52154,7 +51796,7 @@ public struct PaymentIntentUpdateParamsPaymentMethodOptionsAuBecsDebit: Sendable
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.setupFutureUsage = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage.self, forKey: .setupFutureUsage)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage.self, forKey: .setupFutureUsage)
         self.targetDate = try container.decodeIfPresent(String.self, forKey: .targetDate)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
@@ -52225,13 +51867,13 @@ public struct PaymentIntentUpdateParamsPaymentMethodOptionsBacsDebitMandateOptio
 
 public struct PaymentIntentUpdateParamsPaymentMethodOptionsBacsDebit: Sendable, Codable, Equatable, Hashable {
     public var mandateOptions: PaymentIntentUpdateParamsPaymentMethodOptionsBacsDebitMandateOptions?
-    public var setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage?
+    public var setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage?
     public var targetDate: String?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(mandateOptions: PaymentIntentUpdateParamsPaymentMethodOptionsBacsDebitMandateOptions? = nil, setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage? = nil, targetDate: String? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(mandateOptions: PaymentIntentUpdateParamsPaymentMethodOptionsBacsDebitMandateOptions? = nil, setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage? = nil, targetDate: String? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.mandateOptions = mandateOptions
         self.setupFutureUsage = setupFutureUsage
         self.targetDate = targetDate
@@ -52247,7 +51889,7 @@ public struct PaymentIntentUpdateParamsPaymentMethodOptionsBacsDebit: Sendable, 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.mandateOptions = try container.decodeIfPresent(PaymentIntentUpdateParamsPaymentMethodOptionsBacsDebitMandateOptions.self, forKey: .mandateOptions)
-        self.setupFutureUsage = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage.self, forKey: .setupFutureUsage)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage.self, forKey: .setupFutureUsage)
         self.targetDate = try container.decodeIfPresent(String.self, forKey: .targetDate)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
@@ -52277,12 +51919,12 @@ public struct PaymentIntentUpdateParamsPaymentMethodOptionsBacsDebit: Sendable, 
 
 public struct PaymentIntentUpdateParamsPaymentMethodOptionsBancontact: Sendable, Codable, Equatable, Hashable {
     public var preferredLanguage: InvoicePaymentMethodOptionsBancontactPreferredLanguage?
-    public var setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage?
+    public var setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(preferredLanguage: InvoicePaymentMethodOptionsBancontactPreferredLanguage? = nil, setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(preferredLanguage: InvoicePaymentMethodOptionsBancontactPreferredLanguage? = nil, setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.preferredLanguage = preferredLanguage
         self.setupFutureUsage = setupFutureUsage
         self.unknownFields = unknownFields
@@ -52296,7 +51938,7 @@ public struct PaymentIntentUpdateParamsPaymentMethodOptionsBancontact: Sendable,
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.preferredLanguage = try container.decodeIfPresent(InvoicePaymentMethodOptionsBancontactPreferredLanguage.self, forKey: .preferredLanguage)
-        self.setupFutureUsage = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage.self, forKey: .setupFutureUsage)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage.self, forKey: .setupFutureUsage)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -52452,14 +52094,14 @@ public struct PaymentIntentUpdateParamsPaymentMethodOptionsBillieCompanyDetails:
 }
 
 public struct PaymentIntentUpdateParamsPaymentMethodOptionsBillie: Sendable, Codable, Equatable, Hashable {
-    public var captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod?
+    public var captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod?
     public var companyDetails: Clearable<PaymentIntentUpdateParamsPaymentMethodOptionsBillieCompanyDetails>?
     public var reference: String?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod? = nil, companyDetails: Clearable<PaymentIntentUpdateParamsPaymentMethodOptionsBillieCompanyDetails>? = nil, reference: String? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod? = nil, companyDetails: Clearable<PaymentIntentUpdateParamsPaymentMethodOptionsBillieCompanyDetails>? = nil, reference: String? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.captureMethod = captureMethod
         self.companyDetails = companyDetails
         self.reference = reference
@@ -52474,7 +52116,7 @@ public struct PaymentIntentUpdateParamsPaymentMethodOptionsBillie: Sendable, Cod
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.captureMethod = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod.self, forKey: .captureMethod)
+        self.captureMethod = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod.self, forKey: .captureMethod)
         self.companyDetails = try container.decodeIfPresent(Clearable<PaymentIntentUpdateParamsPaymentMethodOptionsBillieCompanyDetails>.self, forKey: .companyDetails)
         self.reference = try container.decodeIfPresent(String.self, forKey: .reference)
         var captured: [String: JSONValue] = [:]
@@ -52584,12 +52226,12 @@ public struct PaymentIntentUpdateParamsPaymentMethodOptionsBlikMandateOptions: S
 public struct PaymentIntentUpdateParamsPaymentMethodOptionsBlik: Sendable, Codable, Equatable, Hashable {
     public var code: String?
     public var mandateOptions: PaymentIntentUpdateParamsPaymentMethodOptionsBlikMandateOptions?
-    public var setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage?
+    public var setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(code: String? = nil, mandateOptions: PaymentIntentUpdateParamsPaymentMethodOptionsBlikMandateOptions? = nil, setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(code: String? = nil, mandateOptions: PaymentIntentUpdateParamsPaymentMethodOptionsBlikMandateOptions? = nil, setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.code = code
         self.mandateOptions = mandateOptions
         self.setupFutureUsage = setupFutureUsage
@@ -52606,7 +52248,7 @@ public struct PaymentIntentUpdateParamsPaymentMethodOptionsBlik: Sendable, Codab
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.code = try container.decodeIfPresent(String.self, forKey: .code)
         self.mandateOptions = try container.decodeIfPresent(PaymentIntentUpdateParamsPaymentMethodOptionsBlikMandateOptions.self, forKey: .mandateOptions)
-        self.setupFutureUsage = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage.self, forKey: .setupFutureUsage)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage.self, forKey: .setupFutureUsage)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -52635,12 +52277,12 @@ public struct PaymentIntentUpdateParamsPaymentMethodOptionsBlik: Sendable, Codab
 
 public struct PaymentIntentUpdateParamsPaymentMethodOptionsBoleto: Sendable, Codable, Equatable, Hashable {
     public var expiresAfterDays: Int?
-    public var setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage?
+    public var setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(expiresAfterDays: Int? = nil, setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(expiresAfterDays: Int? = nil, setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.expiresAfterDays = expiresAfterDays
         self.setupFutureUsage = setupFutureUsage
         self.unknownFields = unknownFields
@@ -52654,7 +52296,7 @@ public struct PaymentIntentUpdateParamsPaymentMethodOptionsBoleto: Sendable, Cod
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.expiresAfterDays = try container.decodeIfPresent(Int.self, forKey: .expiresAfterDays)
-        self.setupFutureUsage = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage.self, forKey: .setupFutureUsage)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage.self, forKey: .setupFutureUsage)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -53033,7 +52675,7 @@ public struct PaymentIntentUpdateParamsPaymentMethodOptionsCardThreeDSecure: Sen
 }
 
 public struct PaymentIntentUpdateParamsPaymentMethodOptionsCard: Sendable, Codable, Equatable, Hashable {
-    public var captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod?
+    public var captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod?
     public var cvcToken: String?
     public var installments: PaymentIntentUpdateParamsPaymentMethodOptionsCardInstallments?
     public var mandateOptions: PaymentIntentUpdateParamsPaymentMethodOptionsCardMandateOptions?
@@ -53046,7 +52688,7 @@ public struct PaymentIntentUpdateParamsPaymentMethodOptionsCard: Sendable, Codab
     public var requestThreeDSecure: CheckoutCardPaymentMethodOptionsRequestThreeDSecure?
     public var requireCvcRecollection: Bool?
     public var setupCredentialUsage: PaymentIntentPaymentMethodOptionsCardSetupCredentialUsage?
-    public var setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage?
+    public var setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage?
     public var statementDescriptorSuffixKana: Clearable<String>?
     public var statementDescriptorSuffixKanji: Clearable<String>?
     public var storedCredentialUsage: PaymentIntentPaymentMethodOptionsCardSetupCredentialUsage?
@@ -53055,7 +52697,7 @@ public struct PaymentIntentUpdateParamsPaymentMethodOptionsCard: Sendable, Codab
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod? = nil, cvcToken: String? = nil, installments: PaymentIntentUpdateParamsPaymentMethodOptionsCardInstallments? = nil, mandateOptions: PaymentIntentUpdateParamsPaymentMethodOptionsCardMandateOptions? = nil, moto: Bool? = nil, network: PaymentIntentPaymentMethodOptionsCardNetwork? = nil, requestExtendedAuthorization: CheckoutCardPaymentMethodOptionsRequestExtendedAuthorization? = nil, requestIncrementalAuthorization: CheckoutCardPaymentMethodOptionsRequestExtendedAuthorization? = nil, requestMulticapture: CheckoutCardPaymentMethodOptionsRequestExtendedAuthorization? = nil, requestOvercapture: CheckoutCardPaymentMethodOptionsRequestExtendedAuthorization? = nil, requestThreeDSecure: CheckoutCardPaymentMethodOptionsRequestThreeDSecure? = nil, requireCvcRecollection: Bool? = nil, setupCredentialUsage: PaymentIntentPaymentMethodOptionsCardSetupCredentialUsage? = nil, setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage? = nil, statementDescriptorSuffixKana: Clearable<String>? = nil, statementDescriptorSuffixKanji: Clearable<String>? = nil, storedCredentialUsage: PaymentIntentPaymentMethodOptionsCardSetupCredentialUsage? = nil, threeDSecure: PaymentIntentUpdateParamsPaymentMethodOptionsCardThreeDSecure? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod? = nil, cvcToken: String? = nil, installments: PaymentIntentUpdateParamsPaymentMethodOptionsCardInstallments? = nil, mandateOptions: PaymentIntentUpdateParamsPaymentMethodOptionsCardMandateOptions? = nil, moto: Bool? = nil, network: PaymentIntentPaymentMethodOptionsCardNetwork? = nil, requestExtendedAuthorization: CheckoutCardPaymentMethodOptionsRequestExtendedAuthorization? = nil, requestIncrementalAuthorization: CheckoutCardPaymentMethodOptionsRequestExtendedAuthorization? = nil, requestMulticapture: CheckoutCardPaymentMethodOptionsRequestExtendedAuthorization? = nil, requestOvercapture: CheckoutCardPaymentMethodOptionsRequestExtendedAuthorization? = nil, requestThreeDSecure: CheckoutCardPaymentMethodOptionsRequestThreeDSecure? = nil, requireCvcRecollection: Bool? = nil, setupCredentialUsage: PaymentIntentPaymentMethodOptionsCardSetupCredentialUsage? = nil, setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage? = nil, statementDescriptorSuffixKana: Clearable<String>? = nil, statementDescriptorSuffixKanji: Clearable<String>? = nil, storedCredentialUsage: PaymentIntentPaymentMethodOptionsCardSetupCredentialUsage? = nil, threeDSecure: PaymentIntentUpdateParamsPaymentMethodOptionsCardThreeDSecure? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.captureMethod = captureMethod
         self.cvcToken = cvcToken
         self.installments = installments
@@ -53100,7 +52742,7 @@ public struct PaymentIntentUpdateParamsPaymentMethodOptionsCard: Sendable, Codab
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.captureMethod = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod.self, forKey: .captureMethod)
+        self.captureMethod = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod.self, forKey: .captureMethod)
         self.cvcToken = try container.decodeIfPresent(String.self, forKey: .cvcToken)
         self.installments = try container.decodeIfPresent(PaymentIntentUpdateParamsPaymentMethodOptionsCardInstallments.self, forKey: .installments)
         self.mandateOptions = try container.decodeIfPresent(PaymentIntentUpdateParamsPaymentMethodOptionsCardMandateOptions.self, forKey: .mandateOptions)
@@ -53113,7 +52755,7 @@ public struct PaymentIntentUpdateParamsPaymentMethodOptionsCard: Sendable, Codab
         self.requestThreeDSecure = try container.decodeIfPresent(CheckoutCardPaymentMethodOptionsRequestThreeDSecure.self, forKey: .requestThreeDSecure)
         self.requireCvcRecollection = try container.decodeIfPresent(Bool.self, forKey: .requireCvcRecollection)
         self.setupCredentialUsage = try container.decodeIfPresent(PaymentIntentPaymentMethodOptionsCardSetupCredentialUsage.self, forKey: .setupCredentialUsage)
-        self.setupFutureUsage = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage.self, forKey: .setupFutureUsage)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage.self, forKey: .setupFutureUsage)
         self.statementDescriptorSuffixKana = try container.decodeIfPresent(Clearable<String>.self, forKey: .statementDescriptorSuffixKana)
         self.statementDescriptorSuffixKanji = try container.decodeIfPresent(Clearable<String>.self, forKey: .statementDescriptorSuffixKanji)
         self.storedCredentialUsage = try container.decodeIfPresent(PaymentIntentPaymentMethodOptionsCardSetupCredentialUsage.self, forKey: .storedCredentialUsage)
@@ -53259,13 +52901,13 @@ public struct PaymentIntentUpdateParamsPaymentMethodOptionsCardPresent: Sendable
 }
 
 public struct PaymentIntentUpdateParamsPaymentMethodOptionsCashapp: Sendable, Codable, Equatable, Hashable {
-    public var captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod?
-    public var setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage?
+    public var captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod?
+    public var setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod? = nil, setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod? = nil, setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.captureMethod = captureMethod
         self.setupFutureUsage = setupFutureUsage
         self.unknownFields = unknownFields
@@ -53278,8 +52920,8 @@ public struct PaymentIntentUpdateParamsPaymentMethodOptionsCashapp: Sendable, Co
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.captureMethod = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod.self, forKey: .captureMethod)
-        self.setupFutureUsage = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage.self, forKey: .setupFutureUsage)
+        self.captureMethod = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod.self, forKey: .captureMethod)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage.self, forKey: .setupFutureUsage)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -53662,12 +53304,12 @@ public struct PaymentIntentUpdateParamsPaymentMethodOptionsGrabpay: Sendable, Co
 }
 
 public struct PaymentIntentUpdateParamsPaymentMethodOptionsIdeal: Sendable, Codable, Equatable, Hashable {
-    public var setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage?
+    public var setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.setupFutureUsage = setupFutureUsage
         self.unknownFields = unknownFields
     }
@@ -53678,7 +53320,7 @@ public struct PaymentIntentUpdateParamsPaymentMethodOptionsIdeal: Sendable, Coda
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.setupFutureUsage = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage.self, forKey: .setupFutureUsage)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage.self, forKey: .setupFutureUsage)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -53740,13 +53382,13 @@ public struct PaymentIntentUpdateParamsPaymentMethodOptionsInteracPresent: Senda
 }
 
 public struct PaymentIntentUpdateParamsPaymentMethodOptionsKakaoPay: Sendable, Codable, Equatable, Hashable {
-    public var captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod?
-    public var setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage?
+    public var captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod?
+    public var setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod? = nil, setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod? = nil, setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.captureMethod = captureMethod
         self.setupFutureUsage = setupFutureUsage
         self.unknownFields = unknownFields
@@ -53759,8 +53401,8 @@ public struct PaymentIntentUpdateParamsPaymentMethodOptionsKakaoPay: Sendable, C
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.captureMethod = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod.self, forKey: .captureMethod)
-        self.setupFutureUsage = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage.self, forKey: .setupFutureUsage)
+        self.captureMethod = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod.self, forKey: .captureMethod)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage.self, forKey: .setupFutureUsage)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -53958,7 +53600,7 @@ public struct PaymentIntentUpdateParamsPaymentMethodOptionsKlarnaSubscriptionsIt
 }
 
 public struct PaymentIntentUpdateParamsPaymentMethodOptionsKlarna: Sendable, Codable, Equatable, Hashable {
-    public var captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod?
+    public var captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod?
     public var onDemand: PaymentIntentUpdateParamsPaymentMethodOptionsKlarnaOnDemand?
     public var preferredLocale: PaymentIntentCreateParamsPaymentMethodOptionsKlarnaPreferredLocale?
     public var setupFutureUsage: CheckoutAcssDebitPaymentMethodOptionsSetupFutureUsage?
@@ -53967,7 +53609,7 @@ public struct PaymentIntentUpdateParamsPaymentMethodOptionsKlarna: Sendable, Cod
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod? = nil, onDemand: PaymentIntentUpdateParamsPaymentMethodOptionsKlarnaOnDemand? = nil, preferredLocale: PaymentIntentCreateParamsPaymentMethodOptionsKlarnaPreferredLocale? = nil, setupFutureUsage: CheckoutAcssDebitPaymentMethodOptionsSetupFutureUsage? = nil, subscriptions: Clearable<[PaymentIntentUpdateParamsPaymentMethodOptionsKlarnaSubscriptionsItem]>? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod? = nil, onDemand: PaymentIntentUpdateParamsPaymentMethodOptionsKlarnaOnDemand? = nil, preferredLocale: PaymentIntentCreateParamsPaymentMethodOptionsKlarnaPreferredLocale? = nil, setupFutureUsage: CheckoutAcssDebitPaymentMethodOptionsSetupFutureUsage? = nil, subscriptions: Clearable<[PaymentIntentUpdateParamsPaymentMethodOptionsKlarnaSubscriptionsItem]>? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.captureMethod = captureMethod
         self.onDemand = onDemand
         self.preferredLocale = preferredLocale
@@ -53986,7 +53628,7 @@ public struct PaymentIntentUpdateParamsPaymentMethodOptionsKlarna: Sendable, Cod
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.captureMethod = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod.self, forKey: .captureMethod)
+        self.captureMethod = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod.self, forKey: .captureMethod)
         self.onDemand = try container.decodeIfPresent(PaymentIntentUpdateParamsPaymentMethodOptionsKlarnaOnDemand.self, forKey: .onDemand)
         self.preferredLocale = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsKlarnaPreferredLocale.self, forKey: .preferredLocale)
         self.setupFutureUsage = try container.decodeIfPresent(CheckoutAcssDebitPaymentMethodOptionsSetupFutureUsage.self, forKey: .setupFutureUsage)
@@ -54082,13 +53724,13 @@ public struct PaymentIntentUpdateParamsPaymentMethodOptionsKonbini: Sendable, Co
 }
 
 public struct PaymentIntentUpdateParamsPaymentMethodOptionsKrCard: Sendable, Codable, Equatable, Hashable {
-    public var captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod?
-    public var setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage?
+    public var captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod?
+    public var setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod? = nil, setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod? = nil, setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.captureMethod = captureMethod
         self.setupFutureUsage = setupFutureUsage
         self.unknownFields = unknownFields
@@ -54101,8 +53743,8 @@ public struct PaymentIntentUpdateParamsPaymentMethodOptionsKrCard: Sendable, Cod
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.captureMethod = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod.self, forKey: .captureMethod)
-        self.setupFutureUsage = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage.self, forKey: .setupFutureUsage)
+        self.captureMethod = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod.self, forKey: .captureMethod)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage.self, forKey: .setupFutureUsage)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -54129,14 +53771,14 @@ public struct PaymentIntentUpdateParamsPaymentMethodOptionsKrCard: Sendable, Cod
 }
 
 public struct PaymentIntentUpdateParamsPaymentMethodOptionsLink: Sendable, Codable, Equatable, Hashable {
-    public var captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod?
+    public var captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod?
     public var persistentToken: String?
-    public var setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage?
+    public var setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod? = nil, persistentToken: String? = nil, setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod? = nil, persistentToken: String? = nil, setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.captureMethod = captureMethod
         self.persistentToken = persistentToken
         self.setupFutureUsage = setupFutureUsage
@@ -54151,9 +53793,9 @@ public struct PaymentIntentUpdateParamsPaymentMethodOptionsLink: Sendable, Codab
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.captureMethod = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod.self, forKey: .captureMethod)
+        self.captureMethod = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod.self, forKey: .captureMethod)
         self.persistentToken = try container.decodeIfPresent(String.self, forKey: .persistentToken)
-        self.setupFutureUsage = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage.self, forKey: .setupFutureUsage)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage.self, forKey: .setupFutureUsage)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -54223,13 +53865,13 @@ public struct PaymentIntentUpdateParamsPaymentMethodOptionsMbWay: Sendable, Coda
 }
 
 public struct PaymentIntentUpdateParamsPaymentMethodOptionsMobilepay: Sendable, Codable, Equatable, Hashable {
-    public var captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod?
+    public var captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod?
     public var setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod? = nil, setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod? = nil, setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.captureMethod = captureMethod
         self.setupFutureUsage = setupFutureUsage
         self.unknownFields = unknownFields
@@ -54242,7 +53884,7 @@ public struct PaymentIntentUpdateParamsPaymentMethodOptionsMobilepay: Sendable, 
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.captureMethod = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod.self, forKey: .captureMethod)
+        self.captureMethod = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod.self, forKey: .captureMethod)
         self.setupFutureUsage = try container.decodeIfPresent(CheckoutAffirmPaymentMethodOptionsSetupFutureUsage.self, forKey: .setupFutureUsage)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
@@ -54312,13 +53954,13 @@ public struct PaymentIntentUpdateParamsPaymentMethodOptionsMultibanco: Sendable,
 }
 
 public struct PaymentIntentUpdateParamsPaymentMethodOptionsNaverPay: Sendable, Codable, Equatable, Hashable {
-    public var captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod?
-    public var setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage?
+    public var captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod?
+    public var setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod? = nil, setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod? = nil, setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.captureMethod = captureMethod
         self.setupFutureUsage = setupFutureUsage
         self.unknownFields = unknownFields
@@ -54331,8 +53973,8 @@ public struct PaymentIntentUpdateParamsPaymentMethodOptionsNaverPay: Sendable, C
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.captureMethod = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod.self, forKey: .captureMethod)
-        self.setupFutureUsage = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage.self, forKey: .setupFutureUsage)
+        self.captureMethod = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod.self, forKey: .captureMethod)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage.self, forKey: .setupFutureUsage)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -54359,13 +54001,13 @@ public struct PaymentIntentUpdateParamsPaymentMethodOptionsNaverPay: Sendable, C
 }
 
 public struct PaymentIntentUpdateParamsPaymentMethodOptionsNzBankAccount: Sendable, Codable, Equatable, Hashable {
-    public var setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage?
+    public var setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage?
     public var targetDate: String?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage? = nil, targetDate: String? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage? = nil, targetDate: String? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.setupFutureUsage = setupFutureUsage
         self.targetDate = targetDate
         self.unknownFields = unknownFields
@@ -54378,7 +54020,7 @@ public struct PaymentIntentUpdateParamsPaymentMethodOptionsNzBankAccount: Sendab
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.setupFutureUsage = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage.self, forKey: .setupFutureUsage)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage.self, forKey: .setupFutureUsage)
         self.targetDate = try container.decodeIfPresent(String.self, forKey: .targetDate)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
@@ -54536,13 +54178,13 @@ public struct PaymentIntentUpdateParamsPaymentMethodOptionsPayByBank: Sendable, 
 }
 
 public struct PaymentIntentUpdateParamsPaymentMethodOptionsPayco: Sendable, Codable, Equatable, Hashable {
-    public var captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod?
+    public var captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod?
     public var setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod? = nil, setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod? = nil, setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.captureMethod = captureMethod
         self.setupFutureUsage = setupFutureUsage
         self.unknownFields = unknownFields
@@ -54555,7 +54197,7 @@ public struct PaymentIntentUpdateParamsPaymentMethodOptionsPayco: Sendable, Coda
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.captureMethod = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod.self, forKey: .captureMethod)
+        self.captureMethod = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod.self, forKey: .captureMethod)
         self.setupFutureUsage = try container.decodeIfPresent(CheckoutAffirmPaymentMethodOptionsSetupFutureUsage.self, forKey: .setupFutureUsage)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
@@ -54625,16 +54267,16 @@ public struct PaymentIntentUpdateParamsPaymentMethodOptionsPaynow: Sendable, Cod
 }
 
 public struct PaymentIntentUpdateParamsPaymentMethodOptionsPaypal: Sendable, Codable, Equatable, Hashable {
-    public var captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod?
-    public var preferredLocale: PaymentIntentCreateParamsPaymentMethodOptionsPaypalPreferredLocale?
+    public var captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod?
+    public var preferredLocale: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalPreferredLocale?
     public var reference: String?
     public var riskCorrelationId: String?
-    public var setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage?
+    public var setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod? = nil, preferredLocale: PaymentIntentCreateParamsPaymentMethodOptionsPaypalPreferredLocale? = nil, reference: String? = nil, riskCorrelationId: String? = nil, setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod? = nil, preferredLocale: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalPreferredLocale? = nil, reference: String? = nil, riskCorrelationId: String? = nil, setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.captureMethod = captureMethod
         self.preferredLocale = preferredLocale
         self.reference = reference
@@ -54653,11 +54295,11 @@ public struct PaymentIntentUpdateParamsPaymentMethodOptionsPaypal: Sendable, Cod
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.captureMethod = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod.self, forKey: .captureMethod)
-        self.preferredLocale = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsPaypalPreferredLocale.self, forKey: .preferredLocale)
+        self.captureMethod = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod.self, forKey: .captureMethod)
+        self.preferredLocale = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsPaypalPreferredLocale.self, forKey: .preferredLocale)
         self.reference = try container.decodeIfPresent(String.self, forKey: .reference)
         self.riskCorrelationId = try container.decodeIfPresent(String.self, forKey: .riskCorrelationId)
-        self.setupFutureUsage = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage.self, forKey: .setupFutureUsage)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage.self, forKey: .setupFutureUsage)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -54724,16 +54366,16 @@ public struct PaymentIntentUpdateParamsPaymentMethodOptionsPaypay: Sendable, Cod
 
 public struct PaymentIntentUpdateParamsPaymentMethodOptionsPaytoMandateOptions: Sendable, Codable, Equatable, Hashable {
     public var amount: Clearable<Int>?
-    public var amountType: PaymentIntentCreateParamsPaymentMethodOptionsPaytoMandateOptionsAmountType?
+    public var amountType: CheckoutSessionCreateParamsPaymentMethodOptionsPaytoMandateOptionsAmountType?
     public var endDate: Clearable<String>?
-    public var paymentSchedule: PaymentIntentCreateParamsPaymentMethodOptionsPaytoMandateOptionsPaymentSchedule?
+    public var paymentSchedule: CheckoutSessionCreateParamsPaymentMethodOptionsPaytoMandateOptionsPaymentSchedule?
     public var paymentsPerPeriod: Clearable<Int>?
-    public var purpose: PaymentIntentCreateParamsPaymentMethodOptionsPaytoMandateOptionsPurpose?
+    public var purpose: CheckoutSessionCreateParamsPaymentMethodOptionsPaytoMandateOptionsPurpose?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(amount: Clearable<Int>? = nil, amountType: PaymentIntentCreateParamsPaymentMethodOptionsPaytoMandateOptionsAmountType? = nil, endDate: Clearable<String>? = nil, paymentSchedule: PaymentIntentCreateParamsPaymentMethodOptionsPaytoMandateOptionsPaymentSchedule? = nil, paymentsPerPeriod: Clearable<Int>? = nil, purpose: PaymentIntentCreateParamsPaymentMethodOptionsPaytoMandateOptionsPurpose? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(amount: Clearable<Int>? = nil, amountType: CheckoutSessionCreateParamsPaymentMethodOptionsPaytoMandateOptionsAmountType? = nil, endDate: Clearable<String>? = nil, paymentSchedule: CheckoutSessionCreateParamsPaymentMethodOptionsPaytoMandateOptionsPaymentSchedule? = nil, paymentsPerPeriod: Clearable<Int>? = nil, purpose: CheckoutSessionCreateParamsPaymentMethodOptionsPaytoMandateOptionsPurpose? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.amount = amount
         self.amountType = amountType
         self.endDate = endDate
@@ -54755,11 +54397,11 @@ public struct PaymentIntentUpdateParamsPaymentMethodOptionsPaytoMandateOptions: 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.amount = try container.decodeIfPresent(Clearable<Int>.self, forKey: .amount)
-        self.amountType = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsPaytoMandateOptionsAmountType.self, forKey: .amountType)
+        self.amountType = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsPaytoMandateOptionsAmountType.self, forKey: .amountType)
         self.endDate = try container.decodeIfPresent(Clearable<String>.self, forKey: .endDate)
-        self.paymentSchedule = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsPaytoMandateOptionsPaymentSchedule.self, forKey: .paymentSchedule)
+        self.paymentSchedule = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsPaytoMandateOptionsPaymentSchedule.self, forKey: .paymentSchedule)
         self.paymentsPerPeriod = try container.decodeIfPresent(Clearable<Int>.self, forKey: .paymentsPerPeriod)
-        self.purpose = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsPaytoMandateOptionsPurpose.self, forKey: .purpose)
+        self.purpose = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsPaytoMandateOptionsPurpose.self, forKey: .purpose)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -54791,12 +54433,12 @@ public struct PaymentIntentUpdateParamsPaymentMethodOptionsPaytoMandateOptions: 
 
 public struct PaymentIntentUpdateParamsPaymentMethodOptionsPayto: Sendable, Codable, Equatable, Hashable {
     public var mandateOptions: PaymentIntentUpdateParamsPaymentMethodOptionsPaytoMandateOptions?
-    public var setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage?
+    public var setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(mandateOptions: PaymentIntentUpdateParamsPaymentMethodOptionsPaytoMandateOptions? = nil, setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(mandateOptions: PaymentIntentUpdateParamsPaymentMethodOptionsPaytoMandateOptions? = nil, setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.mandateOptions = mandateOptions
         self.setupFutureUsage = setupFutureUsage
         self.unknownFields = unknownFields
@@ -54810,7 +54452,7 @@ public struct PaymentIntentUpdateParamsPaymentMethodOptionsPayto: Sendable, Coda
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.mandateOptions = try container.decodeIfPresent(PaymentIntentUpdateParamsPaymentMethodOptionsPaytoMandateOptions.self, forKey: .mandateOptions)
-        self.setupFutureUsage = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage.self, forKey: .setupFutureUsage)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage.self, forKey: .setupFutureUsage)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -55018,13 +54660,13 @@ public struct PaymentIntentUpdateParamsPaymentMethodOptionsPromptpay: Sendable, 
 }
 
 public struct PaymentIntentUpdateParamsPaymentMethodOptionsRevolutPay: Sendable, Codable, Equatable, Hashable {
-    public var captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod?
-    public var setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage?
+    public var captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod?
+    public var setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod? = nil, setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod? = nil, setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.captureMethod = captureMethod
         self.setupFutureUsage = setupFutureUsage
         self.unknownFields = unknownFields
@@ -55037,8 +54679,8 @@ public struct PaymentIntentUpdateParamsPaymentMethodOptionsRevolutPay: Sendable,
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.captureMethod = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod.self, forKey: .captureMethod)
-        self.setupFutureUsage = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage.self, forKey: .setupFutureUsage)
+        self.captureMethod = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod.self, forKey: .captureMethod)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage.self, forKey: .setupFutureUsage)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -55065,13 +54707,13 @@ public struct PaymentIntentUpdateParamsPaymentMethodOptionsRevolutPay: Sendable,
 }
 
 public struct PaymentIntentUpdateParamsPaymentMethodOptionsSamsungPay: Sendable, Codable, Equatable, Hashable {
-    public var captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod?
+    public var captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod?
     public var setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod? = nil, setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod? = nil, setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.captureMethod = captureMethod
         self.setupFutureUsage = setupFutureUsage
         self.unknownFields = unknownFields
@@ -55084,7 +54726,7 @@ public struct PaymentIntentUpdateParamsPaymentMethodOptionsSamsungPay: Sendable,
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.captureMethod = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod.self, forKey: .captureMethod)
+        self.captureMethod = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod.self, forKey: .captureMethod)
         self.setupFutureUsage = try container.decodeIfPresent(CheckoutAffirmPaymentMethodOptionsSetupFutureUsage.self, forKey: .setupFutureUsage)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
@@ -55112,13 +54754,13 @@ public struct PaymentIntentUpdateParamsPaymentMethodOptionsSamsungPay: Sendable,
 }
 
 public struct PaymentIntentUpdateParamsPaymentMethodOptionsSatispay: Sendable, Codable, Equatable, Hashable {
-    public var captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod?
-    public var setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage?
+    public var captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod?
+    public var setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod? = nil, setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod? = nil, setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.captureMethod = captureMethod
         self.setupFutureUsage = setupFutureUsage
         self.unknownFields = unknownFields
@@ -55131,8 +54773,8 @@ public struct PaymentIntentUpdateParamsPaymentMethodOptionsSatispay: Sendable, C
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.captureMethod = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod.self, forKey: .captureMethod)
-        self.setupFutureUsage = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage.self, forKey: .setupFutureUsage)
+        self.captureMethod = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod.self, forKey: .captureMethod)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage.self, forKey: .setupFutureUsage)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -55159,12 +54801,12 @@ public struct PaymentIntentUpdateParamsPaymentMethodOptionsSatispay: Sendable, C
 }
 
 public struct PaymentIntentUpdateParamsPaymentMethodOptionsScalapay: Sendable, Codable, Equatable, Hashable {
-    public var captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod?
+    public var captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.captureMethod = captureMethod
         self.unknownFields = unknownFields
     }
@@ -55175,7 +54817,7 @@ public struct PaymentIntentUpdateParamsPaymentMethodOptionsScalapay: Sendable, C
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.captureMethod = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod.self, forKey: .captureMethod)
+        self.captureMethod = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod.self, forKey: .captureMethod)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -55244,13 +54886,13 @@ public struct PaymentIntentUpdateParamsPaymentMethodOptionsSepaDebitMandateOptio
 
 public struct PaymentIntentUpdateParamsPaymentMethodOptionsSepaDebit: Sendable, Codable, Equatable, Hashable {
     public var mandateOptions: PaymentIntentUpdateParamsPaymentMethodOptionsSepaDebitMandateOptions?
-    public var setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage?
+    public var setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage?
     public var targetDate: String?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(mandateOptions: PaymentIntentUpdateParamsPaymentMethodOptionsSepaDebitMandateOptions? = nil, setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage? = nil, targetDate: String? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(mandateOptions: PaymentIntentUpdateParamsPaymentMethodOptionsSepaDebitMandateOptions? = nil, setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage? = nil, targetDate: String? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.mandateOptions = mandateOptions
         self.setupFutureUsage = setupFutureUsage
         self.targetDate = targetDate
@@ -55266,7 +54908,7 @@ public struct PaymentIntentUpdateParamsPaymentMethodOptionsSepaDebit: Sendable, 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.mandateOptions = try container.decodeIfPresent(PaymentIntentUpdateParamsPaymentMethodOptionsSepaDebitMandateOptions.self, forKey: .mandateOptions)
-        self.setupFutureUsage = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage.self, forKey: .setupFutureUsage)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage.self, forKey: .setupFutureUsage)
         self.targetDate = try container.decodeIfPresent(String.self, forKey: .targetDate)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
@@ -55295,13 +54937,13 @@ public struct PaymentIntentUpdateParamsPaymentMethodOptionsSepaDebit: Sendable, 
 }
 
 public struct PaymentIntentUpdateParamsPaymentMethodOptionsSequra: Sendable, Codable, Equatable, Hashable {
-    public var captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod?
+    public var captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod?
     public var setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod? = nil, setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod? = nil, setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.captureMethod = captureMethod
         self.setupFutureUsage = setupFutureUsage
         self.unknownFields = unknownFields
@@ -55314,7 +54956,7 @@ public struct PaymentIntentUpdateParamsPaymentMethodOptionsSequra: Sendable, Cod
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.captureMethod = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod.self, forKey: .captureMethod)
+        self.captureMethod = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod.self, forKey: .captureMethod)
         self.setupFutureUsage = try container.decodeIfPresent(CheckoutAffirmPaymentMethodOptionsSetupFutureUsage.self, forKey: .setupFutureUsage)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
@@ -55343,12 +54985,12 @@ public struct PaymentIntentUpdateParamsPaymentMethodOptionsSequra: Sendable, Cod
 
 public struct PaymentIntentUpdateParamsPaymentMethodOptionsSofort: Sendable, Codable, Equatable, Hashable {
     public var preferredLanguage: PaymentIntentCreateParamsPaymentMethodOptionsSofortPreferredLanguage?
-    public var setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage?
+    public var setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(preferredLanguage: PaymentIntentCreateParamsPaymentMethodOptionsSofortPreferredLanguage? = nil, setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(preferredLanguage: PaymentIntentCreateParamsPaymentMethodOptionsSofortPreferredLanguage? = nil, setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.preferredLanguage = preferredLanguage
         self.setupFutureUsage = setupFutureUsage
         self.unknownFields = unknownFields
@@ -55362,7 +55004,7 @@ public struct PaymentIntentUpdateParamsPaymentMethodOptionsSofort: Sendable, Cod
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.preferredLanguage = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsSofortPreferredLanguage.self, forKey: .preferredLanguage)
-        self.setupFutureUsage = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAlipaySetupFutureUsage.self, forKey: .setupFutureUsage)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsBlikSetupFutureUsage.self, forKey: .setupFutureUsage)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -55389,13 +55031,13 @@ public struct PaymentIntentUpdateParamsPaymentMethodOptionsSofort: Sendable, Cod
 }
 
 public struct PaymentIntentUpdateParamsPaymentMethodOptionsSunbit: Sendable, Codable, Equatable, Hashable {
-    public var captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod?
+    public var captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod?
     public var setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(captureMethod: PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod? = nil, setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(captureMethod: CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod? = nil, setupFutureUsage: CheckoutAffirmPaymentMethodOptionsSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.captureMethod = captureMethod
         self.setupFutureUsage = setupFutureUsage
         self.unknownFields = unknownFields
@@ -55408,7 +55050,7 @@ public struct PaymentIntentUpdateParamsPaymentMethodOptionsSunbit: Sendable, Cod
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.captureMethod = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAffirmCaptureMethod.self, forKey: .captureMethod)
+        self.captureMethod = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsPaypalCaptureMethod.self, forKey: .captureMethod)
         self.setupFutureUsage = try container.decodeIfPresent(CheckoutAffirmPaymentMethodOptionsSetupFutureUsage.self, forKey: .setupFutureUsage)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
@@ -55583,12 +55225,12 @@ public struct PaymentIntentUpdateParamsPaymentMethodOptionsUpiMandateOptions: Se
 
 public struct PaymentIntentUpdateParamsPaymentMethodOptionsUpi: Sendable, Codable, Equatable, Hashable {
     public var mandateOptions: PaymentIntentUpdateParamsPaymentMethodOptionsUpiMandateOptions?
-    public var setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage?
+    public var setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(mandateOptions: PaymentIntentUpdateParamsPaymentMethodOptionsUpiMandateOptions? = nil, setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(mandateOptions: PaymentIntentUpdateParamsPaymentMethodOptionsUpiMandateOptions? = nil, setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.mandateOptions = mandateOptions
         self.setupFutureUsage = setupFutureUsage
         self.unknownFields = unknownFields
@@ -55602,7 +55244,7 @@ public struct PaymentIntentUpdateParamsPaymentMethodOptionsUpi: Sendable, Codabl
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.mandateOptions = try container.decodeIfPresent(PaymentIntentUpdateParamsPaymentMethodOptionsUpiMandateOptions.self, forKey: .mandateOptions)
-        self.setupFutureUsage = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage.self, forKey: .setupFutureUsage)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage.self, forKey: .setupFutureUsage)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {
@@ -55815,7 +55457,7 @@ public struct PaymentIntentUpdateParamsPaymentMethodOptionsUsBankAccount: Sendab
     public var financialConnections: PaymentIntentUpdateParamsPaymentMethodOptionsUsBankAccountFinancialConnections?
     public var mandateOptions: PaymentIntentUpdateParamsPaymentMethodOptionsUsBankAccountMandateOptions?
     public var networks: PaymentIntentUpdateParamsPaymentMethodOptionsUsBankAccountNetworks?
-    public var setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage?
+    public var setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage?
     public var targetDate: String?
     public var transactionPurpose: PaymentIntentCreateParamsPaymentMethodOptionsUsBankAccountTransactionPurpose?
     public var verificationMethod: CheckoutAcssDebitPaymentMethodOptionsVerificationMethod?
@@ -55823,7 +55465,7 @@ public struct PaymentIntentUpdateParamsPaymentMethodOptionsUsBankAccount: Sendab
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(financialConnections: PaymentIntentUpdateParamsPaymentMethodOptionsUsBankAccountFinancialConnections? = nil, mandateOptions: PaymentIntentUpdateParamsPaymentMethodOptionsUsBankAccountMandateOptions? = nil, networks: PaymentIntentUpdateParamsPaymentMethodOptionsUsBankAccountNetworks? = nil, setupFutureUsage: PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage? = nil, targetDate: String? = nil, transactionPurpose: PaymentIntentCreateParamsPaymentMethodOptionsUsBankAccountTransactionPurpose? = nil, verificationMethod: CheckoutAcssDebitPaymentMethodOptionsVerificationMethod? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(financialConnections: PaymentIntentUpdateParamsPaymentMethodOptionsUsBankAccountFinancialConnections? = nil, mandateOptions: PaymentIntentUpdateParamsPaymentMethodOptionsUsBankAccountMandateOptions? = nil, networks: PaymentIntentUpdateParamsPaymentMethodOptionsUsBankAccountNetworks? = nil, setupFutureUsage: CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage? = nil, targetDate: String? = nil, transactionPurpose: PaymentIntentCreateParamsPaymentMethodOptionsUsBankAccountTransactionPurpose? = nil, verificationMethod: CheckoutAcssDebitPaymentMethodOptionsVerificationMethod? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.financialConnections = financialConnections
         self.mandateOptions = mandateOptions
         self.networks = networks
@@ -55849,7 +55491,7 @@ public struct PaymentIntentUpdateParamsPaymentMethodOptionsUsBankAccount: Sendab
         self.financialConnections = try container.decodeIfPresent(PaymentIntentUpdateParamsPaymentMethodOptionsUsBankAccountFinancialConnections.self, forKey: .financialConnections)
         self.mandateOptions = try container.decodeIfPresent(PaymentIntentUpdateParamsPaymentMethodOptionsUsBankAccountMandateOptions.self, forKey: .mandateOptions)
         self.networks = try container.decodeIfPresent(PaymentIntentUpdateParamsPaymentMethodOptionsUsBankAccountNetworks.self, forKey: .networks)
-        self.setupFutureUsage = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsAcssDebitSetupFutureUsage.self, forKey: .setupFutureUsage)
+        self.setupFutureUsage = try container.decodeIfPresent(CheckoutSessionCreateParamsPaymentMethodOptionsUpiSetupFutureUsage.self, forKey: .setupFutureUsage)
         self.targetDate = try container.decodeIfPresent(String.self, forKey: .targetDate)
         self.transactionPurpose = try container.decodeIfPresent(PaymentIntentCreateParamsPaymentMethodOptionsUsBankAccountTransactionPurpose.self, forKey: .transactionPurpose)
         self.verificationMethod = try container.decodeIfPresent(CheckoutAcssDebitPaymentMethodOptionsVerificationMethod.self, forKey: .verificationMethod)
@@ -57498,13 +57140,13 @@ public struct PaymentLinkCreateParamsInvoiceCreationInvoiceDataIssuer: Sendable,
 }
 
 public struct PaymentLinkCreateParamsInvoiceCreationInvoiceDataRenderingOptions: Sendable, Codable, Equatable, Hashable {
-    public var amountTaxDisplay: CustomerCreateParamsInvoiceSettingsRenderingOptionsAmountTaxDisplay?
+    public var amountTaxDisplay: CheckoutSessionCreateParamsInvoiceCreationInvoiceDataRenderingOptionsAmountTaxDisplay?
     public var template: String?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(amountTaxDisplay: CustomerCreateParamsInvoiceSettingsRenderingOptionsAmountTaxDisplay? = nil, template: String? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(amountTaxDisplay: CheckoutSessionCreateParamsInvoiceCreationInvoiceDataRenderingOptionsAmountTaxDisplay? = nil, template: String? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.amountTaxDisplay = amountTaxDisplay
         self.template = template
         self.unknownFields = unknownFields
@@ -57517,7 +57159,7 @@ public struct PaymentLinkCreateParamsInvoiceCreationInvoiceDataRenderingOptions:
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.amountTaxDisplay = try container.decodeIfPresent(CustomerCreateParamsInvoiceSettingsRenderingOptionsAmountTaxDisplay.self, forKey: .amountTaxDisplay)
+        self.amountTaxDisplay = try container.decodeIfPresent(CheckoutSessionCreateParamsInvoiceCreationInvoiceDataRenderingOptionsAmountTaxDisplay.self, forKey: .amountTaxDisplay)
         self.template = try container.decodeIfPresent(String.self, forKey: .template)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
@@ -60062,13 +59704,13 @@ public struct PaymentLinkUpdateParamsInvoiceCreationInvoiceDataIssuer: Sendable,
 }
 
 public struct PaymentLinkUpdateParamsInvoiceCreationInvoiceDataRenderingOptions: Sendable, Codable, Equatable, Hashable {
-    public var amountTaxDisplay: CustomerCreateParamsInvoiceSettingsRenderingOptionsAmountTaxDisplay?
+    public var amountTaxDisplay: CheckoutSessionCreateParamsInvoiceCreationInvoiceDataRenderingOptionsAmountTaxDisplay?
     public var template: String?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(amountTaxDisplay: CustomerCreateParamsInvoiceSettingsRenderingOptionsAmountTaxDisplay? = nil, template: String? = nil, unknownFields: [String: JSONValue]? = nil) {
+    public init(amountTaxDisplay: CheckoutSessionCreateParamsInvoiceCreationInvoiceDataRenderingOptionsAmountTaxDisplay? = nil, template: String? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.amountTaxDisplay = amountTaxDisplay
         self.template = template
         self.unknownFields = unknownFields
@@ -60081,7 +59723,7 @@ public struct PaymentLinkUpdateParamsInvoiceCreationInvoiceDataRenderingOptions:
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.amountTaxDisplay = try container.decodeIfPresent(CustomerCreateParamsInvoiceSettingsRenderingOptionsAmountTaxDisplay.self, forKey: .amountTaxDisplay)
+        self.amountTaxDisplay = try container.decodeIfPresent(CheckoutSessionCreateParamsInvoiceCreationInvoiceDataRenderingOptionsAmountTaxDisplay.self, forKey: .amountTaxDisplay)
         self.template = try container.decodeIfPresent(String.self, forKey: .template)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {

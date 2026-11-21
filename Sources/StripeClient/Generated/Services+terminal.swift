@@ -9,10 +9,11 @@ import StripeModels
 // Generated client methods for the terminal resources.
 extension StripeClient {
     /// create /v1/terminal/configurations (POST).
-    public func createConfiguration(expand: [String]? = nil, idempotencyKey: String? = nil) async throws -> TerminalConfiguration {
+    public func createConfiguration(_ params: TerminalConfigurationCreateParams, expand: [String]? = nil, idempotencyKey: String? = nil) async throws -> TerminalConfiguration {
         try await self.request(
             method: "POST",
             path: "/v1/terminal/configurations",
+            params: params,
             expand: expand,
             idempotencyKey: idempotencyKey,
         )
@@ -30,28 +31,31 @@ extension StripeClient {
     }
 
     /// list /v1/terminal/configurations (GET).
-    public func listConfigurations(expand: [String]? = nil) async throws -> TerminalConfigurationConfigurationList {
+    public func listTerminalConfigurations(_ params: TerminalConfigurationListParams? = nil, expand: [String]? = nil) async throws -> TerminalConfigurationConfigurationList {
         try await self.request(
             method: "GET",
             path: "/v1/terminal/configurations",
+            params: params,
             expand: expand,
         )
     }
 
     /// retrieve /v1/terminal/configurations/{configuration} (GET).
-    public func retrieveConfiguration(configuration: String, expand: [String]? = nil) async throws -> ConfigurationResponse {
+    public func retrieveConfiguration(configuration: String, _ params: TerminalConfigurationRetrieveParams? = nil, expand: [String]? = nil) async throws -> ConfigurationResponse {
         try await self.request(
             method: "GET",
             path: "/v1/terminal/configurations/\(Self.encodePathSegment(configuration))",
+            params: params,
             expand: expand,
         )
     }
 
     /// update /v1/terminal/configurations/{configuration} (POST).
-    public func updateConfiguration(configuration: String, expand: [String]? = nil, idempotencyKey: String? = nil) async throws -> ConfigurationResponse {
+    public func updateConfiguration(configuration: String, _ params: TerminalConfigurationUpdateParams, expand: [String]? = nil, idempotencyKey: String? = nil) async throws -> ConfigurationResponse {
         try await self.request(
             method: "POST",
             path: "/v1/terminal/configurations/\(Self.encodePathSegment(configuration))",
+            params: params,
             expand: expand,
             idempotencyKey: idempotencyKey,
         )
@@ -69,10 +73,11 @@ extension StripeClient {
     }
 
     /// create /v1/terminal/locations (POST).
-    public func createLocation(expand: [String]? = nil, idempotencyKey: String? = nil) async throws -> TerminalLocation {
+    public func createLocation(_ params: TerminalLocationCreateParams, expand: [String]? = nil, idempotencyKey: String? = nil) async throws -> TerminalLocation {
         try await self.request(
             method: "POST",
             path: "/v1/terminal/locations",
+            params: params,
             expand: expand,
             idempotencyKey: idempotencyKey,
         )
@@ -90,19 +95,21 @@ extension StripeClient {
     }
 
     /// list /v1/terminal/locations (GET).
-    public func listLocations(expand: [String]? = nil) async throws -> TerminalLocationLocationList {
+    public func listTerminalLocations(_ params: TerminalLocationListParams? = nil, expand: [String]? = nil) async throws -> TerminalLocationLocationList {
         try await self.request(
             method: "GET",
             path: "/v1/terminal/locations",
+            params: params,
             expand: expand,
         )
     }
 
     /// retrieve /v1/terminal/locations/{location} (GET).
-    public func retrieveLocation(location: String, expand: [String]? = nil) async throws -> LocationResponse {
+    public func retrieveLocation(location: String, _ params: TerminalLocationRetrieveParams? = nil, expand: [String]? = nil) async throws -> LocationResponse {
         try await self.request(
             method: "GET",
             path: "/v1/terminal/locations/\(Self.encodePathSegment(location))",
+            params: params,
             expand: expand,
         )
     }
