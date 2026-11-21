@@ -11,10 +11,20 @@ echo "== inventory check (spec vs generated docs) =="
 swift run inventory check
 
 echo "== regenerate models; fail on drift =="
-swift run stripe-gen
-if [ -n "$(git status --porcelain Sources/StripeModels/Generated Sources/StripeClient/Generated)" ]; then
+# Regen must reproduce the tree exactly as it stands: generate, hash the
+# Generated trees, and require the same hashes as before the run. This
+# catches stale and hand-edited generated code in CI while still passing
+# when the tree intentionally carries a fresh uncommitted regeneration
+# (a `git status` check would false-fail there).
+GEN_TREE_HASH() {
+    find Sources/StripeModels/Generated Sources/StripeClient/Generated -type f -print0 \
+        | sort -z | xargs -0 shasum | shasum | cut -d ' ' -f 1
+}
+BEFORE_GEN_HASH=$(GEN_TREE_HASH)
+swift run stripe-gen > /dev/null
+AFTER_GEN_HASH=$(GEN_TREE_HASH)
+if [ "$BEFORE_GEN_HASH" != "$AFTER_GEN_HASH" ]; then
     echo "ERROR: generated code is stale. Run 'swift run stripe-gen' and commit the result." >&2
-    git status --porcelain Sources/StripeModels/Generated Sources/StripeClient/Generated >&2
     exit 1
 fi
 
@@ -83,15 +93,22 @@ if xcodebuild -version >/dev/null 2>&1; then
     if [ -n "${GEIST6_SIM_NAME:-}" ]; then
         SIM_NAME="$GEIST6_SIM_NAME"
     else
-        SIM_NAME=$(xcrun simctl list devices available 2>/dev/null | awk '
+        # Shared machine (2026-11-18): prefer a device created for this
+        # checkout (zGeist6_bot-*) so runs never land on another bot's
+        # device; fall back to any iPad for CI, which creates none.
+        SIMS=$(xcrun simctl list devices available 2>/dev/null | awk '
         /^-- iOS/ { have=1; next }
         /^--/ { if (have) exit; next }
         have && /iPad/ {
             line=$0
             sub(/^[ ]+/, "", line)
             sub(/ \([A-F0-9-]{36}\) .*/, "", line)
-            print line; exit
+            print line
         }')
+        SIM_NAME=$(printf "%s\n" "$SIMS" | grep "zGeist6_bot" | head -n 1)
+        if [ -z "$SIM_NAME" ]; then
+            SIM_NAME=$(printf "%s\n" "$SIMS" | head -n 1)
+        fi
     fi
     if [ -z "$SIM_NAME" ]; then
         echo "xcodebuild test: FAILED — no iPad simulator installed (the app is iPad-only). Install an iPad-capable iOS runtime." >&2
@@ -108,11 +125,38 @@ if xcodebuild -version >/dev/null 2>&1; then
     # the PruneExplicitPrecompiledModules phase. The path is unique per
     # run so two overlapping invocations can never clobber each other's
     # build products mid-test.
-    DD=/tmp/geist6-dd-$$
-    rm -rf "$DD"
-    if xcodebuild -project Geist6.xcodeproj -scheme Geist6 \
+    # Reusing a prewarmed path (GEIST6_DD) must not wipe it; fresh paths
+    # start clean so overlapping runs never clobber each other.
+    DD="${GEIST6_DD:-/tmp/geist6-dd-$$}"
+    if [ -z "${GEIST6_DD:-}" ]; then
+        rm -rf "$DD"
+    fi
+    # -clonedSourcePackagesDirPath keeps package resolution inside DD so a
+    # prewarmed path (built with build-for-testing) resolves identically.
+    # On the shared dev machine every simulator run goes through sim-lock
+    # (xcodebuild's test service is process-wide); CI has no such wrapper,
+    # so the prefix stays empty there.
+    LOCK=""
+    if [ -x "$HOME/.hermes/bin/sim-lock" ]; then
+        LOCK="$HOME/.hermes/bin/sim-lock"
+    fi
+    if [ -n "${GEIST6_DD:-}" ]; then
+        if $LOCK xcodebuild -project Geist6.xcodeproj -scheme Geist6 \
+            -destination "platform=iOS Simulator,name=$SIM_NAME,OS=latest" \
+            -derivedDataPath "$DD" \
+            -clonedSourcePackagesDirPath "$DD/pkgs" \
+            test-without-building > "$TEST_LOG" 2>&1; then
+            echo "xcodebuild test: passed (prewarmed, full log in $TEST_LOG)"
+        else
+            echo "xcodebuild test: FAILED (see $TEST_LOG)" >&2
+            tail -40 "$TEST_LOG" >&2
+            kill "$MOCK_PID" 2>/dev/null || true
+            exit 1
+        fi
+    elif $LOCK xcodebuild -project Geist6.xcodeproj -scheme Geist6 \
         -destination "platform=iOS Simulator,name=$SIM_NAME,OS=latest" \
         -derivedDataPath "$DD" \
+        -clonedSourcePackagesDirPath "$DD/pkgs" \
         test > "$TEST_LOG" 2>&1; then
         echo "xcodebuild test: passed (full log in $TEST_LOG)"
     else
@@ -122,7 +166,9 @@ if xcodebuild -version >/dev/null 2>&1; then
         rm -rf "$DD"
         exit 1
     fi
-    rm -rf "$DD"
+    if [ -z "${GEIST6_DD:-}" ]; then
+        rm -rf "$DD"
+    fi
 
     kill "$MOCK_PID" 2>/dev/null || true
     wait "$MOCK_PID" 2>/dev/null || true
