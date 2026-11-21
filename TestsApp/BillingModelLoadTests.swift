@@ -45,6 +45,8 @@ private struct FaultInjectingBackend: BillingBackend {
     return invoices
   }
   func retrieveInvoice(id: String) async throws -> Invoice { throw StubError.boom }
+  func subscriptions() async throws -> [Subscription] { [] }
+  func retrieveSubscription(id: String) async throws -> Subscription { throw StubError.boom }
 
   func retrieveBalance() async throws -> Balance { throw StubError.boom }
   func balanceTransactions(created: DateInterval?, currency: String?) async throws

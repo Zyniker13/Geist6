@@ -37,6 +37,8 @@ private struct SearchRecordingBackend: BillingBackend {
 
   func invoices() async throws -> [Invoice] { invoices }
   func retrieveInvoice(id: String) async throws -> Invoice { throw StubError.missing }
+  func subscriptions() async throws -> [Subscription] { [] }
+  func retrieveSubscription(id: String) async throws -> Subscription { throw StubError.missing }
 
   func retrieveBalance() async throws -> Balance { throw StubError.missing }
   func balanceTransactions(created: DateInterval?, currency: String?) async throws

@@ -50,6 +50,12 @@ public protocol BillingBackend: StripeDataBackend, Sendable {
 
     /// A single invoice.
     func retrieveInvoice(id: String) async throws -> Invoice
+
+    /// The account's subscriptions, newest first (Stripe's list order).
+    func subscriptions() async throws -> [Subscription]
+
+    /// A single subscription.
+    func retrieveSubscription(id: String) async throws -> Subscription
 }
 
 // MARK: - StripeClient conformance
@@ -114,5 +120,14 @@ extension StripeClient: BillingBackend {
 
     public func retrieveInvoice(id: String) async throws -> Invoice {
         try await self.retrieveInvoice(invoice: id)
+    }
+
+    public func subscriptions() async throws -> [Subscription] {
+        let result = try await listSubscriptions()
+        return result.data
+    }
+
+    public func retrieveSubscription(id: String) async throws -> Subscription {
+        try await self.retrieveSubscription(subscriptionExposedId: id)
     }
 }
