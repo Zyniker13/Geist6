@@ -2,13 +2,15 @@ import GeistData
 import StripeModels
 import SwiftUI
 
-/// A tapped row's destination: the product detail screen fetches by ID.
+/// A tapped row's destination.
 enum BillingRoute: Hashable {
   case product(String)
+  case coupon(String)
+  case promotionCode(String)
 }
 
-/// The billing segment: the account's product catalog with search, and
-/// the write entry points when the account allows writes.
+/// The billing segment: the product catalog with search, and the write
+/// entry points when the account allows writes.
 struct BillingView: View {
   let account: Account
   let backend: any BillingBackend
@@ -18,6 +20,8 @@ struct BillingView: View {
   @State private var model: BillingModel?
   @State private var createProductPresented = false
   @State private var createPricePresented = false
+  @State private var createCouponPresented = false
+  @State private var createPromotionCodePresented = false
   @State private var writeResult: WriteResult?
   @State private var searchText = ""
 
@@ -52,6 +56,18 @@ struct BillingView: View {
               Label("New price", systemImage: "tag")
             }
             .accessibilityIdentifier("billing.newPrice")
+            Button {
+              createCouponPresented = true
+            } label: {
+              Label("New coupon", systemImage: "ticket")
+            }
+            .accessibilityIdentifier("billing.newCoupon")
+            Button {
+              createPromotionCodePresented = true
+            } label: {
+              Label("New promotion code", systemImage: "qrcode")
+            }
+            .accessibilityIdentifier("billing.newPromotionCode")
           } label: {
             Label("Add", systemImage: "plus")
           }
@@ -69,41 +85,41 @@ struct BillingView: View {
         CreatePriceSheet(writer: writer, presetProductID: nil, onFinished: handleWriteFinished)
       }
     }
+    .sheet(isPresented: $createCouponPresented) {
+      if let writer {
+        CreateCouponSheet(writer: writer, onFinished: handleWriteFinished)
+      }
+    }
+    .sheet(isPresented: $createPromotionCodePresented) {
+      if let writer {
+        CreatePromotionCodeSheet(
+          writer: writer, coupons: model?.coupons ?? [], onFinished: handleWriteFinished)
+      }
+    }
     .writeResultAlert($writeResult)
   }
 
   private func handleWriteFinished(_ result: WriteResult) {
     createProductPresented = false
     createPricePresented = false
+    createCouponPresented = false
+    createPromotionCodePresented = false
     writeResult = result
     Task { await model?.load() }
   }
 
   @ViewBuilder
   private func content(_ model: BillingModel) -> some View {
-    switch model.phase {
-    case .failed(let message):
-      ContentUnavailableView(
-        "Couldn't load billing",
-        systemImage: "exclamationmark.triangle",
-        description: Text(message)
-      )
-    default:
-      list(model)
-    }
+    list(model)
   }
 
   @ViewBuilder
   private func list(_ model: BillingModel) -> some View {
-    if model.phase == .loading, model.products.isEmpty {
+    if model.phase == .loading, model.products.isEmpty, model.coupons.isEmpty,
+      model.promotionCodes.isEmpty
+    {
       ProgressView()
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-    } else if model.products.isEmpty {
-      ContentUnavailableView(
-        "No products",
-        systemImage: "shippingbox",
-        description: Text(emptyDescription(model))
-      )
     } else {
       rows(model)
     }
@@ -112,11 +128,61 @@ struct BillingView: View {
   @ViewBuilder
   private func rows(_ model: BillingModel) -> some View {
     List {
-      ForEach(model.products, id: \.id) { product in
-        NavigationLink(value: BillingRoute.product(product.id)) {
-          ProductRow(product: product)
+      // Products section
+      Section("Products") {
+        if model.products.isEmpty {
+          if let error = model.productsError {
+            Text("Couldn't load products: ") + Text(error)
+          } else {
+            Text(model.searchQuery.isEmpty ? "No products yet" : "No matching products")
+              .foregroundStyle(.secondary)
+          }
+        } else {
+          ForEach(model.products, id: \.id) { product in
+            NavigationLink(value: BillingRoute.product(product.id)) {
+              ProductRow(product: product)
+            }
+            .accessibilityIdentifier("billing.row.product.\(product.id)")
+          }
         }
-        .accessibilityIdentifier("billing.row.\(product.id)")
+      }
+
+      // Coupons section
+      Section("Coupons") {
+        if model.coupons.isEmpty {
+          if let error = model.couponsError {
+            Text("Couldn't load coupons: ") + Text(error)
+          } else {
+            Text(model.searchQuery.isEmpty ? "No coupons yet" : "No matching coupons")
+              .foregroundStyle(.secondary)
+          }
+        } else {
+          ForEach(model.coupons, id: \.id) { coupon in
+            NavigationLink(value: BillingRoute.coupon(coupon.id)) {
+              CouponRow(coupon: coupon)
+            }
+            .accessibilityIdentifier("billing.row.coupon.\(coupon.id)")
+          }
+        }
+      }
+
+      // Promotion codes section
+      Section("Promotion codes") {
+        if model.promotionCodes.isEmpty {
+          if let error = model.promotionCodesError {
+            Text("Couldn't load promotion codes: ") + Text(error)
+          } else {
+            Text(model.searchQuery.isEmpty ? "No promotion codes yet" : "No matching promotion codes")
+              .foregroundStyle(.secondary)
+          }
+        } else {
+          ForEach(model.promotionCodes, id: \.id) { promo in
+            NavigationLink(value: BillingRoute.promotionCode(promo.id)) {
+              PromotionCodeRow(promotionCode: promo)
+            }
+            .accessibilityIdentifier("billing.row.promotion.\(promo.id)")
+          }
+        }
       }
     }
     .overlay(alignment: .top) {
@@ -126,6 +192,10 @@ struct BillingView: View {
       switch route {
       case .product(let id):
         ProductDetailView(productID: id, backend: backend, writer: writer)
+      case .coupon(let id):
+        CouponDetailView(couponID: id, backend: backend, writer: writer)
+      case .promotionCode(let id):
+        PromotionCodeDetailView(promotionCodeID: id, backend: backend, writer: writer)
       }
     }
     .searchable(
@@ -136,14 +206,6 @@ struct BillingView: View {
     .onSubmit(of: .search) {
       Task { await model.search(searchText) }
     }
-  }
-
-  /// Distinguishes "nothing exists yet" from "the search narrowed it away".
-  private func emptyDescription(_ model: BillingModel) -> String {
-    if !model.searchQuery.isEmpty {
-      return "No results match the search."
-    }
-    return "Nothing has been created yet."
   }
 }
 
@@ -176,5 +238,86 @@ struct ProductRow: View {
     }
     parts.append(product.active ? "Active" : "Inactive")
     return parts.joined(separator: " · ")
+  }
+}
+
+/// One coupon in the list: name, discount type, duration.
+struct CouponRow: View {
+  let coupon: Coupon
+
+  var body: some View {
+    VStack(alignment: .leading, spacing: 2) {
+      Text(title)
+        .font(.body)
+      Text(subtitle)
+        .font(.footnote)
+        .foregroundStyle(.secondary)
+    }
+    .padding(.vertical, 2)
+  }
+
+  private var title: String {
+    if let name = coupon.name.valueOrNil, !name.isEmpty { return name }
+    return coupon.id
+  }
+
+  private var subtitle: String {
+    var parts: [String] = []
+    if let amountOff = coupon.amountOff.valueOrNil {
+      let formatted = String(format: "%.2f", Double(amountOff) / 100.0)
+      let currency = (coupon.currency.valueOrNil ?? "usd").uppercased()
+      parts.append("−\(formatted) \(currency)")
+    } else if let percentOff = coupon.percentOff.valueOrNil {
+      parts.append("\(percentOff)% off")
+    }
+    parts.append(coupon.duration.displayString)
+    parts.append(coupon.valid ? "Valid" : "Invalid")
+    return parts.joined(separator: " · ")
+  }
+}
+
+/// One promotion code in the list: code string, active state, coupon name.
+struct PromotionCodeRow: View {
+  let promotionCode: PromotionCode
+
+  var body: some View {
+    VStack(alignment: .leading, spacing: 2) {
+      Text(title)
+        .font(.body)
+      Text(subtitle)
+        .font(.footnote)
+        .foregroundStyle(.secondary)
+    }
+    .padding(.vertical, 2)
+  }
+
+  private var title: String {
+    if !promotionCode.code.isEmpty { return promotionCode.code }
+    return promotionCode.id
+  }
+
+  private var subtitle: String {
+    var parts: [String] = []
+    if let couponName = promotionCode.promotion.coupon.valueOrNil?.objectOrNil?.name.valueOrNil,
+      !couponName.isEmpty
+    {
+      parts.append(couponName)
+    }
+    parts.append(promotionCode.active ? "Active" : "Inactive")
+    parts.append("Redeemed \(promotionCode.timesRedeemed)×")
+    return parts.joined(separator: " · ")
+  }
+}
+
+// MARK: - Helpers
+
+extension CouponDuration {
+  var displayString: String {
+    switch self {
+    case .once: return "Once"
+    case .repeating: return "Repeating"
+    case .forever: return "Forever"
+    case .undocumented(let value): return value
+    }
   }
 }
