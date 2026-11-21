@@ -7,6 +7,7 @@ enum BillingRoute: Hashable {
   case product(String)
   case coupon(String)
   case promotionCode(String)
+  case invoice(String)
 }
 
 /// The billing segment: the product catalog with search, and the write
@@ -116,7 +117,7 @@ struct BillingView: View {
   @ViewBuilder
   private func list(_ model: BillingModel) -> some View {
     if model.phase == .loading, model.products.isEmpty, model.coupons.isEmpty,
-      model.promotionCodes.isEmpty
+      model.promotionCodes.isEmpty, model.invoices.isEmpty
     {
       ProgressView()
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -184,6 +185,26 @@ struct BillingView: View {
           }
         }
       }
+      // Invoices section
+      Section("Invoices") {
+        if model.invoices.isEmpty {
+          if let error = model.invoicesError {
+            Text("Couldn't load invoices: ") + Text(error)
+          } else {
+            Text(model.searchQuery.isEmpty ? "No invoices yet" : "No matching invoices")
+              .foregroundStyle(.secondary)
+          }
+        } else {
+          ForEach(model.invoices, id: \.id) { invoice in
+            if let id = invoice.id {
+              NavigationLink(value: BillingRoute.invoice(id)) {
+                InvoiceRow(invoice: invoice)
+              }
+              .accessibilityIdentifier("billing.row.invoice.\(id)")
+            }
+          }
+        }
+      }
     }
     .overlay(alignment: .top) {
       if model.phase == .loading { ProgressView().padding(.top, 4) }
@@ -196,6 +217,8 @@ struct BillingView: View {
         CouponDetailView(couponID: id, backend: backend, writer: writer)
       case .promotionCode(let id):
         PromotionCodeDetailView(promotionCodeID: id, backend: backend, writer: writer)
+      case .invoice(let id):
+        InvoiceDetailView(invoiceID: id, backend: backend, writer: writer)
       }
     }
     .searchable(
@@ -305,6 +328,37 @@ struct PromotionCodeRow: View {
     }
     parts.append(promotionCode.active ? "Active" : "Inactive")
     parts.append("Redeemed \(promotionCode.timesRedeemed)×")
+    return parts.joined(separator: " · ")
+  }
+}
+
+/// One invoice in the list: number, status, total, customer email.
+struct InvoiceRow: View {
+  let invoice: Invoice
+
+  var body: some View {
+    VStack(alignment: .leading, spacing: 2) {
+      Text(title)
+        .font(.body)
+      Text(subtitle)
+        .font(.footnote)
+        .foregroundStyle(.secondary)
+    }
+    .padding(.vertical, 2)
+  }
+
+  private var title: String {
+    if let number = invoice.number.valueOrNil, !number.isEmpty { return number }
+    return invoice.id ?? "—"
+  }
+
+  private var subtitle: String {
+    var parts: [String] = []
+    parts.append(invoice.statusDisplay)
+    parts.append(MoneyFormat.amount(invoice.total, currency: invoice.currency))
+    if let email = invoice.customerEmail.valueOrNil, !email.isEmpty {
+      parts.append(email)
+    }
     return parts.joined(separator: " · ")
   }
 }

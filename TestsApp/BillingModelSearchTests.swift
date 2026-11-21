@@ -19,6 +19,7 @@ private struct SearchRecordingBackend: BillingBackend {
   var products: [Product] = []
   var coupons: [Coupon] = []
   var promotionCodes: [PromotionCode] = []
+  var invoices: [Invoice] = []
 
   func products() async throws -> [Product] { products }
   func searchProducts(query: String) async throws -> [Product] {
@@ -33,6 +34,9 @@ private struct SearchRecordingBackend: BillingBackend {
   func retrieveCoupon(id: String) async throws -> Coupon { throw StubError.missing }
   func promotionCodes() async throws -> [PromotionCode] { promotionCodes }
   func retrievePromotionCode(id: String) async throws -> PromotionCode { throw StubError.missing }
+
+  func invoices() async throws -> [Invoice] { invoices }
+  func retrieveInvoice(id: String) async throws -> Invoice { throw StubError.missing }
 
   func retrieveBalance() async throws -> Balance { throw StubError.missing }
   func balanceTransactions(created: DateInterval?, currency: String?) async throws
@@ -140,6 +144,13 @@ private let welcomePromotionCodeFixtureJSON = """
   }
   """
 
+/// A second invoice derived from the shared fixture with distinct identity
+/// fields, so search-filter tests can tell the two rows apart.
+private let secondInvoiceFixtureJSON = invoiceWriteFixtureJSON
+  .replacingOccurrences(of: "\"in_123\"", with: "\"in_456\"")
+  .replacingOccurrences(of: "\"number\": null", with: "\"number\": \"ABCD-0042\"")
+  .replacingOccurrences(of: "\"alice@example.com\"", with: "\"bob@example.com\"")
+
 private func decoded<T: Decodable>(_ json: String, as type: T.Type) -> T {
   guard let value = try? JSONDecoder().decode(T.self, from: Data(json.utf8)) else {
     preconditionFailure("fixture must decode")
@@ -151,11 +162,13 @@ private func decoded<T: Decodable>(_ json: String, as type: T.Type) -> T {
 @Suite
 struct BillingModelSearchTests {
   private func makeModel(
-    coupons: [Coupon] = [], promotionCodes: [PromotionCode] = []
+    coupons: [Coupon] = [], promotionCodes: [PromotionCode] = [],
+    invoices: [Invoice] = []
   ) -> (BillingModel, SearchRecorder) {
     let recorder = SearchRecorder()
     let backend = SearchRecordingBackend(
-      recorder: recorder, coupons: coupons, promotionCodes: promotionCodes)
+      recorder: recorder, coupons: coupons, promotionCodes: promotionCodes,
+      invoices: invoices)
     return (BillingModel(backend: backend), recorder)
   }
 
@@ -199,6 +212,20 @@ struct BillingModelSearchTests {
     #expect(model.promotionCodes.map(\.id) == ["promo_test_123"])
   }
 
+  @Test func searchFiltersInvoicesByIDCustomerEmailAndNumber() async {
+    let invoices = [
+      decoded(invoiceWriteFixtureJSON, as: Invoice.self),
+      decoded(secondInvoiceFixtureJSON, as: Invoice.self),
+    ]
+    let (model, _) = makeModel(invoices: invoices)
+    await model.search("bob")
+    #expect(model.invoices.map(\.id) == ["in_456"])
+    await model.search("0042")
+    #expect(model.invoices.map(\.id) == ["in_456"])
+    await model.search("in_123")
+    #expect(model.invoices.map(\.id) == ["in_123"])
+  }
+
   @Test func searchPassesQueryToStripeSearch() async {
     let (model, recorder) = makeModel()
     await model.search("gold")
@@ -213,6 +240,7 @@ struct BillingModelSearchTests {
     #expect(model.products.isEmpty)
     #expect(model.coupons.isEmpty)
     #expect(model.promotionCodes.isEmpty)
+    #expect(model.invoices.isEmpty)
     #expect(model.phase == .loaded)
   }
 }

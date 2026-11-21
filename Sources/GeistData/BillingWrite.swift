@@ -56,7 +56,7 @@ public struct BillingWriteService: Sendable {
 
   /// Runs one write: refuses in dashboard mode, performs the request with
   /// an idempotency key, records the outcome, and decodes the response.
-  private func run<Response: Decodable>(
+  func run<Response: Decodable>(
     _ type: Response.Type,
     method: String,
     path: String,
@@ -125,7 +125,7 @@ public struct BillingWriteService: Sendable {
     }
   }
 
-  private static func key() -> String { UUID().uuidString }
+  static func key() -> String { UUID().uuidString }
 
   // MARK: - Products
 

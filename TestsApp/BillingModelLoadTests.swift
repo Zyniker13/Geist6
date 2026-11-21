@@ -15,9 +15,11 @@ private struct FaultInjectingBackend: BillingBackend {
   var productsError: Error?
   var couponsError: Error?
   var promotionCodesError: Error?
+  var invoicesError: Error?
   var products: [Product] = []
   var coupons: [Coupon] = []
   var promotionCodes: [PromotionCode] = []
+  var invoices: [Invoice] = []
 
   func products() async throws -> [Product] {
     if let productsError { throw productsError }
@@ -38,6 +40,11 @@ private struct FaultInjectingBackend: BillingBackend {
     return promotionCodes
   }
   func retrievePromotionCode(id: String) async throws -> PromotionCode { throw StubError.boom }
+  func invoices() async throws -> [Invoice] {
+    if let invoicesError { throw invoicesError }
+    return invoices
+  }
+  func retrieveInvoice(id: String) async throws -> Invoice { throw StubError.boom }
 
   func retrieveBalance() async throws -> Balance { throw StubError.boom }
   func balanceTransactions(created: DateInterval?, currency: String?) async throws
@@ -151,6 +158,29 @@ struct BillingModelLoadTests {
     #expect(model.productsError != nil)
     #expect(model.couponsError != nil)
     #expect(model.promotionCodesError != nil)
+  }
+
+  @Test func invoicesSectionLoadsIndependently() async {
+    let backend = FaultInjectingBackend(
+      invoicesError: StubError.boom,
+      coupons: [decoded(couponFixtureJSON, as: Coupon.self)])
+    let model = BillingModel(backend: backend)
+    await model.load()
+    #expect(model.phase == .loaded)
+    #expect(model.invoicesError != nil)
+    #expect(model.couponsError == nil)
+    #expect(model.invoices.isEmpty)
+    #expect(model.coupons.count == 1)
+  }
+
+  @Test func invoicesSectionPopulatesFromBackend() async {
+    let backend = FaultInjectingBackend(
+      invoices: [decoded(invoiceWriteFixtureJSON, as: Invoice.self)])
+    let model = BillingModel(backend: backend)
+    await model.load()
+    #expect(model.phase == .loaded)
+    #expect(model.invoicesError == nil)
+    #expect(model.invoices.count == 1)
   }
 
   @Test func loadClearsStaleSectionErrorsOnSuccess() async {

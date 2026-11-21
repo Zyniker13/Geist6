@@ -1,7 +1,7 @@
 // Billing.swift — Sources/GeistData
 // The billing surface of the Stripe API used by the billing screens:
-// products, prices, coupons, and promotion codes, with search and
-// per-product price listings.
+// products, prices, coupons, promotion codes, and invoices, with search
+// and per-product price listings.
 //
 // Like `PaymentsBackend` and `CustomersBackend`, this protocol is read-only:
 // it has no write methods, so a view model built on it cannot write by
@@ -44,6 +44,12 @@ public protocol BillingBackend: StripeDataBackend, Sendable {
 
     /// A single promotion code.
     func retrievePromotionCode(id: String) async throws -> PromotionCode
+
+    /// The account's invoices, newest first (Stripe's list order).
+    func invoices() async throws -> [Invoice]
+
+    /// A single invoice.
+    func retrieveInvoice(id: String) async throws -> Invoice
 }
 
 // MARK: - StripeClient conformance
@@ -99,5 +105,14 @@ extension StripeClient: BillingBackend {
 
     public func retrievePromotionCode(id: String) async throws -> PromotionCode {
         try await retrievePromotionCode(promotionCode: id)
+    }
+
+    public func invoices() async throws -> [Invoice] {
+        let result = try await listInvoices()
+        return result.data
+    }
+
+    public func retrieveInvoice(id: String) async throws -> Invoice {
+        try await self.retrieveInvoice(invoice: id)
     }
 }
