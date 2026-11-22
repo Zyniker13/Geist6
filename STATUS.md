@@ -2,9 +2,9 @@
 
 Keep every field current after every meaningful step. This file and `ROADMAP.md` are the truth when work resumes.
 
-- **Current milestone:** M7 (Catalog) — overlay (4c5b39f, decision 0029), product rows (86e4efe), Prices section (f6fea79), Payouts segment (c180894), and promotion-code deactivate (0fc47ba) are in; M7 tier-1 coverage set complete.
-- **Last done:** Promotion-code deactivate (0fc47ba, pushed): PromotionCodeDetailView Actions menu — Edit… (existing sheet) and Deactivate… (destructive, confirmation, only when `active`) via `updatePromotionCode(active: false)` with idempotency key + dashboard-mode gate; detail refreshes after. Full local check.sh gate green (392 tests, 0 failures). Fixture fix as code: overlay generator writes `patched-fixtures3.json` (SHA-pinned upstream + promotion_code patched active=true, promotion.coupon set; upstream byte-identical — decision 0030); stripe-mock served from the patched copy. UI test proves detail → Deactivate → confirm → alert, POST `active:false` → 200 in the mock log.
-- **Next step:** Poll CI on 0fc47ba (proc a9953cc23a9a, ~15 min). Then decide whether ProductDetailView's inner price rows stay now that the top-level Prices section exists (decision record if removed), and continue M7 per ROADMAP.md.
+- **Current milestone:** M7 (Balances, Payouts, Reporting) — overlay (4c5b39f, decision 0029), product rows (86e4efe), Prices section (f6fea79), Payouts segment (c180894), promotion-code deactivate (0fc47ba) in; balances screens in flight (see Last done). Remaining M7 tier-1: this slice; tier-2 rows defer to M10 per ROADMAP line 119.
+- **Last done:** Balances screens slice complete and gate-green (uncommitted): `BalancesView` (per-currency Balance section + Ledger list) pushed from the now-tappable home balances card via new `HomeRoute.balances`; `BalanceTransactionDetailView` (Net/Fee/Gross facts, read-only); `PaymentRowCore`/`PaymentRowCaption` internal for row reuse; `BalanceReadTests` (client-level, 5/5), `BalancesIntegrationTests` (app-level vs stripe-mock), `BalancesUITests` (2/2: home card → Balances screen; ledger row → detail Net/Fee/Gross). Fixture fixes: balance fixture needed `destination` in `net_available` and `refund_and_dispute_prefunding` as available/pending arrays.
+- **Next step:** Commit + push the balances slice, poll CI. Then the ProductDetailView inner-price-rows question, then remaining M7 tier-1 per the coverage matrix.
 - **Blocked on:** Nothing.
 
 ## Environment Check

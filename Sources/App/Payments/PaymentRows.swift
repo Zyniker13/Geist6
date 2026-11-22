@@ -3,7 +3,8 @@ import StripeModels
 import SwiftUI
 
 /// One payment list row: amount, status pill, and a caption line.
-private struct PaymentRowCore<Caption: View>: View {
+/// Internal so the balances screens (M7) reuse the same row shape.
+struct PaymentRowCore<Caption: View>: View {
   let title: String
   let status: String
   @ViewBuilder let caption: Caption
@@ -23,7 +24,8 @@ private struct PaymentRowCore<Caption: View>: View {
 }
 
 /// A caption line with a leading glyph and secondary text.
-private struct PaymentRowCaption: View {
+/// Internal so the balances screens (M7) reuse the same caption shape.
+struct PaymentRowCaption: View {
   let symbol: String
   let text: String
 

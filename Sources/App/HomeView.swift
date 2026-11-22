@@ -11,6 +11,7 @@ enum HomeRoute: Hashable {
   case payments
   case customers
   case billing
+  case balances
   case event(String)
 }
 
@@ -68,6 +69,8 @@ struct HomeView: View {
         CustomersView(account: account, backend: paymentsClient, writer: customersWriter)
       case .billing:
         BillingView(account: account, backend: paymentsClient, writer: billingWriter)
+      case .balances:
+        BalancesView(backend: paymentsClient)
       case .event(let eventID):
         EventActivityDetailView(eventID: eventID, backend: model.backend)
       }
@@ -207,24 +210,31 @@ struct HomeView: View {
           .foregroundStyle(.secondary)
       }
       ForEach(balances) { balance in
-        HStack(alignment: .firstTextBaseline) {
-          Text(balance.currency.uppercased())
-            .font(.subheadline.weight(.medium))
-            .foregroundStyle(.secondary)
-          Spacer()
-          VStack(alignment: .trailing, spacing: 2) {
-            Text(Self.money(balance.available))
-              .font(.title3)
-              .fontWeight(.semibold)
-              .monospacedDigit()
-            Text("Pending \(Self.money(balance.pending))")
-              .font(.caption)
+        Button {
+          path.append(HomeRoute.balances)
+        } label: {
+          HStack(alignment: .firstTextBaseline) {
+            Text(balance.currency.uppercased())
+              .font(.subheadline.weight(.medium))
               .foregroundStyle(.secondary)
-              .monospacedDigit()
+            Spacer()
+            VStack(alignment: .trailing, spacing: 2) {
+              Text(Self.money(balance.available))
+                .font(.title3)
+                .fontWeight(.semibold)
+                .monospacedDigit()
+              Text("Pending \(Self.money(balance.pending))")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .monospacedDigit()
+            }
           }
+          .padding(.vertical, 6)
+          .contentShape(Rectangle())
         }
-        .padding(.vertical, 6)
+        .buttonStyle(.plain)
         .accessibilityElement(children: .combine)
+        .accessibilityIdentifier("home.balances")
         .accessibilityLabel(
           "\(balance.currency.uppercased()): available \(Self.money(balance.available)), "
             + "pending \(Self.money(balance.pending))"
