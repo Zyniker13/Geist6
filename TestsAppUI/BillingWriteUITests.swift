@@ -197,8 +197,30 @@ final class BillingWriteUITests: XCTestCase {
     waitHittable(app, productRow, "product row")
     productRow.tap()
 
+    let actions = app.buttons["billing.product.actions"]
+    XCTAssertTrue(actions.waitForExistence(timeout: 10), "product detail missing")
+    actions.tap()
     let edit = app.buttons["billing.product.edit"]
-    XCTAssertTrue(edit.waitForExistence(timeout: 10), "product detail missing")
+    XCTAssertTrue(edit.waitForExistence(timeout: 5), "product actions menu missing")
+  }
+
+  /// The Prices section decodes against the overlaid stripe-mock: the
+  /// fixture price row renders and pushes the price detail screen.
+  func testPriceRowsDecodeAndOpenDetail() {
+    let app = launchFresh()
+    addAccountAndWait(app, name: "Price Store")
+    openBilling(app)
+
+    let priceRow = app.descendants(matching: .any).matching(
+      NSPredicate(format: "identifier BEGINSWITH %@", "billing.row.price.price_")
+    ).firstMatch
+    XCTAssertTrue(priceRow.waitForExistence(timeout: 20),
+                  "price row missing — prices section failed to decode")
+    waitHittable(app, priceRow, "price row")
+    priceRow.tap()
+
+    let edit = app.buttons["price.edit"]
+    XCTAssertTrue(edit.waitForExistence(timeout: 10), "price detail missing")
   }
 
   // MARK: - Delete coupon flow

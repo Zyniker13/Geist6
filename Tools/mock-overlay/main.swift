@@ -116,7 +116,11 @@ private func verifyOrFetch(cacheDir: URL) {
                     "want \(file.sha256). The upstream file changed; update the " +
                     "pin deliberately (decision 0029).")
             }
-            try! fetched.write(to: destination)
+            do {
+                try fetched.write(to: destination)
+            } catch {
+                fatalError("mock-overlay: could not cache \(file.name): \(error)")
+            }
             data = fetched
         }
         _ = data
@@ -165,8 +169,13 @@ private func buildOverlay(cacheDir: URL) -> URL {
         schemas[schemaName] = schema
     }
     spec["components"] = components.merging(["schemas": schemas]) { _, new in new }
-    let data = try! JSONSerialization.data(withJSONObject: spec)
-    try! data.write(to: overlayURL)
+    let data: Data
+    do {
+        data = try JSONSerialization.data(withJSONObject: spec)
+        try data.write(to: overlayURL)
+    } catch {
+        fatalError("mock-overlay: could not write \(overlayURL.lastPathComponent): \(error)")
+    }
     return overlayURL
 }
 

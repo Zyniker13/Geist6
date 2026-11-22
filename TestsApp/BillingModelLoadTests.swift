@@ -13,6 +13,7 @@ private enum StubError: Error { case boom }
 /// independently.
 private struct FaultInjectingBackend: BillingBackend {
   var productsError: Error?
+  var pricesError: Error?
   var couponsError: Error?
   var promotionCodesError: Error?
   var invoicesError: Error?
@@ -27,8 +28,12 @@ private struct FaultInjectingBackend: BillingBackend {
   }
   func searchProducts(query: String) async throws -> [Product] { products }
   func retrieveProduct(byID: String) async throws -> Product { throw StubError.boom }
-  func prices(product: String?) async throws -> [Price] { [] }
-  func searchPrices(query: String) async throws -> [Price] { [] }
+  var prices: [Price] = []
+  func prices(product: String?) async throws -> [Price] {
+    if let pricesError { throw pricesError }
+    return prices
+  }
+  func searchPrices(query: String) async throws -> [Price] { prices }
   func retrievePrice(id: String) async throws -> Price { throw StubError.boom }
   func coupons() async throws -> [Coupon] {
     if let couponsError { throw couponsError }
@@ -84,6 +89,35 @@ private let couponFixtureJSON = """
   }
   """
 
+private let priceSectionFixtureJSON = """
+  {
+    "active": true,
+    "billing_scheme": "per_unit",
+    "created": 1234567890,
+    "currency": "usd",
+    "custom_unit_amount": null,
+    "id": "price_section_123",
+    "livemode": false,
+    "lookup_key": null,
+    "metadata": {},
+    "nickname": "Sticker Monthly",
+    "object": "price",
+    "product": "prod_section_123",
+    "recurring": {
+      "interval": "month",
+      "interval_count": 1,
+      "meter": null,
+      "usage_type": "licensed"
+    },
+    "tax_behavior": "unspecified",
+    "tiers_mode": null,
+    "transform_quantity": null,
+    "type": "recurring",
+    "unit_amount": 500,
+    "unit_amount_decimal": "500"
+  }
+  """
+
 private let promotionCodeFixtureJSON = """
   {
     "id": "promo_test_123",
@@ -108,10 +142,11 @@ private let promotionCodeFixtureJSON = """
   """
 
 private func decoded<T: Decodable>(_ json: String, as type: T.Type) -> T {
-  guard let value = try? JSONDecoder().decode(T.self, from: Data(json.utf8)) else {
-    preconditionFailure("fixture must decode")
+  do {
+    return try JSONDecoder().decode(T.self, from: Data(json.utf8))
+  } catch {
+    preconditionFailure("fixture must decode: \(error)")
   }
-  return value
 }
 
 @MainActor
@@ -160,6 +195,30 @@ struct BillingModelLoadTests {
     #expect(model.productsError != nil)
     #expect(model.couponsError != nil)
     #expect(model.promotionCodesError != nil)
+  }
+
+  @Test func pricesSectionLoadsIndependently() async {
+    let backend = FaultInjectingBackend(
+      pricesError: StubError.boom,
+      coupons: [decoded(couponFixtureJSON, as: Coupon.self)])
+    let model = BillingModel(backend: backend)
+    await model.load()
+    #expect(model.phase == .loaded)
+    #expect(model.pricesError != nil)
+    #expect(model.couponsError == nil)
+    #expect(model.prices.isEmpty)
+    #expect(model.coupons.count == 1)
+  }
+
+  @Test func pricesSectionPopulatesFromBackend() async {
+    let backend = FaultInjectingBackend(
+      prices: [decoded(priceSectionFixtureJSON, as: Price.self)])
+    let model = BillingModel(backend: backend)
+    await model.load()
+    #expect(model.phase == .loaded)
+    #expect(model.pricesError == nil)
+    #expect(model.prices.count == 1)
+    #expect(model.prices.first?.id == "price_section_123")
   }
 
   @Test func invoicesSectionLoadsIndependently() async {

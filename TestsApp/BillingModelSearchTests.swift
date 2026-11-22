@@ -27,8 +27,12 @@ private struct SearchRecordingBackend: BillingBackend {
     return products
   }
   func retrieveProduct(byID: String) async throws -> Product { throw StubError.missing }
-  func prices(product: String?) async throws -> [Price] { [] }
-  func searchPrices(query: String) async throws -> [Price] { [] }
+  var prices: [Price] = []
+  func prices(product: String?) async throws -> [Price] { prices }
+  func searchPrices(query: String) async throws -> [Price] {
+    recorder.searchedQuery = query
+    return prices
+  }
   func retrievePrice(id: String) async throws -> Price { throw StubError.missing }
   func coupons() async throws -> [Coupon] { coupons }
   func retrieveCoupon(id: String) async throws -> Coupon { throw StubError.missing }
@@ -153,6 +157,42 @@ private let secondInvoiceFixtureJSON = invoiceWriteFixtureJSON
   .replacingOccurrences(of: "\"number\": null", with: "\"number\": \"ABCD-0042\"")
   .replacingOccurrences(of: "\"alice@example.com\"", with: "\"bob@example.com\"")
 
+/// Price fixtures for the prices search-filter tests: a nickname and product
+/// ID that differ across the pair, matching the invoice tests' shape.
+private let sectionPriceFixtureJSON = """
+  {
+    "active": true,
+    "billing_scheme": "per_unit",
+    "created": 1234567890,
+    "currency": "usd",
+    "custom_unit_amount": null,
+    "id": "price_search_123",
+    "livemode": false,
+    "lookup_key": null,
+    "metadata": {},
+    "nickname": "Sticker Monthly",
+    "object": "price",
+    "product": "prod_search_123",
+    "recurring": {
+      "interval": "month",
+      "interval_count": 1,
+      "meter": null,
+      "usage_type": "licensed"
+    },
+    "tax_behavior": "unspecified",
+    "tiers_mode": null,
+    "transform_quantity": null,
+    "type": "recurring",
+    "unit_amount": 500,
+    "unit_amount_decimal": "500"
+  }
+  """
+
+private let secondPriceFixtureJSON = sectionPriceFixtureJSON
+  .replacingOccurrences(of: "\"price_search_123\"", with: "\"price_search_456\"")
+  .replacingOccurrences(of: "\"prod_search_123\"", with: "\"prod_search_456\"")
+  .replacingOccurrences(of: "Sticker Monthly", with: "Mug Annual")
+
 private func decoded<T: Decodable>(_ json: String, as type: T.Type) -> T {
   guard let value = try? JSONDecoder().decode(T.self, from: Data(json.utf8)) else {
     preconditionFailure("fixture must decode")
@@ -165,12 +205,13 @@ private func decoded<T: Decodable>(_ json: String, as type: T.Type) -> T {
 struct BillingModelSearchTests {
   private func makeModel(
     coupons: [Coupon] = [], promotionCodes: [PromotionCode] = [],
-    invoices: [Invoice] = []
+    invoices: [Invoice] = [], prices: [Price] = []
   ) -> (BillingModel, SearchRecorder) {
     let recorder = SearchRecorder()
-    let backend = SearchRecordingBackend(
+    var backend = SearchRecordingBackend(
       recorder: recorder, coupons: coupons, promotionCodes: promotionCodes,
       invoices: invoices)
+    backend.prices = prices
     return (BillingModel(backend: backend), recorder)
   }
 
@@ -226,6 +267,20 @@ struct BillingModelSearchTests {
     #expect(model.invoices.map(\.id) == ["in_456"])
     await model.search("in_123")
     #expect(model.invoices.map(\.id) == ["in_123"])
+  }
+
+  @Test func searchFiltersPricesByIDNicknameAndProduct() async {
+    let prices = [
+      decoded(sectionPriceFixtureJSON, as: Price.self),
+      decoded(secondPriceFixtureJSON, as: Price.self)
+    ]
+    let (model, _) = makeModel(prices: prices)
+    await model.search("mug")
+    #expect(model.prices.map(\.id) == ["price_search_456"])
+    await model.search("prod_search_123")
+    #expect(model.prices.map(\.id) == ["price_search_123"])
+    await model.search("price_search_456")
+    #expect(model.prices.map(\.id) == ["price_search_456"])
   }
 
   @Test func searchPassesQueryToStripeSearch() async {

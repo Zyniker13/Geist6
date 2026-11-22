@@ -20,6 +20,7 @@ final class BillingModel {
 
   private(set) var phase: Phase = .idle
   private(set) var products: [Product] = []
+  private(set) var prices: [Price] = []
   private(set) var coupons: [Coupon] = []
   private(set) var promotionCodes: [PromotionCode] = []
   private(set) var invoices: [Invoice] = []
@@ -28,6 +29,7 @@ final class BillingModel {
   /// independently: a decode or network failure in one section leaves the
   /// others loaded instead of blanking the whole screen.
   private(set) var productsError: String?
+  private(set) var pricesError: String?
   private(set) var couponsError: String?
   private(set) var promotionCodesError: String?
   private(set) var invoicesError: String?
@@ -38,19 +40,21 @@ final class BillingModel {
     self.backend = backend
   }
 
-  /// Loads the catalog: products, coupons, promotion codes, invoices, and
-  /// subscriptions. The sections load concurrently and settle independently;
-  /// the load ends once every section has either rows or a section error.
+  /// Loads the catalog: products, prices, coupons, promotion codes, invoices,
+  /// and subscriptions. The sections load concurrently and settle
+  /// independently; the load ends once every section has either rows or a
+  /// section error.
   func load() async {
     phase = .loading
     async let productsSettled: Void = loadProducts()
+    async let pricesSettled: Void = loadPrices()
     async let couponsSettled: Void = loadCoupons()
     async let promotionCodesSettled: Void = loadPromotionCodes()
     async let invoicesSettled: Void = loadInvoices()
     async let subscriptionsSettled: Void = loadSubscriptions()
     _ = await (
-      productsSettled, couponsSettled, promotionCodesSettled, invoicesSettled,
-      subscriptionsSettled
+      productsSettled, pricesSettled, couponsSettled, promotionCodesSettled,
+      invoicesSettled, subscriptionsSettled
     )
     phase = .loaded
   }
@@ -63,6 +67,32 @@ final class BillingModel {
       productsError = nil
     } catch {
       productsError = String(describing: error)
+    }
+  }
+
+  private func loadPrices() async {
+    do {
+      let all = try await backend.prices(product: nil)
+      prices = searchQuery.isEmpty
+        ? all
+        : all.filter { price in
+          matches(price.id) || matches(price.nickname.valueOrNil)
+            || matches(Self.priceProductID(price))
+        }
+      pricesError = nil
+    } catch {
+      pricesError = String(describing: error)
+    }
+  }
+
+  /// The product reference's ID, whether the payload carries the expandable
+  /// string, the expanded object, or its deleted twin.
+  static func priceProductID(_ price: Price) -> String? {
+    switch price.product {
+    case .string(let id): return id
+    case .product(let product): return product.id
+    case .deletedProduct(let deleted): return deleted.id
+    case .other: return nil
     }
   }
 

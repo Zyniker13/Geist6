@@ -5,6 +5,7 @@ import SwiftUI
 /// A tapped row's destination.
 enum BillingRoute: Hashable {
   case product(String)
+  case price(String)
   case coupon(String)
   case promotionCode(String)
   case invoice(String)
@@ -117,8 +118,9 @@ struct BillingView: View {
 
   @ViewBuilder
   private func list(_ model: BillingModel) -> some View {
-    if model.phase == .loading, model.products.isEmpty, model.coupons.isEmpty,
-      model.promotionCodes.isEmpty, model.invoices.isEmpty, model.subscriptions.isEmpty
+    if model.phase == .loading, model.products.isEmpty, model.prices.isEmpty,
+      model.coupons.isEmpty, model.promotionCodes.isEmpty, model.invoices.isEmpty,
+      model.subscriptions.isEmpty
     {
       ProgressView()
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -145,6 +147,25 @@ struct BillingView: View {
               ProductRow(product: product)
             }
             .accessibilityIdentifier("billing.row.product.\(product.id)")
+          }
+        }
+      }
+
+      // Prices section
+      Section("Prices") {
+        if model.prices.isEmpty {
+          if let error = model.pricesError {
+            Text("Couldn't load prices: ") + Text(error)
+          } else {
+            Text(model.searchQuery.isEmpty ? "No prices yet" : "No matching prices")
+              .foregroundStyle(.secondary)
+          }
+        } else {
+          ForEach(model.prices, id: \.id) { price in
+            NavigationLink(value: BillingRoute.price(price.id)) {
+              PriceRow(price: price)
+            }
+            .accessibilityIdentifier("billing.row.price.\(price.id)")
           }
         }
       }
@@ -233,6 +254,8 @@ struct BillingView: View {
       switch route {
       case .product(let id):
         ProductDetailView(productID: id, backend: backend, writer: writer)
+      case .price(let id):
+        PriceDetailView(priceID: id, backend: backend, writer: writer)
       case .coupon(let id):
         CouponDetailView(couponID: id, backend: backend, writer: writer)
       case .promotionCode(let id):

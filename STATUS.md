@@ -4,7 +4,7 @@ Keep every field current after every meaningful step. This file and `ROADMAP.md`
 
 - **Current milestone:** M7 (Catalog) slice 1 in progress. Overlay landed and proven on CI (4c5b39f, decision 0029); new UI test `testProductRowsDecodeAndOpenDetail` green on CI (86e4efe) — the Products section decodes against the overlaid mock and pushes product detail.
 - **Last done:** M6 slice 4 (Subscriptions) closed end to end (d45d5c6, e7127a1 on top of generator fix 098999f + decision 0028); three consecutive CI successes (44969960563, 44976858368, 44978357782).
-- **Next step:** M7 slice 1 continued: prices surfaced in BillingView (a Prices section or on product detail — currently only inside ProductDetailView), then the next roadmap-M6-adjacent catalog item still missing at tier 1; tier-2 rows wait for M10's descriptor engine (ROADMAP line 119).
+- **Next step:** when the full check.sh gate for the prices slice is green, commit and push; then M7 slice 3: coupons/promotion-codes polish (edit/delete flows for coupons already exist; promotion-code deactivate) and the tier-1 catalog item still missing; tier-2 rows wait for M10's descriptor engine (ROADMAP line 119).
 - **Blocked on:** Nothing.
 
 ## Environment Check
