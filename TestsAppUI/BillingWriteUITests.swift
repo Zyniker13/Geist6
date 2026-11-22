@@ -179,6 +179,28 @@ final class BillingWriteUITests: XCTestCase {
     dismissAlert(app)
   }
 
+  // MARK: - Catalog rows
+
+  /// The Products section decodes against the overlaid stripe-mock (decision
+  /// 0029): the fixture product row renders and pushes its detail screen,
+  /// which shows the product's fields and its price rows.
+  func testProductRowsDecodeAndOpenDetail() {
+    let app = launchFresh()
+    addAccountAndWait(app, name: "Catalog Store")
+    openBilling(app)
+
+    let productRow = app.descendants(matching: .any).matching(
+      NSPredicate(format: "identifier BEGINSWITH %@", "billing.row.product.prod_")
+    ).firstMatch
+    XCTAssertTrue(productRow.waitForExistence(timeout: 20),
+                  "product row missing — products section failed to decode")
+    waitHittable(app, productRow, "product row")
+    productRow.tap()
+
+    let edit = app.buttons["billing.product.edit"]
+    XCTAssertTrue(edit.waitForExistence(timeout: 10), "product detail missing")
+  }
+
   // MARK: - Delete coupon flow
 
   /// Deletes the coupon fixture from its detail screen: delete →
