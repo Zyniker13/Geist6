@@ -299,6 +299,14 @@ final class TypeEmitter {
     return name
   }
 
+  /// Fields the pinned spec marks required that Stripe in practice omits
+  /// on some shapes (stripe-mock follows the live API). Typed as plain
+  /// optionals so absence decodes to nil instead of keyNotFound. Each
+  /// entry is "<Struct>.<field>"; keep it short and documented.
+  static let legacyRequiredOptional: Set<String> = [
+    "SubscriptionItem.plan",
+  ]
+
   /// Lets allOf branches with $ref inline the referenced object's
   /// properties; populated lazily by the driver.
   var inlinedProperties: [String: [String: Any]] = [:]
@@ -354,7 +362,7 @@ final class TypeEmitter {
       decodable ? "Sendable, Codable, Equatable, Hashable" : "Sendable, Encodable, Hashable"
     let conformances = ([conformance] + extraConformances).joined(separator: ", ")
     lines.append("public struct \(name): \(conformances) {")
-    var swiftNames: [(json: String, swift: String, typeExpr: String)] = []
+    var swiftNames: [(json: String, swift: String, typeExpr: String, legacyOptional: Bool)] = []
     for field in fields {
       let swiftName = Naming.camel(field.jsonName)
       let innerType = swiftType(
@@ -363,9 +371,14 @@ final class TypeEmitter {
         bucket: bucket
       )
       let isNullable = field.schema["nullable"] as? Bool == true
+      // Spec-required fields Stripe no longer sends on every shape
+      // decode as plain optionals instead of throwing keyNotFound.
+      let legacyOptional =
+        field.required && Self.legacyRequiredOptional.contains("\(name).\(field.jsonName)")
       let typeExpr = TypeEmitter.optionalWrap(
-        innerType, nullable: isNullable, required: field.required)
-      swiftNames.append((field.jsonName, swiftName, typeExpr))
+        innerType, nullable: isNullable,
+        required: field.required && !legacyOptional)
+      swiftNames.append((field.jsonName, swiftName, typeExpr, legacyOptional))
       lines.append("    public var \(swiftName): \(typeExpr)")
     }
     if decodable {
@@ -432,6 +445,13 @@ final class TypeEmitter {
           lines.append(
             "        self.\(entry.swift) = try container.decodeIfPresent("
               + "\(base).self, forKey: .\(entry.swift)) ?? .null"
+          )
+        } else if entry.legacyOptional {
+          // Spec-required but Stripe omits it in practice (see
+          // legacyRequiredOptional below): a plain optional decodes
+          // absence honestly as nil instead of throwing keyNotFound.
+          lines.append(
+            "        self.\(entry.swift) = try container.decodeIfPresent(\(base).self, forKey: .\(entry.swift))"
           )
         } else {
           lines.append(
@@ -633,9 +653,16 @@ final class TypeEmitter {
         "           let tag = raw[\"object\"]?.stringValue ?? raw[\"type\"]?.stringValue {")
       for variant in variants {
         guard let tagValue = variant.tagValue else { continue }
+        // Tag branches must not throw: variants can share a tag (full vs
+        // deleted customer both tagged "customer"), and the full object is
+        // listed first, so a hard try makes the deleted branch unreachable
+        // and turns any missing required key into a fatal decode error.
+        // A try? guard keeps decoding order (full wins on complete data,
+        // deleted wins when the payload only fits the deleted shape) and
+        // falls through to the tolerant chain otherwise.
         lines.append(
-          "            if tag == \"\(tagValue)\" { self = .\(variant.swiftCase)(try container.decode("
-            + "\(variant.typeName).self)); return }"
+          "            if tag == \"" + tagValue + "\", let v = try? container.decode("
+            + "\(variant.typeName).self) { self = .\(variant.swiftCase)(v); return }"
         )
       }
       lines.append("        }")

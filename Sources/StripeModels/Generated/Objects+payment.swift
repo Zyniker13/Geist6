@@ -2652,8 +2652,8 @@ public enum PaymentIntentCustomer: Sendable, Codable, Equatable, Hashable {
         let container = try decoder.singleValueContainer()
         if let raw = try? container.decode([String: JSONValue].self),
            let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
-            if tag == "customer" { self = .customer(try container.decode(Customer.self)); return }
-            if tag == "customer" { self = .deletedCustomer(try container.decode(DeletedCustomer.self)); return }
+            if tag == "customer", let v = try? container.decode(Customer.self) { self = .customer(v); return }
+            if tag == "customer", let v = try? container.decode(DeletedCustomer.self) { self = .deletedCustomer(v); return }
         }
         if let value = try? container.decode(String.self) { self = .string(value); return }
         if let value = try? container.decode(Customer.self) { self = .customer(value); return }
@@ -7107,8 +7107,8 @@ public enum PaymentLinkApplication: Sendable, Codable, Equatable, Hashable {
         let container = try decoder.singleValueContainer()
         if let raw = try? container.decode([String: JSONValue].self),
            let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
-            if tag == "application" { self = .application(try container.decode(Application.self)); return }
-            if tag == "application" { self = .deletedApplication(try container.decode(DeletedApplication.self)); return }
+            if tag == "application", let v = try? container.decode(Application.self) { self = .application(v); return }
+            if tag == "application", let v = try? container.decode(DeletedApplication.self) { self = .deletedApplication(v); return }
         }
         if let value = try? container.decode(String.self) { self = .string(value); return }
         if let value = try? container.decode(Application.self) { self = .application(value); return }
@@ -8828,8 +8828,8 @@ public enum PaymentLinksResourceInvoiceSettingsAccountTaxIdsItem: Sendable, Coda
         let container = try decoder.singleValueContainer()
         if let raw = try? container.decode([String: JSONValue].self),
            let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
-            if tag == "tax_id" { self = .taxId(try container.decode(TaxId.self)); return }
-            if tag == "tax_id" { self = .deletedTaxId(try container.decode(DeletedTaxId.self)); return }
+            if tag == "tax_id", let v = try? container.decode(TaxId.self) { self = .taxId(v); return }
+            if tag == "tax_id", let v = try? container.decode(DeletedTaxId.self) { self = .deletedTaxId(v); return }
         }
         if let value = try? container.decode(String.self) { self = .string(value); return }
         if let value = try? container.decode(TaxId.self) { self = .taxId(value); return }
@@ -10249,8 +10249,8 @@ public enum PaymentLinksResourceSubscriptionDataInvoiceSettingsAccountTaxIdsItem
         let container = try decoder.singleValueContainer()
         if let raw = try? container.decode([String: JSONValue].self),
            let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
-            if tag == "tax_id" { self = .taxId(try container.decode(TaxId.self)); return }
-            if tag == "tax_id" { self = .deletedTaxId(try container.decode(DeletedTaxId.self)); return }
+            if tag == "tax_id", let v = try? container.decode(TaxId.self) { self = .taxId(v); return }
+            if tag == "tax_id", let v = try? container.decode(DeletedTaxId.self) { self = .deletedTaxId(v); return }
         }
         if let value = try? container.decode(String.self) { self = .string(value); return }
         if let value = try? container.decode(TaxId.self) { self = .taxId(value); return }
@@ -27579,8 +27579,8 @@ public enum PaymentPagesCheckoutSessionInvoiceSettingsAccountTaxIdsItem: Sendabl
         let container = try decoder.singleValueContainer()
         if let raw = try? container.decode([String: JSONValue].self),
            let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
-            if tag == "tax_id" { self = .taxId(try container.decode(TaxId.self)); return }
-            if tag == "tax_id" { self = .deletedTaxId(try container.decode(DeletedTaxId.self)); return }
+            if tag == "tax_id", let v = try? container.decode(TaxId.self) { self = .taxId(v); return }
+            if tag == "tax_id", let v = try? container.decode(DeletedTaxId.self) { self = .deletedTaxId(v); return }
         }
         if let value = try? container.decode(String.self) { self = .string(value); return }
         if let value = try? container.decode(TaxId.self) { self = .taxId(value); return }
@@ -28694,10 +28694,10 @@ public enum PaymentSource: Sendable, Codable, Equatable, Hashable {
         let container = try decoder.singleValueContainer()
         if let raw = try? container.decode([String: JSONValue].self),
            let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
-            if tag == "account" { self = .account(try container.decode(Account.self)); return }
-            if tag == "bank_account" { self = .bankAccount(try container.decode(BankAccount.self)); return }
-            if tag == "card" { self = .card(try container.decode(Card.self)); return }
-            if tag == "source" { self = .source(try container.decode(Source.self)); return }
+            if tag == "account", let v = try? container.decode(Account.self) { self = .account(v); return }
+            if tag == "bank_account", let v = try? container.decode(BankAccount.self) { self = .bankAccount(v); return }
+            if tag == "card", let v = try? container.decode(Card.self) { self = .card(v); return }
+            if tag == "source", let v = try? container.decode(Source.self) { self = .source(v); return }
         }
         if let value = try? container.decode(Account.self) { self = .account(value); return }
         if let value = try? container.decode(BankAccount.self) { self = .bankAccount(value); return }

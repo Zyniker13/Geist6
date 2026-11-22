@@ -970,8 +970,8 @@ public enum SubscriptionsResourceSubscriptionInvoiceSettingsAccountTaxIdsItem: S
         let container = try decoder.singleValueContainer()
         if let raw = try? container.decode([String: JSONValue].self),
            let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
-            if tag == "tax_id" { self = .taxId(try container.decode(TaxId.self)); return }
-            if tag == "tax_id" { self = .deletedTaxId(try container.decode(DeletedTaxId.self)); return }
+            if tag == "tax_id", let v = try? container.decode(TaxId.self) { self = .taxId(v); return }
+            if tag == "tax_id", let v = try? container.decode(DeletedTaxId.self) { self = .deletedTaxId(v); return }
         }
         if let value = try? container.decode(String.self) { self = .string(value); return }
         if let value = try? container.decode(TaxId.self) { self = .taxId(value); return }

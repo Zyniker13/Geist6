@@ -343,8 +343,8 @@ public enum ProductCatalogTrialOfferPrice: Sendable, Codable, Equatable, Hashabl
         let container = try decoder.singleValueContainer()
         if let raw = try? container.decode([String: JSONValue].self),
            let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
-            if tag == "price" { self = .price(try container.decode(Price.self)); return }
-            if tag == "price" { self = .deletedPrice(try container.decode(DeletedPrice.self)); return }
+            if tag == "price", let v = try? container.decode(Price.self) { self = .price(v); return }
+            if tag == "price", let v = try? container.decode(DeletedPrice.self) { self = .deletedPrice(v); return }
         }
         if let value = try? container.decode(String.self) { self = .string(value); return }
         if let value = try? container.decode(Price.self) { self = .price(value); return }
@@ -493,8 +493,8 @@ public enum ProductCatalogImplEndpointsTrialOfferResourceTransitionPrice: Sendab
         let container = try decoder.singleValueContainer()
         if let raw = try? container.decode([String: JSONValue].self),
            let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
-            if tag == "price" { self = .price(try container.decode(Price.self)); return }
-            if tag == "price" { self = .deletedPrice(try container.decode(DeletedPrice.self)); return }
+            if tag == "price", let v = try? container.decode(Price.self) { self = .price(v); return }
+            if tag == "price", let v = try? container.decode(DeletedPrice.self) { self = .deletedPrice(v); return }
         }
         if let value = try? container.decode(String.self) { self = .string(value); return }
         if let value = try? container.decode(Price.self) { self = .price(value); return }

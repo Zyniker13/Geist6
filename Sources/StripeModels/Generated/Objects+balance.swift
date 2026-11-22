@@ -1445,22 +1445,22 @@ public enum BalanceTransactionSource: Sendable, Codable, Equatable, Hashable {
         let container = try decoder.singleValueContainer()
         if let raw = try? container.decode([String: JSONValue].self),
            let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
-            if tag == "application_fee" { self = .applicationFee(try container.decode(ApplicationFee.self)); return }
-            if tag == "charge" { self = .charge(try container.decode(Charge.self)); return }
-            if tag == "connect_collection_transfer" { self = .connectCollectionTransfer(try container.decode(ConnectCollectionTransfer.self)); return }
-            if tag == "customer_cash_balance_transaction" { self = .customerCashBalanceTransaction(try container.decode(CustomerCashBalanceTransaction.self)); return }
-            if tag == "dispute" { self = .dispute(try container.decode(Dispute.self)); return }
-            if tag == "fee_refund" { self = .feeRefund(try container.decode(FeeRefund.self)); return }
-            if tag == "issuing.authorization" { self = .issuingAuthorization(try container.decode(IssuingAuthorization.self)); return }
-            if tag == "issuing.dispute" { self = .issuingDispute(try container.decode(IssuingDispute.self)); return }
-            if tag == "issuing.transaction" { self = .issuingTransaction(try container.decode(IssuingTransaction.self)); return }
-            if tag == "payout" { self = .payout(try container.decode(Payout.self)); return }
-            if tag == "refund" { self = .refund(try container.decode(Refund.self)); return }
-            if tag == "reserve_transaction" { self = .reserveTransaction(try container.decode(ReserveTransaction.self)); return }
-            if tag == "tax_deducted_at_source" { self = .taxDeductedAtSource(try container.decode(TaxDeductedAtSource.self)); return }
-            if tag == "topup" { self = .topup(try container.decode(Topup.self)); return }
-            if tag == "transfer" { self = .transfer(try container.decode(Transfer.self)); return }
-            if tag == "transfer_reversal" { self = .transferReversal(try container.decode(TransferReversal.self)); return }
+            if tag == "application_fee", let v = try? container.decode(ApplicationFee.self) { self = .applicationFee(v); return }
+            if tag == "charge", let v = try? container.decode(Charge.self) { self = .charge(v); return }
+            if tag == "connect_collection_transfer", let v = try? container.decode(ConnectCollectionTransfer.self) { self = .connectCollectionTransfer(v); return }
+            if tag == "customer_cash_balance_transaction", let v = try? container.decode(CustomerCashBalanceTransaction.self) { self = .customerCashBalanceTransaction(v); return }
+            if tag == "dispute", let v = try? container.decode(Dispute.self) { self = .dispute(v); return }
+            if tag == "fee_refund", let v = try? container.decode(FeeRefund.self) { self = .feeRefund(v); return }
+            if tag == "issuing.authorization", let v = try? container.decode(IssuingAuthorization.self) { self = .issuingAuthorization(v); return }
+            if tag == "issuing.dispute", let v = try? container.decode(IssuingDispute.self) { self = .issuingDispute(v); return }
+            if tag == "issuing.transaction", let v = try? container.decode(IssuingTransaction.self) { self = .issuingTransaction(v); return }
+            if tag == "payout", let v = try? container.decode(Payout.self) { self = .payout(v); return }
+            if tag == "refund", let v = try? container.decode(Refund.self) { self = .refund(v); return }
+            if tag == "reserve_transaction", let v = try? container.decode(ReserveTransaction.self) { self = .reserveTransaction(v); return }
+            if tag == "tax_deducted_at_source", let v = try? container.decode(TaxDeductedAtSource.self) { self = .taxDeductedAtSource(v); return }
+            if tag == "topup", let v = try? container.decode(Topup.self) { self = .topup(v); return }
+            if tag == "transfer", let v = try? container.decode(Transfer.self) { self = .transfer(v); return }
+            if tag == "transfer_reversal", let v = try? container.decode(TransferReversal.self) { self = .transferReversal(v); return }
         }
         if let value = try? container.decode(ApplicationFee.self) { self = .applicationFee(value); return }
         if let value = try? container.decode(Charge.self) { self = .charge(value); return }

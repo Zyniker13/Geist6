@@ -394,8 +394,8 @@ public enum DeletedDiscountCustomer: Sendable, Codable, Equatable, Hashable {
         let container = try decoder.singleValueContainer()
         if let raw = try? container.decode([String: JSONValue].self),
            let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
-            if tag == "customer" { self = .customer(try container.decode(Customer.self)); return }
-            if tag == "customer" { self = .deletedCustomer(try container.decode(DeletedCustomer.self)); return }
+            if tag == "customer", let v = try? container.decode(Customer.self) { self = .customer(v); return }
+            if tag == "customer", let v = try? container.decode(DeletedCustomer.self) { self = .deletedCustomer(v); return }
         }
         if let value = try? container.decode(String.self) { self = .string(value); return }
         if let value = try? container.decode(Customer.self) { self = .customer(value); return }
@@ -557,8 +557,8 @@ public enum DeletedExternalAccount: Sendable, Codable, Equatable, Hashable {
         let container = try decoder.singleValueContainer()
         if let raw = try? container.decode([String: JSONValue].self),
            let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
-            if tag == "bank_account" { self = .deletedBankAccount(try container.decode(DeletedBankAccount.self)); return }
-            if tag == "card" { self = .deletedCard(try container.decode(DeletedCard.self)); return }
+            if tag == "bank_account", let v = try? container.decode(DeletedBankAccount.self) { self = .deletedBankAccount(v); return }
+            if tag == "card", let v = try? container.decode(DeletedCard.self) { self = .deletedCard(v); return }
         }
         if let value = try? container.decode(DeletedBankAccount.self) { self = .deletedBankAccount(value); return }
         if let value = try? container.decode(DeletedCard.self) { self = .deletedCard(value); return }
@@ -751,8 +751,8 @@ public enum DeletedPaymentSource: Sendable, Codable, Equatable, Hashable {
         let container = try decoder.singleValueContainer()
         if let raw = try? container.decode([String: JSONValue].self),
            let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
-            if tag == "bank_account" { self = .deletedBankAccount(try container.decode(DeletedBankAccount.self)); return }
-            if tag == "card" { self = .deletedCard(try container.decode(DeletedCard.self)); return }
+            if tag == "bank_account", let v = try? container.decode(DeletedBankAccount.self) { self = .deletedBankAccount(v); return }
+            if tag == "card", let v = try? container.decode(DeletedCard.self) { self = .deletedCard(v); return }
         }
         if let value = try? container.decode(DeletedBankAccount.self) { self = .deletedBankAccount(value); return }
         if let value = try? container.decode(DeletedCard.self) { self = .deletedCard(value); return }

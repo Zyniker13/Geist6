@@ -14,8 +14,8 @@ public enum ExternalAccount: Sendable, Codable, Equatable, Hashable {
         let container = try decoder.singleValueContainer()
         if let raw = try? container.decode([String: JSONValue].self),
            let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
-            if tag == "bank_account" { self = .bankAccount(try container.decode(BankAccount.self)); return }
-            if tag == "card" { self = .card(try container.decode(Card.self)); return }
+            if tag == "bank_account", let v = try? container.decode(BankAccount.self) { self = .bankAccount(v); return }
+            if tag == "card", let v = try? container.decode(Card.self) { self = .card(v); return }
         }
         if let value = try? container.decode(BankAccount.self) { self = .bankAccount(value); return }
         if let value = try? container.decode(Card.self) { self = .card(value); return }

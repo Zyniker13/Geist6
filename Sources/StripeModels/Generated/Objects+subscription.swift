@@ -15,8 +15,8 @@ public enum SubscriptionApplication: Sendable, Codable, Equatable, Hashable {
         let container = try decoder.singleValueContainer()
         if let raw = try? container.decode([String: JSONValue].self),
            let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
-            if tag == "application" { self = .application(try container.decode(Application.self)); return }
-            if tag == "application" { self = .deletedApplication(try container.decode(DeletedApplication.self)); return }
+            if tag == "application", let v = try? container.decode(Application.self) { self = .application(v); return }
+            if tag == "application", let v = try? container.decode(DeletedApplication.self) { self = .deletedApplication(v); return }
         }
         if let value = try? container.decode(String.self) { self = .string(value); return }
         if let value = try? container.decode(Application.self) { self = .application(value); return }
@@ -46,8 +46,8 @@ public enum SubscriptionCustomer: Sendable, Codable, Equatable, Hashable {
         let container = try decoder.singleValueContainer()
         if let raw = try? container.decode([String: JSONValue].self),
            let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
-            if tag == "customer" { self = .customer(try container.decode(Customer.self)); return }
-            if tag == "customer" { self = .deletedCustomer(try container.decode(DeletedCustomer.self)); return }
+            if tag == "customer", let v = try? container.decode(Customer.self) { self = .customer(v); return }
+            if tag == "customer", let v = try? container.decode(DeletedCustomer.self) { self = .deletedCustomer(v); return }
         }
         if let value = try? container.decode(String.self) { self = .string(value); return }
         if let value = try? container.decode(Customer.self) { self = .customer(value); return }
@@ -598,7 +598,7 @@ public struct SubscriptionItem: Sendable, Codable, Equatable, Hashable, StripeId
     public var id: String
     public var metadata: [String: String]
     public var object: DeletedSubscriptionItemObject
-    public var plan: Plan
+    public var plan: Plan?
     public var price: Price
     public var quantity: Int?
     public var subscription: String
@@ -607,7 +607,7 @@ public struct SubscriptionItem: Sendable, Codable, Equatable, Hashable, StripeId
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(billedUntil: StripeTimestamp? = nil, billingThresholds: Nullable<SubscriptionItemBillingThresholds>, created: Int, currentPeriodEnd: StripeTimestamp, currentPeriodStart: StripeTimestamp, currentTrial: Nullable<SubscriptionsTrialsResourceCurrentTrial>, discounts: [Expandable<Discount>], id: String, metadata: [String: String], object: DeletedSubscriptionItemObject, plan: Plan, price: Price, quantity: Int? = nil, subscription: String, taxRates: Nullable<[TaxRate]>, unknownFields: [String: JSONValue]? = nil) {
+    public init(billedUntil: StripeTimestamp? = nil, billingThresholds: Nullable<SubscriptionItemBillingThresholds>, created: Int, currentPeriodEnd: StripeTimestamp, currentPeriodStart: StripeTimestamp, currentTrial: Nullable<SubscriptionsTrialsResourceCurrentTrial>, discounts: [Expandable<Discount>], id: String, metadata: [String: String], object: DeletedSubscriptionItemObject, plan: Plan? = nil, price: Price, quantity: Int? = nil, subscription: String, taxRates: Nullable<[TaxRate]>, unknownFields: [String: JSONValue]? = nil) {
         self.billedUntil = billedUntil
         self.billingThresholds = billingThresholds
         self.created = created
@@ -656,7 +656,7 @@ public struct SubscriptionItem: Sendable, Codable, Equatable, Hashable, StripeId
         self.id = try container.decode(String.self, forKey: .id)
         self.metadata = try container.decode([String: String].self, forKey: .metadata)
         self.object = try container.decode(DeletedSubscriptionItemObject.self, forKey: .object)
-        self.plan = try container.decode(Plan.self, forKey: .plan)
+        self.plan = try container.decodeIfPresent(Plan.self, forKey: .plan)
         self.price = try container.decode(Price.self, forKey: .price)
         self.quantity = try container.decodeIfPresent(Int.self, forKey: .quantity)
         self.subscription = try container.decode(String.self, forKey: .subscription)
@@ -1246,8 +1246,8 @@ public enum SubscriptionScheduleApplication: Sendable, Codable, Equatable, Hasha
         let container = try decoder.singleValueContainer()
         if let raw = try? container.decode([String: JSONValue].self),
            let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
-            if tag == "application" { self = .application(try container.decode(Application.self)); return }
-            if tag == "application" { self = .deletedApplication(try container.decode(DeletedApplication.self)); return }
+            if tag == "application", let v = try? container.decode(Application.self) { self = .application(v); return }
+            if tag == "application", let v = try? container.decode(DeletedApplication.self) { self = .deletedApplication(v); return }
         }
         if let value = try? container.decode(String.self) { self = .string(value); return }
         if let value = try? container.decode(Application.self) { self = .application(value); return }
@@ -1277,8 +1277,8 @@ public enum SubscriptionScheduleCustomer: Sendable, Codable, Equatable, Hashable
         let container = try decoder.singleValueContainer()
         if let raw = try? container.decode([String: JSONValue].self),
            let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
-            if tag == "customer" { self = .customer(try container.decode(Customer.self)); return }
-            if tag == "customer" { self = .deletedCustomer(try container.decode(DeletedCustomer.self)); return }
+            if tag == "customer", let v = try? container.decode(Customer.self) { self = .customer(v); return }
+            if tag == "customer", let v = try? container.decode(DeletedCustomer.self) { self = .deletedCustomer(v); return }
         }
         if let value = try? container.decode(String.self) { self = .string(value); return }
         if let value = try? container.decode(Customer.self) { self = .customer(value); return }
@@ -1858,8 +1858,8 @@ public enum SubscriptionScheduleAddInvoiceItemPrice: Sendable, Codable, Equatabl
         let container = try decoder.singleValueContainer()
         if let raw = try? container.decode([String: JSONValue].self),
            let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
-            if tag == "price" { self = .price(try container.decode(Price.self)); return }
-            if tag == "price" { self = .deletedPrice(try container.decode(DeletedPrice.self)); return }
+            if tag == "price", let v = try? container.decode(Price.self) { self = .price(v); return }
+            if tag == "price", let v = try? container.decode(DeletedPrice.self) { self = .deletedPrice(v); return }
         }
         if let value = try? container.decode(String.self) { self = .string(value); return }
         if let value = try? container.decode(Price.self) { self = .price(value); return }
@@ -2008,8 +2008,8 @@ public enum SubscriptionScheduleConfigurationItemPlan: Sendable, Codable, Equata
         let container = try decoder.singleValueContainer()
         if let raw = try? container.decode([String: JSONValue].self),
            let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
-            if tag == "plan" { self = .plan(try container.decode(Plan.self)); return }
-            if tag == "plan" { self = .deletedPlan(try container.decode(DeletedPlan.self)); return }
+            if tag == "plan", let v = try? container.decode(Plan.self) { self = .plan(v); return }
+            if tag == "plan", let v = try? container.decode(DeletedPlan.self) { self = .deletedPlan(v); return }
         }
         if let value = try? container.decode(String.self) { self = .string(value); return }
         if let value = try? container.decode(Plan.self) { self = .plan(value); return }
@@ -2039,8 +2039,8 @@ public enum SubscriptionScheduleConfigurationItemPrice: Sendable, Codable, Equat
         let container = try decoder.singleValueContainer()
         if let raw = try? container.decode([String: JSONValue].self),
            let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
-            if tag == "price" { self = .price(try container.decode(Price.self)); return }
-            if tag == "price" { self = .deletedPrice(try container.decode(DeletedPrice.self)); return }
+            if tag == "price", let v = try? container.decode(Price.self) { self = .price(v); return }
+            if tag == "price", let v = try? container.decode(DeletedPrice.self) { self = .deletedPrice(v); return }
         }
         if let value = try? container.decode(String.self) { self = .string(value); return }
         if let value = try? container.decode(Price.self) { self = .price(value); return }

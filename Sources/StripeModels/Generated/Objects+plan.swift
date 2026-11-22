@@ -89,8 +89,8 @@ public enum PlanProduct: Sendable, Codable, Equatable, Hashable {
         let container = try decoder.singleValueContainer()
         if let raw = try? container.decode([String: JSONValue].self),
            let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
-            if tag == "product" { self = .product(try container.decode(Product.self)); return }
-            if tag == "product" { self = .deletedProduct(try container.decode(DeletedProduct.self)); return }
+            if tag == "product", let v = try? container.decode(Product.self) { self = .product(v); return }
+            if tag == "product", let v = try? container.decode(DeletedProduct.self) { self = .deletedProduct(v); return }
         }
         if let value = try? container.decode(String.self) { self = .string(value); return }
         if let value = try? container.decode(Product.self) { self = .product(value); return }

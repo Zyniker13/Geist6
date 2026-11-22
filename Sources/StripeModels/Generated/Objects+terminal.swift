@@ -5250,8 +5250,8 @@ public enum ConfigurationResponse: Sendable, Codable, Equatable, Hashable {
         let container = try decoder.singleValueContainer()
         if let raw = try? container.decode([String: JSONValue].self),
            let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
-            if tag == "terminal.configuration" { self = .terminalConfiguration(try container.decode(TerminalConfiguration.self)); return }
-            if tag == "terminal.configuration" { self = .deletedTerminalConfiguration(try container.decode(DeletedTerminalConfiguration.self)); return }
+            if tag == "terminal.configuration", let v = try? container.decode(TerminalConfiguration.self) { self = .terminalConfiguration(v); return }
+            if tag == "terminal.configuration", let v = try? container.decode(DeletedTerminalConfiguration.self) { self = .deletedTerminalConfiguration(v); return }
         }
         if let value = try? container.decode(TerminalConfiguration.self) { self = .terminalConfiguration(value); return }
         if let value = try? container.decode(DeletedTerminalConfiguration.self) { self = .deletedTerminalConfiguration(value); return }
@@ -7539,8 +7539,8 @@ public enum LocationResponse: Sendable, Codable, Equatable, Hashable {
         let container = try decoder.singleValueContainer()
         if let raw = try? container.decode([String: JSONValue].self),
            let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
-            if tag == "terminal.location" { self = .terminalLocation(try container.decode(TerminalLocation.self)); return }
-            if tag == "terminal.location" { self = .deletedTerminalLocation(try container.decode(DeletedTerminalLocation.self)); return }
+            if tag == "terminal.location", let v = try? container.decode(TerminalLocation.self) { self = .terminalLocation(v); return }
+            if tag == "terminal.location", let v = try? container.decode(DeletedTerminalLocation.self) { self = .deletedTerminalLocation(v); return }
         }
         if let value = try? container.decode(TerminalLocation.self) { self = .terminalLocation(value); return }
         if let value = try? container.decode(DeletedTerminalLocation.self) { self = .deletedTerminalLocation(value); return }
@@ -7867,8 +7867,8 @@ public enum ReaderResponse: Sendable, Codable, Equatable, Hashable {
         let container = try decoder.singleValueContainer()
         if let raw = try? container.decode([String: JSONValue].self),
            let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
-            if tag == "terminal.reader" { self = .terminalReader(try container.decode(TerminalReader.self)); return }
-            if tag == "terminal.reader" { self = .deletedTerminalReader(try container.decode(DeletedTerminalReader.self)); return }
+            if tag == "terminal.reader", let v = try? container.decode(TerminalReader.self) { self = .terminalReader(v); return }
+            if tag == "terminal.reader", let v = try? container.decode(DeletedTerminalReader.self) { self = .deletedTerminalReader(v); return }
         }
         if let value = try? container.decode(TerminalReader.self) { self = .terminalReader(value); return }
         if let value = try? container.decode(DeletedTerminalReader.self) { self = .deletedTerminalReader(value); return }

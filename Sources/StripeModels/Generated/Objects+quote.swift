@@ -15,8 +15,8 @@ public enum QuoteApplication: Sendable, Codable, Equatable, Hashable {
         let container = try decoder.singleValueContainer()
         if let raw = try? container.decode([String: JSONValue].self),
            let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
-            if tag == "application" { self = .application(try container.decode(Application.self)); return }
-            if tag == "application" { self = .deletedApplication(try container.decode(DeletedApplication.self)); return }
+            if tag == "application", let v = try? container.decode(Application.self) { self = .application(v); return }
+            if tag == "application", let v = try? container.decode(DeletedApplication.self) { self = .deletedApplication(v); return }
         }
         if let value = try? container.decode(String.self) { self = .string(value); return }
         if let value = try? container.decode(Application.self) { self = .application(value); return }
@@ -46,8 +46,8 @@ public enum QuoteCustomer: Sendable, Codable, Equatable, Hashable {
         let container = try decoder.singleValueContainer()
         if let raw = try? container.decode([String: JSONValue].self),
            let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
-            if tag == "customer" { self = .customer(try container.decode(Customer.self)); return }
-            if tag == "customer" { self = .deletedCustomer(try container.decode(DeletedCustomer.self)); return }
+            if tag == "customer", let v = try? container.decode(Customer.self) { self = .customer(v); return }
+            if tag == "customer", let v = try? container.decode(DeletedCustomer.self) { self = .deletedCustomer(v); return }
         }
         if let value = try? container.decode(String.self) { self = .string(value); return }
         if let value = try? container.decode(Customer.self) { self = .customer(value); return }
@@ -77,8 +77,8 @@ public enum QuoteInvoice: Sendable, Codable, Equatable, Hashable {
         let container = try decoder.singleValueContainer()
         if let raw = try? container.decode([String: JSONValue].self),
            let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
-            if tag == "invoice" { self = .invoice(try container.decode(Invoice.self)); return }
-            if tag == "invoice" { self = .deletedInvoice(try container.decode(DeletedInvoice.self)); return }
+            if tag == "invoice", let v = try? container.decode(Invoice.self) { self = .invoice(v); return }
+            if tag == "invoice", let v = try? container.decode(DeletedInvoice.self) { self = .deletedInvoice(v); return }
         }
         if let value = try? container.decode(String.self) { self = .string(value); return }
         if let value = try? container.decode(Invoice.self) { self = .invoice(value); return }

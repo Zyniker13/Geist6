@@ -1120,8 +1120,8 @@ public enum InvoicesResourcePretaxCreditAmountDiscount: Sendable, Codable, Equat
         let container = try decoder.singleValueContainer()
         if let raw = try? container.decode([String: JSONValue].self),
            let tag = raw["object"]?.stringValue ?? raw["type"]?.stringValue {
-            if tag == "discount" { self = .discount(try container.decode(Discount.self)); return }
-            if tag == "discount" { self = .deletedDiscount(try container.decode(DeletedDiscount.self)); return }
+            if tag == "discount", let v = try? container.decode(Discount.self) { self = .discount(v); return }
+            if tag == "discount", let v = try? container.decode(DeletedDiscount.self) { self = .deletedDiscount(v); return }
         }
         if let value = try? container.decode(String.self) { self = .string(value); return }
         if let value = try? container.decode(Discount.self) { self = .discount(value); return }
