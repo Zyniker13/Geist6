@@ -46,6 +46,11 @@ let package = Package(
             dependencies: ["StripeSpec"],
             path: "Tools/stripe-gen"
         ),
+        .executableTarget(
+            name: "mock-overlay",
+            dependencies: ["StripeSpec"],
+            path: "Tools/mock-overlay"
+        ),
         .testTarget(
             name: "ClientTests",
             dependencies: ["StripeClient", "GeistData"]

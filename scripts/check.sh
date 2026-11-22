@@ -78,7 +78,21 @@ if xcodebuild -version >/dev/null 2>&1; then
         sleep 1
     fi
 
-    stripe-mock --port 12111 &
+    # The mock serves from an overlay spec (decision 0029): stripe-mock's
+    # pinned upstream spec with the schema fields our pinned Stripe spec
+    # requires that the mock's older bundled spec lacks (today: product.type),
+    # plus its pinned fixtures. `swift run mock-overlay` fetches and verifies
+    # the upstream files once per cache dir and prints the -spec and
+    # -fixtures paths.
+    OVERLAY_DIR="${TMPDIR:-/tmp}/geist6-mock-overlay-cache"
+    OVERLAY_LINES=$(swift run --quiet mock-overlay "$OVERLAY_DIR" 2>/dev/null)
+    OVERLAY_SPEC=$(printf '%s' "$OVERLAY_LINES" | sed -n '1p')
+    OVERLAY_FIXTURES=$(printf '%s' "$OVERLAY_LINES" | sed -n '2p')
+    if [ ! -f "$OVERLAY_SPEC" ] || [ ! -f "$OVERLAY_FIXTURES" ]; then
+        echo "xcodebuild test: FAILED — mock-overlay produced no spec/fixtures" >&2
+        exit 1
+    fi
+    stripe-mock --http-port 12111 --spec "$OVERLAY_SPEC" --fixtures "$OVERLAY_FIXTURES" &
     MOCK_PID=$!
     sleep 2
     if ! lsof -t -nP -i :12111 -sTCP:LISTEN >/dev/null 2>&1; then
