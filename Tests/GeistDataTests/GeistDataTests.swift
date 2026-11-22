@@ -207,6 +207,7 @@ private final class FakeBackend: StripeDataBackend, @unchecked Sendable {
     private let rawObjects: [String: Data]
 
     private var _btxCurrencies: [String?] = []
+    private var _btxPayouts: [String] = []
     private var _customerEmails: [String?] = []
     private var _retrieveChargeIDs: [String] = []
     private var _retrieveCustomerIDs: [String] = []
@@ -262,6 +263,11 @@ private final class FakeBackend: StripeDataBackend, @unchecked Sendable {
     func balanceTransactions(created: DateInterval?, currency: String?) async throws -> [BalanceTransaction] {
         record { _btxCurrencies.append(currency) }
         return balanceTransactions
+    }
+
+    func balanceTransactions(payout: String) async throws -> [BalanceTransaction] {
+        record { _btxPayouts.append(payout) }
+        return balanceTransactions.filter { $0.unknownFields?["payout"]?.stringValue == payout }
     }
 
     func charges(created: DateInterval?) async throws -> [Charge] {

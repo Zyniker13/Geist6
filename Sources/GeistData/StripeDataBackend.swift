@@ -15,6 +15,11 @@ public protocol StripeDataBackend: Sendable {
     /// Balance transactions (the ledger) in `created`, optionally one currency.
     func balanceTransactions(created: DateInterval?, currency: String?) async throws -> [BalanceTransaction]
 
+    /// The ledger entries belonging to one payout (`GET
+    /// /v1/balance_transactions?payout=...`), which is how a payout's
+    /// transactions reconcile to its amount.
+    func balanceTransactions(payout: String) async throws -> [BalanceTransaction]
+
     /// Charges created in `created`.
     func charges(created: DateInterval?) async throws -> [Charge]
 
@@ -68,6 +73,13 @@ extension StripeClient: StripeDataBackend {
             )
         }
         params.currency = currency
+        let result = try await listBalanceTransactions(params)
+        return result.data
+    }
+
+    public func balanceTransactions(payout: String) async throws -> [BalanceTransaction] {
+        var params = BalanceTransactionListParams()
+        params.payout = payout
         let result = try await listBalanceTransactions(params)
         return result.data
     }

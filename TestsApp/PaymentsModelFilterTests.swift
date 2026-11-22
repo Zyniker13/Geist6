@@ -115,6 +115,7 @@ private struct FilterRecordingBackend: PaymentsBackend {
   func retrieveBalance() async throws -> Balance { throw StubError.missing }
   func balanceTransactions(created: DateInterval?, currency: String?) async throws
     -> [BalanceTransaction] { [] }
+  func balanceTransactions(payout: String) async throws -> [BalanceTransaction] { [] }
   func charges(created: DateInterval?) async throws -> [Charge] { [] }
   func customers(created: DateInterval?, email: String?) async throws -> [Customer] { [] }
   func retrieveCustomer(id: String) async throws -> Customer { throw StubError.missing }

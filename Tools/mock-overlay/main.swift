@@ -198,6 +198,16 @@ private func patchedFixtureData(from raw: Data) throws -> Data {
     else {
         fatalError("mock-overlay: upstream fixtures have no promotion_code resource")
     }
+    // Link the fixture balance transaction to the fixture payout so the
+    // PayoutDetail transactions section (and its reconcile test) can rely
+    // on stripe-mock pass-through lists: upstream has payout: null. The
+    // mock strips unknown fields on response, so this link is latent for
+    // responses but keeps the fixture data honest about the relationship.
+    var txn = resources["balance_transaction"] as? [String: Any]
+    if txn != nil, let payoutID = (resources["payout"] as? [String: Any])?["id"] as? String {
+        txn?["payout"] = payoutID
+        resources["balance_transaction"] = txn
+    }
     promo["active"] = true
     if var promotion = promo["promotion"] as? [String: Any] {
         promotion["coupon"] = "coupon_1Pgc79B7WZ01zgkWgYywVil6"

@@ -23,6 +23,7 @@ struct PayoutDetailView: View {
   @State private var reversePresented = false
   @State private var editPresented = false
   @State private var writeResult: WriteResult?
+  @State private var transactions: [BalanceTransaction]?
 
   var body: some View {
     Group {
@@ -163,13 +164,38 @@ struct PayoutDetailView: View {
           PaymentFactRow(label: "Failure", value: failureMessage)
         }
       }
+
+      // The ledger entries behind this payout: the same balance transactions
+      // Stripe's payout report reconciles against the payout amount. Fetched
+      // with the `payout` list filter, so the list is Stripe's, not ours.
+      Section("Transactions") {
+        switch transactions {
+        case nil:
+          Text("Loading…").foregroundStyle(.secondary)
+        case .some([]):
+          Text("No balance transactions on this payout.")
+            .foregroundStyle(.secondary)
+        case .some(let rows):
+          ForEach(rows, id: \.id) { transaction in
+            BalanceTransactionRow(transaction: transaction)
+          }
+        }
+      }
     }
   }
 
   private func load() async {
     phase = .loading
+    transactions = nil
     do {
-      phase = .loaded(try await backend.retrievePayout(id: payoutID))
+      let payout = try await backend.retrievePayout(id: payoutID)
+      phase = .loaded(payout)
+      do {
+        transactions = try await backend.balanceTransactions(payout: payoutID)
+      } catch {
+        // The ledger is secondary detail; the payout facts stay visible.
+        transactions = []
+      }
     } catch {
       phase = .failed(String(describing: error))
     }

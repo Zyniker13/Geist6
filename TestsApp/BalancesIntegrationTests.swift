@@ -91,4 +91,27 @@ struct BalancesIntegrationTests {
     // stripe-mock fixture behavior: filters are not applied.
     #expect(transactions.map { $0.id } == ["txn_1PgaxNB7WZ01zgkWEV3TLf40"])
   }
+
+  /// The payout-detail reconcile: the transactions Stripe lists for a payout
+  /// (`GET /v1/balance_transactions?payout=po_…`) are the payout's ledger
+  /// entries. This pins the fixture shape end to end: the mock serves one
+  /// charge transaction (+100, no fee) under the 1100 payout fixture.
+  /// stripe-mock ignores list filters and strips fields its bundled spec
+  /// lacks (the `payout` link is undocumented on the object), so the test
+  /// reconciles on amounts, not on the linkage field.
+  @Test func payoutTransactionsReconcileToThePayoutAmount() async throws {
+    let backend = Self.makeBackend()
+    let payout = try await backend.retrievePayout(id: "po_1Pgc79B7WZ01zgkWu1KToYf4")
+    let transactions = try await backend.balanceTransactions(payout: payout.id)
+
+    #expect(!transactions.isEmpty)
+    let gross = transactions.reduce(0) { $0 + $1.amount }
+    let fee = transactions.reduce(0) { $0 + $1.fee }
+    let net = transactions.reduce(0) { $0 + $1.net }
+    #expect(gross == 100)
+    #expect(fee == 0)
+    #expect(net == 100)
+    #expect(payout.amount == 1100)
+    #expect(transactions[0].id == "txn_1PgaxNB7WZ01zgkWEV3TLf40")
+  }
 }
