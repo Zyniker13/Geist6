@@ -11,6 +11,7 @@ enum PaymentRoute: Hashable {
   case paymentMethod(String)
   case paymentLink(String)
   case checkoutSession(String)
+  case payout(String)
 }
 
 /// The payments tab: six browsable lists of one account's payment objects.
@@ -29,6 +30,7 @@ struct PaymentsView: View {
   @State private var createMethodPresented = false
   @State private var createLinkPresented = false
   @State private var createChargePresented = false
+  @State private var createPayoutPresented = false
   @State private var filterPresented = false
   @State private var writeResult: WriteResult?
 
@@ -104,6 +106,14 @@ struct PaymentsView: View {
           }
           .accessibilityIdentifier("payments.newCharge")
         }
+        if writer != nil, segment == .payouts {
+          Button {
+            createPayoutPresented = true
+          } label: {
+            Label("New payout", systemImage: "plus")
+          }
+          .accessibilityIdentifier("payments.newPayout")
+        }
       }
     }
     .sheet(isPresented: $createPresented) {
@@ -129,6 +139,11 @@ struct PaymentsView: View {
     .sheet(isPresented: $createChargePresented) {
       if let writer {
         CreateChargeSheet(writer: writer, onFinished: handleCreateFinished)
+      }
+    }
+    .sheet(isPresented: $createPayoutPresented) {
+      if let writer {
+        CreatePayoutSheet(writer: writer, onFinished: handleCreateFinished)
       }
     }
     .sheet(isPresented: $filterPresented) {
@@ -242,6 +257,12 @@ struct PaymentsView: View {
             CheckoutSessionRow(session: session)
           }
         }
+      case .payouts:
+        ForEach(model.payouts, id: \.id) { payout in
+          NavigationLink(value: PaymentRoute.payout(payout.id)) {
+            PayoutRow(payout: payout)
+          }
+        }
       }
     }
     .overlay(alignment: .top) {
@@ -261,6 +282,7 @@ struct PaymentsView: View {
     case .paymentMethods: return model.paymentMethods.isEmpty
     case .paymentLinks: return model.paymentLinks.isEmpty
     case .checkoutSessions: return model.checkoutSessions.isEmpty
+    case .payouts: return model.payouts.isEmpty
     }
   }
 
@@ -301,6 +323,8 @@ struct PaymentDetailView: View {
         PaymentLinkDetailView(linkID: id, backend: backend, writer: writer)
       case .checkoutSession(let id):
         CheckoutSessionDetailView(sessionID: id, backend: backend, writer: writer)
+      case .payout(let id):
+        PayoutDetailView(payoutID: id, backend: backend, writer: writer)
       }
     }
   }

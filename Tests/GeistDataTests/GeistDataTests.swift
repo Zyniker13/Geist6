@@ -287,6 +287,11 @@ private final class FakeBackend: StripeDataBackend, @unchecked Sendable {
         return customer
     }
 
+    func retrievePayout(id: String) async throws -> Payout {
+        guard let payout = payouts.first(where: { $0.id == id }) else { throw TestError.notFound }
+        return payout
+    }
+
     func payouts() async throws -> [Payout] {
         return payouts
     }

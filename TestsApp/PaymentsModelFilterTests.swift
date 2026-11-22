@@ -31,6 +31,7 @@ private struct FilterRecordingBackend: PaymentsBackend {
   var charges: [Charge] = []
   var refunds: [Refund] = []
   var sessions: [CheckoutSession] = []
+  var payouts: [Payout] = []
 
   func paymentIntents(created: DateInterval?, customer: String?) async throws -> [PaymentIntent] {
     recorder.listCalls.append("paymentIntents")
@@ -117,7 +118,11 @@ private struct FilterRecordingBackend: PaymentsBackend {
   func charges(created: DateInterval?) async throws -> [Charge] { [] }
   func customers(created: DateInterval?, email: String?) async throws -> [Customer] { [] }
   func retrieveCustomer(id: String) async throws -> Customer { throw StubError.missing }
-  func payouts() async throws -> [Payout] { [] }
+  func retrievePayout(id: String) async throws -> Payout { throw StubError.missing }
+  func payouts() async throws -> [Payout] {
+    recorder.listCalls.append("payouts")
+    return payouts
+  }
   func events(created: DateInterval?) async throws -> [Event] { [] }
   func rawObject(path: String) async throws -> Data { throw StubError.missing }
 }
@@ -204,6 +209,29 @@ private enum FilterFixtures {
 
   /// The checkout-session fixture follows the stripe-mock sample shape; only
   /// the fields the tests vary (id, created, status, customer) interpolate.
+  static func payout(
+    id: String, created: Int, status: String, amount: Int
+  ) throws -> Payout {
+    let json = """
+    {
+      "amount": \(amount),
+      "arrival_date": \(created + 86_400),
+      "automatic": true,
+      "created": \(created),
+      "currency": "usd",
+      "id": "\(id)",
+      "livemode": false,
+      "method": "standard",
+      "object": "payout",
+      "reconciliation_status": "not_applicable",
+      "source_type": "card",
+      "status": "\(status)",
+      "type": "bank_account"
+    }
+    """
+    return try JSONDecoder().decode(Payout.self, from: Data(json.utf8))
+  }
+
   static func session(
     id: String, created: Int, status: String, customer: String?
   ) throws -> CheckoutSession {
@@ -333,7 +361,7 @@ struct PaymentsModelFilterTests {
     // Every segment is refetched once per apply.
     #expect(recorder.listCalls == [
       "paymentIntents", "charges", "refunds", "setupIntents", "paymentMethods", "paymentLinks",
-      "checkoutSessions",
+      "checkoutSessions", "payouts",
     ])
   }
 
@@ -415,6 +443,31 @@ struct PaymentsModelFilterTests {
     #expect(recorder.sessionsStatus == "open")
     #expect(recorder.sessionsCreated == nil, "the date range is unset and must not ride the request")
     #expect(model.checkoutSessions.map(\.id) == ["cs_test_match"])
+    #expect(model.phase == .loaded)
+  }
+
+  @Test func payoutFilterTrimsClientSideByStatusAndAmount() async throws {
+    let recorder = FilterRecorder()
+    let backend = FilterRecordingBackend(
+      recorder: recorder,
+      payouts: [
+        try FilterFixtures.payout(
+          id: "po_match", created: 1_750_000_000, status: "in_transit", amount: 50_000
+        ),
+        try FilterFixtures.payout(
+          id: "po_wrongStatus", created: 1_750_000_000, status: "paid", amount: 50_000
+        ),
+        try FilterFixtures.payout(
+          id: "po_tooSmall", created: 1_750_000_000, status: "in_transit", amount: 100
+        ),
+      ]
+    )
+    let model = PaymentsModel(backend: backend)
+
+    await model.apply(PaymentsFilter(status: "in_transit", amountMin: 10_000))
+
+    #expect(recorder.listCalls.contains("payouts"), "payouts must be listed for their segment")
+    #expect(model.payouts.map(\.id) == ["po_match"], "only the in-transit payout above the floor survives")
     #expect(model.phase == .loaded)
   }
 }

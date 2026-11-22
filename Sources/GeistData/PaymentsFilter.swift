@@ -77,6 +77,7 @@ extension PaymentsFilter {
     public enum Segment: String, CaseIterable, Sendable {
         case paymentIntents, charges, refunds, setupIntents, paymentMethods, paymentLinks
         case checkoutSessions
+        case payouts
     }
 
     /// A filter dimension, so the UI can show exactly the fields that mean
@@ -101,6 +102,8 @@ extension PaymentsFilter {
             return [.methodType, .linkActive]
         case .checkoutSessions:
             return [.dateRange, .customer, .status]
+        case .payouts:
+            return [.dateRange, .status, .amount]
         }
     }
 
@@ -199,6 +202,15 @@ extension PaymentsFilter {
         matchesCreated(session.created)
             && matchesCustomer(customerID(session.customer.valueOrNil))
             && (status.map { session.status.valueOrNil?.rawValue == $0 } ?? true)
+    }
+
+    /// Payouts: created, status (`paid`, `pending`, `in_transit`, `canceled`,
+    /// `failed`), and amount apply; payouts carry no customer.
+    public func matches(_ payout: Payout) -> Bool {
+        matchesCreated(payout.created)
+            && (status.map { payout.status == $0 } ?? true)
+            && (amountMin.map { payout.amount >= $0 } ?? true)
+            && (amountMax.map { payout.amount <= $0 } ?? true)
     }
 }
 

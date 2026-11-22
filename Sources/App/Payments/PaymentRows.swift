@@ -158,3 +158,20 @@ struct CheckoutSessionRow: View {
     return session.created.date.formatted(date: .abbreviated, time: .omitted)
   }
 }
+
+/// One payouts-list row: amount, status, arrival date.
+struct PayoutRow: View {
+  let payout: Payout
+
+  var body: some View {
+    PaymentRowCore(title: MoneyFormat.amount(payout.amount, currency: payout.currency), status: payout.status) {
+      PaymentRowCaption(symbol: "banknote", text: caption)
+    }
+    .accessibilityIdentifier("payments.row.\(payout.id)")
+  }
+
+  private var caption: String {
+    let arrival = payout.arrivalDate.date.formatted(date: .abbreviated, time: .omitted)
+    return "Arrives \(arrival)"
+  }
+}

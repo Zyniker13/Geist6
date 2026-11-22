@@ -254,6 +254,8 @@ struct PaymentsFilterSheet: View {
       return []
     case .checkoutSessions:
       return ["open", "complete", "expired"]
+    case .payouts:
+      return ["paid", "pending", "in_transit", "canceled", "failed"]
     }
   }
 

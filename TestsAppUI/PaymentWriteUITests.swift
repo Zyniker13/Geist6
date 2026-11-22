@@ -91,6 +91,12 @@ final class PaymentWriteUITests: XCTestCase {
     XCTAssertTrue(result == .completed, "\(name) never became hittable")
   }
 
+  private func dismissAlert(_ app: XCUIApplication) {
+    let ok = app.buttons["OK"]
+    XCTAssertTrue(ok.waitForExistence(timeout: 10), "alert OK button missing")
+    ok.tap()
+  }
+
   /// Opens the Charges segment and pushes the first charge's detail screen.
   private func openFirstChargeDetail(_ app: XCUIApplication) {
     let chargesSegment = app.buttons["Charges"]
@@ -574,5 +580,73 @@ final class PaymentWriteUITests: XCTestCase {
     }
     XCTAssertTrue(success.waitForExistence(timeout: 5), "expire success alert missing")
     app.buttons["OK"].tap()
+  }
+
+  // MARK: - Payouts
+
+  /// Opens the Payouts segment and waits for the fixture payout row.
+  private func openPayoutDetail(_ app: XCUIApplication) {
+    let payoutsSegment = app.buttons["Payouts"]
+    XCTAssertTrue(payoutsSegment.waitForExistence(timeout: 10), "payouts segment missing")
+    waitHittable(app, payoutsSegment, "payouts segment")
+    payoutsSegment.tap()
+    let switched = app.descendants(matching: .any).matching(
+      NSPredicate(format: "identifier == %@", "payments.segment.payouts")
+    ).firstMatch
+    XCTAssertTrue(switched.waitForExistence(timeout: 10), "segment did not switch to payouts")
+
+    let payoutRow = app.descendants(matching: .any).matching(
+      NSPredicate(format: "identifier BEGINSWITH %@", "payments.row.po_")
+    ).firstMatch
+    XCTAssertTrue(payoutRow.waitForExistence(timeout: 20), "payout row missing")
+    waitHittable(app, payoutRow, "payout row")
+    payoutRow.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.9)).tap()
+
+    let payoutAmount = app.descendants(matching: .any).matching(
+      NSPredicate(format: "identifier == %@", "payments.payout.amount")
+    ).firstMatch
+    XCTAssertTrue(payoutAmount.waitForExistence(timeout: 20), "payout detail missing")
+  }
+
+  /// Payout rows decode against the mock and the detail screen loads.
+  func testPayoutRowsDecodeAndOpenDetail() {
+    let app = launchFresh()
+    addAccountAndWait(app, name: "Payout Store")
+    openPayments(app)
+    openPayoutDetail(app)
+
+    let actions = app.buttons["payments.payoutDetail.actions"]
+    XCTAssertTrue(actions.waitForExistence(timeout: 10), "payout actions menu missing")
+    waitHittable(app, actions, "payout actions menu")
+    actions.tap()
+
+    let edit = app.buttons["payments.payoutDetail.edit"]
+    XCTAssertTrue(edit.waitForExistence(timeout: 10), "payout edit menu item missing")
+  }
+
+  /// The full cancel flow on an in-transit payout: Actions → Cancel payout…
+  /// → confirm → success alert. stripe-mock accepts the cancel.
+  func testPayoutCancelFlowCompletesAgainstMock() {
+    let app = launchFresh()
+    addAccountAndWait(app, name: "Payout Cancel Store")
+    openPayments(app)
+    openPayoutDetail(app)
+
+    let actions = app.buttons["payments.payoutDetail.actions"]
+    XCTAssertTrue(actions.waitForExistence(timeout: 10), "payout actions menu missing")
+    waitHittable(app, actions, "payout actions menu")
+    actions.tap()
+
+    let cancel = app.buttons["payments.payoutDetail.cancel"]
+    XCTAssertTrue(cancel.waitForExistence(timeout: 10), "cancel menu item missing")
+    cancel.tap()
+
+    let dialog = app.buttons["payments.payoutDetail.cancelRun"].firstMatch
+    XCTAssertTrue(dialog.waitForExistence(timeout: 10), "cancel confirmation missing")
+    dialog.tap()
+
+    let success = app.staticTexts["Payout canceled"]
+    XCTAssertTrue(success.waitForExistence(timeout: 15), "cancel success alert missing")
+    dismissAlert(app)
   }
 }

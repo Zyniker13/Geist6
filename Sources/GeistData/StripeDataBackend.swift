@@ -30,6 +30,9 @@ public protocol StripeDataBackend: Sendable {
     /// The account's payouts.
     func payouts() async throws -> [Payout]
 
+    /// A single payout by ID.
+    func retrievePayout(id: String) async throws -> Payout
+
     /// Webhook/API events created in `created`.
     func events(created: DateInterval?) async throws -> [Event]
 
@@ -113,6 +116,10 @@ extension StripeClient: StripeDataBackend {
     public func payouts() async throws -> [Payout] {
         let result = try await listPayouts()
         return result.data
+    }
+
+    public func retrievePayout(id: String) async throws -> Payout {
+        try await retrievePayout(payout: id)
     }
 
     public func events(created: DateInterval?) async throws -> [Event] {

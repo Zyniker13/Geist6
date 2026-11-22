@@ -15,6 +15,7 @@ final class PaymentsModel {
     case paymentMethods
     case paymentLinks
     case checkoutSessions
+    case payouts
 
     var id: String { rawValue }
 
@@ -27,6 +28,7 @@ final class PaymentsModel {
       case .paymentMethods: return "Methods"
       case .paymentLinks: return "Links"
       case .checkoutSessions: return "Checkout"
+      case .payouts: return "Payouts"
       }
     }
   }
@@ -47,6 +49,7 @@ final class PaymentsModel {
   private(set) var paymentMethods: [PaymentMethod] = []
   private(set) var paymentLinks: [PaymentLink] = []
   private(set) var checkoutSessions: [CheckoutSession] = []
+  private(set) var payouts: [Payout] = []
   /// The active filter (M4c-5, decision 0019). Applied server-side where
   /// the backend supports it and client-side over the fetched page.
   private(set) var filter = PaymentsFilter()
@@ -99,6 +102,10 @@ final class PaymentsModel {
         )
         if !filter.isEmpty { items = items.filter { filter.matches($0) } }
         checkoutSessions = items
+      case .payouts:
+        var items = try await backend.payouts()
+        if !filter.isEmpty { items = items.filter { filter.matches($0) } }
+        payouts = items
       }
       phase = .loaded
     } catch {

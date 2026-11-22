@@ -170,6 +170,47 @@ public struct PaymentsWriteService: Sendable {
       params: RefundExpireParams(), key: Self.key(), summary: summary)
   }
 
+  // MARK: - Payouts
+
+  /// Creates a payout from the available balance. Money-moving: the
+  /// confirmation flow must restate the amount and currency before calling.
+  public func createPayout(
+    amount: Int, currency: String, description: String?, summary: String
+  ) async throws -> Payout {
+    var params = PayoutCreateParams(amount: amount, currency: currency)
+    params.description = description
+    return try await run(
+      Payout.self, method: "POST", path: "/v1/payouts", params: params,
+      key: Self.key(), summary: summary)
+  }
+
+  /// Cancels an in-transit payout, returning the funds to the balance.
+  /// Money-moving and irreversible once the network processes it.
+  public func cancelPayout(id: String, summary: String) async throws -> Payout {
+    return try await run(
+      Payout.self, method: "POST", path: "/v1/payouts/\(id)/cancel",
+      params: PayoutCancelParams(), key: Self.key(), summary: summary)
+  }
+
+  /// Reverses a paid instant payout back to the balance.
+  /// Money-moving and irreversible.
+  public func reversePayout(id: String, summary: String) async throws -> Payout {
+    return try await run(
+      Payout.self, method: "POST", path: "/v1/payouts/\(id)/reverse",
+      params: PayoutReverseParams(), key: Self.key(), summary: summary)
+  }
+
+  /// Updates a payout's metadata.
+  public func updatePayout(
+    id: String, metadata: [String: String]?, summary: String
+  ) async throws -> Payout {
+    var params = PayoutUpdateParams()
+    if let metadata { params.metadata = .value(metadata) }
+    return try await run(
+      Payout.self, method: "POST", path: "/v1/payouts/\(id)", params: params,
+      key: Self.key(), summary: summary)
+  }
+
   // MARK: - Charges
 
   /// Captures an uncaptured charge. `amount == nil` captures the full
