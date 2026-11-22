@@ -4,7 +4,7 @@ Keep every field current after every meaningful step. This file and `ROADMAP.md`
 
 - **Current milestone:** M6 (Billing) — slice 4 (Subscriptions) UI written and green locally: BillingView fifth section + SubscriptionDetailView (detail, status-aware Actions menu) + SubscriptionWriteSheets (edit, pause, add item; bare-confirmation pause sheet), 6 `SubscriptionModelTests` + 7 `SubscriptionWriteUITests` all passing against stripe-mock. Next: full `check.sh` gate, push, then M7 (Catalog).
 - **Last done:** subscriptions UI + tests committed (d45d5c6, e7127a1) on top of the generator fix (098999f) and decision 0028: union tag branches now decode tolerantly (deleted-customer payloads reach the deleted twin instead of throwing `keyNotFound`), and `SubscriptionItem.plan` emits as `Plan?` via a documented legacy-required exemption (Stripe omits it though the spec marks it required). UI-test key literal corrected to a full `sk_test_…` prefix (stripe-mock 0.206.0 rejects abbreviated keys with 401). Sub-only sim run: 7/7 UI tests, TEST_EXIT:0.
-- **Next step:** full `scripts/check.sh` gate (all suites + UI), push to main, watch CI; then open M7 (Catalog) per the coverage matrix.
+- **Next step:** open M7 (Catalog) per the coverage matrix: stripe-mock fixture/spec overlay for product `type` (decision 0027 follow-up), catalog UI, prices/coupons wiring.
 - **Blocked on:** Nothing.
 
 ## Environment Check
