@@ -54,7 +54,7 @@ struct TransferDetailView: View {
         .accessibilityIdentifier("payments.transfer.amount")
       }
 
-      MetadataSection(metadata: transfer.metadata.valueOrNil ?? [:])
+      MetadataSection(metadata: transfer.metadata)
       Section("Details") {
         PaymentFactRow(label: "Destination", value: destinationID(transfer.destination))
         PaymentFactRow(
@@ -109,8 +109,9 @@ struct TransferDetailView: View {
   }
 
   /// The destination as a plain ID (or "—" when absent).
-  private func destinationID(_ destination: Nullable<Expandable<Account>>) -> String {
-    switch destination.valueOrNil {
+  private func destinationID(_ destination: Nullable<Expandable<StripeModels.Account>>) -> String {
+    guard let expandable = destination.valueOrNil else { return "—" }
+    switch expandable {
     case .id(let id): return id
     case .object(let account): return account.id
     }
@@ -165,7 +166,7 @@ struct TopupDetailView: View {
         .accessibilityIdentifier("payments.topup.amount")
       }
 
-      MetadataSection(metadata: topup.metadata.valueOrNil ?? [:])
+      MetadataSection(metadata: topup.metadata)
       Section("Details") {
         PaymentFactRow(
           label: "Created",
