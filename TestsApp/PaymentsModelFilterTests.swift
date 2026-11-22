@@ -389,7 +389,7 @@ struct PaymentsModelFilterTests {
     // Every segment is refetched once per apply.
     #expect(recorder.listCalls == [
       "paymentIntents", "charges", "refunds", "setupIntents", "paymentMethods", "paymentLinks",
-      "checkoutSessions", "payouts",
+      "checkoutSessions", "payouts", "transfers", "topups",
     ])
   }
 
