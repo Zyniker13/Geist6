@@ -135,7 +135,8 @@ private struct FilterRecordingBackend: PaymentsBackend {
 
   func retrieveTransfer(id: String) async throws -> Transfer {
     recorder.retrieveCalls.append("transfers/\(id)")
-    return transfers.first(where: { $0.id == id }) ?? { throw StubError.missing }()
+    if let transfer = transfers.first(where: { $0.id == id }) { return transfer }
+    throw StubError.missing
   }
 
   func transferReversals(transfer: String) async throws -> [TransferReversal] { [] }
@@ -147,7 +148,8 @@ private struct FilterRecordingBackend: PaymentsBackend {
 
   func retrieveTopup(id: String) async throws -> Topup {
     recorder.retrieveCalls.append("topups/\(id)")
-    return topups.first(where: { $0.id == id }) ?? { throw StubError.missing }()
+    if let topup = topups.first(where: { $0.id == id }) { return topup }
+    throw StubError.missing
   }
   func events(created: DateInterval?) async throws -> [Event] { [] }
   func rawObject(path: String) async throws -> Data { throw StubError.missing }
