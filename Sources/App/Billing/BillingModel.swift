@@ -2,11 +2,11 @@ import GeistData
 import Observation
 import StripeModels
 
-/// Backing model for the Billing screen: the product catalog, coupons, and
-/// promotion codes. Read-only by construction: `BillingBackend` has no write
-/// methods, so the model cannot send one; writes go through
-/// `BillingWriteService`, which is built only for accounts without a
-/// dashboard lock (the three-gate pattern from payments).
+/// Backing model for the Billing screen: the product catalog, coupons,
+/// promotion codes, invoices, and subscriptions. Read-only by construction:
+/// `BillingBackend` has no write methods, so the model cannot send one;
+/// writes go through `BillingWriteService`, which is built only for accounts
+/// without a dashboard lock (the three-gate pattern from payments).
 @MainActor
 @Observable
 final class BillingModel {
@@ -23,6 +23,7 @@ final class BillingModel {
   private(set) var coupons: [Coupon] = []
   private(set) var promotionCodes: [PromotionCode] = []
   private(set) var invoices: [Invoice] = []
+  private(set) var subscriptions: [Subscription] = []
   /// Per-section load failures. The screen renders each section
   /// independently: a decode or network failure in one section leaves the
   /// others loaded instead of blanking the whole screen.
@@ -30,22 +31,27 @@ final class BillingModel {
   private(set) var couponsError: String?
   private(set) var promotionCodesError: String?
   private(set) var invoicesError: String?
+  private(set) var subscriptionsError: String?
   private(set) var searchQuery = ""
 
   init(backend: BillingBackend) {
     self.backend = backend
   }
 
-  /// Loads the catalog: products, coupons, promotion codes, and invoices.
-  /// The sections load concurrently and settle independently; the load ends
-  /// once every section has either rows or a section error.
+  /// Loads the catalog: products, coupons, promotion codes, invoices, and
+  /// subscriptions. The sections load concurrently and settle independently;
+  /// the load ends once every section has either rows or a section error.
   func load() async {
     phase = .loading
     async let productsSettled: Void = loadProducts()
     async let couponsSettled: Void = loadCoupons()
     async let promotionCodesSettled: Void = loadPromotionCodes()
     async let invoicesSettled: Void = loadInvoices()
-    _ = await (productsSettled, couponsSettled, promotionCodesSettled, invoicesSettled)
+    async let subscriptionsSettled: Void = loadSubscriptions()
+    _ = await (
+      productsSettled, couponsSettled, promotionCodesSettled, invoicesSettled,
+      subscriptionsSettled
+    )
     phase = .loaded
   }
 
@@ -100,6 +106,33 @@ final class BillingModel {
       invoicesError = nil
     } catch {
       invoicesError = String(describing: error)
+    }
+  }
+
+  private func loadSubscriptions() async {
+    do {
+      let all = try await backend.subscriptions()
+      subscriptions = searchQuery.isEmpty
+        ? all
+        : all.filter { subscription in
+          matches(subscription.id)
+            || matches(subscription.description.valueOrNil)
+            || matches(subscriptionCustomerID(subscription))
+        }
+      subscriptionsError = nil
+    } catch {
+      subscriptionsError = String(describing: error)
+    }
+  }
+
+  /// The customer reference's ID, whether the payload carries the expandable
+  /// form or the expanded object.
+  private func subscriptionCustomerID(_ subscription: Subscription) -> String? {
+    switch subscription.customer {
+    case .string(let id): return id
+    case .customer(let customer): return customer.id
+    case .deletedCustomer(let deleted): return deleted.id
+    case .other: return nil
     }
   }
 

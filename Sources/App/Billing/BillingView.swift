@@ -8,6 +8,7 @@ enum BillingRoute: Hashable {
   case coupon(String)
   case promotionCode(String)
   case invoice(String)
+  case subscription(String)
 }
 
 /// The billing segment: the product catalog with search, and the write
@@ -117,7 +118,7 @@ struct BillingView: View {
   @ViewBuilder
   private func list(_ model: BillingModel) -> some View {
     if model.phase == .loading, model.products.isEmpty, model.coupons.isEmpty,
-      model.promotionCodes.isEmpty, model.invoices.isEmpty
+      model.promotionCodes.isEmpty, model.invoices.isEmpty, model.subscriptions.isEmpty
     {
       ProgressView()
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -205,6 +206,25 @@ struct BillingView: View {
           }
         }
       }
+
+      // Subscriptions section
+      Section("Subscriptions") {
+        if model.subscriptions.isEmpty {
+          if let error = model.subscriptionsError {
+            Text("Couldn't load subscriptions: ") + Text(error)
+          } else {
+            Text(model.searchQuery.isEmpty ? "No subscriptions yet" : "No matching subscriptions")
+              .foregroundStyle(.secondary)
+          }
+        } else {
+          ForEach(model.subscriptions, id: \.id) { subscription in
+            NavigationLink(value: BillingRoute.subscription(subscription.id)) {
+              SubscriptionRow(subscription: subscription)
+            }
+            .accessibilityIdentifier("billing.row.subscription.\(subscription.id)")
+          }
+        }
+      }
     }
     .overlay(alignment: .top) {
       if model.phase == .loading { ProgressView().padding(.top, 4) }
@@ -219,6 +239,8 @@ struct BillingView: View {
         PromotionCodeDetailView(promotionCodeID: id, backend: backend, writer: writer)
       case .invoice(let id):
         InvoiceDetailView(invoiceID: id, backend: backend, writer: writer)
+      case .subscription(let id):
+        SubscriptionDetailView(subscriptionID: id, backend: backend, writer: writer)
       }
     }
     .searchable(
@@ -363,7 +385,68 @@ struct InvoiceRow: View {
   }
 }
 
+/// One subscription in the list: description (or ID), status, total, customer.
+struct SubscriptionRow: View {
+  let subscription: Subscription
+
+  var body: some View {
+    VStack(alignment: .leading, spacing: 2) {
+      Text(title)
+        .font(.body)
+      Text(subtitle)
+        .font(.footnote)
+        .foregroundStyle(.secondary)
+    }
+    .padding(.vertical, 2)
+  }
+
+  private var title: String {
+    if let description = subscription.description.valueOrNil, !description.isEmpty {
+      return description
+    }
+    return subscription.id
+  }
+
+  private var subtitle: String {
+    var parts: [String] = []
+    parts.append(subscription.status.displayString)
+    if let quantity = subscription.items.data.first?.quantity {
+      parts.append("Qty \(quantity)")
+    }
+    if let customer = subscriptionCustomerID, !customer.isEmpty {
+      parts.append(customer)
+    }
+    return parts.joined(separator: " · ")
+  }
+
+  private var subscriptionCustomerID: String? {
+    switch subscription.customer {
+    case .string(let id): return id
+    case .customer(let customer): return customer.id
+    case .deletedCustomer(let deleted): return deleted.id
+    case .other: return nil
+    }
+  }
+}
+
 // MARK: - Helpers
+
+extension SubscriptionStatus {
+  /// The status in display case: "past_due" reads "Past due".
+  var displayString: String {
+    switch self {
+    case .active: return "Active"
+    case .canceled: return "Canceled"
+    case .incomplete: return "Incomplete"
+    case .incompleteExpired: return "Incomplete expired"
+    case .pastDue: return "Past due"
+    case .paused: return "Paused"
+    case .trialing: return "Trialing"
+    case .unpaid: return "Unpaid"
+    case .undocumented(let value): return value
+    }
+  }
+}
 
 extension CouponDuration {
   var displayString: String {
