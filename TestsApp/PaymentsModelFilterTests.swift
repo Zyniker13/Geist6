@@ -9,6 +9,7 @@ import Testing
 /// can prove the server-side filter dimensions actually ride the requests.
 private final class FilterRecorder: @unchecked Sendable {
   var listCalls: [String] = []
+  var retrieveCalls: [String] = []
   var intentsCreated: DateInterval?
   var intentsCustomer: String?
   var chargesCreated: DateInterval?
@@ -134,7 +135,7 @@ private struct FilterRecordingBackend: PaymentsBackend {
 
   func retrieveTransfer(id: String) async throws -> Transfer {
     recorder.retrieveCalls.append("transfers/\(id)")
-    return transfers[id] ?? { throw StubError.missing }()
+    return transfers.first(where: { $0.id == id }) ?? { throw StubError.missing }()
   }
 
   func transferReversals(transfer: String) async throws -> [TransferReversal] { [] }
@@ -146,7 +147,7 @@ private struct FilterRecordingBackend: PaymentsBackend {
 
   func retrieveTopup(id: String) async throws -> Topup {
     recorder.retrieveCalls.append("topups/\(id)")
-    return topups[id] ?? { throw StubError.missing }()
+    return topups.first(where: { $0.id == id }) ?? { throw StubError.missing }()
   }
   func events(created: DateInterval?) async throws -> [Event] { [] }
   func rawObject(path: String) async throws -> Data { throw StubError.missing }
