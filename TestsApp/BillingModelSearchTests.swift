@@ -48,6 +48,7 @@ private struct SearchRecordingBackend: BillingBackend {
   func balanceTransactions(created: DateInterval?, currency: String?) async throws
     -> [BalanceTransaction]
   { [] }
+  func balanceTransactions(payout: String) async throws -> [BalanceTransaction] { [] }
   func charges(created: DateInterval?) async throws -> [Charge] { [] }
   func retrieveCharge(id: String) async throws -> Charge { throw StubError.missing }
   func customers(created: DateInterval?, email: String?) async throws -> [Customer] { [] }
