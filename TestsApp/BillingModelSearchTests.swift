@@ -55,6 +55,17 @@ private struct SearchRecordingBackend: BillingBackend {
   func retrieveCustomer(id: String) async throws -> Customer { throw StubError.missing }
   func retrievePayout(id: String) async throws -> Payout { throw StubError.missing }
   func payouts() async throws -> [Payout] { [] }
+
+  func transfers() async throws -> [Transfer] { [] }
+
+  func retrieveTransfer(id: String) async throws -> Transfer { throw StubError.missing }
+
+  func transferReversals(transfer: String) async throws -> [TransferReversal] { [] }
+
+  func topups() async throws -> [Topup] { [] }
+
+  func retrieveTopup(id: String) async throws -> Topup { throw StubError.missing }
+
   func events(created: DateInterval?) async throws -> [Event] { [] }
   func searchCharges(query: String) async throws -> [Charge] { [] }
   func searchPaymentIntents(query: String) async throws -> [PaymentIntent] { [] }

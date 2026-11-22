@@ -38,6 +38,22 @@ public protocol StripeDataBackend: Sendable {
     /// A single payout by ID.
     func retrievePayout(id: String) async throws -> Payout
 
+    /// The account's transfers to connected accounts (the Balance →
+    /// Connect leg of the money flow).
+    func transfers() async throws -> [Transfer]
+
+    /// A single transfer by ID.
+    func retrieveTransfer(id: String) async throws -> Transfer
+
+    /// A transfer's reversals (`GET /v1/transfers/{id}/reversals`).
+    func transferReversals(transfer: String) async throws -> [TransferReversal]
+
+    /// The account's top-ups (funds added to the Stripe balance).
+    func topups() async throws -> [Topup]
+
+    /// A single top-up by ID.
+    func retrieveTopup(id: String) async throws -> Topup
+
     /// Webhook/API events created in `created`.
     func events(created: DateInterval?) async throws -> [Event]
 
@@ -132,6 +148,29 @@ extension StripeClient: StripeDataBackend {
 
     public func retrievePayout(id: String) async throws -> Payout {
         try await retrievePayout(payout: id)
+    }
+
+    public func transfers() async throws -> [Transfer] {
+        let result = try await listTransfers()
+        return result.data
+    }
+
+    public func retrieveTransfer(id: String) async throws -> Transfer {
+        try await retrieveTransfer(transfer: id)
+    }
+
+    public func transferReversals(transfer: String) async throws -> [TransferReversal] {
+        let result = try await listReversals(id: transfer)
+        return result.data
+    }
+
+    public func topups() async throws -> [Topup] {
+        let result = try await listTopups()
+        return result.data
+    }
+
+    public func retrieveTopup(id: String) async throws -> Topup {
+        try await retrieveTopup(topup: id)
     }
 
     public func events(created: DateInterval?) async throws -> [Event] {

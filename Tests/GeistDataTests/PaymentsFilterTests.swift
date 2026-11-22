@@ -505,6 +505,56 @@ final class PaymentsFilterTests: XCTestCase {
         XCTAssertFalse(PaymentsFilter(methodType: "card").matches(none))
     }
 
+    // MARK: - Payout
+
+    func testPayoutStatusAmountAndCreated() throws {
+        let paid = try payout(status: "paid", amount: 1100, created: 1_750_000_050)
+        XCTAssertTrue(PaymentsFilter(status: "paid").matches(paid))
+        XCTAssertFalse(PaymentsFilter(status: "pending").matches(paid))
+        XCTAssertTrue(PaymentsFilter(amountMin: 1100, amountMax: 1100).matches(paid))
+        XCTAssertFalse(PaymentsFilter(amountMax: 1000).matches(paid))
+        XCTAssertTrue(
+            PaymentsFilter(
+                dateStart: Date(timeIntervalSince1970: 1_750_000_000),
+                dateEnd: Date(timeIntervalSince1970: 1_750_000_100)
+            ).matches(paid)
+        )
+    }
+
+    // MARK: - Transfer
+
+    func testTransferAmountAndCreated() throws {
+        let transfer = try self.transfer(amount: 800, created: 1_750_000_050)
+        XCTAssertTrue(PaymentsFilter(amountMin: 800, amountMax: 800).matches(transfer))
+        XCTAssertFalse(PaymentsFilter(amountMin: 900).matches(transfer))
+        XCTAssertFalse(PaymentsFilter(amountMax: 700).matches(transfer))
+        // Status is not a transfers field; an irrelevant status filter is
+        // ignored (same convention as payment methods).
+        XCTAssertFalse(PaymentsFilter.fields(for: .transfers).contains(.status))
+        XCTAssertTrue(
+            PaymentsFilter(
+                dateStart: Date(timeIntervalSince1970: 1_750_000_000),
+                dateEnd: Date(timeIntervalSince1970: 1_750_000_100)
+            ).matches(transfer)
+        )
+    }
+
+    // MARK: - Topup
+
+    func testTopupStatusAmountAndCreated() throws {
+        let succeeded = try topup(status: "succeeded", amount: 5000, created: 1_750_000_050)
+        XCTAssertTrue(PaymentsFilter(status: "succeeded").matches(succeeded))
+        XCTAssertFalse(PaymentsFilter(status: "failed").matches(succeeded))
+        XCTAssertTrue(PaymentsFilter(amountMin: 5000).matches(succeeded))
+        XCTAssertFalse(PaymentsFilter(amountMax: 4000).matches(succeeded))
+        XCTAssertTrue(
+            PaymentsFilter(
+                dateStart: Date(timeIntervalSince1970: 1_750_000_000),
+                dateEnd: Date(timeIntervalSince1970: 1_750_000_100)
+            ).matches(succeeded)
+        )
+    }
+
     // MARK: - Segments and fields
 
     func testFieldsPerSegment() {
@@ -555,5 +605,108 @@ private extension PaymentsFilter {
         if let amountMin { varied.amountMin = amountMin }
         if let dateStart { varied.dateStart = dateStart }
         return varied.matches(base)
+    }
+}
+
+// MARK: - Money-flow fixture builders
+
+private extension PaymentsFilterTests {
+    private func payout(
+        id: String = "po_test_123",
+        status: String = "paid",
+        amount: Int = 1000,
+        created: Int = 1750000000
+    ) throws -> Payout {
+        let json = """
+        {
+          "amount": \(amount),
+          "arrival_date": \(created + 86_400),
+          "automatic": true,
+          "balance_transaction": "txn_test_123",
+          "created": \(created),
+          "currency": "usd",
+          "date": null,
+          "destination": "ba_test_123",
+          "failure_code": null,
+          "failure_message": null,
+          "id": "\(id)",
+          "livemode": false,
+          "metadata": {},
+          "method": "standard",
+          "object": "payout",
+          "original_payout": null,
+          "reconciliation_status": "not_applicable",
+          "reversed_by": null,
+          "statement_descriptor": null,
+          "status": "\(status)",
+          "type": "bank_account",
+          "source_type": "card"
+        }
+        """
+        return try decode(Payout.self, json)
+    }
+
+    private func transfer(
+        id: String = "tr_test_123",
+        amount: Int = 1000,
+        created: Int = 1750000000
+    ) throws -> Transfer {
+        let json = """
+        {
+          "id": "\(id)",
+          "object": "transfer",
+          "amount": \(amount),
+          "amount_reversed": 0,
+          "balance_transaction": "txn_test_456",
+          "created": \(created),
+          "currency": "usd",
+          "description": null,
+          "destination": "acct_test_123",
+          "livemode": false,
+          "metadata": {},
+          "reversed": false,
+          "source_transaction": null,
+          "source_type": "card",
+          "transfer_group": null,
+          "reversals": {
+            "object": "list",
+            "total_count": 0,
+            "has_more": false,
+            "url": "/v1/transfers/\(id)/reversals",
+            "data": []
+          }
+        }
+        """
+        return try decode(Transfer.self, json)
+    }
+
+    private func topup(
+        id: String = "tu_test_123",
+        status: String = "succeeded",
+        amount: Int = 1000,
+        created: Int = 1750000000
+    ) throws -> Topup {
+        let json = """
+        {
+          "id": "\(id)",
+          "object": "topup",
+          "amount": \(amount),
+          "balance_transaction": "txn_test_789",
+          "created": \(created),
+          "currency": "usd",
+          "description": null,
+          "expected_availability_date": \(created + 86_400),
+          "failure_code": null,
+          "failure_message": null,
+          "initiated_by": "user",
+          "livemode": false,
+          "metadata": {},
+          "source": null,
+          "statement_descriptor": null,
+          "status": "\(status)",
+          "transfer_group": null
+        }
+        """
+        return try decode(Topup.self, json)
     }
 }

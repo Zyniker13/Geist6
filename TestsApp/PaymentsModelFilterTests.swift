@@ -32,6 +32,8 @@ private struct FilterRecordingBackend: PaymentsBackend {
   var refunds: [Refund] = []
   var sessions: [CheckoutSession] = []
   var payouts: [Payout] = []
+  var transfers: [Transfer] = []
+  var topups: [Topup] = []
 
   func paymentIntents(created: DateInterval?, customer: String?) async throws -> [PaymentIntent] {
     recorder.listCalls.append("paymentIntents")
@@ -123,6 +125,28 @@ private struct FilterRecordingBackend: PaymentsBackend {
   func payouts() async throws -> [Payout] {
     recorder.listCalls.append("payouts")
     return payouts
+  }
+
+  func transfers() async throws -> [Transfer] {
+    recorder.listCalls.append("transfers")
+    return transfers
+  }
+
+  func retrieveTransfer(id: String) async throws -> Transfer {
+    recorder.retrieveCalls.append("transfers/\(id)")
+    return transfers[id] ?? { throw StubError.missing }()
+  }
+
+  func transferReversals(transfer: String) async throws -> [TransferReversal] { [] }
+
+  func topups() async throws -> [Topup] {
+    recorder.listCalls.append("topups")
+    return topups
+  }
+
+  func retrieveTopup(id: String) async throws -> Topup {
+    recorder.retrieveCalls.append("topups/\(id)")
+    return topups[id] ?? { throw StubError.missing }()
   }
   func events(created: DateInterval?) async throws -> [Event] { [] }
   func rawObject(path: String) async throws -> Data { throw StubError.missing }

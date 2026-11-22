@@ -12,6 +12,8 @@ enum PaymentRoute: Hashable {
   case paymentLink(String)
   case checkoutSession(String)
   case payout(String)
+  case transfer(String)
+  case topup(String)
 }
 
 /// The payments tab: six browsable lists of one account's payment objects.
@@ -263,6 +265,18 @@ struct PaymentsView: View {
             PayoutRow(payout: payout)
           }
         }
+      case .transfers:
+        ForEach(model.transfers, id: \.id) { transfer in
+          NavigationLink(value: PaymentRoute.transfer(transfer.id)) {
+            TransferRow(transfer: transfer)
+          }
+        }
+      case .topups:
+        ForEach(model.topups, id: \.id) { topup in
+          NavigationLink(value: PaymentRoute.topup(topup.id)) {
+            TopupRow(topup: topup)
+          }
+        }
       }
     }
     .overlay(alignment: .top) {
@@ -283,6 +297,8 @@ struct PaymentsView: View {
     case .paymentLinks: return model.paymentLinks.isEmpty
     case .checkoutSessions: return model.checkoutSessions.isEmpty
     case .payouts: return model.payouts.isEmpty
+    case .transfers: return model.transfers.isEmpty
+    case .topups: return model.topups.isEmpty
     }
   }
 
@@ -325,6 +341,10 @@ struct PaymentDetailView: View {
         CheckoutSessionDetailView(sessionID: id, backend: backend, writer: writer)
       case .payout(let id):
         PayoutDetailView(payoutID: id, backend: backend, writer: writer)
+      case .transfer(let id):
+        TransferDetailView(transferID: id, backend: backend)
+      case .topup(let id):
+        TopupDetailView(topupID: id, backend: backend)
       }
     }
   }

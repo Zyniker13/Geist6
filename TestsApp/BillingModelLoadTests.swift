@@ -64,6 +64,17 @@ private struct FaultInjectingBackend: BillingBackend {
   func retrieveCustomer(id: String) async throws -> Customer { throw StubError.boom }
   func retrievePayout(id: String) async throws -> Payout { throw StubError.boom }
   func payouts() async throws -> [Payout] { [] }
+
+  func transfers() async throws -> [Transfer] { [] }
+
+  func retrieveTransfer(id: String) async throws -> Transfer { throw StubError.boom }
+
+  func transferReversals(transfer: String) async throws -> [TransferReversal] { throw StubError.boom }
+
+  func topups() async throws -> [Topup] { [] }
+
+  func retrieveTopup(id: String) async throws -> Topup { throw StubError.boom }
+
   func events(created: DateInterval?) async throws -> [Event] { [] }
   func searchCharges(query: String) async throws -> [Charge] { [] }
   func searchPaymentIntents(query: String) async throws -> [PaymentIntent] { [] }

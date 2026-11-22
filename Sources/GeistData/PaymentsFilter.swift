@@ -78,6 +78,7 @@ extension PaymentsFilter {
         case paymentIntents, charges, refunds, setupIntents, paymentMethods, paymentLinks
         case checkoutSessions
         case payouts
+        case transfers, topups
     }
 
     /// A filter dimension, so the UI can show exactly the fields that mean
@@ -103,6 +104,10 @@ extension PaymentsFilter {
         case .checkoutSessions:
             return [.dateRange, .customer, .status]
         case .payouts:
+            return [.dateRange, .status, .amount]
+        case .transfers:
+            return [.dateRange, .amount]
+        case .topups:
             return [.dateRange, .status, .amount]
         }
     }
@@ -211,6 +216,23 @@ extension PaymentsFilter {
             && (status.map { payout.status == $0 } ?? true)
             && (amountMin.map { payout.amount >= $0 } ?? true)
             && (amountMax.map { payout.amount <= $0 } ?? true)
+    }
+
+    /// Transfers: created and amount apply; the destination is a connected
+    /// account, not a customer, and transfers carry no status.
+    public func matches(_ transfer: Transfer) -> Bool {
+        matchesCreated(transfer.created)
+            && (amountMin.map { transfer.amount >= $0 } ?? true)
+            && (amountMax.map { transfer.amount <= $0 } ?? true)
+    }
+
+    /// Top-ups: created, status (`succeeded`, `pending`, `reversed`,
+    /// `failed`), and amount apply; top-ups carry no customer.
+    public func matches(_ topup: Topup) -> Bool {
+        matchesCreated(topup.created)
+            && (status.map { topup.status.rawValue == $0 } ?? true)
+            && (amountMin.map { topup.amount >= $0 } ?? true)
+            && (amountMax.map { topup.amount <= $0 } ?? true)
     }
 }
 

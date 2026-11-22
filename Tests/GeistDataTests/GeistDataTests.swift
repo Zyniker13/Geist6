@@ -302,6 +302,16 @@ private final class FakeBackend: StripeDataBackend, @unchecked Sendable {
         return payouts
     }
 
+    func transfers() async throws -> [Transfer] { [] }
+
+    func retrieveTransfer(id: String) async throws -> Transfer { throw TestError.notFound }
+
+    func transferReversals(transfer: String) async throws -> [TransferReversal] { [] }
+
+    func topups() async throws -> [Topup] { [] }
+
+    func retrieveTopup(id: String) async throws -> Topup { throw TestError.notFound }
+
     func events(created: DateInterval?) async throws -> [Event] {
         return events
     }

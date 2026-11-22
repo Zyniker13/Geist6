@@ -177,3 +177,61 @@ struct PayoutRow: View {
     return "Arrives \(arrival)"
   }
 }
+
+/// One transfers-list row: amount, destination, direction of the reversal.
+struct TransferRow: View {
+  let transfer: Transfer
+
+  var body: some View {
+    PaymentRowCore(
+      title: MoneyFormat.amount(transfer.amount, currency: transfer.currency),
+      status: transfer.reversed ? "reversed" : "sent"
+    ) {
+      PaymentRowCaption(symbol: "arrowshape.turn.up.right", text: caption)
+    }
+    .accessibilityIdentifier("payments.row.\(transfer.id)")
+  }
+
+  private var caption: String {
+    let created = transfer.created.date.formatted(date: .abbreviated, time: .omitted)
+    if let destination = transfer.destination.valueOrNil {
+      let id = destination.idOrNil ?? destination.objectOrNil?.id ?? "?"
+      return "\(created) · to \(id)"
+    }
+    return created
+  }
+}
+
+/// One reversals-list row inside a transfer's detail screen.
+struct TransferReversalRow: View {
+  let reversal: TransferReversal
+
+  var body: some View {
+    PaymentRowCore(
+      title: MoneyFormat.amount(reversal.amount, currency: reversal.currency),
+      status: "reversal"
+    ) {
+      PaymentRowCaption(
+        symbol: "arrowshape.turn.up.left",
+        text: reversal.created.date.formatted(date: .abbreviated, time: .omitted))
+    }
+    .accessibilityIdentifier("payments.row.\(reversal.id)")
+  }
+}
+
+/// One top-ups-list row: amount, status, created date.
+struct TopupRow: View {
+  let topup: Topup
+
+  var body: some View {
+    PaymentRowCore(
+      title: MoneyFormat.amount(topup.amount, currency: topup.currency),
+      status: topup.status.rawValue
+    ) {
+      PaymentRowCaption(
+        symbol: "plus.circle",
+        text: topup.created.date.formatted(date: .abbreviated, time: .omitted))
+    }
+    .accessibilityIdentifier("payments.row.\(topup.id)")
+  }
+}
