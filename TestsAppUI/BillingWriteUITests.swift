@@ -223,6 +223,50 @@ final class BillingWriteUITests: XCTestCase {
     XCTAssertTrue(edit.waitForExistence(timeout: 10), "price detail missing")
   }
 
+  /// The full promotion-code deactivate flow: open the fixture's detail
+  /// (the overlay fixture ships active=true), then Deactivate → confirm →
+  /// success alert. stripe-mock echoes the update and the detail refreshes.
+  func testDeactivatePromotionCodeFlowCompletesAgainstMock() {
+    let app = launchFresh()
+    addAccountAndWait(app, name: "Deactivate Promo Store")
+    openBilling(app)
+
+    let promoRow = app.descendants(matching: .any).matching(
+      NSPredicate(format: "identifier == %@", "billing.row.promotion.promo_1Pgc79B7WZ01zgkWNy4mn5NX")
+    ).firstMatch
+    XCTAssertTrue(promoRow.waitForExistence(timeout: 20), "promotion row missing")
+    waitHittable(app, promoRow, "promotion row")
+    promoRow.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.9)).tap()
+
+    let actions = app.buttons["promo.actions"]
+    XCTAssertTrue(actions.waitForExistence(timeout: 10), "promo actions menu missing")
+    waitHittable(app, actions, "promo actions menu")
+    actions.tap()
+
+    // The mock fixture ships active, so Deactivate is offered right away.
+    let deactivate = app.buttons["promo.deactivate"]
+    XCTAssertTrue(deactivate.waitForExistence(timeout: 10), "deactivate item missing")
+    deactivate.tap()
+
+    let confirm = app.buttons["promo.deactivate.run"].firstMatch
+    XCTAssertTrue(confirm.waitForExistence(timeout: 10), "deactivate confirmation missing")
+    confirm.tap()
+
+    let success = app.staticTexts["Promotion code deactivated"]
+    if success.waitForExistence(timeout: 15) == false {
+      let labels = app.staticTexts.allElementsBoundByIndex.prefix(40)
+        .map { "\($0.identifier)=\($0.label)" }
+      print("G6DUMP texts: \(labels.joined(separator: " | "))")
+      print("G6DUMP alerts: \(app.alerts.count) sheets: \(app.sheets.count)")
+      let shot = XCTAttachment(screenshot: app.screenshot())
+      shot.name = "failure-screenshot"
+      shot.lifetime = .keepAlways
+      add(shot)
+    }
+    XCTAssertTrue(success.waitForExistence(timeout: 5), "deactivate success alert missing")
+    dismissAlert(app)
+  }
+
   // MARK: - Delete coupon flow
 
   /// Deletes the coupon fixture from its detail screen: delete →

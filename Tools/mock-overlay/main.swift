@@ -179,6 +179,37 @@ private func buildOverlay(cacheDir: URL) -> URL {
     return overlayURL
 }
 
+// MARK: - Fixture patches
+//
+// stripe-mock's fixtures are inert data; where our screens need a state the
+// upstream fixture does not carry, the generator writes a patched copy next
+// to it. The upstream file stays byte-pinned; the patched copy is produced
+// at test time from it (decision 0029).
+
+/// Applies the fixture patches: the promotion code ships active (its
+/// detail screen then offers Deactivate, the flow the deactivate UI test
+/// exercises), and its `promotion.coupon` points at the fixture coupon so
+/// the coupon section renders. Both are `nil`/absent in the upstream
+/// fixture and stripe-mock never mutates fixture state on POST.
+private func patchedFixtureData(from raw: Data) throws -> Data {
+    guard var fixtures = try JSONSerialization.jsonObject(with: raw) as? [String: Any],
+        var resources = fixtures["resources"] as? [String: Any],
+        var promo = resources["promotion_code"] as? [String: Any]
+    else {
+        fatalError("mock-overlay: upstream fixtures have no promotion_code resource")
+    }
+    promo["active"] = true
+    if var promotion = promo["promotion"] as? [String: Any] {
+        promotion["coupon"] = "coupon_1Pgc79B7WZ01zgkWgYywVil6"
+        promo["promotion"] = promotion
+    } else {
+        promo["promotion"] = ["type": "coupon", "coupon": "coupon_1Pgc79B7WZ01zgkWgYywVil6"]
+    }
+    resources["promotion_code"] = promo
+    fixtures["resources"] = resources
+    return try JSONSerialization.data(withJSONObject: fixtures)
+}
+
 // MARK: - Main
 
 let arguments = CommandLine.arguments
@@ -190,6 +221,15 @@ guard arguments.count == 2 else {
 let cacheDir = URL(fileURLWithPath: arguments[1], isDirectory: true)
 verifyOrFetch(cacheDir: cacheDir)
 let overlayURL = buildOverlay(cacheDir: cacheDir)
+// Write the patched fixtures copy (the upstream fixtures stay untouched).
+let fixturesURL = cacheDir.appendingPathComponent("fixtures3.json")
+let patchedURL = cacheDir.appendingPathComponent("patched-fixtures3.json")
+do {
+    let raw = try Data(contentsOf: fixturesURL)
+    try patchedFixtureData(from: raw).write(to: patchedURL)
+} catch {
+    fatalError("mock-overlay: could not write \(patchedURL.lastPathComponent): \(error)")
+}
 // Print the two arguments for stripe-mock, one per line: spec, fixtures.
 print(overlayURL.path)
-print(cacheDir.appendingPathComponent("fixtures3.json").path)
+print(patchedURL.path)

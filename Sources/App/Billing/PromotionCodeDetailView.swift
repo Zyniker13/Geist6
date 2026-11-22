@@ -3,8 +3,8 @@ import StripeModels
 import SwiftUI
 
 /// Detail view for a single promotion code. Shows all fields and provides
-/// edit (active flag + metadata) when the account allows writes.
-/// Promotion codes cannot be deleted in Stripe — only deactivated.
+/// edit (active flag + metadata) and deactivation when the account allows
+/// writes. Promotion codes cannot be deleted in Stripe — only deactivated.
 struct PromotionCodeDetailView: View {
   let promotionCodeID: String
   let backend: any BillingBackend
@@ -12,6 +12,7 @@ struct PromotionCodeDetailView: View {
 
   @State private var promotionCode: PromotionCode?
   @State private var editPresented = false
+  @State private var deactivatePresented = false
   @State private var writeResult: WriteResult?
   @State private var loadingError: String?
 
@@ -34,8 +35,17 @@ struct PromotionCodeDetailView: View {
     .toolbar {
       if writer != nil {
         ToolbarItem(placement: .primaryAction) {
-          Button("Edit") { editPresented = true }
-            .accessibilityIdentifier("promo.edit")
+          Menu {
+            Button("Edit…") { editPresented = true }
+              .accessibilityIdentifier("promo.edit")
+            if let promotionCode, promotionCode.active {
+              Button("Deactivate…", role: .destructive) { deactivatePresented = true }
+                .accessibilityIdentifier("promo.deactivate")
+            }
+          } label: {
+            Label("Actions", systemImage: "ellipsis.circle")
+          }
+          .accessibilityIdentifier("promo.actions")
         }
       }
     }
@@ -45,7 +55,32 @@ struct PromotionCodeDetailView: View {
           promotionCode: promotionCode, writer: writer, onFinished: handleWriteFinished)
       }
     }
+    .confirmationDialog(
+      "Deactivate \(promotionCode?.code ?? "")? Customers can no longer redeem it.",
+      isPresented: $deactivatePresented, titleVisibility: .visible
+    ) {
+      Button("Deactivate", role: .destructive) {
+        Task { await runDeactivate() }
+      }
+      .accessibilityIdentifier("promo.deactivate.run")
+      Button("Keep it active", role: .cancel) {}
+    }
     .writeResultAlert($writeResult)
+  }
+
+  private func runDeactivate() async {
+    guard let writer else { return }
+    do {
+      _ = try await writer.updatePromotionCode(
+        id: promotionCodeID, active: false, metadata: nil,
+        summary: "Deactivate promotion code \(promotionCodeID)")
+      await loadPromotionCode()
+      writeResult = WriteResult(
+        title: "Promotion code deactivated",
+        message: "\(promotionCodeID) is no longer redeemable.")
+    } catch {
+      writeResult = WriteResult(title: "Write failed", message: writeErrorMessage(error))
+    }
   }
 
   private func loadPromotionCode() async {
@@ -141,4 +176,3 @@ struct PromotionCodeDetailView: View {
     }
   }
 }
-
