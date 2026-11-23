@@ -321,7 +321,7 @@ final class ConnectDecodeTests: XCTestCase {
   "expires_at": 1234567891,
   "livemode": false,
   "object": "account_session"
-"#
+"""#
 
     private func decode<T: Decodable>(_ type: T.Type, _ json: String) throws -> T {
         try decoder.decode(type, from: Data(json.utf8))
