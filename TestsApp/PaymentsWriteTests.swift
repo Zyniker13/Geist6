@@ -573,6 +573,86 @@ final class PaymentsWriteTests: XCTestCase {
     XCTAssertEqual(auditedKeys, sentKeys, "audit keys must match the sent keys exactly")
   }
 
+  // MARK: - Report run creation (M7, decision 0031)
+
+  /// The report-run result file fixture: every field the generated File
+  /// decoder requires (url null is the mock's actual canned shape).
+  private static let reportRunJSON: [String: Any] = [
+    "created": 1_700_000_000, "error": NSNull(), "id": "frr_test_123",
+    "livemode": false, "object": "reporting.report_run",
+    "parameters": ["interval_end": 1525132800, "interval_start": 1522540800],
+    "report_type": "balance.summary.1",
+    "result": [
+      "created": 1_700_000_000, "expires_at": NSNull(), "filename": NSNull(),
+      "id": "file_test_123", "links": NSNull(), "object": "file",
+      "purpose": "reporting.report_run", "size": 353, "title": NSNull(),
+      "type": NSNull(), "url": NSNull(),
+    ],
+    "status": "succeeded", "succeeded_at": 1_700_000_000,
+  ]
+
+  func testCreateReportRunEncodesTypeAndInterval() async throws {
+    let service = makeService(mode: .management)
+    WriteStub.install(status: 200, json: Self.reportRunJSON)
+    let run = try await service.createReportRun(
+      reportType: "balance.summary.1", intervalStart: 1_522_540_800,
+      intervalEnd: 1_525_132_800, summary: "Run balance summary")
+    XCTAssertEqual(run.id, "frr_test_123")
+    XCTAssertEqual(run.status, "succeeded")
+    let request = try XCTUnwrap(WriteStubURLProtocol.recordedRequests.first)
+    XCTAssertEqual(request.httpMethod, "POST")
+    XCTAssertTrue(request.url!.path.hasSuffix("/v1/reporting/report_runs"))
+    // Keys sort alphabetically with a nested key immediately after its
+    // parent: parameters[interval_end] then [interval_start], then the
+    // scalar report_type.
+    let body = try XCTUnwrap(WriteStub.firstBodyString())
+    XCTAssertEqual(
+      body,
+      "parameters%5Binterval_end%5D=1525132800"
+        + "&parameters%5Binterval_start%5D=1522540800"
+        + "&report_type=balance.summary.1")
+  }
+
+  func testCreateReportRunRefusesInDashboardMode() async throws {
+    let service = makeService(mode: .dashboard)
+    do {
+      _ = try await service.createReportRun(
+        reportType: "balance.summary.1", intervalStart: nil, intervalEnd: nil,
+        summary: "Run")
+      XCTFail("dashboard-mode report-run creation should throw")
+    } catch let error as PaymentsWriteError {
+      XCTAssertEqual(error, .dashboardMode)
+    } catch {
+      XCTFail("Expected PaymentsWriteError.dashboardMode, got \(error)")
+    }
+    XCTAssertTrue(
+      WriteStubURLProtocol.recordedRequests.isEmpty,
+      "a dashboard-mode report run reached the network")
+    let entries = await audit.entries(limit: 10)
+    XCTAssertEqual(entries.count, 1)
+    XCTAssertEqual(entries[0].outcome, "refused: dashboard mode")
+    XCTAssertEqual(entries[0].method, "POST")
+    XCTAssertEqual(entries[0].path, "/v1/reporting/report_runs")
+  }
+
+  func testCreateReportRunCarriesIdempotencyKeyAndAudit() async throws {
+    let service = makeService(mode: .management)
+    WriteStub.install(status: 200, json: Self.reportRunJSON, headers: ["Request-Id": "req_test_456"])
+    _ = try await service.createReportRun(
+      reportType: "balance.summary.1", intervalStart: nil, intervalEnd: nil,
+      summary: "Run balance summary")
+    let request = try XCTUnwrap(WriteStubURLProtocol.recordedRequests.first)
+    let headerKey = try XCTUnwrap(request.value(forHTTPHeaderField: "Idempotency-Key"))
+    XCTAssertFalse(headerKey.isEmpty)
+    let entries = await audit.entries(limit: 10)
+    XCTAssertEqual(entries.count, 1)
+    XCTAssertEqual(entries[0].idempotencyKey, headerKey, "audit key must match the sent key")
+    XCTAssertEqual(entries[0].requestID, "req_test_456")
+    XCTAssertEqual(entries[0].outcome, "succeeded")
+    XCTAssertEqual(entries[0].summary, "Run balance summary")
+    XCTAssertEqual(entries[0].path, "/v1/reporting/report_runs")
+  }
+
   // MARK: - Distinct keys per attempt
 
   func testSeparateAttemptsGetDistinctKeys() async throws {

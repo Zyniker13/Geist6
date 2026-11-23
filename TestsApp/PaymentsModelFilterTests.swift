@@ -21,6 +21,7 @@ private final class FilterRecorder: @unchecked Sendable {
   var sessionsCreated: DateInterval?
   var sessionsCustomer: String?
   var sessionsStatus: String?
+  var reportRunsCreated: DateInterval?
 }
 
 private enum StubError: Error { case missing }
@@ -35,6 +36,31 @@ private struct FilterRecordingBackend: PaymentsBackend {
   var payouts: [Payout] = []
   var transfers: [Transfer] = []
   var topups: [Topup] = []
+  var reportRuns: [ReportingReportRun] = []
+  var reportTypes: [ReportingReportType] = []
+
+  func reportRuns(created: DateInterval?) async throws -> [ReportingReportRun] {
+    recorder.listCalls.append("reportRuns")
+    recorder.reportRunsCreated = created
+    return reportRuns
+  }
+
+  func retrieveReportRun(id: String) async throws -> ReportingReportRun {
+    recorder.retrieveCalls.append("reportRuns/\(id)")
+    if let run = reportRuns.first(where: { $0.id == id }) { return run }
+    throw StubError.missing
+  }
+
+  func reportTypes() async throws -> [ReportingReportType] {
+    recorder.listCalls.append("reportTypes")
+    return reportTypes
+  }
+
+  func retrieveReportType(id: String) async throws -> ReportingReportType {
+    recorder.retrieveCalls.append("reportTypes/\(id)")
+    if let type = reportTypes.first(where: { $0.id == id }) { return type }
+    throw StubError.missing
+  }
 
   func paymentIntents(created: DateInterval?, customer: String?) async throws -> [PaymentIntent] {
     recorder.listCalls.append("paymentIntents")
@@ -389,8 +415,10 @@ struct PaymentsModelFilterTests {
     // Every segment is refetched once per apply.
     #expect(recorder.listCalls == [
       "paymentIntents", "charges", "refunds", "setupIntents", "paymentMethods", "paymentLinks",
-      "checkoutSessions", "payouts", "transfers", "topups",
+      "checkoutSessions", "payouts", "transfers", "topups", "reportRuns", "reportTypes",
     ])
+    #expect(recorder.reportRunsCreated?.start == filter.dateStart)
+    #expect(recorder.reportRunsCreated?.end == filter.dateEnd)
   }
 
   @Test func applyTrimsFetchedPagesClientSide() async throws {
