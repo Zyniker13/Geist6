@@ -172,9 +172,7 @@ struct ConnectedAccountRow: View {
       Text(account.id)
         .font(.caption2)
         .foregroundStyle(.secondary)
-      if let requirements = account.requirements,
-        let disabled = requirements.disabledReason.valueOrNil
-      {
+      if let requirements = account.requirements, let disabled = requirements.disabledReason.valueOrNil {
         Text("Restricted: \(disabled.rawValue)")
           .font(.caption2)
           .foregroundStyle(.red)
