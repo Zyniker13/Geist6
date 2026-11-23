@@ -145,7 +145,7 @@ final class ConnectDecodeTests: XCTestCase {
     // The exact response stripe-mock 0.206.0 serves for
     // POST /v1/account_sessions (captured and re-identified; account and
     // client_secret faked). All 22 component keys the pinned spec requires.
-    private let accountSessionJSON = #"{
+    private let accountSessionJSON = #"""
   "account": "acct_test_123",
   "client_secret": "accs_secret_test_1234567890abcdef",
   "components": {
@@ -321,7 +321,7 @@ final class ConnectDecodeTests: XCTestCase {
   "expires_at": 1234567891,
   "livemode": false,
   "object": "account_session"
-}"#
+"#
 
     private func decode<T: Decodable>(_ type: T.Type, _ json: String) throws -> T {
         try decoder.decode(type, from: Data(json.utf8))
