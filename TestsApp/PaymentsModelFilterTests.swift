@@ -183,8 +183,9 @@ private struct FilterRecordingBackend: PaymentsBackend {
 
 /// Minimal fixture builders. All values are obviously fake (test IDs,
 /// alice@example.com); shapes follow the objects decoded by the timeline
-/// tests, extended with the filter-relevant fields.
-private enum FilterFixtures {
+/// tests, extended with the filter-relevant fields. Internal so the export
+/// tests can reuse the same fixtures.
+enum FilterFixtures {
   static func intent(
     id: String, created: Int, status: String, amount: Int, customer: String?
   ) throws -> PaymentIntent {

@@ -37,6 +37,9 @@ struct PaymentsView: View {
   @State private var createChargePresented = false
   @State private var createPayoutPresented = false
   @State private var filterPresented = false
+  /// The file the last export wrote; non-nil presents the share sheet.
+  @State private var exportFile: ExportURL?
+  @State private var exportError: String?
   @State private var writeResult: WriteResult?
 
   var body: some View {
@@ -57,6 +60,14 @@ struct PaymentsView: View {
     .toolbar {
       // Two separate items: a single .primaryAction ToolbarItem renders only
       // one of its children on iPadOS, which hid the create buttons.
+      ToolbarItem(placement: .primaryAction) {
+        Button {
+          exportPresented()
+        } label: {
+          Label("Export CSV", systemImage: "square.and.arrow.up")
+        }
+        .accessibilityIdentifier("payments.export")
+      }
       ToolbarItem(placement: .primaryAction) {
         Button {
           filterPresented = true
@@ -159,6 +170,17 @@ struct PaymentsView: View {
         Task { await model?.apply(applied) }
       }
     }
+    .sheet(item: $exportFile) { file in
+      ListExportSheet(url: file.url, segmentLabel: segment.label)
+    }
+    .alert(
+      "Export failed", isPresented: .init(
+        get: { exportError != nil }, set: { if !$0 { exportError = nil } })
+    ) {
+      Button("OK", role: .cancel) {}
+    } message: {
+      Text(exportError ?? "")
+    }
     .writeResultAlert($writeResult)
   }
 
@@ -170,6 +192,22 @@ struct PaymentsView: View {
     createChargePresented = false
     writeResult = result
     Task { await model?.load(segment) }
+  }
+
+  /// Exports the current segment to Documents and opens the share sheet.
+  private func exportPresented() {
+    guard let model else { return }
+    do {
+      let csv = try model.exportCSV(segment)
+      let directory = FileManager.default.urls(
+        for: .documentDirectory, in: .userDomainMask
+      ).first!
+      let target = directory.appendingPathComponent("geist6_\(segment.rawValue).csv")
+      try csv.write(to: target, atomically: true, encoding: .utf8)
+      exportFile = ExportURL(url: target)
+    } catch {
+      exportError = error.localizedDescription
+    }
   }
 
   @ViewBuilder
@@ -324,6 +362,40 @@ struct PaymentsView: View {
   /// The view's segment and the filter's segment enum have the same cases.
   private var filterSegment: PaymentsFilter.Segment {
     PaymentsFilter.Segment(rawValue: segment.rawValue) ?? .paymentIntents
+  }
+}
+
+/// The export confirmation: names the file and hands it to the share sheet.
+/// Sheet items need Identifiable; URLs conform via lastPathComponent.
+private struct ExportURL: Identifiable {
+  let url: URL
+  var id: String { url.lastPathComponent }
+}
+
+/// The export sheet: the file name, the row count, and the Share action.
+struct ListExportSheet: View {
+  let url: URL
+  let segmentLabel: String
+
+  var body: some View {
+    VStack(spacing: 16) {
+      Image(systemName: "checkmark.circle")
+        .font(.system(size: 44))
+        .foregroundStyle(.green)
+        .accessibilityIdentifier("payments.export.checkmark")
+      Text("Exported \(segmentLabel)")
+        .font(.title3.weight(.semibold))
+      Text("Saved to Documents as \(url.lastPathComponent). Share it to the Files app.")
+        .font(.footnote)
+        .foregroundStyle(.secondary)
+        .multilineTextAlignment(.center)
+      ShareLink(item: url, preview: SharePreview(url.lastPathComponent))
+        .buttonStyle(.borderedProminent)
+        .accessibilityIdentifier("payments.export.share")
+      Spacer()
+    }
+    .padding(24)
+    .frame(maxWidth: .infinity, alignment: .leading)
   }
 }
 

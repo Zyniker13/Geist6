@@ -148,4 +148,49 @@ final class PaymentsModel {
       await load(segment)
     }
   }
+
+  /// Renders the active segment's currently loaded (already filtered) list
+  /// as RFC 4180 CSV (M7). Throws when the segment has not been loaded yet:
+  /// exporting a list the user has not seen would contradict the screen.
+  func exportCSV(_ segment: Segment, generatedAt: Date = Date()) throws -> String {
+    guard phase == .loaded else {
+      throw ExportError.notLoaded(segment)
+    }
+    switch segment {
+    case .charges:
+      return ListCSVExporter.export(
+        title: "charges", headers: ListCSVExporter.ChargeRow.headers,
+        rows: ListCSVExporter.rows(fromCharges: charges), generatedAt: generatedAt)
+    case .payouts:
+      return ListCSVExporter.export(
+        title: "payouts", headers: ListCSVExporter.PayoutRow.headers,
+        rows: ListCSVExporter.rows(fromPayouts: payouts), generatedAt: generatedAt)
+    case .reports:
+      return ListCSVExporter.export(
+        title: "report_runs", headers: ListCSVExporter.ReportRunRow.headers,
+        rows: reportRuns.map { run in
+          ListCSVExporter.ReportRunRow(
+            id: run.id, reportType: run.reportType,
+            status: run.status, created: run.created.seconds,
+            resultFile: run.result.valueOrNil?.id ?? ""
+          ).values
+        }, generatedAt: generatedAt)
+    default:
+      throw ExportError.segmentNotSupported(segment)
+    }
+  }
+
+  enum ExportError: LocalizedError {
+    case notLoaded(Segment)
+    case segmentNotSupported(Segment)
+
+    var errorDescription: String? {
+      switch self {
+      case .notLoaded(let segment):
+        return "The \(segment.label) list has not been loaded yet."
+      case .segmentNotSupported(let segment):
+        return "CSV export for \(segment.label) is not supported yet."
+      }
+    }
+  }
 }
