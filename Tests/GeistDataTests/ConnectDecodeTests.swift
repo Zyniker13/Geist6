@@ -40,7 +40,7 @@ final class ConnectDecodeTests: XCTestCase {
         "errors": [],
         "eventually_due": [],
         "past_due": []
-      }
+      },
       "metadata": {},
       "payouts_enabled": true,
       "requirements": {
@@ -51,7 +51,7 @@ final class ConnectDecodeTests: XCTestCase {
         "errors": [],
         "eventually_due": [],
         "past_due": []
-      }
+      },
       "settings": {
         "bacs_debit_payments": {"display_name": null, "service_user_number": null},
         "branding": {"icon": null, "logo": null, "primary_color": null, "secondary_color": null},
@@ -60,7 +60,7 @@ final class ConnectDecodeTests: XCTestCase {
           "statement_descriptor_prefix": null,
           "statement_descriptor_prefix_kana": null,
           "statement_descriptor_prefix_kanji": null
-        }
+        },
         "dashboard": {"display_name": "alice inc", "timezone": "US/Eastern"},
         "payout_schedule": {"delay_days": 2, "interval": "daily"},
         "payout_statement_descriptor": "ALICE INC",
@@ -74,7 +74,7 @@ final class ConnectDecodeTests: XCTestCase {
       },
       "tos_acceptance": {"date": 1234567890, "ip": null, "user_agent": null},
       "type": "express"
-    }
+    },
     """
 
     private let capabilityJSON = """
@@ -86,7 +86,7 @@ final class ConnectDecodeTests: XCTestCase {
       "requested_at": 1234567890,
       "requirements": {"alternatives": [], "currently_due": [], "errors": [], "eventually_due": [], "past_due": [], "pending_verification": []},
       "status": "active"
-    }
+    },
     """
 
     private let personJSON = """
@@ -103,7 +103,7 @@ final class ConnectDecodeTests: XCTestCase {
       "relationship": {"owner": true, "percent_ownership": 50},
       "requirements": {"alternatives": [], "currently_due": [], "errors": [], "eventually_due": [], "past_due": [], "pending_verification": []},
       "type": "company_person"
-    }
+    },
     """
 
     private let bankAccountJSON = """
@@ -122,7 +122,7 @@ final class ConnectDecodeTests: XCTestCase {
       "metadata": {},
       "routing_number": "110000000",
       "status": "new"
-    }
+    },
     """
 
     private let accountLinkJSON = """
@@ -131,7 +131,7 @@ final class ConnectDecodeTests: XCTestCase {
       "expires_at": 1234654290,
       "object": "account_link",
       "url": "https://example.com/setup/s/acct_test_123/MerI6itPZo2K"
-    }
+    },
     """
 
     private let loginLinkJSON = """
@@ -139,13 +139,14 @@ final class ConnectDecodeTests: XCTestCase {
       "created": 1234567890,
       "object": "login_link",
       "url": "https://example.com/express/acct_test_123/ehJImT2clfHr"
-    }
+    },
     """
 
     // The exact response stripe-mock 0.206.0 serves for
     // POST /v1/account_sessions (captured and re-identified; account and
     // client_secret faked). All 22 component keys the pinned spec requires.
     private let accountSessionJSON = #"""
+  {
   "account": "acct_test_123",
   "client_secret": "accs_secret_test_1234567890abcdef",
   "components": {
@@ -321,10 +322,17 @@ final class ConnectDecodeTests: XCTestCase {
   "expires_at": 1234567891,
   "livemode": false,
   "object": "account_session"
+  }
 """#
 
+    // Fixture literals carry a trailing comma (list style); the parser
+    // gets clean JSON by stripping everything after the last '}'.
     private func decode<T: Decodable>(_ type: T.Type, _ json: String) throws -> T {
-        try decoder.decode(type, from: Data(json.utf8))
+        var trimmed = json.trimmingCharacters(in: .whitespacesAndNewlines)
+        // Fixture literals carry a trailing comma (list style); stop at the
+        // final closing brace so the parser never sees it.
+        while trimmed.hasSuffix(",") { trimmed.removeLast() }
+        return try decoder.decode(type, from: Data(trimmed.utf8))
     }
 
     // MARK: Account
