@@ -12,6 +12,7 @@ enum HomeRoute: Hashable {
   case customers
   case billing
   case balances
+  case connect
   case event(String)
 }
 
@@ -73,6 +74,8 @@ struct HomeView: View {
         BillingView(account: account, backend: paymentsClient, writer: billingWriter)
       case .balances:
         BalancesView(backend: paymentsClient)
+      case .connect:
+        ConnectView(account: account, backend: paymentsClient)
       case .event(let eventID):
         EventActivityDetailView(eventID: eventID, backend: model.backend)
       }
@@ -101,6 +104,14 @@ struct HomeView: View {
           Label("Billing", systemImage: "shippingbox")
         }
         .accessibilityIdentifier("home.billing")
+      }
+      ToolbarItem(placement: .topBarTrailing) {
+        Button {
+          path.append(HomeRoute.connect)
+        } label: {
+          Label("Connect", systemImage: "person.2.square.stack")
+        }
+        .accessibilityIdentifier("home.connect")
       }
       ToolbarItem(placement: .topBarTrailing) {
         Picker("Period", selection: $period) {
