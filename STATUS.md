@@ -3,7 +3,7 @@
 Keep every field current after every meaningful step. This file and `ROADMAP.md` are the truth when work resumes.
 
 - **Current milestone:** M8 (Connect) opened — slice 1 (reads) in: ConnectBackend protocol (7 read verbs, decision 0032), ConnectModel with per-section isolation (0027 pattern), ConnectView + ConnectedAccountDetailView + ApplicationFeeDetailView, home toolbar entry. Slice 2 (ConnectWriteService) next.
-- **Last done:** Connect slice 1 landed (750e7a3, 8bc427c, 3145267): backend paths proven against the mock by URLProtocol recorder (12/12), decode tests, model isolation tests 8/8, both Connect UI tests pass (banner + connected-account detail, acting-account banner always visible per the M8 done-when). UI-test key lesson re-proven: abbreviated keys (`sk_tes...`) are rejected by the app's own validation — full `sk_test_…` only.
+- **Last done:** Connect slice 1 landed (750e7a3, 8bc427c, 3145267 + lint cleanup); check42 first attempt caught SwiftLint line-length errors in the new fixtures (one 3.1k-char raw-string JSON reformatted, `class func` -> `static func`, one brace style) — fixed and rebuilt clean. Full gate re-running.
 - **Next step:** Run the full detached gate (check.sh) on the Connect commits, push, check CI; then slice 2: ConnectWriteService (account links, login links, capability updates — manage-mode only, idempotency keys, dashboard refusal).
 - **Blocked on:** Nothing.
 
