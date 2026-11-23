@@ -79,6 +79,7 @@ extension PaymentsFilter {
         case checkoutSessions
         case payouts
         case transfers, topups
+        case reports
     }
 
     /// A filter dimension, so the UI can show exactly the fields that mean
@@ -109,6 +110,8 @@ extension PaymentsFilter {
             return [.dateRange, .amount]
         case .topups:
             return [.dateRange, .status, .amount]
+        case .reports:
+            return [.dateRange, .status]
         }
     }
 
@@ -233,6 +236,14 @@ extension PaymentsFilter {
             && (status.map { topup.status.rawValue == $0 } ?? true)
             && (amountMin.map { topup.amount >= $0 } ?? true)
             && (amountMax.map { topup.amount <= $0 } ?? true)
+    }
+
+    /// Report runs: created and status apply. Runs carry no customer,
+    /// amount, or method type; the status is a plain string in the API
+    /// (`succeeded`, `pending`, `failed`).
+    public func matches(_ run: ReportingReportRun) -> Bool {
+        matchesCreated(run.created)
+            && (status.map { run.status == $0 } ?? true)
     }
 }
 

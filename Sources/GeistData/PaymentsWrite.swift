@@ -512,6 +512,31 @@ public struct PaymentsWriteService: Sendable {
       CheckoutSession.self, method: "POST", path: "/v1/checkout/sessions/\(id)/expire",
       params: SessionExpireParams(), key: Self.key(), summary: summary)
   }
+
+  // MARK: - Report runs (M7, decision 0031)
+
+  /// Starts a report run for one report type, optionally narrowed to a
+  /// `[interval_start, interval_end]` window. Stripe runs the report
+  /// asynchronously; the returned run's `status` stays `pending` until the
+  /// result file exists.
+  public func createReportRun(
+    reportType: String, intervalStart: Int?, intervalEnd: Int?, summary: String
+  ) async throws -> ReportingReportRun {
+    var params = ReportRunCreateParams(reportType: reportType)
+    if intervalStart != nil || intervalEnd != nil {
+      var parameters = ReportRunCreateParamsParameters()
+      if let intervalStart {
+        parameters.intervalStart = StripeTimestamp(seconds: intervalStart)
+      }
+      if let intervalEnd {
+        parameters.intervalEnd = StripeTimestamp(seconds: intervalEnd)
+      }
+      params.parameters = parameters
+    }
+    return try await run(
+      ReportingReportRun.self, method: "POST", path: "/v1/reporting/report_runs",
+      params: params, key: Self.key(), summary: summary)
+  }
 }
 
 /// Formats a Stripe metadata dictionary as the one-pair-per-line

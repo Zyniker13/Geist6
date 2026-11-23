@@ -333,6 +333,15 @@ private final class FakeBackend: StripeDataBackend, @unchecked Sendable {
         guard let body = rawObjects[path] else { throw TestError.notFound }
         return body
     }
+
+    func reportRuns(created: DateInterval?) async throws -> [ReportingReportRun] { [] }
+    func retrieveReportRun(id: String) async throws -> ReportingReportRun {
+        throw TestError.notFound
+    }
+    func reportTypes() async throws -> [ReportingReportType] { [] }
+    func retrieveReportType(id: String) async throws -> ReportingReportType {
+        throw TestError.notFound
+    }
 }
 
 // MARK: - HomeDataLoader

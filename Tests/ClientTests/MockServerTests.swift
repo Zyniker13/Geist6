@@ -134,6 +134,31 @@ final class MockServerTests: XCTestCase {
       "retrieveBalanceTransaction(id:) did not return within 15 s; it must call the generated method, not itself")
   }
 
+  /// Same class of regression for the M7 reporting wrappers: the conformance
+  /// methods share their generated counterpart's second label (`reportRun:`
+  /// / `reportType:`), so a body calling `retrieveReportRun(id: id)` would
+  /// resolve to itself inside GeistData and spin forever. Dispatch through
+  /// the protocol existential exactly as the app does.
+  func testReportRetrieveWrappersTerminate() throws {
+    let backend: any PaymentsBackend = MockHarness.client
+    let runDone = expectation(description: "retrieveReportRun returned")
+    let typeDone = expectation(description: "retrieveReportType returned")
+    Task.detached(priority: .utility) {
+      // Any error is fine (the mock serves fixture IDs); the assertion is
+      // that the call RETURNS rather than recursing.
+      _ = try? await backend.retrieveReportRun(id: "frr_1Pgc79B7WZ01zgkWMmsefTsj")
+      runDone.fulfill()
+    }
+    Task.detached(priority: .utility) {
+      _ = try? await backend.retrieveReportType(id: "balance.summary.1")
+      typeDone.fulfill()
+    }
+    let outcome = XCTWaiter.wait(for: [runDone, typeDone], timeout: 15)
+    XCTAssertEqual(
+      outcome, .completed,
+      "a reporting retrieve wrapper did not return within 15 s; it must call the generated method, not itself")
+  }
+
   // Search and 404-error handling are covered in RequestShapeTests via
   // URLProtocol stubs: stripe-mock serves fixture objects for any
   // resource id (so an unknown id does not 404) and does not implement

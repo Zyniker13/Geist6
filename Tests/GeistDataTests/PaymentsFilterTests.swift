@@ -555,6 +555,60 @@ final class PaymentsFilterTests: XCTestCase {
         )
     }
 
+    // MARK: - Report run
+
+    /// Report runs carry no customer, method type, or status field beyond
+    /// their `status` string; the run's created date applies.
+    func testReportRunStatusAndCreated() throws {
+        let succeeded = try reportRun(status: "succeeded", created: 1_750_000_050)
+        XCTAssertTrue(PaymentsFilter(status: "succeeded").matches(succeeded))
+        XCTAssertFalse(PaymentsFilter(status: "failed").matches(succeeded))
+        XCTAssertTrue(
+            PaymentsFilter(
+                dateStart: Date(timeIntervalSince1970: 1_750_000_000),
+                dateEnd: Date(timeIntervalSince1970: 1_750_000_100)
+            ).matches(succeeded)
+        )
+        XCTAssertFalse(
+            PaymentsFilter(
+                dateStart: Date(timeIntervalSince1970: 1_750_000_100)
+            ).matches(succeeded)
+        )
+        // Customer and method type are not report-run dimensions: a filter
+        // that sets only those matches every run.
+        XCTAssertTrue(PaymentsFilter(customer: "cus_test_1").matches(succeeded))
+        XCTAssertTrue(PaymentsFilter(methodType: "card").matches(succeeded))
+        XCTAssertFalse(PaymentsFilter.fields(for: .reports).contains(.customer))
+        XCTAssertFalse(PaymentsFilter.fields(for: .reports).contains(.methodType))
+        XCTAssertTrue(PaymentsFilter.fields(for: .reports).contains(.status))
+        XCTAssertTrue(PaymentsFilter.fields(for: .reports).contains(.dateRange))
+    }
+
+    private func reportRun(
+        id: String = "frr_test_123",
+        status: String = "succeeded",
+        created: Int = 1750000000
+    ) throws -> ReportingReportRun {
+        let json = """
+        {
+          "id": "\(id)",
+          "object": "reporting.report_run",
+          "created": \(created),
+          "error": null,
+          "livemode": false,
+          "parameters": {
+            "interval_end": \(created + 86_400),
+            "interval_start": \(created)
+          },
+          "report_type": "balance.summary.1",
+          "result": null,
+          "status": "\(status)",
+          "succeeded_at": \(status == "succeeded" ? String(created) : "null")
+        }
+        """
+        return try decode(ReportingReportRun.self, json)
+    }
+
     // MARK: - Segments and fields
 
     func testFieldsPerSegment() {

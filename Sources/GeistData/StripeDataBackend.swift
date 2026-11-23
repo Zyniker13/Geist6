@@ -57,6 +57,19 @@ public protocol StripeDataBackend: Sendable {
     /// Webhook/API events created in `created`.
     func events(created: DateInterval?) async throws -> [Event]
 
+    /// The account's report runs, created within `created` when both
+    /// bounds are set (M7).
+    func reportRuns(created: DateInterval?) async throws -> [ReportingReportRun]
+
+    /// A single report run by ID.
+    func retrieveReportRun(id: String) async throws -> ReportingReportRun
+
+    /// The report types available to the account (M7).
+    func reportTypes() async throws -> [ReportingReportType]
+
+    /// A single report type by ID.
+    func retrieveReportType(id: String) async throws -> ReportingReportType
+
     /// Search charges with a Stripe Search API query string.
     func searchCharges(query: String) async throws -> [Charge]
 
@@ -185,6 +198,33 @@ extension StripeClient: StripeDataBackend {
         }
         let result = try await listEvents(params)
         return result.data
+    }
+
+    public func reportRuns(created: DateInterval?) async throws -> [ReportingReportRun] {
+        var params = ReportRunListParams()
+        if let created {
+            params.created = .reportRunListParamsCreatedVariant1(
+                ReportRunListParamsCreatedVariant1(
+                    gte: Int(created.start.timeIntervalSince1970),
+                    lt: Int(created.end.timeIntervalSince1970)
+                )
+            )
+        }
+        let result = try await listReportRuns(params)
+        return result.data
+    }
+
+    public func retrieveReportRun(id: String) async throws -> ReportingReportRun {
+        try await retrieveReportRun(reportRun: id)
+    }
+
+    public func reportTypes() async throws -> [ReportingReportType] {
+        let result = try await listReportTypes()
+        return result.data
+    }
+
+    public func retrieveReportType(id: String) async throws -> ReportingReportType {
+        try await retrieveReportType(reportType: id)
     }
 
     public func searchCharges(query: String) async throws -> [Charge] {
