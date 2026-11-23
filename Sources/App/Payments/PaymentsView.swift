@@ -14,6 +14,7 @@ enum PaymentRoute: Hashable {
   case payout(String)
   case transfer(String)
   case topup(String)
+  case reportRun(String)
 }
 
 /// The payments tab: six browsable lists of one account's payment objects.
@@ -22,6 +23,8 @@ enum PaymentRoute: Hashable {
 struct PaymentsView: View {
   let account: Account
   let backend: any PaymentsBackend
+  /// The account key, sent only to Stripe-provided file URLs (decision 0031).
+  let bearerToken: String
   /// Nil for dashboard-locked accounts: no write UI exists at all.
   let writer: PaymentsWriteService?
 
@@ -277,13 +280,20 @@ struct PaymentsView: View {
             TopupRow(topup: topup)
           }
         }
+      case .reports:
+        ForEach(model.reportRuns, id: \.id) { run in
+          NavigationLink(value: PaymentRoute.reportRun(run.id)) {
+            ReportRunRow(run: run)
+          }
+        }
       }
     }
     .overlay(alignment: .top) {
       if model.phase == .loading { ProgressView().padding(.top, 4) }
     }
     .navigationDestination(for: PaymentRoute.self) { route in
-      PaymentDetailView(route: route, backend: backend, writer: writer)
+      PaymentDetailView(
+        route: route, backend: backend, bearerToken: bearerToken, writer: writer)
     }
   }
 
@@ -299,6 +309,7 @@ struct PaymentsView: View {
     case .payouts: return model.payouts.isEmpty
     case .transfers: return model.transfers.isEmpty
     case .topups: return model.topups.isEmpty
+    case .reports: return model.reportRuns.isEmpty
     }
   }
 
@@ -320,6 +331,8 @@ struct PaymentsView: View {
 struct PaymentDetailView: View {
   let route: PaymentRoute
   let backend: any PaymentsBackend
+  /// The account key, sent only to Stripe-provided file URLs (decision 0031).
+  let bearerToken: String
   let writer: PaymentsWriteService?
 
   var body: some View {
@@ -345,6 +358,8 @@ struct PaymentDetailView: View {
         TransferDetailView(transferID: id, backend: backend)
       case .topup(let id):
         TopupDetailView(topupID: id, backend: backend)
+      case .reportRun(let id):
+        ReportRunDetailView(runID: id, backend: backend, bearerToken: bearerToken, writer: writer)
       }
     }
   }

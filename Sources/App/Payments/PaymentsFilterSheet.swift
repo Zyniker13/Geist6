@@ -260,6 +260,8 @@ struct PaymentsFilterSheet: View {
       return []
     case .topups:
       return ["succeeded", "pending", "reversed", "failed"]
+    case .reports:
+      return ["succeeded", "pending", "failed"]
     }
   }
 

@@ -18,6 +18,7 @@ final class PaymentsModel {
     case payouts
     case transfers
     case topups
+    case reports
 
     var id: String { rawValue }
 
@@ -33,6 +34,7 @@ final class PaymentsModel {
       case .payouts: return "Payouts"
       case .transfers: return "Transfers"
       case .topups: return "Top-ups"
+      case .reports: return "Reports"
       }
     }
   }
@@ -56,6 +58,8 @@ final class PaymentsModel {
   private(set) var payouts: [Payout] = []
   private(set) var transfers: [Transfer] = []
   private(set) var topups: [Topup] = []
+  private(set) var reportRuns: [ReportingReportRun] = []
+  private(set) var reportTypes: [ReportingReportType] = []
   /// The active filter (M4c-5, decision 0019). Applied server-side where
   /// the backend supports it and client-side over the fetched page.
   private(set) var filter = PaymentsFilter()
@@ -120,6 +124,13 @@ final class PaymentsModel {
         var items = try await backend.topups()
         if !filter.isEmpty { items = items.filter { filter.matches($0) } }
         topups = items
+      case .reports:
+        // Runs narrow by created server-side and by status client-side; the
+        // type list is tiny and fetched whole for the run sheet's picker.
+        var items = try await backend.reportRuns(created: filter.createdInterval)
+        if !filter.isEmpty { items = items.filter { filter.matches($0) } }
+        reportRuns = items
+        reportTypes = try await backend.reportTypes()
       }
       phase = .loaded
     } catch {

@@ -64,7 +64,9 @@ struct HomeView: View {
     .navigationDestination(for: HomeRoute.self) { route in
       switch route {
       case .payments:
-        PaymentsView(account: account, backend: paymentsClient, writer: writer)
+        PaymentsView(
+          account: account, backend: paymentsClient, bearerToken: account.apiKey,
+          writer: writer)
       case .customers:
         CustomersView(account: account, backend: paymentsClient, writer: customersWriter)
       case .billing:

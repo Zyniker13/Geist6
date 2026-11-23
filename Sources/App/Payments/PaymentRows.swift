@@ -235,3 +235,20 @@ struct TopupRow: View {
     .accessibilityIdentifier("payments.row.\(topup.id)")
   }
 }
+
+/// A report-run list row: the report type, status pill, and created date.
+struct ReportRunRow: View {
+  let run: ReportingReportRun
+
+  var body: some View {
+    PaymentRowCore(
+      title: run.reportType,
+      status: run.status
+    ) {
+      PaymentRowCaption(
+        symbol: "doc.chart.bar",
+        text: run.created.date.formatted(date: .abbreviated, time: .omitted))
+    }
+    .accessibilityIdentifier("payments.row.\(run.id)")
+  }
+}
