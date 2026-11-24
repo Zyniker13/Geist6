@@ -119,7 +119,9 @@ final class ConnectUITests: XCTestCase {
     XCTAssertTrue(submit.waitForExistence(timeout: 10), "link sheet missing")
     submit.tap()
 
-    let confirm = app.buttons["connect.link.confirm"]
+    let confirm = app.buttons.matching(
+      NSPredicate(format: "identifier == %@", "connect.link.confirm")
+    ).firstMatch
     XCTAssertTrue(confirm.waitForExistence(timeout: 10), "confirm missing")
     confirm.tap()
 

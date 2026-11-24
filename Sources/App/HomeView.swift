@@ -406,8 +406,8 @@ struct HomeView: View {
   }
 }
 
-private extension HomePeriod {
-  var shortLabel: String {
+extension HomePeriod {
+  fileprivate var shortLabel: String {
     switch self {
     case .last7Days: "7D"
     case .last30Days: "30D"

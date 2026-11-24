@@ -174,7 +174,9 @@ struct ConnectedAccountRow: View {
       Text(account.id)
         .font(.caption2)
         .foregroundStyle(.secondary)
-      if let requirements = account.requirements, let disabled = requirements.disabledReason.valueOrNil {
+      if let requirements = account.requirements,
+        let disabled = requirements.disabledReason.valueOrNil
+      {
         Text("Restricted: \(disabled.rawValue)")
           .font(.caption2)
           .foregroundStyle(.red)
@@ -288,8 +290,10 @@ struct ConnectedAccountDetailView: View {
         set: { if !$0 { capabilityPendingToggle = nil } }),
       titleVisibility: .visible
     ) {
-      Button(capabilityPendingToggle?.requested == true ? "Unrequest" : "Request",
-             role: .destructive) {
+      Button(
+        capabilityPendingToggle?.requested == true ? "Unrequest" : "Request",
+        role: .destructive
+      ) {
         if let capability = capabilityPendingToggle {
           Task { await runToggleCapability(capability) }
         }
@@ -315,7 +319,9 @@ struct ConnectedAccountDetailView: View {
           Button("Create onboarding link…") { linkPresented = true }
             .accessibilityIdentifier("connect.detail.link")
           if let capability = capabilities.first(where: { $0.status != .active }) {
-            Button(capability.requested ? "Unrequest \(capability.id)…" : "Request \(capability.id)…") {
+            Button(
+              capability.requested ? "Unrequest \(capability.id)…" : "Request \(capability.id)…"
+            ) {
               capabilityPendingToggle = capability
             }
             .accessibilityIdentifier("connect.detail.capability")
@@ -560,7 +566,8 @@ struct ConnectedAccountDetailView: View {
             .monospaced()
         }
       }
-      .accessibilityIdentifier("connect.requirement.\(label.replacingOccurrences(of: " ", with: "-"))")
+      .accessibilityIdentifier(
+        "connect.requirement.\(label.replacingOccurrences(of: " ", with: "-"))")
     }
   }
 

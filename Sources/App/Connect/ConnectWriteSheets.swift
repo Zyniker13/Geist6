@@ -1,3 +1,4 @@
+import GeistData
 import StripeModels
 import SwiftUI
 
@@ -38,10 +39,15 @@ struct CreateAccountLinkSheet: View {
 
     var summary: String {
       switch self {
-      case .onboarding: return "Create onboarding link for " + accountID
-      case .update: return "Create update link for " + accountID
+      case .onboarding: return "Create onboarding link"
+      case .update: return "Create update link"
       }
     }
+  }
+
+  /// Restates the exact account and link type before the write runs.
+  private var confirmText: String {
+    "Create an " + linkType.label.lowercased() + " link for " + accountID + "?"
   }
 
   var body: some View {
@@ -86,8 +92,7 @@ struct CreateAccountLinkSheet: View {
         }
       }
       .confirmationDialog(
-        "Create an " + linkType.label.lowercased()
-          + " link for " + accountID + "?",
+        confirmText,
         isPresented: $confirmPresented, titleVisibility: .visible
       ) {
         Button("Create link") {
@@ -102,9 +107,10 @@ struct CreateAccountLinkSheet: View {
   private func run() async {
     running = true
     failureText = nil
+    let summary = linkType.summary + " " + accountID
     do {
       let link = try await writer.createAccountLink(
-        account: accountID, type: linkType.useCase, summary: linkType.summary)
+        account: accountID, type: linkType.useCase, summary: summary)
       onFinished(
         WriteResult(
           title: "Account link created",
