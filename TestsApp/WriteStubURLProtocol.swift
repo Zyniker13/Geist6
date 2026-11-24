@@ -200,6 +200,19 @@ enum WriteStub {
     "status": "succeeded", "transfer_group": null,
   ]
 
+  /// Installs a response from a complete JSON object literal (no fixture
+  /// merging). Used by Connect write tests whose object kinds differ per
+  /// endpoint; the caller supplies every required field.
+  static func installConnect(status: Int, json: [String: Any], headers: [String: String] = [:]) {
+    let body: Data
+    do {
+      body = try JSONSerialization.data(withJSONObject: cocoaTree(json), options: [])
+    } catch {
+      fatalError("invalid test fixture: \(error)")
+    }
+    install(status: status, body: body, headers: headers)
+  }
+
   static func install(status: Int, body: Data, headers: [String: String] = [:]) {
     WriteStubURLProtocol.handler = { _ in
       var allHeaders = headers
