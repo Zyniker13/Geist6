@@ -33,6 +33,7 @@ struct HomeView: View {
   @State private var writer: PaymentsWriteService?
   @State private var customersWriter: CustomersWriteService?
   @State private var billingWriter: BillingWriteService?
+  @State private var connectWriter: ConnectWriteService?
 
   private static let currencies = ["usd", "eur", "gbp", "cad", "aud", "jpy"]
 
@@ -75,7 +76,7 @@ struct HomeView: View {
       case .balances:
         BalancesView(backend: paymentsClient)
       case .connect:
-        ConnectView(account: account, backend: paymentsClient)
+        ConnectView(account: account, backend: paymentsClient, writer: connectWriter)
       case .event(let eventID):
         EventActivityDetailView(eventID: eventID, backend: model.backend)
       }
@@ -164,6 +165,13 @@ struct HomeView: View {
             storeBox.store?.cached(id: account.id)?.dashboardLock ?? false
           })
         billingWriter = BillingWriteService(
+          client: paymentsClient, accountID: account.id.uuidString,
+          accountName: account.name,
+          audit: FileAuditStore(directory: auditDirectory),
+          dashboardLocked: { [storeBox] in
+            storeBox.store?.cached(id: account.id)?.dashboardLock ?? false
+          })
+        connectWriter = ConnectWriteService(
           client: paymentsClient, accountID: account.id.uuidString,
           accountName: account.name,
           audit: FileAuditStore(directory: auditDirectory),

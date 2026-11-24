@@ -92,4 +92,40 @@ final class ConnectUITests: XCTestCase {
     ).firstMatch
     XCTAssertTrue(idFact.waitForExistence(timeout: 15), "detail ID fact missing")
   }
+
+  /// The account detail's Actions menu (management mode) opens and shows
+  /// the onboarding-link entry; the link sheet restates the account and
+  /// creates through the stubbed mock (POST /v1/account_links).
+  func testAccountDetailActionsCreateOnboardingLink() {
+    let app = launchFresh()
+    addAccountAndWait(app, name: "connectactions")
+    openConnect(app)
+
+    let row = app.descendants(matching: .any).matching(
+      NSPredicate(format: "identifier BEGINSWITH %@", "connect.row.")
+    ).firstMatch
+    XCTAssertTrue(row.waitForExistence(timeout: 15), "no connected-account row")
+    row.tap()
+
+    let actions = app.buttons["connect.detail.actions"]
+    XCTAssertTrue(actions.waitForExistence(timeout: 15), "actions menu missing")
+    actions.tap()
+
+    let linkItem = app.buttons["connect.detail.link"]
+    XCTAssertTrue(linkItem.waitForExistence(timeout: 10), "link action missing")
+    linkItem.tap()
+
+    let submit = app.buttons["connect.link.submit"]
+    XCTAssertTrue(submit.waitForExistence(timeout: 10), "link sheet missing")
+    submit.tap()
+
+    let confirm = app.buttons["connect.link.confirm"]
+    XCTAssertTrue(confirm.waitForExistence(timeout: 10), "confirm missing")
+    confirm.tap()
+
+    let alert = app.descendants(matching: .any).matching(
+      NSPredicate(format: "label CONTAINS %@", "Account link created")
+    ).firstMatch
+    XCTAssertTrue(alert.waitForExistence(timeout: 15), "success alert missing")
+  }
 }

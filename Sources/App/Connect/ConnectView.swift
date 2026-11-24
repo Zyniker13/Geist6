@@ -22,6 +22,8 @@ enum ConnectRoute: Hashable {
 struct ConnectView: View {
   let account: Account  // the app's local account (Keychain-stored)
   let backend: any ConnectBackend
+  /// Nil for dashboard-locked accounts: no write controls are shown.
+  let writer: ConnectWriteService?
 
   @State private var model: ConnectModel?
   @State private var path = NavigationPath()
@@ -38,9 +40,9 @@ struct ConnectView: View {
     .navigationDestination(for: ConnectRoute.self) { route in
       switch route {
       case .account(let id):
-        ConnectedAccountDetailView(accountID: id, backend: backend)
+        ConnectedAccountDetailView(accountID: id, backend: backend, writer: writer)
       case .fee(let id):
-        ApplicationFeeDetailView(feeID: id, backend: backend)
+        ApplicationFeeDetailView(feeID: id, backend: backend, writer: writer)
       }
     }
     .task {
@@ -194,6 +196,8 @@ struct ConnectedAccountRow: View {
 struct ConnectedAccountDetailView: View {
   let accountID: String
   let backend: any ConnectBackend
+  /// Nil for dashboard-locked accounts: no write controls are shown.
+  let writer: ConnectWriteService?
 
   @State private var account: ConnectStripeAccount?
   @State private var capabilities: [Capability] = []
@@ -204,6 +208,12 @@ struct ConnectedAccountDetailView: View {
   @State private var personsError: String?
   @State private var banksError: String?
   @State private var phase: LoadPhase = .loading
+  @State private var linkPresented = false
+  @State private var linkResult: String?
+  @State private var personPendingDelete: Person?
+  @State private var bankPendingDelete: BankAccount?
+  @State private var capabilityPendingToggle: Capability?
+  @State private var writeResult: WriteResult?
 
   enum LoadPhase {
     case loading
@@ -233,6 +243,140 @@ struct ConnectedAccountDetailView: View {
     }
     .refreshable {
       await load()
+    }
+    .toolbar { actionsToolbar }
+    .sheet(isPresented: $linkPresented) {
+      if let writer {
+        CreateAccountLinkSheet(accountID: accountID, writer: writer) { result in
+          linkPresented = false
+          writeResult = result
+        }
+      }
+    }
+    .confirmationDialog(
+      "Remove this bank account from the connected account?",
+      isPresented: Binding(
+        get: { bankPendingDelete != nil },
+        set: { if !$0 { bankPendingDelete = nil } }),
+      titleVisibility: .visible
+    ) {
+      Button("Remove bank account", role: .destructive) {
+        if let bank = bankPendingDelete { Task { await runDeleteBank(bank) } }
+        bankPendingDelete = nil
+      }
+      .accessibilityIdentifier("connect.detail.deleteBank.run")
+      Button("Keep bank account", role: .cancel) { bankPendingDelete = nil }
+    }
+    .confirmationDialog(
+      "Delete this person from the connected account?",
+      isPresented: Binding(
+        get: { personPendingDelete != nil },
+        set: { if !$0 { personPendingDelete = nil } }),
+      titleVisibility: .visible
+    ) {
+      Button("Delete person", role: .destructive) {
+        if let person = personPendingDelete { Task { await runDeletePerson(person) } }
+        personPendingDelete = nil
+      }
+      .accessibilityIdentifier("connect.detail.deletePerson.run")
+      Button("Keep person", role: .cancel) { personPendingDelete = nil }
+    }
+    .confirmationDialog(
+      capabilityPendingToggle.map { capabilityTogglePrompt($0) } ?? "",
+      isPresented: Binding(
+        get: { capabilityPendingToggle != nil },
+        set: { if !$0 { capabilityPendingToggle = nil } }),
+      titleVisibility: .visible
+    ) {
+      Button(capabilityPendingToggle?.requested == true ? "Unrequest" : "Request",
+             role: .destructive) {
+        if let capability = capabilityPendingToggle {
+          Task { await runToggleCapability(capability) }
+        }
+        capabilityPendingToggle = nil
+      }
+      .accessibilityIdentifier("connect.detail.capability.run")
+      Button("Keep as is", role: .cancel) { capabilityPendingToggle = nil }
+    }
+    .writeResultAlert($writeResult)
+  }
+
+  private func capabilityTogglePrompt(_ capability: Capability) -> String {
+    capability.requested
+      ? "Stop requesting \(capability.id) on this account?"
+      : "Request the \(capability.id) capability on this account?"
+  }
+
+  @ToolbarContentBuilder
+  private var actionsToolbar: some ToolbarContent {
+    ToolbarItem(placement: .primaryAction) {
+      if let writer, account != nil {
+        Menu {
+          Button("Create onboarding link…") { linkPresented = true }
+            .accessibilityIdentifier("connect.detail.link")
+          if let capability = capabilities.first(where: { $0.status != .active }) {
+            Button(capability.requested ? "Unrequest \(capability.id)…" : "Request \(capability.id)…") {
+              capabilityPendingToggle = capability
+            }
+            .accessibilityIdentifier("connect.detail.capability")
+          }
+          if let person = persons.first {
+            Button("Delete person…", role: .destructive) { personPendingDelete = person }
+              .accessibilityIdentifier("connect.detail.deletePerson")
+          }
+          if let bank = banks.first {
+            Button("Remove bank account…", role: .destructive) { bankPendingDelete = bank }
+              .accessibilityIdentifier("connect.detail.deleteBank")
+          }
+        } label: {
+          Label("Actions", systemImage: "ellipsis.circle")
+        }
+        .accessibilityIdentifier("connect.detail.actions")
+      }
+    }
+  }
+
+  private func runToggleCapability(_ capability: Capability) async {
+    guard let writer else { return }
+    do {
+      _ = try await writer.updateCapability(
+        account: accountID, capability: capability.id,
+        requested: !capability.requested,
+        summary: "\(capability.requested ? "Unrequest" : "Request") capability \(capability.id)")
+      await loadCapabilities()
+      writeResult = WriteResult(
+        title: capability.requested ? "Capability unrequested" : "Capability requested",
+        message: "\(capability.id) is now \(capability.requested ? "unrequested" : "requested").")
+    } catch {
+      writeResult = WriteResult(title: "Write failed", message: writeErrorMessage(error))
+    }
+  }
+
+  private func runDeletePerson(_ person: Person) async {
+    guard let writer else { return }
+    do {
+      _ = try await writer.deletePerson(
+        account: accountID, person: person.id, summary: "Delete person \(person.id)")
+      await loadPersons()
+      writeResult = WriteResult(
+        title: "Person deleted",
+        message: "\(Self.personName(person)) was removed from the account.")
+    } catch {
+      writeResult = WriteResult(title: "Write failed", message: writeErrorMessage(error))
+    }
+  }
+
+  private func runDeleteBank(_ bank: BankAccount) async {
+    guard let writer else { return }
+    do {
+      _ = try await writer.deleteExternalAccount(
+        account: accountID, id: bank.id, summary: "Remove bank account \(bank.id)")
+      await loadBanks()
+      writeResult = WriteResult(
+        title: "Bank account removed",
+        message: "\(bank.bankName.valueOrNil ?? "Bank account") ··\(bank.last4) was removed.")
+    } catch {
+      writeResult = WriteResult(title: "Write failed", message: writeErrorMessage(error))
     }
   }
 
@@ -468,14 +612,24 @@ struct ApplicationFeeRow: View {
   }
 }
 
-/// The detail screen of one application fee.
+/// The detail screen of one application fee. Write: refund the fee
+/// (management mode only; refused in dashboard mode by the service).
 struct ApplicationFeeDetailView: View {
   let feeID: String
   let backend: any ConnectBackend
+  /// Nil for dashboard-locked accounts: no write controls are shown.
+  let writer: ConnectWriteService?
 
   @State private var fee: ApplicationFee?
   @State private var error: String?
   @State private var loaded = false
+  @State private var refundPresented = false
+  @State private var writeResult: WriteResult?
+
+  private var fullyRefunded: Bool {
+    guard let fee else { return false }
+    return fee.refunded || fee.amountRefunded >= fee.amount
+  }
 
   var body: some View {
     List {
@@ -508,6 +662,53 @@ struct ApplicationFeeDetailView: View {
       }
       loaded = true
     }
+    .toolbar { refundToolbar }
+    .confirmationDialog(
+      "Refund this application fee in full?",
+      isPresented: $refundPresented, titleVisibility: .visible
+    ) {
+      Button("Refund fee", role: .destructive) {
+        Task { await runRefund() }
+      }
+      .accessibilityIdentifier("connect.feeDetail.refundRun")
+      Button("Keep fee", role: .cancel) {}
+    }
+    .writeResultAlert($writeResult)
+  }
+
+  @ToolbarContentBuilder
+  private var refundToolbar: some ToolbarContent {
+    ToolbarItem(placement: .primaryAction) {
+      if let writer, let fee, !fullyRefunded {
+        Button("Refund…", role: .destructive) { refundPresented = true }
+          .accessibilityIdentifier("connect.feeDetail.refund")
+      }
+    }
+  }
+
+  private func runRefund() async {
+    guard let writer, let fee else { return }
+    do {
+      let refund = try await writer.createFeeRefund(
+        fee: fee.id, amount: nil, summary: "Refund application fee \(fee.id)")
+      await reload()
+      writeResult = WriteResult(
+        title: "Fee refunded",
+        message: "Refund \(refund.id) for "
+          + MoneyFormat.amount(fee.amount, currency: fee.currency) + " is processing.")
+    } catch {
+      writeResult = WriteResult(title: "Write failed", message: writeErrorMessage(error))
+    }
+  }
+
+  private func reload() async {
+    do {
+      fee = try await backend.retrieveApplicationFee(id: feeID)
+      error = nil
+    } catch {
+      self.error = String(describing: error)
+    }
+    loaded = true
   }
 
   private func row(_ label: String, _ value: String?, id: String? = nil) -> some View {
