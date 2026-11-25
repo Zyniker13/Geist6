@@ -212,6 +212,8 @@ struct ConnectedAccountDetailView: View {
   @State private var phase: LoadPhase = .loading
   @State private var linkPresented = false
   @State private var linkResult: String?
+  @State private var loginLinkPresented = false
+  @State private var sessionPresented = false
   @State private var personPendingDelete: Person?
   @State private var bankPendingDelete: BankAccount?
   @State private var capabilityPendingToggle: Capability?
@@ -251,6 +253,22 @@ struct ConnectedAccountDetailView: View {
       if let writer {
         CreateAccountLinkSheet(accountID: accountID, writer: writer) { result in
           linkPresented = false
+          writeResult = result
+        }
+      }
+    }
+    .sheet(isPresented: $loginLinkPresented) {
+      if let writer {
+        CreateLoginLinkSheet(accountID: accountID, writer: writer) { result in
+          loginLinkPresented = false
+          writeResult = result
+        }
+      }
+    }
+    .sheet(isPresented: $sessionPresented) {
+      if let writer {
+        CreateAccountSessionSheet(accountID: accountID, writer: writer) { result in
+          sessionPresented = false
           writeResult = result
         }
       }
@@ -326,6 +344,10 @@ struct ConnectedAccountDetailView: View {
             }
             .accessibilityIdentifier("connect.detail.capability")
           }
+          Button("Create login link…") { loginLinkPresented = true }
+            .accessibilityIdentifier("connect.detail.loginLink")
+          Button("Create account session…") { sessionPresented = true }
+            .accessibilityIdentifier("connect.detail.session")
           if let person = persons.first {
             Button("Delete person…", role: .destructive) { personPendingDelete = person }
               .accessibilityIdentifier("connect.detail.deletePerson")

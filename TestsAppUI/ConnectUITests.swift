@@ -130,4 +130,78 @@ final class ConnectUITests: XCTestCase {
     ).firstMatch
     XCTAssertTrue(alert.waitForExistence(timeout: 15), "success alert missing")
   }
+
+  /// The Actions menu's login-link entry runs the same confirm-then-write
+  /// flow against the stubbed mock (POST /v1/accounts/{a}/login_links).
+  func testAccountDetailActionsCreateLoginLink() {
+    let app = launchFresh()
+    addAccountAndWait(app, name: "connectlogin")
+    openConnect(app)
+
+    let row = app.descendants(matching: .any).matching(
+      NSPredicate(format: "identifier BEGINSWITH %@", "connect.row.")
+    ).firstMatch
+    XCTAssertTrue(row.waitForExistence(timeout: 15), "no connected-account row")
+    row.tap()
+
+    let actions = app.buttons["connect.detail.actions"]
+    XCTAssertTrue(actions.waitForExistence(timeout: 15), "actions menu missing")
+    actions.tap()
+
+    let loginItem = app.buttons["connect.detail.loginLink"]
+    XCTAssertTrue(loginItem.waitForExistence(timeout: 10), "login-link action missing")
+    loginItem.tap()
+
+    let submit = app.buttons["connect.loginlink.submit"]
+    XCTAssertTrue(submit.waitForExistence(timeout: 10), "login-link sheet missing")
+    submit.tap()
+
+    let confirm = app.buttons.matching(
+      NSPredicate(format: "identifier == %@", "connect.loginlink.confirm")
+    ).firstMatch
+    XCTAssertTrue(confirm.waitForExistence(timeout: 10), "confirm missing")
+    confirm.tap()
+
+    let alert = app.descendants(matching: .any).matching(
+      NSPredicate(format: "label CONTAINS %@", "Login link created")
+    ).firstMatch
+    XCTAssertTrue(alert.waitForExistence(timeout: 15), "success alert missing")
+  }
+
+  /// The Actions menu's account-session entry runs the confirm-then-write
+  /// flow against the stubbed mock (POST /v1/account_sessions).
+  func testAccountDetailActionsCreateAccountSession() {
+    let app = launchFresh()
+    addAccountAndWait(app, name: "connectsession")
+    openConnect(app)
+
+    let row = app.descendants(matching: .any).matching(
+      NSPredicate(format: "identifier BEGINSWITH %@", "connect.row.")
+    ).firstMatch
+    XCTAssertTrue(row.waitForExistence(timeout: 15), "no connected-account row")
+    row.tap()
+
+    let actions = app.buttons["connect.detail.actions"]
+    XCTAssertTrue(actions.waitForExistence(timeout: 15), "actions menu missing")
+    actions.tap()
+
+    let sessionItem = app.buttons["connect.detail.session"]
+    XCTAssertTrue(sessionItem.waitForExistence(timeout: 10), "session action missing")
+    sessionItem.tap()
+
+    let submit = app.buttons["connect.session.submit"]
+    XCTAssertTrue(submit.waitForExistence(timeout: 10), "session sheet missing")
+    submit.tap()
+
+    let confirm = app.buttons.matching(
+      NSPredicate(format: "identifier == %@", "connect.session.confirm")
+    ).firstMatch
+    XCTAssertTrue(confirm.waitForExistence(timeout: 10), "confirm missing")
+    confirm.tap()
+
+    let alert = app.descendants(matching: .any).matching(
+      NSPredicate(format: "label CONTAINS %@", "Account session created")
+    ).firstMatch
+    XCTAssertTrue(alert.waitForExistence(timeout: 15), "success alert missing")
+  }
 }
