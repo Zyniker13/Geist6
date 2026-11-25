@@ -23,7 +23,15 @@ A new tool, `Tools/mock-overlay`, builds the overlay at test time:
    change can never silently flow in — the pin moves deliberately.
 2. It copies the missing schema properties from the pinned Stripe spec
    into the mock's spec (today: `product.type`) and writes
-   `overlay-spec3.json` beside the fixtures.
+   `overlay-spec3.json` beside the fixtures. It also relaxes request-body
+   validation on named paths (`overlayBodyPaths()`, today:
+   `/v1/accounts/{account}/login_links`): the mock's spec forbids extra
+   body properties there, but the live API and the mock's own fixtures
+   accept `account` in the login_links body, so the overlay drops
+   `additionalProperties: false` from that body schema. Nested
+   dictionaries are rebuilt bottom-up — JSONSerialization may share
+   storage between the parsed tree and the nested dicts, so mutating a
+   nested dict in place does not stick.
 3. It prints the two paths; `scripts/check.sh` passes them to
    `stripe-mock --spec <overlay> --fixtures <fixtures>`.
 

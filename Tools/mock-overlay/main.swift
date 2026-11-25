@@ -147,6 +147,14 @@ private func overlayProperties() -> [String: [String: Any]] {
     return ["product": ["type": type]]
 }
 
+/// Request-body shapes the pinned spec is stricter about than Stripe's
+/// live API (and stripe-mock's own fixtures). The login_links POST body
+/// carries `account` in the wild; the mock's spec forbids extra body
+/// properties, so the overlay relaxes the constraint for that path.
+private func overlayBodyPaths() -> [String] {
+    ["/v1/accounts/{account}/login_links"]
+}
+
 private func buildOverlay(cacheDir: URL) -> URL {
     let specURL = cacheDir.appendingPathComponent("spec3.json")
     let overlayURL = cacheDir.appendingPathComponent("overlay-spec3.json")
@@ -169,6 +177,44 @@ private func buildOverlay(cacheDir: URL) -> URL {
         schemas[schemaName] = schema
     }
     spec["components"] = components.merging(["schemas": schemas]) { _, new in new }
+    // Relax request-body validation on the paths listed above: drop
+    // `additionalProperties: false` so bodies the live API accepts pass
+    // the mock's validator too.
+    if var paths = spec["paths"] as? [String: Any] {
+        for bodyPath in overlayBodyPaths() {
+            // Rebuild the nested dictionaries: JSONSerialization objects can
+            // share storage with the parsed tree, so mutating a nested dict
+            // in place is not guaranteed to stick.
+            guard
+                let pathItem = paths[bodyPath] as? [String: Any],
+                let post = pathItem["post"] as? [String: Any],
+                let requestBody = post["requestBody"] as? [String: Any],
+                let content = requestBody["content"] as? [String: Any]
+            else { continue }
+            var newContent: [String: Any] = [:]
+            for (mediaType, mediaAny) in content {
+                guard let media = mediaAny as? [String: Any],
+                    let schema = media["schema"] as? [String: Any]
+                else {
+                    newContent[mediaType] = mediaAny
+                    continue
+                }
+                var newSchema = schema
+                newSchema.removeValue(forKey: "additionalProperties")
+                var newMedia = media
+                newMedia["schema"] = newSchema
+                newContent[mediaType] = newMedia
+            }
+            var newRequestBody = requestBody
+            newRequestBody["content"] = newContent
+            var newPost = post
+            newPost["requestBody"] = newRequestBody
+            var newPathItem = pathItem
+            newPathItem["post"] = newPost
+            paths[bodyPath] = newPathItem
+        }
+        spec["paths"] = paths
+    }
     let data: Data
     do {
         data = try JSONSerialization.data(withJSONObject: spec)
