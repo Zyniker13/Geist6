@@ -298,16 +298,16 @@ public struct ConnectEmbeddedAccountSessionCreateComponents: Sendable, Codable, 
     public var payoutReconciliationReport: ConnectEmbeddedBaseConfigClaim
     public var payouts: ConnectEmbeddedPayoutsConfig
     public var payoutsList: ConnectEmbeddedBaseConfigClaim
-    public var reportingChart: ConnectEmbeddedBaseConfig
+    public var reportingChart: ConnectEmbeddedBaseConfig?
     public var taxRegistrations: ConnectEmbeddedBaseConfigClaim
     public var taxSettings: ConnectEmbeddedBaseConfigClaim
-    public var terminalHardwareOrders: ConnectEmbeddedBaseConfig
-    public var terminalHardwareShop: ConnectEmbeddedBaseConfig
+    public var terminalHardwareOrders: ConnectEmbeddedBaseConfig?
+    public var terminalHardwareShop: ConnectEmbeddedBaseConfig?
     /// Fields present in the payload that the pinned spec does not
     /// describe. Kept so decoding never drops data (lossless decoding).
     public var unknownFields: [String: JSONValue]?
 
-    public init(accountManagement: ConnectEmbeddedAccountConfigClaim, accountOnboarding: ConnectEmbeddedAccountConfigClaim, balanceReport: ConnectEmbeddedBaseConfigClaim, balances: ConnectEmbeddedPayoutsConfig, disputesList: ConnectEmbeddedDisputesListConfig, documents: ConnectEmbeddedBaseConfigClaim, financialAccount: ConnectEmbeddedFinancialAccountConfigClaim, financialAccountTransactions: ConnectEmbeddedFinancialAccountTransactionsConfigClaim, instantPayoutsPromotion: ConnectEmbeddedInstantPayoutsPromotionConfig, issuingCard: ConnectEmbeddedIssuingCardConfigClaim, issuingCardsList: ConnectEmbeddedIssuingCardsListConfigClaim, notificationBanner: ConnectEmbeddedAccountConfigClaim, paymentDetails: ConnectEmbeddedPaymentsConfigClaim, paymentDisputes: ConnectEmbeddedPaymentDisputesConfig, paymentMethodSettings: ConnectEmbeddedPaymentMethodSettingsConfigClaim, payments: ConnectEmbeddedPaymentsConfigClaim, payoutDetails: ConnectEmbeddedBaseConfigClaim, payoutReconciliationReport: ConnectEmbeddedBaseConfigClaim, payouts: ConnectEmbeddedPayoutsConfig, payoutsList: ConnectEmbeddedBaseConfigClaim, reportingChart: ConnectEmbeddedBaseConfig, taxRegistrations: ConnectEmbeddedBaseConfigClaim, taxSettings: ConnectEmbeddedBaseConfigClaim, terminalHardwareOrders: ConnectEmbeddedBaseConfig, terminalHardwareShop: ConnectEmbeddedBaseConfig, unknownFields: [String: JSONValue]? = nil) {
+    public init(accountManagement: ConnectEmbeddedAccountConfigClaim, accountOnboarding: ConnectEmbeddedAccountConfigClaim, balanceReport: ConnectEmbeddedBaseConfigClaim, balances: ConnectEmbeddedPayoutsConfig, disputesList: ConnectEmbeddedDisputesListConfig, documents: ConnectEmbeddedBaseConfigClaim, financialAccount: ConnectEmbeddedFinancialAccountConfigClaim, financialAccountTransactions: ConnectEmbeddedFinancialAccountTransactionsConfigClaim, instantPayoutsPromotion: ConnectEmbeddedInstantPayoutsPromotionConfig, issuingCard: ConnectEmbeddedIssuingCardConfigClaim, issuingCardsList: ConnectEmbeddedIssuingCardsListConfigClaim, notificationBanner: ConnectEmbeddedAccountConfigClaim, paymentDetails: ConnectEmbeddedPaymentsConfigClaim, paymentDisputes: ConnectEmbeddedPaymentDisputesConfig, paymentMethodSettings: ConnectEmbeddedPaymentMethodSettingsConfigClaim, payments: ConnectEmbeddedPaymentsConfigClaim, payoutDetails: ConnectEmbeddedBaseConfigClaim, payoutReconciliationReport: ConnectEmbeddedBaseConfigClaim, payouts: ConnectEmbeddedPayoutsConfig, payoutsList: ConnectEmbeddedBaseConfigClaim, reportingChart: ConnectEmbeddedBaseConfig? = nil, taxRegistrations: ConnectEmbeddedBaseConfigClaim, taxSettings: ConnectEmbeddedBaseConfigClaim, terminalHardwareOrders: ConnectEmbeddedBaseConfig? = nil, terminalHardwareShop: ConnectEmbeddedBaseConfig? = nil, unknownFields: [String: JSONValue]? = nil) {
         self.accountManagement = accountManagement
         self.accountOnboarding = accountOnboarding
         self.balanceReport = balanceReport
@@ -386,11 +386,11 @@ public struct ConnectEmbeddedAccountSessionCreateComponents: Sendable, Codable, 
         self.payoutReconciliationReport = try container.decode(ConnectEmbeddedBaseConfigClaim.self, forKey: .payoutReconciliationReport)
         self.payouts = try container.decode(ConnectEmbeddedPayoutsConfig.self, forKey: .payouts)
         self.payoutsList = try container.decode(ConnectEmbeddedBaseConfigClaim.self, forKey: .payoutsList)
-        self.reportingChart = try container.decode(ConnectEmbeddedBaseConfig.self, forKey: .reportingChart)
+        self.reportingChart = try container.decodeIfPresent(ConnectEmbeddedBaseConfig.self, forKey: .reportingChart)
         self.taxRegistrations = try container.decode(ConnectEmbeddedBaseConfigClaim.self, forKey: .taxRegistrations)
         self.taxSettings = try container.decode(ConnectEmbeddedBaseConfigClaim.self, forKey: .taxSettings)
-        self.terminalHardwareOrders = try container.decode(ConnectEmbeddedBaseConfig.self, forKey: .terminalHardwareOrders)
-        self.terminalHardwareShop = try container.decode(ConnectEmbeddedBaseConfig.self, forKey: .terminalHardwareShop)
+        self.terminalHardwareOrders = try container.decodeIfPresent(ConnectEmbeddedBaseConfig.self, forKey: .terminalHardwareOrders)
+        self.terminalHardwareShop = try container.decodeIfPresent(ConnectEmbeddedBaseConfig.self, forKey: .terminalHardwareShop)
         var captured: [String: JSONValue] = [:]
         for key in container.allKeys {
             switch key {

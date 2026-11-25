@@ -305,6 +305,12 @@ final class TypeEmitter {
   /// entry is "<Struct>.<field>"; keep it short and documented.
   static let legacyRequiredOptional: Set<String> = [
     "SubscriptionItem.plan",
+    // Account-session components: the live API (and stripe-mock) omit the
+    // three reporting/terminal configs unless requested; the pinned spec
+    // still lists them as required.
+    "ConnectEmbeddedAccountSessionCreateComponents.reporting_chart",
+    "ConnectEmbeddedAccountSessionCreateComponents.terminal_hardware_orders",
+    "ConnectEmbeddedAccountSessionCreateComponents.terminal_hardware_shop",
   ]
 
   /// Lets allOf branches with $ref inline the referenced object's
