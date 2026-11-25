@@ -29,6 +29,14 @@ public protocol ConnectBackend: Sendable {
 
     /// A single application fee by ID.
     func retrieveApplicationFee(id: String) async throws -> ApplicationFee
+
+    /// The platform's accounts on the v2 namespace (GET /v2/core/accounts).
+    /// Supported only by v2-era platform keys: stripe-mock and non-platform
+    /// keys fail here, which is the slice-3 detection signal.
+    func v2Accounts(limit: Int?) async throws -> [V2CoreAccount]
+
+    /// One v2-namespace account by ID (GET /v2/core/accounts/{id}).
+    func retrieveV2Account(id: String) async throws -> V2CoreAccount
 }
 
 // MARK: - StripeClient conformance
@@ -83,5 +91,16 @@ extension StripeClient: ConnectBackend {
 
     public func retrieveApplicationFee(id: String) async throws -> ApplicationFee {
         try await retrieveApplicationFee(id: id, ApplicationFeeRetrieveParams())
+    }
+
+    public func v2Accounts(limit: Int?) async throws -> [V2CoreAccount] {
+        var params = V2CoreAccountListParams()
+        params.limit = limit
+        let result = try await listV2CoreAccounts(params)
+        return result.data
+    }
+
+    public func retrieveV2Account(id: String) async throws -> V2CoreAccount {
+        try await retrieveAccount(id: id, V2CoreAccountRetrieveParams())
     }
 }

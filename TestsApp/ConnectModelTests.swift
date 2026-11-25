@@ -49,6 +49,18 @@ private struct RecordingConnectBackend: ConnectBackend {
     if let fee = fees.first(where: { $0.id == id }) { return fee }
     throw ConnectStubError.boom
   }
+  var v2: [V2CoreAccount] = []
+  var v2Error: Error?
+  var v2Detail: V2CoreAccount?
+
+  func v2Accounts(limit: Int?) async throws -> [V2CoreAccount] {
+    if let v2Error { throw v2Error }
+    return v2
+  }
+  func retrieveV2Account(id: String) async throws -> V2CoreAccount {
+    if let v2Detail { return v2Detail }
+    throw ConnectStubError.boom
+  }
 }
 
 /// The fee detail's application-fee fixture, reusable in both load paths.
@@ -237,6 +249,83 @@ struct ConnectModelTests {
     #expect(refreshed.accountsError == nil)
     #expect(refreshed.accounts.count == 1)
   }
+
+  /// A v2-era platform key: the v2 probe answers, the section renders v2
+  /// rows, and the v1 list is never consulted (decision 0032, slice 3).
+  @Test func v2ListWinsAndRendersV2Rows() async {
+    var backend = RecordingConnectBackend(
+      accounts: [decoded(connectedAccountFixtureJSON, as: StripeModels.Account.self)])
+    backend.v2 = [decodedV2(v2AccountFixtureJSON)]
+    let model = ConnectModel(backend: backend)
+    await model.load()
+    #expect(model.usesV2Accounts)
+    #expect(model.v2Accounts.count == 1)
+    #expect(model.v2Accounts.first?.id == "acct_test_v2_1")
+    #expect(model.accounts.isEmpty)
+    #expect(model.accountsError == nil)
+    #expect(model.v2Title(model.v2Accounts[0]) == "Vera's Stand")
+  }
+
+  /// A v1-era platform key: the v2 probe fails, the v1 list answers, and
+  /// the screen stays on v1 rows with no error from the probe.
+  @Test func v1ListServesWhenV2ProbeFails() async {
+    var backend = RecordingConnectBackend(
+      accounts: [decoded(connectedAccountFixtureJSON, as: StripeModels.Account.self)])
+    backend.v2Error = Stripe403()
+    let model = ConnectModel(backend: backend)
+    await model.load()
+    #expect(!model.usesV2Accounts)
+    #expect(model.v2Accounts.isEmpty)
+    #expect(model.accounts.count == 1)
+    #expect(model.accountsError == nil)
+  }
+
+  /// An empty v2 page does not claim v2 mode: a key that answers 200 with
+  /// no accounts still falls back so the v1 list and its states render.
+  @Test func emptyV2PageFallsBackToV1() async {
+    var backend = RecordingConnectBackend(
+      accounts: [decoded(connectedAccountFixtureJSON, as: StripeModels.Account.self)])
+    backend.v2 = []
+    let model = ConnectModel(backend: backend)
+    await model.load()
+    #expect(!model.usesV2Accounts)
+    #expect(model.accounts.count == 1)
+  }
+
+  /// Search narrows the loaded v2 page client-side by name, email, and ID.
+  @Test func searchFiltersV2Accounts() async {
+    var backend = RecordingConnectBackend()
+    backend.v2 = [
+      decodedV2(v2AccountFixtureJSON),
+      decodedV2("""
+      {
+        "id": "acct_test_v2_2",
+        "object": "v2.core.account",
+        "applied_configurations": ["recipient"],
+        "contact_email": "buyer@example.com",
+        "created": "2026-11-02T00:00:00Z",
+        "display_name": "Boris' Depot",
+        "livemode": false
+      }
+      """),
+    ]
+    let model = ConnectModel(backend: backend)
+    await model.load()
+
+    model.setSearch("vera")
+    #expect(model.v2Accounts.count == 1)
+    #expect(model.v2Accounts.first?.id == "acct_test_v2_1")
+
+    model.setSearch("buyer@")
+    #expect(model.v2Accounts.count == 1)
+    #expect(model.v2Accounts.first?.id == "acct_test_v2_2")
+
+    model.setSearch("acct_test_v2_1")
+    #expect(model.v2Accounts.count == 1)
+
+    model.setSearch("")
+    #expect(model.v2Accounts.count == 2)
+  }
 }
 
 private let alternateAccountFixtureJSON = """
@@ -264,3 +353,28 @@ private let alternateAccountFixtureJSON = """
     "type": "express"
   }
   """
+
+/// A recorded v2 account row (decision 0032: the v2 namespace is proven
+/// with hand-written fixtures using obviously fake values).
+private let v2AccountFixtureJSON = """
+  {
+    "id": "acct_test_v2_1",
+    "object": "v2.core.account",
+    "applied_configurations": ["merchant"],
+    "closed": false,
+    "contact_email": "seller@example.com",
+    "created": "2026-11-01T00:00:00Z",
+    "display_name": "Vera's Stand",
+    "identity": {"country": "US"},
+    "livemode": false,
+    "metadata": {}
+  }
+  """
+
+private func decodedV2(_ json: String) -> V2CoreAccount {
+  do {
+    return try JSONDecoder().decode(V2CoreAccount.self, from: Data(json.utf8))
+  } catch {
+    preconditionFailure("v2 fixture must decode: \(error)")
+  }
+}

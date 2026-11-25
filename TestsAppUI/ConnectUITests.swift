@@ -74,6 +74,25 @@ final class ConnectUITests: XCTestCase {
     XCTAssertTrue(navBar.waitForExistence(timeout: 10), "Connect title missing")
   }
 
+  /// stripe-mock serves no /v2/core/accounts, so the v2 probe fails and
+  /// the screen falls back to the v1 rows (decision 0032, slice 3): a
+  /// v1 connected-account row still renders after the probe.
+  func testConnectScreenFallsBackToV1RowsWhenV2Unavailable() {
+    let app = launchFresh()
+    addAccountAndWait(app, name: "connectv2probe")
+    openConnect(app)
+
+    let row = app.descendants(matching: .any).matching(
+      NSPredicate(format: "identifier BEGINSWITH %@", "connect.row.")
+    ).firstMatch
+    XCTAssertTrue(row.waitForExistence(timeout: 15), "no v1 fallback row")
+
+    let errorLabel = app.descendants(matching: .any).matching(
+      NSPredicate(format: "label CONTAINS %@", "403")
+    ).firstMatch
+    XCTAssertFalse(errorLabel.exists, "probe failure must not surface as an error")
+  }
+
   /// A connected-account row (stripe-mock fixture) opens the detail
   /// screen, whose identity section shows the account's facts.
   func testConnectedAccountDetailOpens() {

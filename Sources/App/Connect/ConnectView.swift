@@ -11,6 +11,8 @@ typealias ConnectStripeAccount = StripeModels.Account
 enum ConnectRoute: Hashable {
   case account(String)
   case fee(String)
+  /// A v2-namespace connected account (decision 0032, slice 3).
+  case v2Account(String)
 }
 
 /// The Connect screen of one platform account: the connected accounts
@@ -43,6 +45,8 @@ struct ConnectView: View {
         ConnectedAccountDetailView(accountID: id, backend: backend, writer: writer)
       case .fee(let id):
         ApplicationFeeDetailView(feeID: id, backend: backend, writer: writer)
+      case .v2Account(let id):
+        V2AccountDetailView(accountID: id, backend: backend)
       }
     }
     .task {
@@ -102,6 +106,21 @@ struct ConnectView: View {
           Label(error, systemImage: "exclamationmark.triangle")
             .font(.caption)
             .foregroundStyle(.orange)
+        } else if model.usesV2Accounts {
+          if model.v2Accounts.isEmpty {
+            if model.phase == .loading {
+              ProgressView()
+            } else {
+              Text("No connected accounts yet.")
+                .foregroundStyle(.secondary)
+            }
+          } else {
+            ForEach(model.v2Accounts, id: \.id) { v2 in
+              NavigationLink(value: ConnectRoute.v2Account(v2.id)) {
+                V2AccountRow(account: v2)
+              }
+            }
+          }
         } else if model.accounts.isEmpty {
           if model.phase == .loading {
             ProgressView()
@@ -190,6 +209,140 @@ struct ConnectedAccountRow: View {
     let business = account.businessProfile?.valueOrNil?.name.valueOrNil
     let email = account.email?.valueOrNil
     return business ?? email ?? account.id
+  }
+}
+
+/// One v2-namespace connected account in the list (decision 0032, slice 3).
+struct V2AccountRow: View {
+  let account: V2CoreAccount
+
+  var body: some View {
+    VStack(alignment: .leading, spacing: 3) {
+      HStack {
+        Text(account.displayName ?? account.id)
+          .lineLimit(1)
+        Spacer()
+        if account.closed == true {
+          Text("Closed")
+            .font(.caption2.weight(.medium))
+            .foregroundStyle(.red)
+        }
+        ForEach(account.appliedConfigurations, id: \.rawValue) { item in
+          Text(item.rawValue)
+            .font(.caption2)
+            .foregroundStyle(.secondary)
+        }
+      }
+      Text(account.id)
+        .font(.caption2)
+        .foregroundStyle(.secondary)
+      if let email = account.contactEmail {
+        Text(email)
+          .font(.caption2)
+          .foregroundStyle(.secondary)
+      }
+      if account.closed == true {
+        Text("Restricted")
+          .font(.caption2)
+          .foregroundStyle(.red)
+      }
+    }
+    .accessibilityElement(children: .combine)
+    .accessibilityIdentifier("connect.row.v2.\(account.id)")
+  }
+}
+
+/// The detail screen of a v2-namespace connected account: the read-only
+/// identity and configuration summary (writes stay on the v1 namespace
+/// and the tier-2/3 engine until the v2 write verbs are needed).
+struct V2AccountDetailView: View {
+  let accountID: String
+  let backend: any ConnectBackend
+
+  @State private var account: V2CoreAccount?
+  @State private var error: String?
+  @State private var phase: ConnectedAccountDetailView.LoadPhase = .loading
+
+  var body: some View {
+    List {
+      if let error {
+        Section {
+          Label(error, systemImage: "exclamationmark.triangle")
+            .font(.caption)
+            .foregroundStyle(.orange)
+        }
+      } else if let account {
+        Section("Identity") {
+          row("Account ID", account.id)
+          if let name = account.displayName {
+            row("Display name", name)
+          }
+          if let email = account.contactEmail {
+            row("Contact email", email)
+          }
+          if let phone = account.contactPhone {
+            row("Contact phone", phone)
+          }
+          row("Created", account.created)
+          row("Closed", account.closed == true ? "Yes" : "No")
+        }
+        Section("Configurations") {
+          if account.appliedConfigurations.isEmpty {
+            Text("None")
+              .foregroundStyle(.secondary)
+          } else {
+            ForEach(account.appliedConfigurations, id: \.rawValue) { item in
+              Text(item.rawValue)
+            }
+          }
+        }
+        if let requirements = account.requirements {
+          Section("Requirements") {
+            if let summary = requirements.summary,
+              let deadline = summary.minimumDeadline?.time
+            {
+              row("Minimum deadline", deadline)
+            } else {
+              row("Minimum deadline", "None")
+            }
+            row("Open entries", "\(requirements.entries?.count ?? 0)")
+            if let entries = requirements.entries, !entries.isEmpty {
+              ForEach(entries.indices, id: \.self) { index in
+                VStack(alignment: .leading, spacing: 2) {
+                  Text(entries[index].description)
+                    .font(.subheadline)
+                  Text(entries[index].awaitingActionFrom.rawValue)
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
+                }
+              }
+            }
+          }
+        }
+      } else if phase == .loading {
+        Section {
+          ProgressView()
+        }
+      }
+    }
+    .navigationTitle("Account")
+    .navigationBarTitleDisplayMode(.inline)
+    .task { await load() }
+    .refreshable { await load() }
+  }
+
+  private func load() async {
+    do {
+      account = try await backend.retrieveV2Account(id: accountID)
+      error = nil
+    } catch {
+      self.error = String(describing: error)
+    }
+    phase = .loaded
+  }
+
+  private func row(_ label: String, _ value: String) -> some View {
+    LabeledContent(label, value: value)
   }
 }
 

@@ -34,16 +34,29 @@ final class ConnectModel {
   private(set) var accountsError: String?
   private(set) var feesError: String?
   private(set) var searchQuery = ""
+  /// True when the platform key also serves the v2 accounts namespace:
+  /// the v2 list succeeded, so `v2Accounts` carries the rows and the
+  /// Connected accounts section renders v2 rows (slice 3, decision 0032).
+  private(set) var usesV2Accounts = false
+  private(set) var v2Accounts: [V2CoreAccount] = []
 
   /// The search field's setter for the view's binding. Re-filters the
   /// already-loaded page client-side (the list request is not re-sent).
   func setSearch(_ query: String) {
     searchQuery = query
-    accounts = filtered(allAccounts)
+    if usesV2Accounts {
+      v2Accounts = filteredV2(allV2Accounts)
+      accounts = []
+    } else {
+      accounts = filtered(allAccounts)
+      v2Accounts = []
+    }
   }
   /// The unfiltered page from the last successful load, kept so the
   /// search can narrow and widen it without another request.
   private var allAccounts: [StripeAccount] = []
+  /// The v1/v2 twin of `allAccounts` for the v2 namespace.
+  private var allV2Accounts: [V2CoreAccount] = []
 
   init(backend: any ConnectBackend) {
     self.backend = backend
@@ -61,7 +74,24 @@ final class ConnectModel {
   }
 
   /// Reloads only the connected accounts (after a write, or on demand).
+  /// The v2 namespace is probed first: a v2-era platform key answers it
+  /// and the rows render as v2 accounts; a v1-era platform key or a
+  /// non-platform key does not, so the v1 list decides between "plain
+  /// platform key" and "not a platform key" (decision 0032). The probe's
+  /// failure is never surfaced as an error of its own.
   func loadAccounts() async {
+    if let v2 = try? await backend.v2Accounts(limit: 100), !v2.isEmpty {
+      usesV2Accounts = true
+      allV2Accounts = v2
+      v2Accounts = filteredV2(v2)
+      accounts = []
+      allAccounts = []
+      accountsError = nil
+      return
+    }
+    usesV2Accounts = false
+    v2Accounts = []
+    allV2Accounts = []
     do {
       let all = try await backend.connectedAccounts(created: nil, limit: 100)
       allAccounts = all
@@ -87,6 +117,20 @@ final class ConnectModel {
       matches(account.id) || matches(account.email?.valueOrNil)
         || matches(businessName(account))
     }
+  }
+
+  /// The v2 twin of `filtered`: ID, display name, and contact email.
+  private func filteredV2(_ all: [V2CoreAccount]) -> [V2CoreAccount] {
+    guard !searchQuery.isEmpty else { return all }
+    return all.filter { account in
+      matches(account.id) || matches(account.displayName)
+        || matches(account.contactEmail)
+    }
+  }
+
+  /// The display title of a v2 account row: display name, then ID.
+  func v2Title(_ account: V2CoreAccount) -> String {
+    account.displayName ?? account.id
   }
 
   /// The business profile's name, through the Nullable wrapper.

@@ -176,4 +176,22 @@ final class ConnectBackendTests: XCTestCase {
         _ = try? await client.retrieveConnectedAccount(id: "acct_test_123")
         XCTAssertTrue(Recorder.headers[0]["authorization"]?.hasPrefix("Bearer sk_test_") ?? false)
     }
+
+    // MARK: - v2 namespace (decision 0032, slice 3)
+
+    func testV2AccountsHitsV2CoreAccountsWithLimit() async throws {
+        let client = client()
+        _ = try? await client.v2Accounts(limit: 100)
+        XCTAssertEqual(Recorder.paths, ["/v2/core/accounts"])
+        XCTAssertEqual(Recorder.methods, ["GET"])
+        XCTAssertTrue(Recorder.queries[0].contains("limit=100"))
+        XCTAssertNil(Recorder.headers[0]["stripe-account"])
+    }
+
+    func testRetrieveV2AccountHitsV2CoreAccountsID() async throws {
+        let client = client()
+        _ = try? await client.retrieveV2Account(id: "acct_test_v2_1")
+        XCTAssertEqual(Recorder.paths, ["/v2/core/accounts/acct_test_v2_1"])
+        XCTAssertEqual(Recorder.methods, ["GET"])
+    }
 }
