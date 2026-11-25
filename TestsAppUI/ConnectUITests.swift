@@ -204,4 +204,134 @@ final class ConnectUITests: XCTestCase {
     ).firstMatch
     XCTAssertTrue(alert.waitForExistence(timeout: 15), "success alert missing")
   }
+
+  /// The Actions menu's capability entry toggles the first non-active
+  /// capability (stripe-mock's card_payments: requested=true, inactive) via
+  /// POST /v1/accounts/{a}/capabilities/{id}, then reloads the section.
+  func testAccountDetailActionsToggleCapability() {
+    let app = launchFresh()
+    addAccountAndWait(app, name: "connectcapability")
+    openConnect(app)
+
+    let row = app.descendants(matching: .any).matching(
+      NSPredicate(format: "identifier BEGINSWITH %@", "connect.row.")
+    ).firstMatch
+    XCTAssertTrue(row.waitForExistence(timeout: 15), "no connected-account row")
+    row.tap()
+
+    let actions = app.buttons["connect.detail.actions"]
+    XCTAssertTrue(actions.waitForExistence(timeout: 15), "actions menu missing")
+    actions.tap()
+
+    let capabilityItem = app.buttons["connect.detail.capability"]
+    XCTAssertTrue(capabilityItem.waitForExistence(timeout: 10), "capability action missing")
+    capabilityItem.tap()
+
+    let run = app.buttons.matching(
+      NSPredicate(format: "identifier == %@", "connect.detail.capability.run")
+    ).firstMatch
+    XCTAssertTrue(run.waitForExistence(timeout: 10), "capability confirm missing")
+    run.tap()
+
+    let alert = app.descendants(matching: .any).matching(
+      NSPredicate(format: "label CONTAINS %@", "Capability unrequested")
+    ).firstMatch
+    XCTAssertTrue(alert.waitForExistence(timeout: 15), "success alert missing")
+  }
+
+  /// The Actions menu's delete-person entry removes the mock's person row
+  /// (DELETE /v1/accounts/{a}/persons/{id}) after confirmation.
+  func testAccountDetailActionsDeletePerson() {
+    let app = launchFresh()
+    addAccountAndWait(app, name: "connectperson")
+    openConnect(app)
+
+    let row = app.descendants(matching: .any).matching(
+      NSPredicate(format: "identifier BEGINSWITH %@", "connect.row.")
+    ).firstMatch
+    XCTAssertTrue(row.waitForExistence(timeout: 15), "no connected-account row")
+    row.tap()
+
+    let actions = app.buttons["connect.detail.actions"]
+    XCTAssertTrue(actions.waitForExistence(timeout: 15), "actions menu missing")
+    actions.tap()
+
+    let personItem = app.buttons["connect.detail.deletePerson"]
+    XCTAssertTrue(personItem.waitForExistence(timeout: 10), "delete-person action missing")
+    personItem.tap()
+
+    let run = app.buttons.matching(
+      NSPredicate(format: "identifier == %@", "connect.detail.deletePerson.run")
+    ).firstMatch
+    XCTAssertTrue(run.waitForExistence(timeout: 10), "person confirm missing")
+    run.tap()
+
+    let alert = app.descendants(matching: .any).matching(
+      NSPredicate(format: "label CONTAINS %@", "Person deleted")
+    ).firstMatch
+    XCTAssertTrue(alert.waitForExistence(timeout: 15), "success alert missing")
+  }
+
+  /// The Actions menu's remove-bank entry deletes the mock's external bank
+  /// account (DELETE /v1/accounts/{a}/external_accounts/{id}).
+  func testAccountDetailActionsRemoveBank() {
+    let app = launchFresh()
+    addAccountAndWait(app, name: "connectbank")
+    openConnect(app)
+
+    let row = app.descendants(matching: .any).matching(
+      NSPredicate(format: "identifier BEGINSWITH %@", "connect.row.")
+    ).firstMatch
+    XCTAssertTrue(row.waitForExistence(timeout: 15), "no connected-account row")
+    row.tap()
+
+    let actions = app.buttons["connect.detail.actions"]
+    XCTAssertTrue(actions.waitForExistence(timeout: 15), "actions menu missing")
+    actions.tap()
+
+    let bankItem = app.buttons["connect.detail.deleteBank"]
+    XCTAssertTrue(bankItem.waitForExistence(timeout: 10), "remove-bank action missing")
+    bankItem.tap()
+
+    let run = app.buttons.matching(
+      NSPredicate(format: "identifier == %@", "connect.detail.deleteBank.run")
+    ).firstMatch
+    XCTAssertTrue(run.waitForExistence(timeout: 10), "bank confirm missing")
+    run.tap()
+
+    let alert = app.descendants(matching: .any).matching(
+      NSPredicate(format: "label CONTAINS %@", "Bank account removed")
+    ).firstMatch
+    XCTAssertTrue(alert.waitForExistence(timeout: 15), "success alert missing")
+  }
+
+  /// The application-fee detail's Refund action runs the full-fee refund
+  /// (POST /v1/application_fees/{id}/refunds) after confirmation, and the
+  /// success alert names the refund.
+  func testFeeDetailRefundFlow() {
+    let app = launchFresh()
+    addAccountAndWait(app, name: "connectfee")
+    openConnect(app)
+
+    let feeRow = app.descendants(matching: .any).matching(
+      NSPredicate(format: "identifier BEGINSWITH %@", "connect.fee.")
+    ).firstMatch
+    XCTAssertTrue(feeRow.waitForExistence(timeout: 15), "no application-fee row")
+    feeRow.tap()
+
+    let refund = app.buttons["connect.feeDetail.refund"]
+    XCTAssertTrue(refund.waitForExistence(timeout: 15), "refund action missing")
+    refund.tap()
+
+    let run = app.buttons.matching(
+      NSPredicate(format: "identifier == %@", "connect.feeDetail.refundRun")
+    ).firstMatch
+    XCTAssertTrue(run.waitForExistence(timeout: 10), "refund confirm missing")
+    run.tap()
+
+    let alert = app.descendants(matching: .any).matching(
+      NSPredicate(format: "label CONTAINS %@", "Fee refunded")
+    ).firstMatch
+    XCTAssertTrue(alert.waitForExistence(timeout: 15), "success alert missing")
+  }
 }
